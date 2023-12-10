@@ -1,47 +1,41 @@
 // These styles apply to every route in the application
-import "@/styles/globals.css";
-import { Metadata } from "next";
-import { Inter } from "next/font/google";
-import { Toaster } from "react-hot-toast";
-import AuthStatus from "@/components/auth-status";
-import { Suspense } from "react";
+import '@/styles/globals.css'
+import { Metadata } from 'next'
+import { Toaster } from 'react-hot-toast'
+import AuthStatus from 'views/auth-status'
+import { Suspense } from 'react'
 
-const inter = Inter({
-  variable: "--font-inter",
-  subsets: ["latin"],
-});
-
-const title = "Next.js Prisma Postgres Auth Starter";
+const title = 'CloudSort'
 const description =
-  "This is a Next.js starter kit that uses Next-Auth for simple email + password login and a Postgres database to persist the data.";
+  'Sort your lists.'
 
 export const metadata: Metadata = {
   title,
   description,
   twitter: {
-    card: "summary_large_image",
+    card: 'summary_large_image',
     title,
-    description,
+    description
   },
-  metadataBase: new URL("https://nextjs-postgres-auth.vercel.app"),
-  themeColor: "#FFF",
-};
+  metadataBase: new URL('https://clousort.io'),
+  themeColor: '#FFF'
+}
 
-export default async function RootLayout({
-  children,
+export default async function RootLayout ({
+  children
 }: {
-  children: React.ReactNode;
-}) {
+  children: React.ReactNode
+}): Promise<JSX.Element> {
   return (
-    <html lang="en">
-      <body className={inter.variable}>
+    <html lang='en'>
+      <body>
         <Toaster />
-        <Suspense fallback="Loading...">
+        <Suspense fallback='Loading...'>
           {/* @ts-expect-error Async Server Component */}
           <AuthStatus />
         </Suspense>
         {children}
       </body>
     </html>
-  );
+  )
 }
