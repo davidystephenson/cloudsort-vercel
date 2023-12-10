@@ -2,13 +2,16 @@ import { getServerSession } from 'next-auth/next'
 
 export default async function AuthStatus (): Promise<JSX.Element> {
   const session = await getServerSession()
+  if (session == null) {
+    return (
+      <p>
+        Not signed in
+      </p>
+    )
+  }
   return (
-    <div className='absolute top-5 w-full flex justify-center items-center'>
-      {(session != null) && (
-        <p className='text-stone-200 text-sm'>
-          Signed in as {session.user?.email}
-        </p>
-      )}
-    </div>
+    <p>
+      Signed in as {session.user?.email}
+    </p>
   )
 }

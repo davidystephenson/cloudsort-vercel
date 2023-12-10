@@ -1,9 +1,11 @@
 // These styles apply to every route in the application
 import '@/styles/globals.css'
+import '@radix-ui/themes/styles.css'
 import { Metadata } from 'next'
 import { Toaster } from 'react-hot-toast'
 import AuthStatus from 'views/auth-status'
 import { Suspense } from 'react'
+import ThemeView from 'views/theme-view'
 
 const title = 'CloudSort'
 const description =
@@ -27,14 +29,16 @@ export default async function RootLayout ({
   children: React.ReactNode
 }): Promise<JSX.Element> {
   return (
-    <html lang='en'>
+    <html lang='en' suppressHydrationWarning>
       <body>
-        <Toaster />
-        <Suspense fallback='Loading...'>
-          {/* @ts-expect-error Async Server Component */}
-          <AuthStatus />
-        </Suspense>
-        {children}
+        <ThemeView>
+          <Toaster />
+          <Suspense fallback='Loading...'>
+            {/* @ts-expect-error Async Server Component */}
+            <AuthStatus />
+          </Suspense>
+          {children}
+        </ThemeView>
       </body>
     </html>
   )
