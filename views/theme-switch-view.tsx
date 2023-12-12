@@ -3,10 +3,11 @@
 import { useState, useEffect } from 'react'
 import { useTheme } from 'next-themes'
 import { useRouter } from 'next/navigation'
+import clsx from 'clsx'
 
 export default function ThemeSwitchView (): JSX.Element {
   const [mounted, setMounted] = useState(false)
-  const { theme, setTheme, systemTheme } = useTheme()
+  const { theme, setTheme, systemTheme, resolvedTheme } = useTheme()
   const router = useRouter()
 
   // useEffect only runs on the client, so now we can safely show the UI
@@ -25,7 +26,9 @@ export default function ThemeSwitchView (): JSX.Element {
   }
 
   function changeTheme (newTheme: string): void {
+    console.log('newTheme', newTheme)
     if (newTheme === 'system') {
+      console.log('systemTheme', systemTheme)
       if (systemTheme == null) {
         updateTheme('dark')
       } else {
@@ -36,14 +39,36 @@ export default function ThemeSwitchView (): JSX.Element {
     }
   }
 
+  function clickShade (shade: string): void {
+    console.log('shade', shade)
+    console.log('theme', theme)
+    if (theme === shade) {
+      console.log('theme === shade')
+      changeTheme('system')
+    } else {
+      changeTheme(shade)
+    }
+  }
+
+  function handleLight (): void {
+    clickShade('light')
+  }
+
+  function handleDark (): void {
+    clickShade('dark')
+  }
+
+  const buttonClasses = ['btn', 'join-item']
+  const resolvedLight = resolvedTheme === 'light'
+  const lightClassName = clsx(buttonClasses, 'btn-accent', !resolvedLight && 'btn-outline')
+  const darkClassName = clsx(buttonClasses, resolvedLight ? 'btn-neutral btn-outline' : 'btn-neutral')
+
   return (
     <>
-      <button className='btn btn-primary'>Primary</button>
-      <select value={theme} onChange={e => changeTheme(e.target.value)}>
-        <option value='system'>System</option>
-        <option value='dark'>Dark</option>
-        <option value='light'>Light</option>
-      </select>
+      <div className='join'>
+        <button className={lightClassName} onClick={handleLight}>Light</button>
+        <button className={darkClassName} onClick={handleDark}>Dark</button>
+      </div>
     </>
   )
 }
