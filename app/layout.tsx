@@ -1,11 +1,12 @@
 // These styles apply to every route in the application
 import '@/styles/globals.css'
-import '@radix-ui/themes/styles.css'
 import { Metadata } from 'next'
 import { Toaster } from 'react-hot-toast'
 import AuthStatus from 'views/auth-status'
 import { Suspense } from 'react'
 import ThemeView from 'views/theme-view'
+import { cookies } from 'next/headers'
+import getDaisyTheme from '@/lib/getDaisyTheme'
 
 const title = 'CloudSort'
 const description =
@@ -28,17 +29,21 @@ export default async function RootLayout ({
 }: {
   children: React.ReactNode
 }): Promise<JSX.Element> {
+  const themeCookie = cookies().get('theme')
+
+  const daisyTheme = getDaisyTheme({ shade: themeCookie?.value })
+
   return (
-    <html lang='en' suppressHydrationWarning>
+    <html lang='en' className={themeCookie?.value} data-theme={daisyTheme} suppressHydrationWarning>
       <body>
-        <ThemeView>
-          <Toaster />
-          <Suspense fallback='Loading...'>
+        <Suspense fallback='Loading...'>
+          <ThemeView themeCookie={themeCookie?.value}>
+            <Toaster />
             {/* @ts-expect-error Async Server Component */}
             <AuthStatus />
-          </Suspense>
-          {children}
-        </ThemeView>
+            {children}
+          </ThemeView>
+        </Suspense>
       </body>
     </html>
   )
