@@ -1,5 +1,6 @@
 module.exports = {
   content: [
+    './views/**/*.{js,ts,jsx,tsx}',
     'node_modules/daisyui/dist/**/*.js',
     'node_modules/react-daisyui/dist/**/*.js'
   ],
@@ -7,7 +8,7 @@ module.exports = {
   daisyui: {
     themes: [
       'acid',
-      'synthwave' // first one will be the default theme
+      'synthwave'
     ]
   }
 }

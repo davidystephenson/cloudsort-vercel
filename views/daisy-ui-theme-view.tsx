@@ -10,12 +10,10 @@ export default function DaisyUiThemeView ({
   children: React.ReactNode
   shade: string | undefined
 }): JSX.Element | null {
-  console.log('shade', shade)
   const dataTheme = getDaisyTheme({ shade })
-  console.log('dataTheme', dataTheme)
 
   return (
-    <Theme dataTheme={dataTheme}>
+    <Theme dataTheme={dataTheme} className='container mx-auto'>
       {children}
     </Theme>
   )

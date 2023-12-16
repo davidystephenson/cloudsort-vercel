@@ -3,11 +3,10 @@
 import { useState, useEffect } from 'react'
 import { useTheme } from 'next-themes'
 import { useRouter } from 'next/navigation'
-import clsx from 'clsx'
 
 export default function ThemeSwitchView (): JSX.Element {
   const [mounted, setMounted] = useState(false)
-  const { theme, setTheme, systemTheme, resolvedTheme } = useTheme()
+  const { setTheme, resolvedTheme } = useTheme()
   const router = useRouter()
 
   // useEffect only runs on the client, so now we can safely show the UI
@@ -19,56 +18,34 @@ export default function ThemeSwitchView (): JSX.Element {
     return <></>
   }
 
+  const lit = resolvedTheme === 'light'
+
   function updateTheme (newTheme: string): void {
     setTheme(newTheme)
     document.cookie = `theme=${newTheme}`
     router.refresh()
   }
 
-  function changeTheme (newTheme: string): void {
-    console.log('newTheme', newTheme)
-    if (newTheme === 'system') {
-      console.log('systemTheme', systemTheme)
-      if (systemTheme == null) {
-        updateTheme('dark')
-      } else {
-        updateTheme(systemTheme)
-      }
+  function changeTheme (): void {
+    if (lit) {
+      updateTheme('dark')
     } else {
-      updateTheme(newTheme)
+      updateTheme('light')
     }
   }
-
-  function clickShade (shade: string): void {
-    console.log('shade', shade)
-    console.log('theme', theme)
-    if (theme === shade) {
-      console.log('theme === shade')
-      changeTheme('system')
-    } else {
-      changeTheme(shade)
-    }
-  }
-
-  function handleLight (): void {
-    clickShade('light')
-  }
-
-  function handleDark (): void {
-    clickShade('dark')
-  }
-
-  const buttonClasses = ['btn', 'join-item']
-  const resolvedLight = resolvedTheme === 'light'
-  const lightClassName = clsx(buttonClasses, 'btn-accent', !resolvedLight && 'btn-outline')
-  const darkClassName = clsx(buttonClasses, resolvedLight ? 'btn-neutral btn-outline' : 'btn-neutral')
 
   return (
     <>
-      <div className='join'>
-        <button className={lightClassName} onClick={handleLight}>Light</button>
-        <button className={darkClassName} onClick={handleDark}>Dark</button>
-      </div>
+      <label className='cursor-pointer label'>
+        <span className='label-text'>Dark</span>
+        <input
+          type='checkbox'
+          className='toggle toggle-primary'
+          checked={lit}
+          onChange={changeTheme}
+        />
+        <span className='label-text'>Light</span>
+      </label>
     </>
   )
 }
