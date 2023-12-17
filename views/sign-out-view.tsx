@@ -7,7 +7,7 @@ export default function SignOutView (): JSX.Element {
   }
   return (
     <button
-      className='text-stone-400 hover:text-stone-200 transition-all'
+      className='btn btn-primary'
       onClick={handleClick}
     >
       Goddammit, sign me out!

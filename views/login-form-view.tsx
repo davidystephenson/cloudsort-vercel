@@ -9,15 +9,15 @@ import AuthFormView from './auth-form-view'
 
 export default function LoginFormView (): JSX.Element {
   const router = useRouter()
-  const login = useStore((state) => state.login)
-  const loginLoading = useStore((state) => state.loginLoading)
+  const sendLogin = useStore((state) => state.login.send)
+  const loginLoading = useStore((state) => state.login.loading)
 
   async function authenticate ({ email, password }: {
     email: string
     password: string
   }): Promise<void> {
     try {
-      await login({ email, password })
+      await sendLogin({ email, password })
       router.refresh()
       router.push('/protected')
     } catch (error) {
@@ -32,13 +32,11 @@ export default function LoginFormView (): JSX.Element {
       buttonContent={<LoginButtonContentView />}
       loading={loginLoading}
     >
-      <p className='text-center text-sm text-gray-600'>
-        Don&apos;t have an account?{' '}
-        <Link href='/register' className='font-semibold text-gray-800'>
+      <div>
+        <Link href='/register'>
           Sign up
-        </Link>{' '}
-        for free.
-      </p>
+        </Link>
+      </div>
     </AuthFormView>
   )
 }

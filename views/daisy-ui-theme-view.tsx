@@ -1,6 +1,6 @@
 'use client'
 
-import getDaisyTheme from '@/lib/getDaisyTheme'
+import getDaisyTheme from '@/lib/get-daisy-theme'
 import { Theme } from 'react-daisyui'
 
 export default function DaisyUiThemeView ({

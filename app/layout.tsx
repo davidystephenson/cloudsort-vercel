@@ -3,7 +3,7 @@ import '@/styles/globals.css'
 import { Metadata } from 'next'
 import { Suspense } from 'react'
 import { cookies } from 'next/headers'
-import getDaisyTheme from '@/lib/getDaisyTheme'
+import getDaisyTheme from '@/lib/get-daisy-theme'
 import LayoutView from '@/components/layout'
 
 const title = 'CloudSort'

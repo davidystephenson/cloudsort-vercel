@@ -1,14 +1,13 @@
+export interface RequestState <Props, ResponseBody = void> {
+  error: Error | undefined
+  loading: boolean
+  send: (props: Props) => Promise<ResponseBody>
+}
+export interface AuthProps {
+  email: string
+  password: string
+}
 export interface Store {
-  loginError: Error | undefined
-  loginLoading: boolean
-  login: ({ email, password }: {
-    email: string
-    password: string
-  }) => Promise<void>
-  registerError: Error | undefined
-  registerLoading: boolean
-  register: ({ email, password }: {
-    email: string
-    password: string
-  }) => Promise<void>
+  login: RequestState<AuthProps>
+  register: RequestState<AuthProps>
 }

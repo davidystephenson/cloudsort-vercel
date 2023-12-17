@@ -9,8 +9,8 @@ import RegisterButtonContentView from './register-button-content-view'
 
 export default function RegisterFormView (): JSX.Element {
   const router = useRouter()
-  const register = useStore((state) => state.login)
-  const registerLoading = useStore((state) => state.loginLoading)
+  const sendRegister = useStore((state) => state.register.send)
+  const registerLoading = useStore((state) => state.register.loading)
 
   async function authenticate ({
     email, password
@@ -19,7 +19,7 @@ export default function RegisterFormView (): JSX.Element {
     password: string
   }): Promise<void> {
     try {
-      await register({ email, password })
+      await sendRegister({ email, password })
       router.refresh()
       router.push('/protected')
     } catch (error) {
