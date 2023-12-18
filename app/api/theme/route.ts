@@ -21,6 +21,5 @@ export async function POST (
       theme: body.theme
     }
   })
-  console.log('user', user)
   return NextResponse.json(user)
 }

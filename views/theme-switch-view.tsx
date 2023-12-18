@@ -1,14 +1,12 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { useTheme } from 'next-themes'
 import { useRouter } from 'next/navigation'
 import useStore from '@/lib/store'
 
 export default function ThemeSwitchView (): JSX.Element {
   const [mounted, setMounted] = useState(false)
   const shade = useStore(state => state.shade)
-  const { setTheme } = useTheme()
   const router = useRouter()
   useEffect(() => {
     setMounted(true)
@@ -17,7 +15,6 @@ export default function ThemeSwitchView (): JSX.Element {
   if (!mounted) {
     return <></>
   }
-  console.log('shade', shade)
   const lit = shade === 'light'
 
   async function postTheme ({ theme }: {
@@ -38,7 +35,6 @@ export default function ThemeSwitchView (): JSX.Element {
   function updateTheme ({ theme }: {
     theme: string
   }): void {
-    setTheme(theme)
     document.cookie = `theme=${theme};`
     document.cookie = `newTheme=${theme}; expires=0;`
     router.refresh()
@@ -52,7 +48,6 @@ export default function ThemeSwitchView (): JSX.Element {
       updateTheme({ theme: 'light' })
     }
   }
-  console.log('lit', lit)
 
   return (
     <>

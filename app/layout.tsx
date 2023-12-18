@@ -6,7 +6,6 @@ import { cookies } from 'next/headers'
 import getDaisyTheme from '@/lib/get-daisy-theme'
 import LayoutView from '@/components/layout'
 import auth from '@/lib/auth'
-import { clearNewTheme } from './actions/clearNewTheme'
 
 const title = 'CloudSort'
 const description = 'Sort your lists.'
@@ -24,24 +23,17 @@ export const metadata: Metadata = {
 }
 
 export default async function RootLayout ({
-  children,
-  params
+  children
 }: {
   children: React.ReactNode
-  params: Record<string, string>
 }): Promise<JSX.Element> {
   const authSession = await auth()
-  // console.log('session', authSession)
   const themeCookie = cookies().get('theme')
-  // console.log('themeCookie', themeCookie)
   const newThemeCookie = cookies().get('newTheme')
-  // console.log('newThemeCookie', newThemeCookie)
   const newTheme = newThemeCookie?.value != null && newThemeCookie.value !== 'none'
     ? newThemeCookie.value
     : undefined
-  // void clearNewTheme()
   const shade = newTheme ?? authSession?.user.theme ?? themeCookie?.value
-  console.log('shade', shade)
   const daisyTheme = getDaisyTheme({ shade })
 
   return (

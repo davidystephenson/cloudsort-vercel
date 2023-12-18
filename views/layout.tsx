@@ -11,7 +11,6 @@ export default function LayoutView ({
   children: ReactNode
   shade?: string
 }): JSX.Element {
-  console.log('layoutview shade', shade)
   return (
     <ThemeView shade={shade}>
       <ThemeSwitchView />
