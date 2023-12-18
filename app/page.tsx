@@ -1,3 +1,4 @@
+import CreateListButtonView from '@/components/create-list-button-view'
 import Link from 'next/link'
 
 export default function Home (): JSX.Element {
@@ -12,13 +13,7 @@ export default function Home (): JSX.Element {
         </Link>
       </div>
       <div>
-        <a
-          href='https://github.com/steven-tey/nextjs-typescript-starter'
-          target='_blank'
-          rel='noopener noreferrer'
-        >
-          GitHub
-        </a>
+        <CreateListButtonView />
       </div>
     </>
   )

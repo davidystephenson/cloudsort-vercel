@@ -1,8 +1,5 @@
 'use client'
 
-import getDaisyTheme from '@/lib/get-daisy-theme'
-import { Theme } from 'react-daisyui'
-
 export default function DaisyUiThemeView ({
   children,
   shade
@@ -10,11 +7,9 @@ export default function DaisyUiThemeView ({
   children: React.ReactNode
   shade: string | undefined
 }): JSX.Element | null {
-  const dataTheme = getDaisyTheme({ shade })
-
   return (
-    <Theme dataTheme={dataTheme} className='container mx-auto'>
+    <div className='container mx-auto'>
       {children}
-    </Theme>
+    </div>
   )
 }
