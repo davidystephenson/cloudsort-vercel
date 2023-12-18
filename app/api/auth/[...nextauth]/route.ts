@@ -38,8 +38,30 @@ export const authOptions: NextAuthOptions = {
         }
         return u
       }
+
     })
-  ]
+  ],
+  callbacks: {
+    async session ({ session }) {
+      if (session.user == null || session.user.email == null) {
+        throw new Error('There is no email')
+      }
+      const dbUser = await prisma.user.findUnique({
+        where: {
+          email: session.user.email
+        }
+      })
+      if (dbUser == null) {
+        throw new Error('There is no user')
+      }
+      const { password, ...sessionUser } = dbUser
+      const newSession = {
+        ...session,
+        user: sessionUser
+      }
+      return newSession
+    }
+  }
 }
 
 const handler = NextAuth(authOptions)

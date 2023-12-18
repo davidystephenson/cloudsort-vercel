@@ -2,16 +2,19 @@ import { ReactNode } from 'react'
 import { Toaster } from 'react-hot-toast'
 import AuthStatus from './auth-status'
 import ThemeView from './theme-view'
+import ThemeSwitchView from './theme-switch-view'
 
 export default function LayoutView ({
   children,
-  themeCookie
+  shade
 }: {
   children: ReactNode
-  themeCookie?: string
+  shade?: string
 }): JSX.Element {
+  console.log('layoutview shade', shade)
   return (
-    <ThemeView themeCookie={themeCookie}>
+    <ThemeView shade={shade}>
+      <ThemeSwitchView />
       <Toaster />
       {/* @ts-expect-error Async Server Component */}
       <AuthStatus />

@@ -1,24 +1,26 @@
 import prisma from '@/lib/prisma'
-import { NextResponse } from 'next/server'
+import { NextRequest, NextResponse } from 'next/server'
+import { authOptions } from '../auth/[...nextauth]/route'
+import { getServerSession } from 'next-auth/next'
 
-export async function POST (req: Request): Promise<Response> {
-  const { email, theme } = await req.json()
-  const exists = await prisma.user.findUnique({
+export async function POST (
+  req: NextRequest
+): Promise<Response> {
+  const session = await getServerSession(authOptions)
+  if (session == null) {
+    const body = { error: 'There is no session' }
+    const options = { status: 400 }
+    return NextResponse.json(body, options)
+  }
+  const body = await req.json()
+  const user = await prisma.user.update({
     where: {
-      email
+      id: session.user.id
+    },
+    data: {
+      theme: body.theme
     }
   })
-  if (exists == null) {
-    return NextResponse.json({ error: 'There is no user' }, { status: 404 })
-  } else {
-    const user = await prisma.user.update({
-      where: {
-        email
-      },
-      data: {
-        theme
-      }
-    })
-    return NextResponse.json(user)
-  }
+  console.log('user', user)
+  return NextResponse.json(user)
 }

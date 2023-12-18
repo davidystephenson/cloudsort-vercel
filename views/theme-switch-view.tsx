@@ -3,13 +3,13 @@
 import { useState, useEffect } from 'react'
 import { useTheme } from 'next-themes'
 import { useRouter } from 'next/navigation'
+import useStore from '@/lib/store'
 
 export default function ThemeSwitchView (): JSX.Element {
   const [mounted, setMounted] = useState(false)
-  const { setTheme, resolvedTheme } = useTheme()
+  const shade = useStore(state => state.shade)
+  const { setTheme } = useTheme()
   const router = useRouter()
-
-  // useEffect only runs on the client, so now we can safely show the UI
   useEffect(() => {
     setMounted(true)
   }, [])
@@ -17,22 +17,42 @@ export default function ThemeSwitchView (): JSX.Element {
   if (!mounted) {
     return <></>
   }
+  console.log('shade', shade)
+  const lit = shade === 'light'
 
-  const lit = resolvedTheme === 'light'
+  async function postTheme ({ theme }: {
+    theme: string
+  }): Promise<void> {
+    const body = JSON.stringify({ theme })
+    const options = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body
+    }
+    await fetch('/api/theme', options)
+    document.cookie = 'newTheme=none;'
+  }
 
-  function updateTheme (newTheme: string): void {
-    setTheme(newTheme)
-    document.cookie = `theme=${newTheme}`
+  function updateTheme ({ theme }: {
+    theme: string
+  }): void {
+    setTheme(theme)
+    document.cookie = `theme=${theme};`
+    document.cookie = `newTheme=${theme}; expires=0;`
     router.refresh()
+    void postTheme({ theme })
   }
 
   function changeTheme (): void {
     if (lit) {
-      updateTheme('dark')
+      updateTheme({ theme: 'dark' })
     } else {
-      updateTheme('light')
+      updateTheme({ theme: 'light' })
     }
   }
+  console.log('lit', lit)
 
   return (
     <>

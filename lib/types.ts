@@ -10,4 +10,5 @@ export interface AuthProps {
 export interface Store {
   login: RequestState<AuthProps>
   register: RequestState<AuthProps>
+  shade?: string
 }

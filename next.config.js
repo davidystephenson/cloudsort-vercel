@@ -5,7 +5,10 @@ const nextConfig = {
   },
   swcMinify: true,
   transpilePackages: ['react-daisyui'],
-  reactStrictMode: true
+  reactStrictMode: true,
+  experimental: {
+    serverActions: true
+  }
 }
 
 module.exports = nextConfig

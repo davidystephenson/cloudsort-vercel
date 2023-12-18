@@ -1,10 +1,8 @@
-import ThemeSwitchView from '@/components/theme-switch-view'
 import Link from 'next/link'
 
 export default function Home (): JSX.Element {
   return (
     <>
-      <ThemeSwitchView />
       <div>
         <Link
           href='/protected'

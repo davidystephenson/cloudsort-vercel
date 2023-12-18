@@ -2,17 +2,23 @@
 
 import { ThemeProvider } from 'next-themes'
 import DaisyUiThemeView from './daisy-ui-theme-view'
+import { useEffect } from 'react'
+import useStore from '@/lib/store'
 
 export default function ThemeView ({
   children,
-  themeCookie
+  shade
 }: {
   children: React.ReactNode
-  themeCookie: string | undefined
+  shade: string | undefined
 }): JSX.Element {
+  useEffect(() => {
+    useStore.setState({ shade })
+  }, [shade])
+
   return (
-    <ThemeProvider attribute='class' defaultTheme={themeCookie}>
-      <DaisyUiThemeView shade={themeCookie}>
+    <ThemeProvider attribute='class' forcedTheme={shade}>
+      <DaisyUiThemeView shade={shade}>
         {children}
       </DaisyUiThemeView>
     </ThemeProvider>
