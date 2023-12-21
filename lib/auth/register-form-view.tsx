@@ -1,18 +1,16 @@
 'use client'
 
 import toast from 'react-hot-toast'
-import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import useStore from '@/lib/store'
-import AuthFormView from './auth-form-view'
-import RegisterButtonContentView from './register-button-content-view'
+import AuthFormView from '../auth-form/auth-form-view'
+import SubmitRequestView from '../request/submit-request-view'
 
 export default function RegisterFormView (): JSX.Element {
   const router = useRouter()
   const sendRegister = useStore((state) => state.register.send)
-  const registerLoading = useStore((state) => state.register.loading)
 
-  async function authenticate ({
+  async function register ({
     email, password
   }: {
     email: string
@@ -30,17 +28,11 @@ export default function RegisterFormView (): JSX.Element {
 
   return (
     <AuthFormView
-      loading={registerLoading}
-      authenticate={authenticate}
-      buttonContent={<RegisterButtonContentView />}
+      send={register}
     >
-      <p className='text-center text-sm text-gray-600'>
-        Already have an account?{' '}
-        <Link href='/login' className='font-semibold text-gray-800'>
-          Sign in
-        </Link>{' '}
-        instead.
-      </p>
+      <SubmitRequestView>
+        Register
+      </SubmitRequestView>
     </AuthFormView>
   )
 }

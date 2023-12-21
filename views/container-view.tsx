@@ -1,6 +1,6 @@
 'use client'
 
-export default function DaisyUiThemeView ({
+export default function ContainerView ({
   children,
   shade
 }: {

@@ -1,39 +1,10 @@
 import { signIn } from 'next-auth/react'
 import { create } from 'zustand'
-import { AuthProps, CreateListProps, Store } from '@/lib/types'
+import { AuthProps, Store } from '@/lib/types'
 import { immer } from 'zustand/middleware/immer'
 
 const useStore = create<Store>()(
   immer((set) => ({
-    createList: {
-      error: undefined,
-      loading: false,
-      send: async ({ name }: CreateListProps) => {
-        set(state => {
-          state.createList.error = undefined
-          state.createList.loading = true
-        })
-        const body = JSON.stringify({ name })
-        const result = await fetch('/api/list', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body
-        })
-        console.log('result?', result)
-        set(state => {
-          state.register.loading = false
-        })
-        if (result.status !== 200) {
-          const json = await result.json()
-          set(state => {
-            state.createList.error = new Error(json.error)
-            state.createList.loading = false
-          })
-        }
-      }
-    },
     login: {
       error: undefined,
       loading: false,

@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import useStore from '@/lib/store'
+import { Switch } from '@nextui-org/react'
 
 export default function ThemeSwitchView (): JSX.Element {
   const [mounted, setMounted] = useState(false)
@@ -15,7 +16,7 @@ export default function ThemeSwitchView (): JSX.Element {
   if (!mounted) {
     return <></>
   }
-  const lit = shade === 'light'
+  const darkened = shade === 'dark'
 
   async function postTheme ({ theme }: {
     theme: string
@@ -41,8 +42,8 @@ export default function ThemeSwitchView (): JSX.Element {
     void postTheme({ theme })
   }
 
-  function changeTheme (): void {
-    if (lit) {
+  function changeTheme (darkened: boolean): void {
+    if (darkened) {
       updateTheme({ theme: 'dark' })
     } else {
       updateTheme({ theme: 'light' })
@@ -51,16 +52,7 @@ export default function ThemeSwitchView (): JSX.Element {
 
   return (
     <>
-      <label className='cursor-pointer label'>
-        <span className='label-text'>Dark</span>
-        <input
-          type='checkbox'
-          className='toggle toggle-primary'
-          checked={lit}
-          onChange={changeTheme}
-        />
-        <span className='label-text'>Light</span>
-      </label>
+      <Switch isSelected={darkened} onValueChange={changeTheme} />
     </>
   )
 }

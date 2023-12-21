@@ -1,8 +1,8 @@
 'use client'
 
-import clsx from 'clsx'
+import { Button } from '@nextui-org/react'
 
-export default function AuthFormView ({
+export default function AuthInputsView ({
   authenticate,
   buttonContent,
   children,
@@ -20,12 +20,6 @@ export default function AuthFormView ({
       password: e.currentTarget.password.value
     })
   }
-
-  const buttonLoadingClass = loading && 'btn-disabled'
-  const buttonClass = clsx(
-    'btn btn-primary',
-    buttonLoadingClass
-  )
 
   return (
     <form
@@ -53,12 +47,13 @@ export default function AuthFormView ({
         />
       </div>
       {children}
-      <button
-        disabled={loading}
-        className={buttonClass}
+
+      <Button
+        isLoading={loading}
+        type='submit'
       >
         {buttonContent}
-      </button>
+      </Button>
     </form>
   )
 }

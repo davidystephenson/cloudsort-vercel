@@ -1,6 +1,6 @@
 import { ReactNode } from 'react'
 import { Toaster } from 'react-hot-toast'
-import AuthStatus from './auth-status'
+import AuthStatus from '../lib/auth/auth-status'
 import ThemeView from './theme-view'
 import ThemeSwitchView from './theme-switch-view'
 

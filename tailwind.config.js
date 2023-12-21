@@ -1,14 +1,16 @@
-module.exports = {
+import { nextui } from '@nextui-org/react'
+
+const config = {
   content: [
     './views/**/*.{js,ts,jsx,tsx}',
-    'node_modules/daisyui/dist/**/*.js',
-    'node_modules/react-daisyui/dist/**/*.js'
+    './lib/**/*.{js,ts,jsx,tsx}',
+    './node_modules/@nextui-org/theme/dist/**/*.{js,ts,jsx,tsx}'
   ],
-  plugins: [require('daisyui')],
-  daisyui: {
-    themes: [
-      'acid',
-      'synthwave'
-    ]
-  }
+  theme: {
+    extend: {}
+  },
+  darkMode: 'class',
+  plugins: [nextui()]
 }
+
+export default config

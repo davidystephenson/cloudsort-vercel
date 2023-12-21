@@ -1,8 +1,10 @@
 'use client'
 
-import DaisyUiThemeView from './daisy-ui-theme-view'
+import ContainerView from './container-view'
 import { useEffect } from 'react'
 import useStore from '@/lib/store'
+import { NextUIProvider } from '@nextui-org/react'
+import { useRouter } from 'next/navigation'
 
 export default function ThemeView ({
   children,
@@ -11,13 +13,17 @@ export default function ThemeView ({
   children: React.ReactNode
   shade: string | undefined
 }): JSX.Element {
+  const router = useRouter()
+
   useEffect(() => {
     useStore.setState({ shade })
   }, [shade])
 
   return (
-    <DaisyUiThemeView shade={shade}>
-      {children}
-    </DaisyUiThemeView>
+    <NextUIProvider navigate={router.push}>
+      <ContainerView shade={shade}>
+        {children}
+      </ContainerView>
+    </NextUIProvider>
   )
 }
