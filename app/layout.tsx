@@ -3,7 +3,7 @@ import '@/styles/globals.css'
 import { Metadata } from 'next'
 import { Suspense } from 'react'
 import { cookies } from 'next/headers'
-import LayoutView from '@/components/layout-view'
+import ThemeView from '@/lib/theme/theme-view'
 import serverAuth from '@/lib/auth/server-auth'
 import clsx from 'clsx'
 
@@ -43,9 +43,9 @@ export default async function RootLayout ({
     >
       <body>
         <Suspense fallback='Loading...'>
-          <LayoutView shade={shade}>
+          <ThemeView shade={shade}>
             {children}
-          </LayoutView>
+          </ThemeView>
         </Suspense>
       </body>
     </html>

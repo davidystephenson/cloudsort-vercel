@@ -14,10 +14,12 @@ export function useRequestContext (): RequestContextValue {
 
 export function RequestProvider ({
   children,
-  send
+  send,
+  endless = false
 }: {
   children: React.ReactNode
   send: () => Promise<void>
+  endless?: boolean
 }): JSX.Element {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<AxiosError<ErrorBody>>()
@@ -32,6 +34,9 @@ export function RequestProvider ({
       const e = error as AxiosError<ErrorBody>
       setError(e)
       setErrorMessage(e.response?.data?.error ?? e.message)
+    }
+    if (endless) {
+      return
     }
     setLoading(false)
   }

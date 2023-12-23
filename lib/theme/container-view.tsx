@@ -1,15 +1,13 @@
 'use client'
 
-export default function ContainerView ({
-  children,
-  shade
-}: {
-  children: React.ReactNode
-  shade: string | undefined
+import { ReactNode } from 'react'
+
+export default function ContainerView (props: {
+  children: ReactNode
 }): JSX.Element | null {
   return (
     <div className='container mx-auto'>
-      {children}
+      {props.children}
     </div>
   )
 }

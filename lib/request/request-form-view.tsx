@@ -6,13 +6,15 @@ import RequestFormConsumer from './request-form-consumer'
 
 export default function RequestFormView ({
   children,
+  endless = false,
   send
 }: {
   children: ReactNode
+  endless?: boolean
   send: () => Promise<void>
 }): JSX.Element {
   return (
-    <RequestProvider send={send}>
+    <RequestProvider endless={endless} send={send}>
       <RequestFormConsumer>
         {children}
       </RequestFormConsumer>

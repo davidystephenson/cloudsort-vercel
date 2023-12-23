@@ -10,7 +10,7 @@ export default function AuthFormConsumer (props: {
   const authForm = useAuthFormContext()
 
   return (
-    <RequestFormView send={authForm.send}>
+    <RequestFormView send={authForm.send} endless>
       <AuthFieldsView />
       {props.children}
     </RequestFormView>

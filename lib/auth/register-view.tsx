@@ -2,15 +2,15 @@
 
 import AuthFormView from '../auth-form/auth-form-view'
 import SubmitRequestView from '../request/submit-request-view'
-import login from './login'
+import register from './register'
 
-export default function LoginFormView (): JSX.Element {
+export default function RegisterView (): JSX.Element {
   return (
     <AuthFormView
-      send={login}
+      send={register}
     >
       <SubmitRequestView>
-        Login
+        Register
       </SubmitRequestView>
     </AuthFormView>
   )
