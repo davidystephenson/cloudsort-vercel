@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
-import { Switch } from '@nextui-org/react'
+import { Switch, Skeleton } from '@nextui-org/react'
 import { useTheme } from './theme-context'
 
 export default function ThemeSwitchView (): JSX.Element {
@@ -14,7 +14,11 @@ export default function ThemeSwitchView (): JSX.Element {
   }, [])
 
   if (!mounted) {
-    return <></>
+    return (
+      <Skeleton className='rounded-lg'>
+        <Switch className='min-w' />
+      </Skeleton>
+    )
   }
   const darkened = theme.shade === 'dark'
 
