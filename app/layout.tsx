@@ -6,6 +6,7 @@ import { cookies } from 'next/headers'
 import ThemeView from '@/lib/theme/theme-view'
 import serverAuth from '@/lib/auth/server-auth'
 import clsx from 'clsx'
+import LayoutView from '@/lib/layout/layout-view'
 
 const title = 'CloudSort'
 const description = 'Sort your lists.'
@@ -44,7 +45,10 @@ export default async function RootLayout ({
       <body>
         <Suspense fallback='Loading...'>
           <ThemeView shade={shade}>
-            {children}
+            {/* @ts-expect-error Async Server Component */}
+            <LayoutView>
+              {children}
+            </LayoutView>
           </ThemeView>
         </Suspense>
       </body>

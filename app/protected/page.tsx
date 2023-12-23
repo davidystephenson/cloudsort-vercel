@@ -1,9 +1,7 @@
-import SignOutView from '@/lib/auth/logout-view'
-
 export default function Home (): JSX.Element {
   return (
     <>
-      <SignOutView />
+      <h1 className='text-lg'>Sort your lists</h1>
     </>
   )
 }

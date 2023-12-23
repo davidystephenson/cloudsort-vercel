@@ -1,8 +1,9 @@
+'use client'
+
 import { ReactNode } from 'react'
-import AuthStatus from '../auth/auth-status'
-import ThemeSwitchView from './theme-switch-view'
 import { ThemeProvider } from '@/lib/theme/theme-context'
-import ThemeConsumer from '@/lib/theme/theme-consumer'
+import { useRouter } from 'next/navigation'
+import { NextUIProvider } from '@nextui-org/react'
 
 export default function ThemeView ({
   children,
@@ -11,14 +12,13 @@ export default function ThemeView ({
   children: ReactNode
   shade?: string
 }): JSX.Element {
+  const router = useRouter()
+
   return (
-    <ThemeProvider shade={shade}>
-      <ThemeConsumer>
-        <ThemeSwitchView />
-        {/* @ts-expect-error Async Server Component */}
-        <AuthStatus />
+    <NextUIProvider navigate={router.push}>
+      <ThemeProvider shade={shade}>
         {children}
-      </ThemeConsumer>
-    </ThemeProvider>
+      </ThemeProvider>
+    </NextUIProvider>
   )
 }
