@@ -15,8 +15,8 @@ export default function ThemeSwitchView (): JSX.Element {
 
   if (!mounted) {
     return (
-      <Skeleton className='rounded-lg'>
-        <Switch className='min-w' />
+      <Skeleton className='rounded-full w-fit'>
+        <Switch classNames={{ wrapper: 'mr-0' }} />
       </Skeleton>
     )
   }
