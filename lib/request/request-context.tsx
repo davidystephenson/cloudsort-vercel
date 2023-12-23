@@ -23,17 +23,13 @@ export function RequestProvider ({
   const [error, setError] = useState<AxiosError<ErrorBody>>()
   const [errorMessage, setErrorMessage] = useState<string>()
   async function sendRequest (): Promise<void> {
-    console.log('sendRequest')
     setLoading(true)
     setError(undefined)
     setErrorMessage(undefined)
     try {
       await send()
-      console.log('after')
     } catch (error) {
-      console.log('error', error)
       const e = error as AxiosError<ErrorBody>
-      console.log('e', e)
       setError(e)
       setErrorMessage(e.response?.data?.error ?? e.message)
     }

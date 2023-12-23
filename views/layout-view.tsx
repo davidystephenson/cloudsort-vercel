@@ -1,8 +1,8 @@
 import { ReactNode } from 'react'
-import { Toaster } from 'react-hot-toast'
 import AuthStatus from '../lib/auth/auth-status'
-import ThemeView from './theme-view'
-import ThemeSwitchView from './theme-switch-view'
+import ThemeSwitchView from '../lib/theme/theme-switch-view'
+import { ThemeProvider } from '@/lib/theme/theme-context'
+import ThemeView from '@/lib/theme/theme-view'
 
 export default function LayoutView ({
   children,
@@ -12,12 +12,13 @@ export default function LayoutView ({
   shade?: string
 }): JSX.Element {
   return (
-    <ThemeView shade={shade}>
-      <ThemeSwitchView />
-      <Toaster />
-      {/* @ts-expect-error Async Server Component */}
-      <AuthStatus />
-      {children}
-    </ThemeView>
+    <ThemeProvider shade={shade}>
+      <ThemeView>
+        <ThemeSwitchView />
+        {/* @ts-expect-error Async Server Component */}
+        <AuthStatus />
+        {children}
+      </ThemeView>
+    </ThemeProvider>
   )
 }

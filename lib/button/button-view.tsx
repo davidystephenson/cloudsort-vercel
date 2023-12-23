@@ -1,7 +1,7 @@
 'use client'
 
 import { ButtonProvider } from '@/lib/button/button-context'
-import ButtonConsumerView from './button-consumer-view'
+import ButtonConsumer from './button-consumer'
 import { ReactNode } from 'react'
 
 export default function ButtonView (props: {
@@ -18,9 +18,9 @@ export default function ButtonView (props: {
       onClick={props.onClick}
       type={props.type}
     >
-      <ButtonConsumerView>
+      <ButtonConsumer>
         {props.children}
-      </ButtonConsumerView>
+      </ButtonConsumer>
     </ButtonProvider>
   )
 }

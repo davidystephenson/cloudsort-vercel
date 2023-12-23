@@ -10,13 +10,11 @@ export default function RequestFormConsumer ({
 }): JSX.Element {
   const request = useRequestContext()
   function handleSubmit (event: FormEvent<HTMLFormElement>): void {
-    console.log('handleSubmit')
     event.preventDefault()
     void request.send()
   }
-  console.log('request', request)
   return (
-    <form onSubmit={handleSubmit}>
+    <form onSubmit={handleSubmit} suppressHydrationWarning>
       {children}
     </form>
   )

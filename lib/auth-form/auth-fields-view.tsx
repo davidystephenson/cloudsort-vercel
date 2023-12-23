@@ -9,8 +9,6 @@ export default function AuthFieldsView (): JSX.Element {
     <>
       <div>
         <input
-          id='email'
-          name='email'
           type='email'
           placeholder='email'
           autoComplete='email'
@@ -22,10 +20,9 @@ export default function AuthFieldsView (): JSX.Element {
       </div>
       <div>
         <input
-          id='password'
-          name='password'
           type='password'
           placeholder='password'
+          autoComplete='current-password'
           required
           className='input'
           onChange={authForm.handlePasswordChange}

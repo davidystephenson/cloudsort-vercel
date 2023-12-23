@@ -7,7 +7,7 @@ export default function AuthFormView ({
   send
 }: {
   children: React.ReactNode
-  send: ({ email, password }: { email: string, password: string }) => Promise<void>
+  send: ({ email, password }: { email: string, password: string }) => Promise<unknown>
 }): JSX.Element {
   return (
     <AuthFormProvider send={send}>

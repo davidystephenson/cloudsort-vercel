@@ -9,9 +9,7 @@ export default async function login ({ email, password }: {
     email,
     password
   }
-  console.log('body', body)
   const result = await nextAuthSignIn('credentials', body)
-  console.log('result', result)
   if (result == null) {
     throw new Error('There is no result')
   }

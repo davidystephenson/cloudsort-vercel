@@ -2,12 +2,12 @@
 
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
-import useStore from '@/lib/store'
 import { Switch } from '@nextui-org/react'
+import { useTheme } from './theme-context'
 
 export default function ThemeSwitchView (): JSX.Element {
   const [mounted, setMounted] = useState(false)
-  const shade = useStore(state => state.shade)
+  const theme = useTheme()
   const router = useRouter()
   useEffect(() => {
     setMounted(true)
@@ -16,7 +16,7 @@ export default function ThemeSwitchView (): JSX.Element {
   if (!mounted) {
     return <></>
   }
-  const darkened = shade === 'dark'
+  const darkened = theme.shade === 'dark'
 
   async function postTheme ({ theme }: {
     theme: string

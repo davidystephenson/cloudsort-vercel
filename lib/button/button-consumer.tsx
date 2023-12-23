@@ -5,7 +5,7 @@ import { Button, ButtonGroup, Popover, PopoverContent, PopoverTrigger } from '@n
 import { ReactNode } from 'react'
 import { MdError } from 'react-icons/md'
 
-export default function ButtonConsumerView ({
+export default function ButtonConsumer ({
   children
 }: {
   children: ReactNode
@@ -18,7 +18,7 @@ export default function ButtonConsumerView ({
         isLoading={button.loading}
         type={button.type}
       >
-        {children} xyz
+        {children}
       </Button>
     )
   }
@@ -32,7 +32,11 @@ export default function ButtonConsumerView ({
       >
         {children}
       </Button>
-      <Popover showArrow>
+      <Popover
+        classNames={{ content: 'bg-danger text-black' }}
+        placement='right-start'
+        showArrow
+      >
         <PopoverTrigger>
           <Button isIconOnly color='danger'>
             <MdError className='h-[55%] w-max' />

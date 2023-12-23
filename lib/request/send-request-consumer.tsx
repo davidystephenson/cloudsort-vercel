@@ -13,7 +13,6 @@ export default function SendRequestConsumer ({
   function handleClick (): void {
     void request.send()
   }
-  console.log('request', request)
   return (
     <ButtonView
       onClick={handleClick}
