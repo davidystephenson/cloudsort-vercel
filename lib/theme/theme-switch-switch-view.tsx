@@ -1,0 +1,69 @@
+'use client'
+
+import { Skeleton, Switch } from '@nextui-org/react'
+import { useState, useEffect } from 'react'
+import { useTheme } from './theme-context'
+import { useRouter } from 'next/navigation'
+
+export default function ThemeSwitchSwitchView (): JSX.Element {
+  const theme = useTheme()
+  const router = useRouter()
+  const [mounted, setMounted] = useState(false)
+  useEffect(() => {
+    setMounted(true)
+  }, [])
+  const classNames = { wrapper: 'ml-2' }
+  if (!mounted) {
+    return (
+      <>
+        <Skeleton
+          className='rounded-full w-fit h-7 ml-2 mr-2'
+        >
+          <Switch
+            classNames={{ wrapper: 'ml-0 mr-0' }}
+          />
+        </Skeleton>
+      </>
+    )
+  }
+  const darkened = theme.shade === 'dark'
+
+  async function postTheme ({ theme }: {
+    theme: string
+  }): Promise<void> {
+    const body = JSON.stringify({ theme })
+    const options = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body
+    }
+    await fetch('/api/theme', options)
+    document.cookie = 'newTheme=none;'
+  }
+
+  function updateTheme ({ theme }: {
+    theme: string
+  }): void {
+    document.cookie = `theme=${theme};`
+    document.cookie = `newTheme=${theme}; expires=0;`
+    router.refresh()
+    void postTheme({ theme })
+  }
+
+  function changeTheme (darkened: boolean): void {
+    if (darkened) {
+      updateTheme({ theme: 'dark' })
+    } else {
+      updateTheme({ theme: 'light' })
+    }
+  }
+  return (
+    <Switch
+      isSelected={darkened}
+      onValueChange={changeTheme}
+      classNames={classNames}
+    />
+  )
+}

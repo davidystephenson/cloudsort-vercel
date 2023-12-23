@@ -2,17 +2,14 @@
 import { AuthFormProvider } from './auth-form-context'
 import AuthFormConsumer from './auth-form-consumer'
 
-export default function AuthFormView ({
-  children,
-  send
-}: {
+export default function AuthFormView (props: {
   children: React.ReactNode
-  send: ({ email, password }: { email: string, password: string }) => Promise<unknown>
+  send: (props: { email: string, password: string }) => Promise<unknown>
 }): JSX.Element {
   return (
-    <AuthFormProvider send={send}>
+    <AuthFormProvider send={props.send}>
       <AuthFormConsumer>
-        {children}
+        {props.children}
       </AuthFormConsumer>
     </AuthFormProvider>
   )

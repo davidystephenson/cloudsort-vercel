@@ -14,7 +14,7 @@ export function useAuthFormContext (): AuthFormContextValue {
 
 export function AuthFormProvider (props: {
   children: React.ReactNode
-  send: ({ email, password }: { email: string, password: string }) => Promise<unknown>
+  send: (props: { email: string, password: string }) => Promise<unknown>
 }): JSX.Element {
   const router = useRouter()
   const [email, setEmail] = useState('')
