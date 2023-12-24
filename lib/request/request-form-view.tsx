@@ -1,19 +1,20 @@
 'use client'
 
 import { ReactNode } from 'react'
-import { RequestProvider } from './request-context'
-import RequestFormConsumer from './request-form-consumer'
+import { FormProvider } from '../form/form-context'
+import { Fields } from '../form/form-types'
+import RequestFormController from './request-form-controller'
 
 export default function RequestFormView (props: {
   children: ReactNode
   endless?: boolean
-  send: () => Promise<void>
+  send: (fields: Fields) => Promise<unknown>
 }): JSX.Element {
   return (
-    <RequestProvider endless={props.endless} send={props.send}>
-      <RequestFormConsumer>
+    <FormProvider>
+      <RequestFormController endless={props.endless} send={props.send}>
         {props.children}
-      </RequestFormConsumer>
-    </RequestProvider>
+      </RequestFormController>
+    </FormProvider>
   )
 }

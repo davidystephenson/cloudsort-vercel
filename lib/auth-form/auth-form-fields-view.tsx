@@ -1,34 +1,23 @@
-'use client'
-
-import { Input } from '@nextui-org/react'
-import { useAuthFormContext } from './auth-form-context'
+import FormFieldView from '../form/form-field-view'
 
 export default function AuthFormFieldsView (): JSX.Element {
-  const authForm = useAuthFormContext()
-
   return (
     <>
-      <Input
+      <FormFieldView
         autoComplete='email'
         color='primary'
         label='Email'
-        onChange={authForm.handleChange}
+        name='email'
         isRequired
-        ref={authForm.emailRef}
         type='email'
-        value={authForm.email}
-        variant='underlined'
       />
-      <Input
+      <FormFieldView
         autoComplete='current-password'
         color='primary'
         label='Password'
-        onChange={authForm.handleChange}
+        name='password'
         isRequired
-        ref={authForm.passwordRef}
         type='password'
-        value={authForm.password}
-        variant='underlined'
       />
     </>
   )

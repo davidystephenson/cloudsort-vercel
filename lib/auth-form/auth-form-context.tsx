@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, useRef } from 'react'
+import { createContext, useContext } from 'react'
 import { useRouter } from 'next/navigation'
 import { AuthFormContextValue } from './auth-form-types'
 
@@ -17,31 +17,16 @@ export function AuthFormProvider (props: {
   send: (props: { email: string, password: string }) => Promise<unknown>
 }): JSX.Element {
   const router = useRouter()
-  const emailRef = useRef<HTMLInputElement | null>(null)
-  console.log('emailRef', emailRef.current?.validationMessage)
-  const passwordRef = useRef<HTMLInputElement | null>(null)
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  function handleChange (): void {
-    if (emailRef.current != null) {
-      setEmail(emailRef.current.value)
-    }
-    if (passwordRef.current != null) {
-      setPassword(passwordRef.current.value)
-    }
-  }
   async function send (): Promise<void> {
     console.log('send')
-    await props.send({ email, password })
+    await props.send({
+      email: '1@fake',
+      password: 'fake'
+    })
     router.refresh()
     router.push('/protected')
   }
   const value: AuthFormContextValue = {
-    email,
-    emailRef,
-    handleChange,
-    password,
-    passwordRef,
     send
   }
   return (
