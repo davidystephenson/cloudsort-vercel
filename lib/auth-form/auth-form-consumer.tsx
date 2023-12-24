@@ -1,7 +1,7 @@
 'use client'
 
 import RequestFormView from '../request/request-form-view'
-import AuthFieldsView from './auth-fields-view'
+import AuthFormFieldsView from './auth-form-fields-view'
 import { useAuthFormContext } from './auth-form-context'
 
 export default function AuthFormConsumer (props: {
@@ -11,7 +11,7 @@ export default function AuthFormConsumer (props: {
 
   return (
     <RequestFormView send={authForm.send} endless>
-      <AuthFieldsView />
+      <AuthFormFieldsView />
       {props.children}
     </RequestFormView>
   )

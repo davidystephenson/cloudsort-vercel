@@ -4,7 +4,7 @@ import { useButtonContext } from '@/lib/button/button-context'
 import { ButtonGroup, Popover, PopoverContent, PopoverTrigger } from '@nextui-org/react'
 import { ForwardedRef, ReactNode, forwardRef } from 'react'
 import { MdError } from 'react-icons/md'
-import ButtonDisplayView from './button-display-view'
+import ButtonDisplayView from '../theme/button-display-view'
 
 function Consumer (
   props: {

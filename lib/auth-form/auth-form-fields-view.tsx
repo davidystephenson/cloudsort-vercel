@@ -2,7 +2,7 @@
 
 import { useAuthFormContext } from './auth-form-context'
 
-export default function AuthFieldsView (): JSX.Element {
+export default function AuthFormFieldsView (): JSX.Element {
   const authForm = useAuthFormContext()
 
   return (

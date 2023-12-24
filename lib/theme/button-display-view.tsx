@@ -1,7 +1,7 @@
 import { Button, ButtonProps } from '@nextui-org/react'
 import { ReactNode, forwardRef, ForwardedRef } from 'react'
 
-function ButtonDisplay (
+function ThemeButtonView (
   props: {
     children: ReactNode
   } & ButtonProps,
@@ -18,6 +18,6 @@ function ButtonDisplay (
   )
 }
 
-const ButtonDisplayView = forwardRef(ButtonDisplay)
+const ButtonDisplayView = forwardRef(ThemeButtonView)
 
 export default ButtonDisplayView

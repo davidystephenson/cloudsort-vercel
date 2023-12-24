@@ -6,9 +6,15 @@ export default function ThemeLinkView (props: ComponentProps<typeof Link>): JSX.
   const pathname = usePathname()
 
   const active = pathname === props.href
+  const color = active ? 'primary' : 'secondary'
   const underline = active ? 'always' : 'none'
 
   return (
-    <Link href='/login' underline={underline} {...props} />
+    <Link
+      href='/login'
+      color={color}
+      underline={underline}
+      {...props}
+    />
   )
 }
