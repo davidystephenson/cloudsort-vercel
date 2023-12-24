@@ -1,7 +1,7 @@
 'use client'
 
 import { ReactNode } from 'react'
-import { useRequestContext } from './request-context'
+import { useRequest } from './request-context'
 import ButtonView from '../button/button-view'
 
 export default function SubmitRequestView ({
@@ -9,7 +9,7 @@ export default function SubmitRequestView ({
 }: {
   children: ReactNode
 }): JSX.Element {
-  const request = useRequestContext()
+  const request = useRequest()
   return (
     <ButtonView
       loading={request.loading}

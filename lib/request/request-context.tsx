@@ -1,10 +1,10 @@
-import { ErrorBody, RequestContextValue } from '@/lib/types'
 import { AxiosError } from 'axios'
 import { createContext, useContext, useState } from 'react'
+import { ErrorBody, RequestContextValue } from './request-types'
 
 export const requestContext = createContext<RequestContextValue | undefined>(undefined)
 
-export function useRequestContext (): RequestContextValue {
+export function useRequest (): RequestContextValue {
   const value = useContext(requestContext)
   if (value == null) {
     throw new Error('useRequestContext must be used within a ButtonContextProvider')
@@ -34,6 +34,7 @@ export function RequestProvider ({
       const e = error as AxiosError<ErrorBody>
       setError(e)
       setErrorMessage(e.response?.data?.error ?? e.message)
+      setLoading(false)
     }
     if (endless) {
       return

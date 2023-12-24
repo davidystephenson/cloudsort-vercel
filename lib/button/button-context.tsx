@@ -1,5 +1,5 @@
-import { ButtonContextValue } from '@/lib/types'
 import { createContext, useContext } from 'react'
+import { ButtonContextValue } from './button-types'
 
 export const buttonContext = createContext<ButtonContextValue | undefined>(undefined)
 

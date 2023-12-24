@@ -4,19 +4,15 @@ import { ReactNode } from 'react'
 import { RequestProvider } from './request-context'
 import SendRequestConsumer from './send-request-consumer'
 
-export default function SendRequestView ({
-  children,
-  endless = false,
-  send
-}: {
+export default function SendRequestView (props: {
   children: ReactNode
   endless?: boolean
   send: () => Promise<void>
 }): JSX.Element {
   return (
-    <RequestProvider endless={endless} send={send}>
+    <RequestProvider endless={props.endless} send={props.send}>
       <SendRequestConsumer>
-        {children}
+        {props.children}
       </SendRequestConsumer>
     </RequestProvider>
   )

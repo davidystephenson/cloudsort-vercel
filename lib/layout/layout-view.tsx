@@ -1,18 +1,13 @@
 import { ReactNode } from 'react'
-import ThemeSwitchView from '../theme/theme-switch-view'
-import AuthStatusView from '../auth/auth-status-view'
-import LogoutView from '../auth/logout-view'
+import NavbarView from './navbar-view'
 
 export default async function LayoutView (props: {
   children: ReactNode
 }): Promise<JSX.Element | null> {
   return (
-    <div className='container mx-auto'>
-      <h1 className='text-xl'>Cloudsort</h1>
-      <ThemeSwitchView />
+    <div className='container mx-auto' style={{ fontFamily: 'sans-serif' }}>
       {/* @ts-expect-error Async Server Component */}
-      <AuthStatusView />
-      <LogoutView />
+      <NavbarView />
       {props.children}
     </div>
   )

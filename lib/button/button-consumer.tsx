@@ -1,46 +1,53 @@
 'use client'
 
 import { useButtonContext } from '@/lib/button/button-context'
-import { Button, ButtonGroup, Popover, PopoverContent, PopoverTrigger } from '@nextui-org/react'
-import { ReactNode } from 'react'
+import { ButtonGroup, Popover, PopoverContent, PopoverTrigger } from '@nextui-org/react'
+import { ForwardedRef, ReactNode, forwardRef } from 'react'
 import { MdError } from 'react-icons/md'
+import ButtonDisplayView from './button-display-view'
 
-export default function ButtonConsumer ({
-  children
-}: {
-  children: ReactNode
-}): JSX.Element {
+function Consumer (
+  props: {
+    children: ReactNode
+  },
+  ref: ForwardedRef<HTMLButtonElement>
+): JSX.Element {
   const button = useButtonContext()
   if (button.error == null) {
     return (
-      <Button
-        onClick={button.handleClick}
+      <ButtonDisplayView
         isLoading={button.loading}
+        onClick={button.handleClick}
+        ref={ref}
         type={button.type}
       >
-        {children}
-      </Button>
+        {props.children}
+      </ButtonDisplayView>
     )
   }
 
   return (
     <ButtonGroup>
-      <Button
+      <ButtonDisplayView
         onClick={button.handleClick}
         isLoading={button.loading}
+        ref={ref}
         type={button.type}
       >
-        {children}
-      </Button>
+        {props.children}
+      </ButtonDisplayView>
       <Popover
-        classNames={{ content: 'bg-danger text-black' }}
+        classNames={{ content: 'bg-red-950' }}
         placement='right-start'
         showArrow
       >
         <PopoverTrigger>
-          <Button isIconOnly color='danger'>
+          <ButtonDisplayView
+            isIconOnly
+            color='danger'
+          >
             <MdError className='h-[55%] w-max' />
-          </Button>
+          </ButtonDisplayView>
         </PopoverTrigger>
         <PopoverContent>
           {button.error}
@@ -49,3 +56,7 @@ export default function ButtonConsumer ({
     </ButtonGroup>
   )
 }
+
+const ButtonConsumer = forwardRef(Consumer)
+
+export default ButtonConsumer

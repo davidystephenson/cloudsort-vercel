@@ -9,23 +9,25 @@ export default function AuthFieldsView (): JSX.Element {
     <>
       <div>
         <input
-          type='email'
-          placeholder='email'
           autoComplete='email'
-          required
           className='input'
-          onChange={authForm.handleEmailChange}
+          onChange={authForm.handleChange}
+          placeholder='email'
+          ref={authForm.emailRef}
+          required
           value={authForm.email}
+          type='email'
         />
       </div>
       <div>
         <input
-          type='password'
-          placeholder='password'
           autoComplete='current-password'
-          required
           className='input'
-          onChange={authForm.handlePasswordChange}
+          onChange={authForm.handleChange}
+          placeholder='password'
+          ref={authForm.passwordRef}
+          required
+          type='password'
           value={authForm.password}
         />
       </div>

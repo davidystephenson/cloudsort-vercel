@@ -1,6 +1,6 @@
 import { cookies } from 'next/headers'
 
-export default function getShade (props: {
+export default function getThemeShade (props: {
   sessionTheme?: string
 }): string | undefined {
   const themeCookie = cookies().get('theme')

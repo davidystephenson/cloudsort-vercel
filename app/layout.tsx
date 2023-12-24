@@ -6,7 +6,8 @@ import ThemeView from '@/lib/theme/theme-view'
 import serverAuth from '@/lib/auth/server-auth'
 import clsx from 'clsx'
 import LayoutView from '@/lib/layout/layout-view'
-import getShade from '@/lib/theme/get-shade'
+import getThemeShade from '@/lib/theme/get-theme-shade'
+import AuthView from '@/lib/auth/auth-view'
 
 const title = 'CloudSort'
 const description = 'Sort your lists.'
@@ -29,8 +30,9 @@ export default async function RootLayout ({
   children: React.ReactNode
 }): Promise<JSX.Element> {
   const authSession = await serverAuth()
-  const shade = getShade({ sessionTheme: authSession?.user.theme })
-  const htmlClass = clsx(shade, 'text-foreground', 'bg-background')
+  const shade = getThemeShade({ sessionTheme: authSession?.user.theme })
+  const theme = shade === 'dark' ? 'pink-dark' : 'pink-light'
+  const htmlClass = clsx(theme, 'text-foreground', 'bg-background')
   return (
     <html
       lang='en'
@@ -39,12 +41,15 @@ export default async function RootLayout ({
     >
       <body>
         <Suspense fallback='Loading...'>
-          <ThemeView shade={shade}>
-            {/* @ts-expect-error Async Server Component */}
-            <LayoutView>
-              {children}
-            </LayoutView>
-          </ThemeView>
+          {/* @ts-expect-error Async Server Component */}
+          <AuthView session={authSession}>
+            <ThemeView shade={shade}>
+              {/* @ts-expect-error Async Server Component */}
+              <LayoutView>
+                {children}
+              </LayoutView>
+            </ThemeView>
+          </AuthView>
         </Suspense>
       </body>
     </html>

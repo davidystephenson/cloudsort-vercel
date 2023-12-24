@@ -1,14 +1,14 @@
 'use client'
 
 import { FormEvent, ReactNode } from 'react'
-import { useRequestContext } from './request-context'
+import { useRequest } from './request-context'
 
 export default function RequestFormConsumer ({
   children
 }: {
   children: ReactNode
 }): JSX.Element {
-  const request = useRequestContext()
+  const request = useRequest()
   function handleSubmit (event: FormEvent<HTMLFormElement>): void {
     event.preventDefault()
     void request.send()

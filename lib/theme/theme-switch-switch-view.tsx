@@ -4,6 +4,7 @@ import { Skeleton, Switch } from '@nextui-org/react'
 import { useState, useEffect } from 'react'
 import { useTheme } from './theme-context'
 import { useRouter } from 'next/navigation'
+import { MdLightMode, MdDarkMode } from 'react-icons/md'
 
 export default function ThemeSwitchSwitchView (): JSX.Element {
   const theme = useTheme()
@@ -59,11 +60,16 @@ export default function ThemeSwitchSwitchView (): JSX.Element {
       updateTheme({ theme: 'light' })
     }
   }
+
+  const icon = darkened ? <MdDarkMode /> : <MdLightMode />
+
   return (
     <Switch
+      classNames={classNames}
+      color='primary'
       isSelected={darkened}
       onValueChange={changeTheme}
-      classNames={classNames}
+      thumbIcon={icon}
     />
   )
 }

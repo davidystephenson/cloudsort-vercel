@@ -1,25 +1,21 @@
 'use client'
 
-import { ReactNode } from 'react'
-import { useRequestContext } from './request-context'
+import { ComponentProps } from 'react'
+import { useRequest } from './request-context'
+import RequestButtonView from './request-button-view'
 import ButtonView from '../button/button-view'
 
-export default function SendRequestConsumer ({
-  children
-}: {
-  children: ReactNode
-}): JSX.Element {
-  const request = useRequestContext()
+export default function SendRequestConsumer (props: ComponentProps<typeof ButtonView>): JSX.Element {
+  const request = useRequest()
   function handleClick (): void {
     void request.send()
   }
   return (
-    <ButtonView
+    <RequestButtonView
       onClick={handleClick}
       loading={request.loading}
       error={request.errorMessage}
-    >
-      {children}
-    </ButtonView>
+      {...props}
+    />
   )
 }
