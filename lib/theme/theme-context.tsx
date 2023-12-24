@@ -17,7 +17,9 @@ export function ThemeProvider (props: {
   children: ReactNode
   shade?: string
 }): JSX.Element {
+  const darkened = props.shade === 'dark'
   const value: ThemeContextValue = {
+    darkened,
     shade: props.shade
   }
   return (

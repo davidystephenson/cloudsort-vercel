@@ -1,11 +1,10 @@
 import { Button, ButtonProps } from '@nextui-org/react'
-import { ReactNode, forwardRef, ForwardedRef } from 'react'
+import { ReactNode } from 'react'
 
-function ThemeButtonView (
+export default function ThemeButtonView (
   props: {
     children: ReactNode
-  } & ButtonProps,
-  ref: ForwardedRef<HTMLButtonElement>
+  } & ButtonProps
 ): JSX.Element {
   return (
     <Button
@@ -13,11 +12,6 @@ function ThemeButtonView (
       className='text-md'
       size='sm'
       {...props}
-      ref={ref}
     />
   )
 }
-
-const ButtonDisplayView = forwardRef(ThemeButtonView)
-
-export default ButtonDisplayView

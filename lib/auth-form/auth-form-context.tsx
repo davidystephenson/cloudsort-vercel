@@ -18,6 +18,7 @@ export function AuthFormProvider (props: {
 }): JSX.Element {
   const router = useRouter()
   const emailRef = useRef<HTMLInputElement | null>(null)
+  console.log('emailRef', emailRef.current?.validationMessage)
   const passwordRef = useRef<HTMLInputElement | null>(null)
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -30,6 +31,7 @@ export function AuthFormProvider (props: {
     }
   }
   async function send (): Promise<void> {
+    console.log('send')
     await props.send({ email, password })
     router.refresh()
     router.push('/protected')

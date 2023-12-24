@@ -2,15 +2,14 @@
 
 import { useButtonContext } from '@/lib/button/button-context'
 import { ButtonGroup, Popover, PopoverContent, PopoverTrigger } from '@nextui-org/react'
-import { ForwardedRef, ReactNode, forwardRef } from 'react'
+import { ReactNode } from 'react'
 import { MdError } from 'react-icons/md'
 import ButtonDisplayView from '../theme/button-display-view'
 
-function Consumer (
+export default function ButtonConsumer (
   props: {
     children: ReactNode
-  },
-  ref: ForwardedRef<HTMLButtonElement>
+  }
 ): JSX.Element {
   const button = useButtonContext()
   if (button.error == null) {
@@ -18,7 +17,6 @@ function Consumer (
       <ButtonDisplayView
         isLoading={button.loading}
         onClick={button.handleClick}
-        ref={ref}
         type={button.type}
       >
         {props.children}
@@ -31,7 +29,6 @@ function Consumer (
       <ButtonDisplayView
         onClick={button.handleClick}
         isLoading={button.loading}
-        ref={ref}
         type={button.type}
       >
         {props.children}
@@ -56,7 +53,3 @@ function Consumer (
     </ButtonGroup>
   )
 }
-
-const ButtonConsumer = forwardRef(Consumer)
-
-export default ButtonConsumer

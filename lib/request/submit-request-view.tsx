@@ -15,6 +15,9 @@ export default function SubmitRequestView ({
       loading={request.loading}
       error={request.errorMessage}
       type='submit'
+      onClick={() => {
+        console.log('SubmitRequestView.onClick')
+      }}
     >
       {children}
     </ButtonView>

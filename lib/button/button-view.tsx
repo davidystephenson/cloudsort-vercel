@@ -2,17 +2,16 @@
 
 import { ButtonProvider } from '@/lib/button/button-context'
 import ButtonConsumer from './button-consumer'
-import { ReactNode, ForwardedRef, forwardRef } from 'react'
+import { ReactNode } from 'react'
 
-function Button (
+export default function ButtonView (
   props: {
     children: ReactNode
     error?: string
     loading?: boolean
     onClick?: () => void
     type?: 'button' | 'submit'
-  },
-  ref: ForwardedRef<HTMLButtonElement>
+  }
 ): JSX.Element {
   return (
     <ButtonProvider
@@ -21,13 +20,9 @@ function Button (
       onClick={props.onClick}
       type={props.type}
     >
-      <ButtonConsumer ref={ref}>
+      <ButtonConsumer>
         {props.children}
       </ButtonConsumer>
     </ButtonProvider>
   )
 }
-
-const ButtonView = forwardRef(Button)
-
-export default ButtonView

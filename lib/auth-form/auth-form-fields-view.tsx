@@ -1,5 +1,6 @@
 'use client'
 
+import { Input } from '@nextui-org/react'
 import { useAuthFormContext } from './auth-form-context'
 
 export default function AuthFormFieldsView (): JSX.Element {
@@ -7,30 +8,28 @@ export default function AuthFormFieldsView (): JSX.Element {
 
   return (
     <>
-      <div>
-        <input
-          autoComplete='email'
-          className='input'
-          onChange={authForm.handleChange}
-          placeholder='email'
-          ref={authForm.emailRef}
-          required
-          value={authForm.email}
-          type='email'
-        />
-      </div>
-      <div>
-        <input
-          autoComplete='current-password'
-          className='input'
-          onChange={authForm.handleChange}
-          placeholder='password'
-          ref={authForm.passwordRef}
-          required
-          type='password'
-          value={authForm.password}
-        />
-      </div>
+      <Input
+        autoComplete='email'
+        color='primary'
+        label='Email'
+        onChange={authForm.handleChange}
+        isRequired
+        ref={authForm.emailRef}
+        type='email'
+        value={authForm.email}
+        variant='underlined'
+      />
+      <Input
+        autoComplete='current-password'
+        color='primary'
+        label='Password'
+        onChange={authForm.handleChange}
+        isRequired
+        ref={authForm.passwordRef}
+        type='password'
+        value={authForm.password}
+        variant='underlined'
+      />
     </>
   )
 }
