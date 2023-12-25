@@ -25,7 +25,6 @@ const ThemeButtonView = forwardRef<HTMLButtonElement, {
   return (
     <Button
       color='primary'
-      className='text-md'
       size='sm'
       {...props} ref={ref}
     />

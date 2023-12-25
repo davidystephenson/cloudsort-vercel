@@ -16,7 +16,7 @@ export default function SubmitRequestView (props: {
   const mounted = isMounted()
   if (!mounted) {
     return (
-      <Skeleton className='rounded-lg'>
+      <Skeleton className='rounded-lg w-fit'>
         <ButtonView>
           {props.children}
         </ButtonView>

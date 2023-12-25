@@ -5,7 +5,6 @@ export default function AuthFormFieldsView (): JSX.Element {
     <>
       <FormFieldView
         autoComplete='email'
-        color='primary'
         label='Email'
         name='email'
         isRequired
@@ -13,7 +12,6 @@ export default function AuthFormFieldsView (): JSX.Element {
       />
       <FormFieldView
         autoComplete='current-password'
-        color='primary'
         label='Password'
         name='password'
         isRequired

@@ -2,6 +2,9 @@
 
 import { createContext, useContext, ReactNode } from 'react'
 import { ThemeContextValue } from './theme-types'
+import { useIsMounted } from 'usehooks-ts'
+import { useRouter } from 'next/navigation'
+import { useAuth } from '../auth/auth-context'
 
 const themeContext = createContext<ThemeContextValue | undefined>(undefined)
 
@@ -17,8 +20,51 @@ export function ThemeProvider (props: {
   children: ReactNode
   shade?: string
 }): JSX.Element {
+  const auth = useAuth()
+  const isMounted = useIsMounted()
+  const router = useRouter()
+
   const darkened = props.shade === 'dark'
+
+  async function postTheme ({ theme }: {
+    theme: string
+  }): Promise<void> {
+    const body = JSON.stringify({ theme })
+    const options = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body
+    }
+    await fetch('/api/theme', options)
+    document.cookie = 'newTheme=none;'
+  }
+
+  function updateTheme ({ theme }: {
+    theme: string
+  }): void {
+    document.cookie = `theme=${theme};`
+    document.cookie = `newTheme=${theme}; expires=0;`
+    router.refresh()
+    if (auth.session == null) {
+      return
+    }
+    void postTheme({ theme })
+  }
+
+  function handleChangeTheme (): void {
+    if (!isMounted()) {
+      return
+    }
+    if (darkened) {
+      updateTheme({ theme: 'light' })
+    } else {
+      updateTheme({ theme: 'dark' })
+    }
+  }
   const value: ThemeContextValue = {
+    handleChangeTheme,
     darkened,
     shade: props.shade
   }

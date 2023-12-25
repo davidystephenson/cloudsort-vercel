@@ -5,19 +5,21 @@ import { useAuth } from './auth-context'
 import { useRequest } from '../request/request-context'
 import { MdLogout } from 'react-icons/md'
 import ThemeButtonView from '../theme/theme-button-view'
+import ThemeSwitchView from '../theme/theme-switch-view'
+import { useTheme } from '../theme/theme-context'
 
 export default function ProfileConsumer (): JSX.Element {
   const auth = useAuth()
   const request = useRequest()
+  const theme = useTheme()
 
   if (auth.session == null) {
-    return (
-      <p>Login</p>
-    )
+    throw new Error('ProfileConsumer must be used within a AuthProvider')
   }
   function handleClick (): void {
     void request.send()
   }
+
   return (
     <Dropdown>
       <DropdownTrigger>
@@ -32,9 +34,18 @@ export default function ProfileConsumer (): JSX.Element {
       </DropdownTrigger>
       <DropdownMenu aria-label='Logout'>
         <DropdownItem
+          key='theme'
+          onClick={theme.handleChangeTheme}
+          textValue='Change theme'
+          color='primary'
+        >
+          <ThemeSwitchView />
+        </DropdownItem>
+        <DropdownItem
           key='logout'
           onClick={handleClick}
           startContent={<MdLogout />}
+          color='primary'
         >
           Logout
         </DropdownItem>

@@ -26,12 +26,11 @@ export default function FormFieldView (props: { name: string } & InputProps): JS
       errorMessage={field?.error}
       isDisabled={disabled}
       isRequired
-      label={props.label}
       onChange={form.handleChange}
       ref={field?.ref}
-      type={props.type}
       value={field?.value ?? ''}
       variant='underlined'
+      {...props}
     />
   )
 }
