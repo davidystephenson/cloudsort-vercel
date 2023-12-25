@@ -22,11 +22,12 @@ export default function FormFieldView (props: { name: string } & InputProps): JS
   return (
     <Input
       autoComplete={props.autoComplete}
-      isDisabled={disabled}
+      color='primary'
       errorMessage={field?.error}
+      isDisabled={disabled}
+      isRequired
       label={props.label}
       onChange={form.handleChange}
-      isRequired
       ref={field?.ref}
       type={props.type}
       value={field?.value ?? ''}

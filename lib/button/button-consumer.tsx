@@ -5,6 +5,7 @@ import { ButtonGroup, Popover, PopoverContent, PopoverTrigger } from '@nextui-or
 import { ReactNode } from 'react'
 import { MdError } from 'react-icons/md'
 import ThemeButtonView from '../theme/theme-button-view'
+import { useTheme } from '../theme/theme-context'
 
 export default function ButtonConsumer (
   props: {
@@ -12,6 +13,7 @@ export default function ButtonConsumer (
   }
 ): JSX.Element {
   const button = useButtonContext()
+  const theme = useTheme()
   if (button.error == null) {
     return (
       <ThemeButtonView
@@ -24,6 +26,8 @@ export default function ButtonConsumer (
     )
   }
 
+  const contentClass = theme.darkened ? 'bg-danger-900' : 'bg-danger-200'
+
   return (
     <ButtonGroup>
       <ThemeButtonView
@@ -34,7 +38,7 @@ export default function ButtonConsumer (
         {props.children}
       </ThemeButtonView>
       <Popover
-        classNames={{ content: 'bg-red-950' }}
+        classNames={{ content: contentClass }}
         placement='right-start'
         showArrow
       >

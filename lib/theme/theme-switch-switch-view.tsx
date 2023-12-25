@@ -5,8 +5,10 @@ import { useState, useEffect } from 'react'
 import { useTheme } from './theme-context'
 import { useRouter } from 'next/navigation'
 import { MdLightMode, MdDarkMode } from 'react-icons/md'
+import { useAuth } from '../auth/auth-context'
 
 export default function ThemeSwitchSwitchView (): JSX.Element {
+  const auth = useAuth()
   const theme = useTheme()
   const router = useRouter()
   const [mounted, setMounted] = useState(false)
@@ -50,6 +52,9 @@ export default function ThemeSwitchSwitchView (): JSX.Element {
     document.cookie = `theme=${theme};`
     document.cookie = `newTheme=${theme}; expires=0;`
     router.refresh()
+    if (auth.session == null) {
+      return
+    }
     void postTheme({ theme })
   }
 
