@@ -1,9 +1,10 @@
 'use client'
 
-import { Button, Dropdown, DropdownItem, DropdownMenu, DropdownTrigger } from '@nextui-org/react'
+import { Dropdown, DropdownItem, DropdownMenu, DropdownTrigger } from '@nextui-org/react'
 import { useAuth } from './auth-context'
 import { useRequest } from '../request/request-context'
 import { MdLogout } from 'react-icons/md'
+import ThemeButtonView from '../theme/theme-button-view'
 
 export default function ProfileConsumer (): JSX.Element {
   const auth = useAuth()
@@ -20,14 +21,14 @@ export default function ProfileConsumer (): JSX.Element {
   return (
     <Dropdown>
       <DropdownTrigger>
-        <Button
+        <ThemeButtonView
           isLoading={request.loading}
           color='primary'
           size='sm'
           className='text-md'
         >
           {auth.session.user?.email}
-        </Button>
+        </ThemeButtonView>
       </DropdownTrigger>
       <DropdownMenu aria-label='Logout'>
         <DropdownItem
