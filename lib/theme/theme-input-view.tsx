@@ -1,18 +1,18 @@
 import { Input, InputProps } from '@nextui-org/react'
 import { forwardRef } from 'react'
-import useMounted from '../mounted/use-mounted'
+import { useTheme } from './theme-context'
 
 const ThemeInputView = forwardRef<
 HTMLInputElement,
 InputProps & { debug?: boolean }
 >((props, ref) => {
-  const mounted = useMounted()
+  const theme = useTheme()
   if (props.debug === true) {
-    console.log('mounted', mounted)
+    console.debug('mounted', theme.mounted)
   }
-  const disabled = !mounted
+  const disabled = !theme.mounted
   if (props.debug === true) {
-    console.log('disabled', disabled)
+    console.debug('disabled', disabled)
   }
   return (
     <Input

@@ -2,7 +2,6 @@ export type TableItem = Record<string, string | number>
 
 export interface TableContextValue {
   columns: string[]
-  filter: (query: string) => void
-  filteredRows: TableItem[]
+  filterRows: (props: { query: string }) => void
   rows: TableItem[]
 }

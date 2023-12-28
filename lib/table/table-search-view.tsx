@@ -7,7 +7,7 @@ export default function TableSearchView (): JSX.Element {
   const [query, setQuery] = useState('')
   function handleQueryChange (event: ChangeEvent<HTMLInputElement>): void {
     setQuery(event.target.value)
-    table.filter(event.target.value)
+    table.filterRows({ query: event.target.value })
   }
   return (
     <>

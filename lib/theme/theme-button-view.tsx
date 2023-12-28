@@ -1,21 +1,6 @@
 import { Button, ButtonProps } from '@nextui-org/react'
 import { ReactNode, forwardRef } from 'react'
-import useMounted from '../mounted/use-mounted'
-
-// export default function ThemeButtonView (
-//   props: {
-//     children: ReactNode
-//   } & ButtonProps
-// ): JSX.Element {
-//   return (
-//     <Button
-//       color='primary'
-//       className='text-md'
-//       size='sm'
-//       {...props}
-//     />
-//   )
-// }
+import { useTheme } from './theme-context'
 
 const ThemeButtonView = forwardRef<HTMLButtonElement, {
   children: ReactNode
@@ -23,8 +8,8 @@ const ThemeButtonView = forwardRef<HTMLButtonElement, {
   props,
   ref
 ): JSX.Element {
-  const mounted = useMounted()
-  const disabled = !mounted
+  const theme = useTheme()
+  const disabled = !theme.mounted
   return (
     <Button
       color='primary'

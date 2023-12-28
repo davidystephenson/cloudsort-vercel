@@ -1,28 +1,35 @@
 import { List } from '@prisma/client'
 import { ListsContextValue } from './list-types'
-import { createContext, useContext, ReactNode } from 'react'
+import { contextCreator } from '../context-creator/context-creator'
+import { useState } from 'react'
 
-const listsContext = createContext<ListsContextValue | undefined>(undefined)
-
-export function useLists (): ListsContextValue {
-  const value = useContext(listsContext)
-  if (value == null) {
-    throw new Error('useListsContext must be used within a ListsProvider')
+function useValue (props: {
+  rows: List[]
+}): ListsContextValue {
+  const [filteredRows, setFilteredRows] = useState<List[]>(props.rows)
+  function filterRows (filterProps: {
+    query: string
+  }): void {
+    const filteredRows = props.rows.filter((row) => {
+      const values = Object.values(row)
+      const includes = values.some((value) => {
+        const string = String(value)
+        const includes = string.includes(filterProps.query)
+        return includes
+      })
+      return includes
+    })
+    setFilteredRows(filteredRows)
+  }
+  const value: ListsContextValue = {
+    filterRows,
+    filteredRows,
+    rows: props.rows
   }
   return value
 }
 
-export function ListsProvider (props: {
-  children: ReactNode
-  rows: List[]
-}): JSX.Element {
-  const value: ListsContextValue = {
-    rows: props.rows
-  }
-
-  return (
-    <listsContext.Provider value={value}>
-      {props.children}
-    </listsContext.Provider>
-  )
-}
+export const {
+  useCreatedContext: useLists,
+  ContextProvider: ListsProvider
+} = contextCreator({ useValue })

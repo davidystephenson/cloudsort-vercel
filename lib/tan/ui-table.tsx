@@ -62,9 +62,6 @@ export default function UiTable (): JSX.Element {
       </TableColumn>
     )
   })
-  console.log('headers', headers)
-  console.log('rows', rows)
-  console.log('items', items)
   const rowViews = items.map((virtualRow, index) => {
     const row = rows[virtualRow.index]
 

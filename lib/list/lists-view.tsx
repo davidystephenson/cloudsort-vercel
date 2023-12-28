@@ -3,20 +3,16 @@
 import { List } from '@prisma/client'
 import { ListsProvider } from './lists-context'
 import ListsTableView from './lists-table-view'
-import { TableProvider } from '../table/table-context'
 import CreateListFormView from './create-list-form-view'
 
 export default function ListsView (props: {
   rows: List[]
 }): JSX.Element {
-  const columns = ['Name']
   return (
     <ListsProvider rows={props.rows}>
       <div className='text-3xl'>Lists</div>
       <CreateListFormView />
-      <TableProvider columns={columns} rows={props.rows}>
-        <ListsTableView />
-      </TableProvider>
+      <ListsTableView />
     </ListsProvider>
   )
 }

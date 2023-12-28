@@ -19,7 +19,6 @@ export default function ThemeTableView (): JSX.Element {
             style={{ height: '100%' }}
             data={rows}
             itemContent={(index, user) => {
-              console.log('user')
               return (
                 <TableRow key={user.name}>
                   <TableCell>{user.name}</TableCell>

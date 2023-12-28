@@ -46,10 +46,8 @@ export function FormProvider (props: {
     setFields((current) => {
       const next = { ...current }
       for (const name in next) {
-        console.log('name', name)
         const field = next[name]
         if (field.ref.current != null) {
-          console.log('field.ref.current.value', field.ref.current.value)
           field.value = field.ref.current.value
         }
       }

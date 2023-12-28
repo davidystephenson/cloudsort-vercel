@@ -66,6 +66,7 @@ export function ThemeProvider (props: {
   const value: ThemeContextValue = {
     handleChangeTheme,
     darkened,
+    mounted,
     shade: props.shade
   }
   return (

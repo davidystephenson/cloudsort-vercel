@@ -16,7 +16,6 @@ export default function SubmitRequestView (props: {
       error={request.errorMessage}
       type='submit'
       onClick={() => {
-        console.log('SubmitRequestView.onClick')
         form.handleSubmit()
       }}
     >
