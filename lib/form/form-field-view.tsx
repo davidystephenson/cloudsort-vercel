@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react'
 import { useForm } from './form-context'
-import { Input, InputProps } from '@nextui-org/react'
+import { InputProps } from '@nextui-org/react'
+import ThemeInputView from '../theme/theme-input-view'
 
 export default function FormFieldView (props: { name: string } & InputProps): JSX.Element {
   const form = useForm()
@@ -20,7 +21,7 @@ export default function FormFieldView (props: { name: string } & InputProps): JS
   const field = form.fields[props.name]
   const disabled = field == null
   return (
-    <Input
+    <ThemeInputView
       autoComplete={props.autoComplete}
       color='primary'
       errorMessage={field?.error}

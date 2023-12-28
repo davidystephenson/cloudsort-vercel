@@ -13,20 +13,19 @@ export default function CreateListFormView (): JSX.Element {
     }
     await postList({ name: fields.name.value })
   }
-
+  const end = (
+    <SubmitRequestView>
+      Create List
+    </SubmitRequestView>
+  )
   return (
     <RequestFormView send={send}>
       <FormFieldView
         name='name'
-        label='Name'
+        label='Create'
         isRequired
-        endContent={
-          <SubmitRequestView>
-            Create List
-          </SubmitRequestView>
-        }
+        endContent={end}
       />
-
     </RequestFormView>
   )
 }

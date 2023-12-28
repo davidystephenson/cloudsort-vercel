@@ -1,10 +1,11 @@
-import CreateListFormView from '@/lib/list/create-list-form-view'
+import ListsView from '@/lib/list/lists-view'
+import prisma from '@/lib/prisma'
 
-export default function Lists (): JSX.Element {
+export default async function Lists (): Promise<JSX.Element> {
+  const lists = await prisma.list.findMany()
   return (
     <>
-      <h1 className='text-lg'>Lists</h1>
-      <CreateListFormView />
+      <ListsView rows={lists} />
     </>
   )
 }

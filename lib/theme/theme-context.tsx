@@ -2,9 +2,9 @@
 
 import { createContext, useContext, ReactNode } from 'react'
 import { ThemeContextValue } from './theme-types'
-import { useIsMounted } from 'usehooks-ts'
 import { useRouter } from 'next/navigation'
 import { useAuth } from '../auth/auth-context'
+import useMounted from '../mounted/use-mounted'
 
 const themeContext = createContext<ThemeContextValue | undefined>(undefined)
 
@@ -21,7 +21,7 @@ export function ThemeProvider (props: {
   shade?: string
 }): JSX.Element {
   const auth = useAuth()
-  const isMounted = useIsMounted()
+  const mounted = useMounted()
   const router = useRouter()
 
   const darkened = props.shade === 'dark'
@@ -54,7 +54,7 @@ export function ThemeProvider (props: {
   }
 
   function handleChangeTheme (): void {
-    if (!isMounted()) {
+    if (!mounted) {
       return
     }
     if (darkened) {

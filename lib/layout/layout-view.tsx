@@ -6,7 +6,7 @@ export default async function LayoutView (props: {
 }): Promise<JSX.Element | null> {
   return (
     <div
-      className='w-full sm:w-[640px] mx-auto p-2'
+      className='flex flex-col w-full sm:w-[640px] mx-auto p-2 h-screen'
       style={{ fontFamily: 'sans-serif' }}
     >
       {/* @ts-expect-error Async Server Component */}
