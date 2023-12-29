@@ -1,11 +1,12 @@
 import { MdDeleteForever } from 'react-icons/md'
 import { useList } from './list-context'
 import SendRequestView from '../request/send-request-view'
+import ThemeIconView from '../theme/theme-icon-view'
 
 export default function ListCellsConsumer (): JSX.Element {
   const list = useList()
   async function send (): Promise<void> {
-    await list.deleteRow()
+    await list.delete()
   }
   return (
     <>
@@ -19,7 +20,7 @@ export default function ListCellsConsumer (): JSX.Element {
           size='sm'
           variant='light'
         >
-          <MdDeleteForever className='h-[55%] w-max' />
+          <ThemeIconView Icon={MdDeleteForever} />
         </SendRequestView>
       </td>
     </>

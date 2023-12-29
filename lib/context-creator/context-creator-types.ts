@@ -2,5 +2,5 @@ import { ReactNode } from 'react'
 
 export interface ContextCreation <ContextValue, ProviderProps> {
   useCreatedContext: () => ContextValue
-  ContextProvider: React.FC<{ children: ReactNode } & ProviderProps>
+  CreatedProvider: React.FC<{ children: ReactNode } & ProviderProps>
 }

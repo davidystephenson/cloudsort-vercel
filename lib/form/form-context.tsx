@@ -1,19 +1,8 @@
-import { createContext, useContext, useState, createRef, ReactNode, useCallback } from 'react'
+import { useState, createRef, useCallback } from 'react'
 import { Field, FormContextValue } from './form-types'
+import { contextCreator } from '../context-creator/context-creator'
 
-const formContext = createContext<FormContextValue | undefined>(undefined)
-
-export function useForm (): FormContextValue {
-  const value = useContext(formContext)
-  if (value == null) {
-    throw new Error('useFormContext must be used within a FormProvider')
-  }
-  return value
-}
-
-export function FormProvider (props: {
-  children: ReactNode
-}): JSX.Element {
+function useValue (props: {}): FormContextValue {
   const [fields, setFields] = useState<Record<string, Field>>({})
 
   const register = useCallback((props: {
@@ -75,10 +64,12 @@ export function FormProvider (props: {
     handleSubmit,
     register
   }
-
-  return (
-    <formContext.Provider value={value}>
-      {props.children}
-    </formContext.Provider>
-  )
+  return value
 }
+
+export const {
+  useCreatedContext: useForm,
+  CreatedProvider: FormProvider
+} = contextCreator({
+  useValue
+})

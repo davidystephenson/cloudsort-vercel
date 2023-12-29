@@ -5,6 +5,7 @@ import { ButtonGroup, ButtonProps, Popover, PopoverContent, PopoverTrigger } fro
 import { ReactNode } from 'react'
 import { MdError } from 'react-icons/md'
 import ThemeButtonView from '../theme/theme-button-view'
+import ThemeIconView from '../theme/theme-icon-view'
 
 export default function ButtonConsumer (props: {
   children: ReactNode
@@ -24,8 +25,9 @@ export default function ButtonConsumer (props: {
     )
   }
 
-  // const contentClass = theme.darkened ? 'bg-danger-200' : 'bg-danger-200'
-  const contentClass = 'bg-danger-200'
+  const popoverClass = {
+    content: 'bg-danger-100 border-1 border-danger-400'
+  }
 
   return (
     <ButtonGroup>
@@ -38,7 +40,7 @@ export default function ButtonConsumer (props: {
         {props.children}
       </ThemeButtonView>
       <Popover
-        classNames={{ content: contentClass }}
+        classNames={popoverClass}
         placement='right-start'
         showArrow
       >
@@ -47,7 +49,7 @@ export default function ButtonConsumer (props: {
             isIconOnly
             color='danger'
           >
-            <MdError className='h-[55%] w-max' />
+            <ThemeIconView Icon={MdError} />
           </ThemeButtonView>
         </PopoverTrigger>
         <PopoverContent>

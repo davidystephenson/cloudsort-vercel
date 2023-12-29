@@ -3,7 +3,7 @@ import { contextCreator } from '../context-creator/context-creator'
 
 function useValue (props: {
   columns: string[]
-  filterRows: (props: { query: string }) => void
+  filterRows: (props: { query: string | undefined }) => void
   rows: TableItem[]
 }): TableContextValue {
   const value: TableContextValue = {
@@ -16,5 +16,5 @@ function useValue (props: {
 
 export const {
   useCreatedContext: useTable,
-  ContextProvider: TableProvider
+  CreatedProvider: TableProvider
 } = contextCreator({ useValue })

@@ -7,11 +7,11 @@ function useValue (props: {
   row: List
 }): ListContextValue {
   const lists = useLists()
-  async function deleteRow (): Promise<void> {
-    await lists.deleteRow({ id: props.row.id })
+  async function _delete (): Promise<void> {
+    await lists.delete({ id: props.row.id })
   }
   const value: ListContextValue = {
-    deleteRow,
+    delete: _delete,
     row: props.row
   }
   return value
@@ -19,5 +19,5 @@ function useValue (props: {
 
 export const {
   useCreatedContext: useList,
-  ContextProvider: ListProvider
+  CreatedProvider: ListProvider
 } = contextCreator({ useValue })

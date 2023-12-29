@@ -13,7 +13,7 @@ export function contextCreator <ContextValue, ProviderProps> (props: {
     return value
   }
 
-  function ContextProvider (providerProps: {
+  function CreatedProvider (providerProps: {
     children: ReactNode
   } & ProviderProps): JSX.Element {
     const value = props.useValue(providerProps)
@@ -26,6 +26,6 @@ export function contextCreator <ContextValue, ProviderProps> (props: {
 
   return {
     useCreatedContext,
-    ContextProvider
+    CreatedProvider
   }
 }

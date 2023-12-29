@@ -1,25 +1,14 @@
 'use client'
 
-import { createContext, useContext, ReactNode } from 'react'
 import { ThemeContextValue } from './theme-types'
 import { useRouter } from 'next/navigation'
 import { useAuth } from '../auth/auth-context'
 import useMounted from '../mounted/use-mounted'
+import { contextCreator } from '../context-creator/context-creator'
 
-const themeContext = createContext<ThemeContextValue | undefined>(undefined)
-
-export function useTheme (): ThemeContextValue {
-  const value = useContext(themeContext)
-  if (value == null) {
-    throw new Error('useTheme must be used within a ThemeProvider')
-  }
-  return value
-}
-
-export function ThemeProvider (props: {
-  children: ReactNode
+function useValue (props: {
   shade?: string
-}): JSX.Element {
+}): ThemeContextValue {
   const auth = useAuth()
   const mounted = useMounted()
   const router = useRouter()
@@ -69,9 +58,12 @@ export function ThemeProvider (props: {
     mounted,
     shade: props.shade
   }
-  return (
-    <themeContext.Provider value={value}>
-      {props.children}
-    </themeContext.Provider>
-  )
+  return value
 }
+
+export const {
+  useCreatedContext: useTheme,
+  CreatedProvider: ThemeProvider
+} = contextCreator({
+  useValue
+})

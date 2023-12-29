@@ -3,6 +3,7 @@ import { ListsContextValue } from './list-types'
 import { contextCreator } from '../context-creator/context-creator'
 import { useEffect, useState } from 'react'
 import deleteList from './delete-list'
+import postList from './post-list'
 
 function useValue (props: {
   rows: List[]
@@ -29,7 +30,16 @@ function useValue (props: {
     })
     setFilteredRows(filteredRows)
   }, [rows, query])
-  async function deleteRow (props: {
+  async function create (props: {
+    name: string
+  }): Promise<void> {
+    const row = await postList({ name: props.name })
+    setRows((rows) => {
+      const newRows = [row, ...rows]
+      return newRows
+    })
+  }
+  async function _delete (props: {
     id: number
   }): Promise<void> {
     await deleteList({ id: props.id })
@@ -47,7 +57,8 @@ function useValue (props: {
     setQuery(props.query)
   }
   const value: ListsContextValue = {
-    deleteRow,
+    create,
+    delete: _delete,
     filterRows,
     filteredRows,
     rows
@@ -57,5 +68,5 @@ function useValue (props: {
 
 export const {
   useCreatedContext: useLists,
-  ContextProvider: ListsProvider
+  CreatedProvider: ListsProvider
 } = contextCreator({ useValue })
