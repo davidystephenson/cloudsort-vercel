@@ -11,29 +11,20 @@ export function useButtonContext (): ButtonContextValue {
   return value
 }
 
-export function ButtonProvider ({
-  children,
-  error,
-  loading,
-  onClick,
-  type
-}: {
+export function ButtonProvider (props: {
   children: React.ReactNode
-  error?: string
-  loading?: boolean
-  onClick?: () => void
-  type?: 'button' | 'submit'
-}): JSX.Element {
+} & ButtonContextValue): JSX.Element {
   const value: ButtonContextValue = {
-    error,
-    loading,
-    handleClick: onClick,
-    type
+    error: props.error,
+    iconOnly: props.iconOnly,
+    loading: props.loading,
+    handleClick: props.handleClick,
+    type: props.type
   }
 
   return (
     <buttonContext.Provider value={value}>
-      {children}
+      {props.children}
     </buttonContext.Provider>
   )
 }

@@ -1,32 +1,31 @@
 'use client'
 
 import { useButtonContext } from '@/lib/button/button-context'
-import { ButtonGroup, Popover, PopoverContent, PopoverTrigger } from '@nextui-org/react'
+import { ButtonGroup, ButtonProps, Popover, PopoverContent, PopoverTrigger } from '@nextui-org/react'
 import { ReactNode } from 'react'
 import { MdError } from 'react-icons/md'
 import ThemeButtonView from '../theme/theme-button-view'
-import { useTheme } from '../theme/theme-context'
 
-export default function ButtonConsumer (
-  props: {
-    children: ReactNode
-  }
-): JSX.Element {
+export default function ButtonConsumer (props: {
+  children: ReactNode
+} & ButtonProps): JSX.Element {
   const button = useButtonContext()
-  const theme = useTheme()
+  const { ref, ...restProps } = props
   if (button.error == null) {
     return (
       <ThemeButtonView
         isLoading={button.loading}
         onClick={button.handleClick}
         type={button.type}
+        {...restProps}
       >
         {props.children}
       </ThemeButtonView>
     )
   }
 
-  const contentClass = theme.darkened ? 'bg-danger-900' : 'bg-danger-200'
+  // const contentClass = theme.darkened ? 'bg-danger-200' : 'bg-danger-200'
+  const contentClass = 'bg-danger-200'
 
   return (
     <ButtonGroup>
@@ -34,6 +33,7 @@ export default function ButtonConsumer (
         onClick={button.handleClick}
         isLoading={button.loading}
         type={button.type}
+        {...restProps}
       >
         {props.children}
       </ThemeButtonView>

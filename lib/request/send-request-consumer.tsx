@@ -1,18 +1,21 @@
 'use client'
 
-import { ComponentProps } from 'react'
+import { ReactNode } from 'react'
 import { useRequest } from './request-context'
 import RequestButtonView from './request-button-view'
-import ButtonView from '../button/button-view'
+import { ButtonContextValue } from '../button/button-types'
+import { ButtonProps } from '@nextui-org/react'
 
-export default function SendRequestConsumer (props: ComponentProps<typeof ButtonView>): JSX.Element {
+export default function SendRequestConsumer (props: {
+  children: ReactNode
+} & ButtonContextValue & ButtonProps): JSX.Element {
   const request = useRequest()
   function handleClick (): void {
     void request.send()
   }
   return (
     <RequestButtonView
-      onClick={handleClick}
+      handleClick={handleClick}
       loading={request.loading}
       error={request.errorMessage}
       {...props}

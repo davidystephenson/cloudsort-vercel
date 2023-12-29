@@ -3,26 +3,24 @@
 import { ButtonProvider } from '@/lib/button/button-context'
 import ButtonConsumer from './button-consumer'
 import { ReactNode } from 'react'
+import { ButtonContextValue } from './button-types'
+import { ButtonProps } from '@nextui-org/react'
 
-export default function ButtonView (
-  props: {
-    children: ReactNode
-    error?: string
-    loading?: boolean
-    onClick?: () => void
-    type?: 'button' | 'submit'
+export default function ButtonView (props: {
+  children: ReactNode
+} & ButtonContextValue & ButtonProps): JSX.Element {
+  const { error, handleClick, loading, type, ...restProps } = props
+  function onClick (): void {
+    handleClick?.()
   }
-): JSX.Element {
   return (
     <ButtonProvider
-      error={props.error}
-      loading={props.loading}
-      onClick={props.onClick}
-      type={props.type}
+      error={error}
+      loading={loading}
+      handleClick={onClick}
+      type={type}
     >
-      <ButtonConsumer>
-        {props.children}
-      </ButtonConsumer>
+      <ButtonConsumer {...restProps} />
     </ButtonProvider>
   )
 }

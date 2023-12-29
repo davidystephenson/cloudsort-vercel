@@ -2,11 +2,12 @@
 
 import { useRequest } from './request-context'
 import ButtonView from '../button/button-view'
-import { ComponentProps } from 'react'
+import { ButtonProps } from '@nextui-org/react'
+import { ReactNode } from 'react'
 
-export default function RequestButtonView (
-  props: ComponentProps<typeof ButtonView>
-): JSX.Element {
+export default function RequestButtonView (props: {
+  children: ReactNode
+} & ButtonProps): JSX.Element {
   const request = useRequest()
   return (
     <ButtonView

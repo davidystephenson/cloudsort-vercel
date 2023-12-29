@@ -10,14 +10,15 @@ export default function SubmitRequestView (props: {
 }): JSX.Element {
   const form = useForm()
   const request = useRequest()
+  function onClick (): void {
+    form.handleSubmit()
+  }
   return (
     <ButtonView
       loading={request.loading}
       error={request.errorMessage}
       type='submit'
-      onClick={() => {
-        form.handleSubmit()
-      }}
+      handleClick={onClick}
     >
       {props.children}
     </ButtonView>

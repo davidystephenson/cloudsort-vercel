@@ -29,3 +29,30 @@ export async function POST (req: Request): Promise<Response> {
   })
   return NextResponse.json(list)
 }
+
+export async function DELETE (req: Request): Promise<Response> {
+  const authSession = await auth()
+  if (authSession == null) {
+    const body = { error: 'There is no session' }
+    const options = { status: 400 }
+    return NextResponse.json(body, options)
+  }
+  const { id } = await req.json()
+  const list = await prisma.list.findFirst({
+    where: {
+      id,
+      userId: authSession.user.id
+    }
+  })
+  if (list == null) {
+    const body = { error: 'This list does not exist' }
+    const options = { status: 400 }
+    return NextResponse.json(body, options)
+  }
+  await prisma.list.delete({
+    where: {
+      id
+    }
+  })
+  return NextResponse.json(list)
+}
