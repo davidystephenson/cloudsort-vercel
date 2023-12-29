@@ -14,12 +14,15 @@ InputProps & { debug?: boolean }
   if (props.debug === true) {
     console.debug('disabled', disabled)
   }
+  const dateField = props.type === 'date'
+  const type = disabled && dateField ? 'text' : props.type
   return (
     <Input
       color='primary'
       variant='underlined'
       isDisabled={disabled}
       {...props}
+      type={type}
       ref={ref}
     />
   )

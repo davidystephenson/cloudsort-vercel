@@ -7,8 +7,11 @@ export default function FormFieldView (props: { name: string } & InputProps): JS
   const form = useForm()
 
   useEffect(() => {
+    const dateField = props.type === 'date'
+    const value = props.defaultValue ?? (dateField ? new Date().toISOString().slice(0, 10) : undefined)
     form.register({
-      name: props.name
+      name: props.name,
+      value
     })
 
     function cleanup (): void {
@@ -16,7 +19,7 @@ export default function FormFieldView (props: { name: string } & InputProps): JS
     }
 
     return cleanup
-  }, [props.name, form.register])
+  }, [props.name, props.type, form.register])
 
   const field = form.fields[props.name]
   const disabled = field == null
@@ -30,7 +33,6 @@ export default function FormFieldView (props: { name: string } & InputProps): JS
       onChange={form.handleChange}
       ref={field?.ref}
       value={field?.value ?? ''}
-      variant='underlined'
       {...props}
     />
   )

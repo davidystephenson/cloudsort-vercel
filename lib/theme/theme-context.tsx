@@ -65,5 +65,6 @@ export const {
   useCreatedContext: useTheme,
   CreatedProvider: ThemeProvider
 } = contextCreator({
+  name: 'theme',
   useValue
 })

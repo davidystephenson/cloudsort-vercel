@@ -40,5 +40,6 @@ export const {
   useCreatedContext: useRequest,
   CreatedProvider: RequestProvider
 } = contextCreator({
+  name: 'request',
   useValue
 })

@@ -1,8 +1,7 @@
-import { List } from '@prisma/client'
+import { List, Movie } from '@prisma/client'
 import { ListsContextValue } from './list-types'
 import { contextCreator } from '../context-creator/context-creator'
 import { useEffect, useState } from 'react'
-import deleteList from './delete-list'
 import postList from './post-list'
 
 function useValue (props: {
@@ -32,17 +31,35 @@ function useValue (props: {
   }, [rows, query])
   async function create (props: {
     name: string
-  }): Promise<void> {
+  }): Promise<List> {
     const row = await postList({ name: props.name })
     setRows((rows) => {
       const newRows = [row, ...rows]
       return newRows
     })
+    return row
   }
-  async function _delete (props: {
+  function createMovie (props: {
+    listId: number
+    movie: Movie
+  }): void {
+    setRows((rows) => {
+      const newRows = rows.map((row) => {
+        if (row.id !== props.listId) {
+          return row
+        }
+        const newRow: List = {
+          ...row,
+          itemIds: [...row.itemIds, props.movie.id]
+        }
+        return newRow
+      })
+      return newRows
+    })
+  }
+  function _delete (props: {
     id: number
-  }): Promise<void> {
-    await deleteList({ id: props.id })
+  }): void {
     setRows((rows) => {
       const newRows = rows.filter((row) => {
         const keep = row.id !== props.id
@@ -58,6 +75,7 @@ function useValue (props: {
   }
   const value: ListsContextValue = {
     create,
+    createMovie,
     delete: _delete,
     filterRows,
     filteredRows,
@@ -68,5 +86,6 @@ function useValue (props: {
 
 export const {
   useCreatedContext: useLists,
-  CreatedProvider: ListsProvider
-} = contextCreator({ useValue })
+  CreatedProvider: ListsProvider,
+  useCreatedContextUnsafe: useListsUnsafe
+} = contextCreator({ name: 'lists', useValue })

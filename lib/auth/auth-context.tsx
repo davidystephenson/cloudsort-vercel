@@ -18,5 +18,6 @@ export const {
   useCreatedContext: useAuth,
   CreatedProvider: AuthProvider
 } = contextCreator({
+  name: 'auth',
   useValue
 })

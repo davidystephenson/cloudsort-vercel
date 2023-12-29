@@ -1,15 +1,13 @@
-import { TableContextValue, TableItem } from './table-types'
+import { TableContextValue } from './table-types'
 import { contextCreator } from '../context-creator/context-creator'
 
 function useValue (props: {
   columns: string[]
   filterRows: (props: { query: string | undefined }) => void
-  rows: TableItem[]
 }): TableContextValue {
   const value: TableContextValue = {
     columns: props.columns,
-    filterRows: props.filterRows,
-    rows: props.rows
+    filterRows: props.filterRows
   }
   return value
 }
@@ -17,4 +15,4 @@ function useValue (props: {
 export const {
   useCreatedContext: useTable,
   CreatedProvider: TableProvider
-} = contextCreator({ useValue })
+} = contextCreator({ name: 'table', useValue })

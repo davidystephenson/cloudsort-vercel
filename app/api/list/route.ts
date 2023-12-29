@@ -1,29 +1,27 @@
-import auth from '@/lib/auth/server-auth'
-import prisma from '@/lib/prisma'
+import respondAuthError from '@/lib/auth/respond-auth-error'
+import serverAuth from '@/lib/auth/server-auth'
+import prisma from '@/lib/prisma/prisma'
+import apiError from '@/lib/api/api-error'
 import { NextResponse } from 'next/server'
 
 export async function POST (req: Request): Promise<Response> {
-  const authSession = await auth()
+  const authSession = await serverAuth()
   if (authSession == null) {
-    const body = { error: 'There is no session' }
-    const options = { status: 400 }
-    return NextResponse.json(body, options)
+    return respondAuthError()
   }
-  const { name } = await req.json()
+  const body = await req.json()
   const exists = await prisma.list.findFirst({
     where: {
-      name,
+      name: body.name,
       userId: authSession.user.id
     }
   })
   if (exists != null) {
-    const body = { error: 'This list already exists' }
-    const options = { status: 400 }
-    return NextResponse.json(body, options)
+    return apiError({ message: 'This list already exists', status: 409 })
   }
   const list = await prisma.list.create({
     data: {
-      name,
+      name: body.name,
       userId: authSession.user.id
     }
   })
@@ -31,27 +29,23 @@ export async function POST (req: Request): Promise<Response> {
 }
 
 export async function DELETE (req: Request): Promise<Response> {
-  const authSession = await auth()
+  const authSession = await serverAuth()
   if (authSession == null) {
-    const body = { error: 'There is no session' }
-    const options = { status: 400 }
-    return NextResponse.json(body, options)
+    return respondAuthError()
   }
-  const { id } = await req.json()
+  const body = await req.json()
   const list = await prisma.list.findFirst({
     where: {
-      id,
+      id: body.id,
       userId: authSession.user.id
     }
   })
   if (list == null) {
-    const body = { error: 'This list does not exist' }
-    const options = { status: 400 }
-    return NextResponse.json(body, options)
+    return apiError({ message: 'This list does not exist', status: 404 })
   }
   await prisma.list.delete({
     where: {
-      id
+      id: body.id
     }
   })
   return NextResponse.json(list)

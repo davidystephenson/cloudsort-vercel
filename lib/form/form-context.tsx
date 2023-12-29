@@ -7,11 +7,12 @@ function useValue (props: {}): FormContextValue {
 
   const register = useCallback((props: {
     name: string
+    value?: string
   }) => {
     const field: Field = {
       name: props.name,
       ref: createRef<HTMLInputElement>(),
-      value: '',
+      value: props.value ?? '',
       error: ''
     }
     setFields((fields) => {
@@ -71,5 +72,6 @@ export const {
   useCreatedContext: useForm,
   CreatedProvider: FormProvider
 } = contextCreator({
+  name: 'form',
   useValue
 })

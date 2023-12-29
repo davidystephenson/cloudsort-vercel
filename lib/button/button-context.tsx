@@ -11,4 +11,4 @@ function useValue (props: ButtonContextValue): ButtonContextValue {
 export const {
   useCreatedContext: useButtonContext,
   CreatedProvider: ButtonProvider
-} = contextCreator({ useValue })
+} = contextCreator({ name: 'button', useValue })
