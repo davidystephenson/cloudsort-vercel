@@ -4,6 +4,8 @@ import { MovieData } from '../movie/movie-types'
 export interface ListContextValue {
   createMovie: (props: MovieData) => Promise<Movie>
   delete: () => Promise<void>
+  filter: (props: { query: string | undefined }) => void
+  filtered: Movie[]
   row: List
   movies: Movie[]
 }
@@ -12,7 +14,7 @@ export interface ListsContextValue {
   create: (props: { name: string }) => Promise<List>
   createMovie: (props: { listId: number, movie: Movie }) => void
   delete: (props: { id: number }) => void
-  filterRows: (filterProps: { query: string | undefined }) => void
-  filteredRows: List[]
+  filter: (filterProps: { query: string | undefined }) => void
+  filtered: List[]
   rows: List[]
 }

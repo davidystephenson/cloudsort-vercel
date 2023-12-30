@@ -10,7 +10,7 @@ export default function ListsTableView (): JSX.Element {
   return (
     <TableProvider
       columns={columns}
-      filterRows={lists.filterRows}
+      filterRows={lists.filter}
     >
       <ListsTableConsumer />
     </TableProvider>

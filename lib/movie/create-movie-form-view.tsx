@@ -53,9 +53,9 @@ export default function CreateMovieFormView (): JSX.Element {
         type='number'
       />
       <FormFieldView
+        isRequired
         name='url'
         label='URL'
-        isRequired
       />
       <FormFieldView
         name='year'
@@ -63,9 +63,11 @@ export default function CreateMovieFormView (): JSX.Element {
         isRequired
         type='number'
       />
-      <SubmitRequestView>
-        Add Movie
-      </SubmitRequestView>
+      <div className='flex justify-end mt-2'>
+        <SubmitRequestView>
+          Add Movie
+        </SubmitRequestView>
+      </div>
     </RequestFormView>
   )
 }

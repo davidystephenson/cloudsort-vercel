@@ -41,10 +41,8 @@ export default async function RootLayout ({
     >
       <body>
         <Suspense fallback='Loading...'>
-          {/* @ts-expect-error Async Server Component */}
           <AuthView session={authSession}>
             <ThemeView shade={shade}>
-              {/* @ts-expect-error Async Server Component */}
               <LayoutView>
                 {children}
               </LayoutView>

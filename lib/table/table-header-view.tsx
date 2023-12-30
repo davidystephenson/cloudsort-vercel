@@ -18,7 +18,7 @@ export default function TableHeaderView (): JSX.Element {
   return (
     <>
       <tr>
-        <th colSpan={colSpan} className='pb-2'>
+        <th colSpan={colSpan} className='pb-2 bg-white'>
           <TableSearchView />
         </th>
       </tr>

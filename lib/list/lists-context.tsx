@@ -3,32 +3,17 @@ import { ListsContextValue } from './list-types'
 import { contextCreator } from '../context-creator/context-creator'
 import { useEffect, useState } from 'react'
 import postList from './post-list'
+import filterList from './filter-list'
+import useFilter from '../filter/use-filter'
 
 function useValue (props: {
   rows: List[]
 }): ListsContextValue {
   const [rows, setRows] = useState(props.rows)
-  const [query, setQuery] = useState<string>()
-  const [filteredRows, setFilteredRows] = useState<List[]>(props.rows)
   useEffect(() => {
     setRows(props.rows)
   }, [props.rows])
-  useEffect(() => {
-    if (query == null) {
-      setFilteredRows(rows)
-      return
-    }
-    const filteredRows = rows.filter((row) => {
-      const values = Object.values(row)
-      const includes = values.some((value) => {
-        const string = String(value)
-        const includes = string.includes(query)
-        return includes
-      })
-      return includes
-    })
-    setFilteredRows(filteredRows)
-  }, [rows, query])
+  const { filtered, filter } = useFilter({ rows, filter: filterList })
   async function create (props: {
     name: string
   }): Promise<List> {
@@ -68,17 +53,12 @@ function useValue (props: {
       return newRows
     })
   }
-  function filterRows (props: {
-    query: string
-  }): void {
-    setQuery(props.query)
-  }
   const value: ListsContextValue = {
     create,
     createMovie,
     delete: _delete,
-    filterRows,
-    filteredRows,
+    filter,
+    filtered,
     rows
   }
   return value

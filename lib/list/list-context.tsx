@@ -6,16 +6,22 @@ import { MovieData, PostMovieBody } from '../movie/movie-types'
 import postMovie from '../movie/post-movie'
 import deleteList from './delete-list'
 import { useEffect, useState } from 'react'
+import useFilter from '../filter/use-filter'
+import filterMovie from '../movie/filterMovie'
 
 function useValue (props: {
   row: List
-  movies: Movie[]
+  movies?: Movie[]
 }): ListContextValue {
   const lists = useListsUnsafe()
-  const [movies, setMovies] = useState(props.movies)
+  const [movies, setMovies] = useState(props.movies ?? [])
   useEffect(() => {
-    setMovies(props.movies)
+    setMovies(props.movies ?? [])
   }, [props.movies])
+  const { filter, filtered } = useFilter({
+    rows: movies,
+    filter: filterMovie
+  })
   async function createMovie (
     createMovieProps: MovieData
   ): Promise<Movie> {
@@ -24,7 +30,7 @@ function useValue (props: {
       ...createMovieProps
     }
     const movie = await postMovie(body)
-    setMovies([movie, ...movies])
+    setMovies(current => [movie, ...current])
     lists?.createMovie({
       movie,
       listId: props.row.id
@@ -38,6 +44,8 @@ function useValue (props: {
   const value: ListContextValue = {
     createMovie,
     delete: _delete,
+    filter,
+    filtered,
     movies,
     row: props.row
   }

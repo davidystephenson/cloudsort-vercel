@@ -1,20 +1,22 @@
 import { MdDeleteForever } from 'react-icons/md'
-import { useList } from './list-context'
 import SendRequestView from '../request/send-request-view'
 import ThemeIconView from '../theme/theme-icon-view'
+import { useMovie } from '../movie/movie-context'
 import ThemeLinkableView from '../theme/theme-linkable-view'
 
-export default function ListCellsConsumer (): JSX.Element {
-  const list = useList()
+export default function MovieCellsConsumer (): JSX.Element {
+  const movie = useMovie()
+  console.log('movie', movie)
   async function send (): Promise<void> {
-    await list.delete()
+    // await movie.delete()
   }
-  const href = `/list/${list.row.id}`
+  const isUrl = URL.canParse(movie.row.url)
+  console.log('isUrl', isUrl, movie.row.url)
   return (
     <>
       <td className='w-full'>
-        <ThemeLinkableView href={href}>
-          {list.row.name}
+        <ThemeLinkableView href={movie.row.url} isExternal showAnchorIcon>
+          {movie.row.name}
         </ThemeLinkableView>
       </td>
       <td>

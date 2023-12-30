@@ -1,9 +1,18 @@
-import ProfileView from '../auth/profile-view'
+'use client'
 
-export default async function NavbarLayoutView (): Promise<JSX.Element | null> {
+import ProfileView from '../auth/profile-view'
+import ThemeLinkView from '../theme/theme-link-view'
+
+export default function NavbarLayoutView (): JSX.Element {
   return (
     <div className='flex items-center justify-between'>
-      <h1 className='text-4xl text-primary'>Cloudsort</h1>
+      <ThemeLinkView
+        className='text-4xl'
+        href='/lists'
+        underline='none'
+      >
+        Cloudsort
+      </ThemeLinkView>
       <ProfileView />
     </div>
   )

@@ -23,11 +23,13 @@ export async function POST (req: Request): Promise<Response> {
   if (list.userId !== authSession.user.id) {
     return apiError({ message: 'This is not your list', status: 403 })
   }
+  console.log('body', body)
   const exists = await prisma.movie.findFirst({
     where: {
       imdbId: body.imdbId
     }
   })
+  console.log('exists', exists)
   if (exists != null) {
     return apiError({ message: 'This movie already exists', status: 409 })
   }
