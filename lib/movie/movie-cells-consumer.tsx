@@ -7,7 +7,7 @@ import ThemeLinkableView from '../theme/theme-linkable-view'
 export default function MovieCellsConsumer (): JSX.Element {
   const movie = useMovie()
   async function send (): Promise<void> {
-    // await movie.delete()
+    await movie.delete()
   }
   return (
     <>

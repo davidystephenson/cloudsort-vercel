@@ -52,3 +52,40 @@ export async function POST (req: Request): Promise<Response> {
   console.log('movie', movie)
   return NextResponse.json(movie)
 }
+
+export async function DELETE (req: Request): Promise<Response> {
+  const authSession = await serverAuth()
+  if (authSession == null) {
+    return respondAuthError()
+  }
+  const body = await req.json()
+  const movie = await prisma.movie.findFirst({
+    where: {
+      id: body.movieId
+    }
+  })
+  if (movie == null) {
+    return apiError({ message: 'This movie does not exist', status: 404 })
+  }
+  const list = await prisma.list.findFirst({
+    where: {
+      id: body.listId
+    }
+  })
+  if (list == null) {
+    return apiError({ message: 'This list does not exist', status: 404 })
+  }
+  if (list.userId !== authSession.user.id) {
+    return apiError({ message: 'This is not your list', status: 403 })
+  }
+  const itemIds = list.itemIds.filter((id) => id !== movie.id)
+  await prisma.list.update({
+    where: {
+      id: body.listId
+    },
+    data: {
+      itemIds
+    }
+  })
+  return NextResponse.json(movie)
+}

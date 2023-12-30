@@ -41,9 +41,25 @@ function useValue (props: {
     await deleteList({ id: props.row.id })
     lists?.delete({ id: props.row.id })
   }
+  function deleteMovie (deleteMovieProps: {
+    movieId: number
+  }): void {
+    setMovies((movies) => {
+      const newMovies = movies.filter((movie) => {
+        const keep = movie.id !== deleteMovieProps.movieId
+        return keep
+      })
+      return newMovies
+    })
+    lists?.deleteMovie({
+      movieId: deleteMovieProps.movieId,
+      listId: props.row.id
+    })
+  }
   const value: ListContextValue = {
     createMovie,
     delete: _delete,
+    deleteMovie,
     filter,
     filtered,
     movies,

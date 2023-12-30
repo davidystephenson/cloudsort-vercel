@@ -53,10 +53,32 @@ function useValue (props: {
       return newRows
     })
   }
+  function deleteMovie (props: {
+    listId: number
+    movieId: number
+  }): void {
+    setRows((rows) => {
+      const newRows = rows.map((row) => {
+        if (row.id !== props.listId) {
+          return row
+        }
+        const newRow: List = {
+          ...row,
+          itemIds: row.itemIds.filter((itemId) => {
+            const keep = itemId !== props.movieId
+            return keep
+          })
+        }
+        return newRow
+      })
+      return newRows
+    })
+  }
   const value: ListsContextValue = {
     create,
     createMovie,
     delete: _delete,
+    deleteMovie,
     filter,
     filtered,
     rows
