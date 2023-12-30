@@ -3,9 +3,10 @@ import ThemeLinkView from './theme-link-view'
 import { ReactNode } from 'react'
 import isUrl from '../isUrl/is-url'
 
-export default function ThemeLinkableView (props: {
+export default function ThemeLinkableView (props: LinkProps & {
   children: ReactNode
-} & LinkProps): JSX.Element {
+  href?: string | null
+}): JSX.Element {
   const linked = props.href != null && isUrl(props.href)
   if (linked) {
     return (

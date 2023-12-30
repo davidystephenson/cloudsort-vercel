@@ -3,7 +3,10 @@ import { useForm } from './form-context'
 import { InputProps } from '@nextui-org/react'
 import ThemeInputView from '../theme/theme-input-view'
 
-export default function FormFieldView (props: { name: string } & InputProps): JSX.Element {
+export default function FormFieldView (props: {
+  debug?: boolean
+  name: string
+} & InputProps): JSX.Element {
   const form = useForm()
 
   useEffect(() => {
@@ -27,9 +30,9 @@ export default function FormFieldView (props: { name: string } & InputProps): JS
     <ThemeInputView
       autoComplete={props.autoComplete}
       color='primary'
+      debug={props.debug}
       errorMessage={field?.error}
       isDisabled={disabled}
-      isRequired
       onChange={form.handleChange}
       ref={field?.ref}
       value={field?.value ?? ''}

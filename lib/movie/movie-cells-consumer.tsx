@@ -6,16 +6,13 @@ import ThemeLinkableView from '../theme/theme-linkable-view'
 
 export default function MovieCellsConsumer (): JSX.Element {
   const movie = useMovie()
-  console.log('movie', movie)
   async function send (): Promise<void> {
     // await movie.delete()
   }
-  const isUrl = URL.canParse(movie.row.url)
-  console.log('isUrl', isUrl, movie.row.url)
   return (
     <>
       <td className='w-full'>
-        <ThemeLinkableView href={movie.row.url} isExternal showAnchorIcon>
+        <ThemeLinkableView href={movie.row.url ?? undefined} isExternal showAnchorIcon>
           {movie.row.name}
         </ThemeLinkableView>
       </td>

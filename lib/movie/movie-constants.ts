@@ -9,4 +9,4 @@ export const MOVIE_DATA: MovieData = {
   review: '',
   url: ''
 }
-export const MOVIE_DATA_KEYS: Array<keyof MovieData> = Object.keys(MOVIE_DATA) as Array<keyof MovieData>
+export const MOVIE_DATA_KEYS: Array<keyof MovieData> = ['name', 'score', 'imdbId', 'year']

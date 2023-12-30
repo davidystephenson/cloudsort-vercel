@@ -32,9 +32,9 @@ model Movie {
   id     Int      @id @default(autoincrement())
   name   String
   score  Int
-  dateRated   DateTime
+  dateRated   DateTime?
   imdbId String
-  review String
-  url    String
+  review String?
+  url    String?
   year   Int
 }

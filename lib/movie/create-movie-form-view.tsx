@@ -34,7 +34,6 @@ export default function CreateMovieFormView (): JSX.Element {
       <FormFieldView
         name='dateRated'
         label='Date Rated'
-        isRequired
         type='date'
       />
       <FormFieldView
@@ -53,7 +52,6 @@ export default function CreateMovieFormView (): JSX.Element {
         type='number'
       />
       <FormFieldView
-        isRequired
         name='url'
         label='URL'
       />
