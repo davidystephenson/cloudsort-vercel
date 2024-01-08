@@ -1,12 +1,12 @@
 import { useState, useEffect } from 'react'
 import { Filter } from './filter-types'
 
-export default function useFilter <Item> (props: {
-  filter: (props: { row: Item, query: string }) => boolean
-  rows: Item[]
-}): Filter<Item> {
+export default function useFilter <Row> (props: {
+  filter: (props: { row: Row, query: string }) => boolean
+  rows: Row[]
+}): Filter<Row> {
   const [query, setQuery] = useState<string>()
-  const [filtered, setFiltered] = useState<Item[]>(props.rows)
+  const [filtered, setFiltered] = useState<Row[]>(props.rows)
   useEffect(() => {
     if (query == null) {
       setFiltered(props.rows)

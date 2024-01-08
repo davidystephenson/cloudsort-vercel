@@ -2,7 +2,7 @@ import respondAuthError from '@/lib/auth/respond-auth-error'
 import serverAuth from '@/lib/auth/server-auth'
 import apiError from '@/lib/api/api-error'
 import prisma from '@/lib/prisma/prisma'
-import { PostMovieBody } from '@/lib/movie/movie-types'
+import { DeleteMovieBody, PostMovieBody } from '@/lib/movie/movie-types'
 import { NextResponse } from 'next/server'
 
 export async function POST (req: Request): Promise<Response> {
@@ -58,7 +58,7 @@ export async function DELETE (req: Request): Promise<Response> {
   if (authSession == null) {
     return respondAuthError()
   }
-  const body = await req.json()
+  const body: DeleteMovieBody = await req.json()
   const movie = await prisma.movie.findFirst({
     where: {
       id: body.movieId
