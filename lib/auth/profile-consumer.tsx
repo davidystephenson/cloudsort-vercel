@@ -14,7 +14,7 @@ export default function ProfileConsumer (): JSX.Element {
   const theme = useTheme()
 
   if (auth.session == null) {
-    throw new Error('ProfileConsumer must be used within a AuthProvider')
+    throw new Error('There is no session')
   }
   function handleClick (): void {
     void request.send()

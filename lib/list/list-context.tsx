@@ -1,27 +1,62 @@
-import { ListContextValue } from './list-types'
-import { List, Movie } from '@prisma/client'
+import { ListContextValue, RelatedList } from './list-types'
+import { Movie } from '@prisma/client'
 import { contextCreator } from '../context-creator/context-creator'
 import { useListsUnsafe } from './lists-context'
 import { MovieData, PostMovieBody } from '../movie/movie-types'
 import postMovie from '../movie/post-movie'
 import deleteList from './delete-list'
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import useFilter from '../filter/use-filter'
 import filterMovie from '../movie/filterMovie'
+import { State } from '../mergeChoice/merge-choice-types'
+import createYeastState from '../mergeChoice/createYeastState'
+import getSortedMovies from '../movies/getSortedMovies'
+import importItems from '../mergeChoice/importItems'
+import removeItem from '../mergeChoice/removeItem'
+import chooseMovie from '../movie/choose-movie'
+import chooseOption from '../mergeChoice/chooseOption'
 
 function useValue (props: {
-  row: List
-  movies?: Movie[]
+  row: RelatedList
+  state?: State<Movie>
 }): ListContextValue {
   const lists = useListsUnsafe()
-  const [movies, setMovies] = useState(props.movies ?? [])
+  const getDefaultState = useCallback(() => {
+    return props.state ?? createYeastState<Movie>()
+  }, [props.state])
+  const [state, setState] = useState(getDefaultState)
+  console.log('state', state)
+  const [movies, setMovies] = useState(() => {
+    const sortedMovies = getSortedMovies({ state })
+    return sortedMovies
+  })
   useEffect(() => {
-    setMovies(props.movies ?? [])
-  }, [props.movies])
+    const state = getDefaultState()
+    setState(state)
+  }, [props.state])
   const { filter, filtered } = useFilter({
     rows: movies,
     filter: filterMovie
   })
+  async function updateState (callback: (current: State<Movie>) => Promise<State<Movie>>): Promise<void> {
+    const newState = await callback(state)
+    const sortedMovies = getSortedMovies({ state: newState })
+    setMovies(sortedMovies)
+    setState(newState)
+  }
+  async function importMovies (props: {
+    movies: Movie[]
+    slice?: number
+  }): Promise<void> {
+    void updateState(async current => {
+      const newState = await importItems({
+        items: props.movies,
+        slice: props.slice,
+        state: current
+      })
+      return newState
+    })
+  }
   async function createMovie (
     createMovieProps: MovieData
   ): Promise<Movie> {
@@ -29,41 +64,47 @@ function useValue (props: {
       listId: props.row.id,
       ...createMovieProps
     }
-    const movie = await postMovie(body)
-    setMovies(current => [movie, ...current])
-    lists?.createMovie({
-      movie,
-      listId: props.row.id
-    })
+    const movie = await postMovie({ body })
+    await importMovies({ movies: [movie] })
     return movie
   }
   async function _delete (): Promise<void> {
     await deleteList({ id: props.row.id })
     lists?.delete({ id: props.row.id })
   }
-  function deleteMovie (deleteMovieProps: {
+  function deleteMovie (props: {
     movieId: number
   }): void {
-    setMovies((movies) => {
-      const newMovies = movies.filter((movie) => {
-        const keep = movie.id !== deleteMovieProps.movieId
-        return keep
-      })
-      return newMovies
+    void updateState(async current => {
+      const newState = await removeItem({ id: props.movieId, state: current })
+      return newState
     })
-    lists?.deleteMovie({
-      movieId: deleteMovieProps.movieId,
-      listId: props.row.id
+  }
+  async function choose (chooseProps: {
+    betterIndex: number
+  }): Promise<void> {
+    await updateState(async current => {
+      const body = {
+        betterIndex: chooseProps.betterIndex,
+        listId: props.row.id
+      }
+      await chooseMovie({ body })
+      const newState = await chooseOption({
+        betterIndex: chooseProps.betterIndex, state: current
+      })
+      return newState
     })
   }
   const value: ListContextValue = {
+    choose,
     createMovie,
     delete: _delete,
     deleteMovie,
     filter,
     filtered,
     movies,
-    row: props.row
+    row: props.row,
+    state
   }
   return value
 }

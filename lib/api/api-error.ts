@@ -1,10 +1,10 @@
-import apiResponse from './api-response'
+import apiRespond from './api-respond'
 
 export default function apiError (props: {
   message: string
   status: number
 }): Response {
-  return apiResponse({
+  return apiRespond({
     body: {
       error: props.message
     },

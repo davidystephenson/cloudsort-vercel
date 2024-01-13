@@ -1,26 +1,16 @@
+import getMergeChoiceList from '@/lib/list/get-merge-choice-list'
 import ListView from '@/lib/list/list-view'
-import prisma from '@/lib/prisma/prisma'
 
-export default async function Lists ({ params }: {
+export default async function Lists (props: {
   params: {
     listId: string
   }
 }): Promise<JSX.Element> {
-  const list = await prisma.list.findFirstOrThrow({
-    where: {
-      id: Number(params.listId)
-    }
-  })
-  const movies = await prisma.movie.findMany({
-    where: {
-      id: {
-        in: list.itemIds
-      }
-    }
-  })
+  const listId = Number(props.params.listId)
+  const mergeChoiceList = await getMergeChoiceList({ listId })
   return (
     <>
-      <ListView movies={movies} row={list} />
+      <ListView state={mergeChoiceList.state} row={mergeChoiceList.list} />
     </>
   )
 }

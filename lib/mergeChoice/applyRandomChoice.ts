@@ -1,3 +1,4 @@
+import arrayToDictionary from './arrayToDictionary'
 import createActiveChoice from './createActiveChoice'
 import getOperations from './getOperations'
 import getPoints from './getPoints'
@@ -19,7 +20,7 @@ export default async function applyRandomChoice <ListItem extends Item> (props: 
   const unchosenPoints = props.aBetter ? props.bPoints : props.aPoints
   const consistent = chosenPoints > unchosenPoints
   if (consistent) {
-    return { ...props.state, finalized: true }
+    return { ...props.state, complete: true }
   }
   // TODO single reduce
   const betterIds = props.state.activeIds.filter(id => {
@@ -40,10 +41,11 @@ export default async function applyRandomChoice <ListItem extends Item> (props: 
     betterIds.unshift(chosenItem.id)
     const output = [...worseIds, ...betterIds]
     const newOperation = await props.createOperation({ output })
+    const newOperations = { [newOperation.mergeChoiceId]: newOperation }
     return {
       ...props.state,
-      activeOperations: [newOperation],
-      finalized: true
+      activeOperations: newOperations,
+      complete: true
     }
   }
   activeIds.push(chosenItem.id)
@@ -52,22 +54,25 @@ export default async function applyRandomChoice <ListItem extends Item> (props: 
     const operation = await props.createOperation({ output: [id] })
     return operation
   })
-  const completedOperations = await Promise.all(completedOperationPromises)
+  const completedOperationArray = await Promise.all(completedOperationPromises)
+  const completedOperations = arrayToDictionary({ array: completedOperationArray })
   const betterOperation = await props.createOperation({
     output: betterIds
   })
+  const betterOperations = { [betterOperation.mergeChoiceId]: betterOperation }
   const worseOperation = await props.createOperation({
     output: worseIds
   })
+  const worseOperations = { [worseOperation.mergeChoiceId]: worseOperation }
   const newState: State<ListItem> = {
     ...props.state,
     betterIds,
     worseIds,
     activeIds,
     activeOperations: completedOperations,
-    betterOperations: [betterOperation],
-    worseOperations: [worseOperation],
-    finalized: false
+    betterOperations,
+    worseOperations,
+    complete: false
   }
   newState.activeOperations = await getOperations({
     activeOperations: newState.activeOperations,

@@ -18,7 +18,6 @@ export default function CreateMovieFormView (): JSX.Element {
     })
     const movieData: MovieData = {
       ...guarded,
-      dateRated: new Date(guarded.dateRated),
       score: Number(guarded.score),
       year: Number(guarded.year)
     }

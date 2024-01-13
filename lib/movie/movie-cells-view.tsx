@@ -6,7 +6,7 @@ export default function MovieCellsView (props: {
   row: Movie
 }): JSX.Element {
   return (
-    <MovieProvider row={props.row}>
+    <MovieProvider calculated={props.row}>
       <MovieCellsConsumer />
     </MovieProvider>
   )

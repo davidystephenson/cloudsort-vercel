@@ -12,11 +12,18 @@ export default function MovieCellsConsumer (): JSX.Element {
   return (
     <>
       <td className='w-full'>
-        <ThemeLinkableView href={movie.row.url ?? undefined} isExternal showAnchorIcon>
-          {movie.row.name}
+        <ThemeLinkableView href={movie.calculated.url ?? undefined} isExternal showAnchorIcon>
+          {movie.calculated.name}
         </ThemeLinkableView>
       </td>
+      <td className='w-fit whitespace-nowrap'>
+        <div className='w-fit'>{movie.calculated.updatedAt.toLocaleString()}</div>
+      </td>
       <td>
+        {movie.calculated.score}
+      </td>
+      <td className='flex items-center'>
+        {movie.calculated.points}
         <SendRequestView
           aria-label='Delete'
           color='danger'

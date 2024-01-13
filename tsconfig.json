@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "target": "es5",
+    "target": "es2015",
     "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
     "skipLibCheck": true,
@@ -26,7 +26,7 @@
       {
         "name": "next"
       }
-    ]
+    ],
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "lib/request/request-button-consumer-view.tsx0", "lib/list/movies-cells-view"],
   "exclude": ["node_modules"]

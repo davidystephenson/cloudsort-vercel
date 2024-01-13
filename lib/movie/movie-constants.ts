@@ -4,7 +4,6 @@ export const MOVIE_DATA: MovieData = {
   name: '',
   year: 0,
   score: 0,
-  dateRated: new Date(),
   imdbId: '',
   review: '',
   url: ''

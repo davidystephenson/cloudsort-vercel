@@ -10,7 +10,7 @@ export default function filterMovie (props: {
   if (props.row.imdbId.includes(props.query)) {
     return true
   }
-  if (props.row.review.includes(props.query)) {
+  if (props.row.review?.includes(props.query)) {
     return true
   }
   if (String(props.row.score).includes(props.query)) {
@@ -19,7 +19,7 @@ export default function filterMovie (props: {
   if (String(props.row.year).includes(props.query)) {
     return true
   }
-  if (props.row.url.includes(props.query)) {
+  if (props.row.url?.includes(props.query)) {
     return true
   }
   return false

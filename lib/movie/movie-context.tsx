@@ -1,20 +1,19 @@
-import { Movie } from '@prisma/client'
-import { MovieContextValue } from './movie-types'
+import { CalculatedMovie, MovieContextValue } from './movie-types'
 import { contextCreator } from '../context-creator/context-creator'
 import deleteMovie from './delete-movie'
 import { useList } from '../list/list-context'
 
 function useValue (props: {
-  row: Movie
+  calculated: CalculatedMovie
 }): MovieContextValue {
   const list = useList()
   async function _delete (): Promise<void> {
-    await deleteMovie({ listId: list.row.id, movieId: props.row.id })
-    list.deleteMovie({ movieId: props.row.id })
+    await deleteMovie({ listId: list.row.id, movieId: props.calculated.id })
+    list.deleteMovie({ movieId: props.calculated.id })
   }
   const value: MovieContextValue = {
     delete: _delete,
-    row: props.row
+    calculated: props.calculated
   }
   return value
 }

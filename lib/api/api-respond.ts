@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server'
 
-export default function apiResponse (props: {
+export default function apiRespond (props: {
   body: unknown
   options?: ResponseInit
 }): Response {

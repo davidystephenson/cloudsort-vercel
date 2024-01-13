@@ -4,6 +4,7 @@ import getOperationsSteps from './getOperationsSteps'
 import getOperations from './getOperations'
 import { CreateChoice, CreateOperation, Item, Population, State } from './merge-choice-types'
 import getItem from './getItem'
+import arrayToDictionary from './arrayToDictionary'
 
 export default async function populate <ListItem extends Item> (props: {
   items: ListItem[]
@@ -22,7 +23,7 @@ export default async function populate <ListItem extends Item> (props: {
 
   const newIds = newItems.map(item => item.id)
   if (
-    props.state.finalized ||
+    props.state.complete ||
     (props.state.betterIds.length === 0 && props.state.worseIds.length === 0 && props.state.choice?.random !== true)
   ) {
     const newState: State<ListItem> = createYeastState()
@@ -39,13 +40,22 @@ export default async function populate <ListItem extends Item> (props: {
       const operation = await props.createOperation({ output })
       return operation
     })
-    newState.activeOperations = await Promise.all(activeOperationPromises)
+    const activeOperationArray = await Promise.all(activeOperationPromises)
+    const activeOperationDictionary = arrayToDictionary({ array: activeOperationArray })
+    newState.activeOperations = activeOperationDictionary
     newState.activeIds.push(...props.state.activeIds)
-    newState.activeOperations = await getOperations({ ...newState, createOperation: props.createOperation })
-    newState.activeOperations.push(...props.state.activeOperations)
+    const newActiveOperations = await getOperations({
+      activeOperations: newState.activeOperations,
+      createOperation: props.createOperation
+    })
+    newState.activeOperations = newActiveOperations
+    newState.activeOperations = {
+      ...newState.activeOperations,
+      ...props.state.activeOperations
+    }
     const maxSteps = getOperationsSteps({ operations: newState.activeOperations })
     if (maxSteps === 0) {
-      newState.finalized = true
+      newState.complete = true
       return { state: newState, items: newItems }
     }
     newState.choice = await createActiveChoice({

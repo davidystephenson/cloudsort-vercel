@@ -1,20 +1,23 @@
 import { MdDeleteForever } from 'react-icons/md'
-import { useList } from './list-context'
 import SendRequestView from '../request/send-request-view'
 import ThemeIconView from '../theme/theme-icon-view'
 import ThemeLinkableView from '../theme/theme-linkable-view'
+import { List } from '@prisma/client'
+import { useLists } from './lists-context'
 
-export default function ListCellsConsumer (): JSX.Element {
-  const list = useList()
+export default function ListCellsConsumer (props: {
+  list: List
+}): JSX.Element {
+  const lists = useLists()
   async function send (): Promise<void> {
-    await list.delete()
+    lists.delete({ id: props.list.id })
   }
-  const href = `/list/${list.row.id}`
+  const href = `/list/${props.list.id}`
   return (
     <>
       <td className='w-full'>
         <ThemeLinkableView href={href}>
-          {list.row.name}
+          {props.list.name}
         </ThemeLinkableView>
       </td>
       <td>

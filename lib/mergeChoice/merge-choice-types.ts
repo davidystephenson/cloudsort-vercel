@@ -1,54 +1,55 @@
-export type Id = string | number
+export type ItemId = string | number
+export interface Identity {
+  mergeChoiceId: string
+}
 export interface Item {
-  id: Id
+  id: ItemId
   name: string
-  updatedAt: number
+  updatedAt: Date
 }
 export type Calculated<T> = T & { points: number }
-export interface Operation {
-  id: Id
-  input: Id[][]
-  output: Id[]
+export interface Operation extends Identity {
+  input: ItemId[][]
+  output: ItemId[]
 }
 export interface ChoiceData {
-  options: Id[]
-  currentOperationId?: Id
+  options: ItemId[]
+  operationMergeChoiceId?: string | null
   aIndex: number
   bIndex: number
   random: boolean
 }
-export interface Choice extends ChoiceData {
-  id: Id
-}
+export type Choice = ChoiceData & Identity
+export type OperationDictionary = Record<string, Operation>
 export interface State <ListItem extends Item> {
-  items: Record<Id, ListItem>
-  activeIds: Id[]
-  betterIds: Id[]
-  worseIds: Id[]
-  reserveIds: Id[]
-  activeOperations: Operation[]
-  betterOperations: Operation[]
-  worseOperations: Operation[]
+  activeIds: ItemId[]
+  activeOperations: OperationDictionary
+  betterIds: ItemId[]
+  betterOperations: OperationDictionary
   choice?: Choice
+  complete: boolean
   history: Array<HistoryEvent<ListItem>>
-  finalized: boolean
+  items: Record<ItemId, ListItem>
+  reserveIds: ItemId[]
+  worseIds: ItemId[]
+  worseOperations: OperationDictionary
 }
+
 export type PreviousState <ListItem extends Item> = Omit<State<ListItem>, 'history'> & {
   history?: Array<HistoryEvent<ListItem>>
 }
-export interface HistoryEvent <ListItem extends Item> {
+export interface HistoryEvent <ListItem extends Item> extends Identity {
   createdAt: number
-  id: Id
   choice?: {
     aBetter: boolean
-    aId: Id
+    aId: ItemId
     aItem: Calculated<ListItem>
-    bId: Id
+    bId: ItemId
     bItem: Calculated<ListItem>
     random: boolean
   }
   remove?: {
-    id: Id
+    id: ItemId
     item: Calculated<ListItem>
   }
   import?: {
@@ -57,8 +58,8 @@ export interface HistoryEvent <ListItem extends Item> {
   previousState?: PreviousState<ListItem>
 }
 export interface RemovalFromOperations {
-  emptiedOperationId?: Id
-  operations: Operation[]
+  emptiedOperationId?: ItemId
+  operations: OperationDictionary
 }
 export interface CountRange {
   maximum: number
@@ -69,7 +70,7 @@ export interface Population <ListItem extends Item> {
   items: ListItem[]
 }
 export type CreateOperation = (props?: {
-  input?: [Id[], Id[]]
-  output?: Id[]
+  input?: [ItemId[], ItemId[]]
+  output?: ItemId[]
 }) => Promise<Operation>
 export type CreateChoice = (props: ChoiceData) => Promise<Choice>

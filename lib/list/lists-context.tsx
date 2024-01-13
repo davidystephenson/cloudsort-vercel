@@ -1,4 +1,4 @@
-import { List, Movie } from '@prisma/client'
+import { List } from '@prisma/client'
 import { ListsContextValue } from './list-types'
 import { contextCreator } from '../context-creator/context-creator'
 import { useEffect, useState } from 'react'
@@ -24,24 +24,6 @@ function useValue (props: {
     })
     return row
   }
-  function createMovie (props: {
-    listId: number
-    movie: Movie
-  }): void {
-    setRows((rows) => {
-      const newRows = rows.map((row) => {
-        if (row.id !== props.listId) {
-          return row
-        }
-        const newRow: List = {
-          ...row,
-          itemIds: [...row.itemIds, props.movie.id]
-        }
-        return newRow
-      })
-      return newRows
-    })
-  }
   function _delete (props: {
     id: number
   }): void {
@@ -53,32 +35,9 @@ function useValue (props: {
       return newRows
     })
   }
-  function deleteMovie (props: {
-    listId: number
-    movieId: number
-  }): void {
-    setRows((rows) => {
-      const newRows = rows.map((row) => {
-        if (row.id !== props.listId) {
-          return row
-        }
-        const newRow: List = {
-          ...row,
-          itemIds: row.itemIds.filter((itemId) => {
-            const keep = itemId !== props.movieId
-            return keep
-          })
-        }
-        return newRow
-      })
-      return newRows
-    })
-  }
   const value: ListsContextValue = {
     create,
-    createMovie,
     delete: _delete,
-    deleteMovie,
     filter,
     filtered,
     rows
