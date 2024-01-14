@@ -93,7 +93,11 @@ export default async function getMergeChoiceList (props: {
     worseOperations,
     worseIds
   }
-  const activeChoice = list.choices[0]
+  const activeChoices = list.choices.filter((choice) => choice.active)
+  if (activeChoices.length > 1) {
+    throw new Error('There is more than one active choice')
+  }
+  const activeChoice = activeChoices[0]
   if (activeChoice != null) {
     const options = activeChoice.options.map((option) => option.movieId)
     const choice = {
