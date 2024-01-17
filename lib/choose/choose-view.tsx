@@ -1,5 +1,5 @@
 import { useList } from '../list/list-context'
-import SendRequestView from '../request/send-request-view'
+import RequestButtonView from '../request/request-button-view'
 
 export default function ChooseView (): JSX.Element {
   const list = useList()
@@ -15,12 +15,12 @@ export default function ChooseView (): JSX.Element {
 
   return (
     <>
-      <SendRequestView send={chooseA}>
+      <RequestButtonView send={chooseA}>
         A
-      </SendRequestView>
-      <SendRequestView send={chooseB}>
+      </RequestButtonView>
+      <RequestButtonView send={chooseB}>
         B
-      </SendRequestView>
+      </RequestButtonView>
     </>
   )
 }

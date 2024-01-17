@@ -1,19 +1,38 @@
 'use client'
 
 import { ThemeContextValue } from './theme-types'
-import { useRouter } from 'next/navigation'
 import { useAuth } from '../auth/auth-context'
 import useMounted from '../mounted/use-mounted'
 import { contextCreator } from '../context-creator/context-creator'
+import useSystemDark from '../use-system-dark/useSystemDark'
+import { useCallback, useEffect, useMemo } from 'react'
+import { useColorMode } from '@chakra-ui/react'
 
 function useValue (props: {
   shade?: string
 }): ThemeContextValue {
   const auth = useAuth()
   const mounted = useMounted()
-  const router = useRouter()
+  const colorMode = useColorMode()
+  const systemDark = useSystemDark()
+  const darkened = useMemo(() => colorMode.colorMode === 'dark', [colorMode.colorMode])
 
-  const darkened = props.shade === 'dark'
+  useEffect(() => {
+    const different = systemDark !== darkened
+    if (different && auth.session?.user.theme == null) {
+      colorMode.toggleColorMode()
+    }
+  }, [auth.session, colorMode, darkened, systemDark])
+
+  const updateTheme = useCallback((props: {
+    theme: string
+  }) => {
+    colorMode.toggleColorMode()
+    if (auth.session == null) {
+      return
+    }
+    void postTheme({ theme: props.theme })
+  }, [])
 
   async function postTheme ({ theme }: {
     theme: string
@@ -27,22 +46,12 @@ function useValue (props: {
       body
     }
     await fetch('/api/theme', options)
-    document.cookie = 'newTheme=none;'
   }
 
-  function updateTheme ({ theme }: {
-    theme: string
+  function toggleTheme (props: {
+    debugLabel?: string
   }): void {
-    document.cookie = `theme=${theme};`
-    document.cookie = `newTheme=${theme}; expires=0;`
-    router.refresh()
-    if (auth.session == null) {
-      return
-    }
-    void postTheme({ theme })
-  }
-
-  function handleChangeTheme (): void {
+    console.log('handleChangeTheme', props.debugLabel)
     if (!mounted) {
       return
     }
@@ -53,10 +62,10 @@ function useValue (props: {
     }
   }
   const value: ThemeContextValue = {
-    handleChangeTheme,
+    toggleTheme,
     darkened,
     mounted,
-    shade: props.shade
+    shade: colorMode.colorMode
   }
   return value
 }

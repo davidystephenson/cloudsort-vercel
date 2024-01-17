@@ -5,19 +5,18 @@ import AuthFormView from '../auth-form/auth-form-view'
 import SubmitRequestView from '../request/submit-request-view'
 import register from './register'
 import { Fields } from '../form/form-types'
+import guardFields from '../guard/guard-fields'
 
 export default function RegisterView (): JSX.Element {
   const router = useRouter()
   async function send (fields: Fields): Promise<void> {
-    if (fields.email == null) {
-      throw new Error('There is no email field')
-    }
-    if (fields.password == null) {
-      throw new Error('There is no password field')
-    }
+    const values = guardFields({
+      fields,
+      names: ['email', 'password']
+    })
     await register({
-      email: fields.email.value,
-      password: fields.password.value
+      email: values.email,
+      password: values.password
     })
     router.refresh()
     router.push('/login')

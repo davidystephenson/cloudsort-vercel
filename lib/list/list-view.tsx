@@ -7,11 +7,11 @@ import MoviesTableView from '../movie/movies-table-view'
 import { useState } from 'react'
 import ButtonView from '../button/button-view'
 import { MdClear } from 'react-icons/md'
-import ThemeIconView from '../theme/theme-icon-view'
 import CurtainView from '../curtain/curtain-view'
 import { RelatedList } from './list-types'
 import { State } from '../mergeChoice/merge-choice-types'
 import ChooseView from '../choose/choose-view'
+import { HStack, Heading } from '@chakra-ui/react'
 
 export default function ListView (props: {
   state: State<Movie>
@@ -29,12 +29,11 @@ export default function ListView (props: {
       Add Movie
     </ButtonView>
   )
-  const startContent = <ThemeIconView Icon={MdClear} />
   return (
     <ListProvider state={props.state} row={props.row}>
-      <div className='text-3xl'>List</div>
-      <div className='flex justify-between'>
-        <div className='text-2xl text-gray'>{props.row.name}</div>
+      <Heading size='lg'>List</Heading>
+      <HStack justify='space-between'>
+        <Heading size='md'>{props.row.name}</Heading>
         <CurtainView
           open={open}
           hider={hider}
@@ -43,12 +42,12 @@ export default function ListView (props: {
             color='danger'
             variant='light'
             onClick={handleClose}
-            startContent={startContent}
+            leftIcon={<MdClear />}
           >
             Close
           </ButtonView>
         </CurtainView>
-      </div>
+      </HStack>
       <CurtainView open={open}>
         <CreateMovieFormView />
       </CurtainView>

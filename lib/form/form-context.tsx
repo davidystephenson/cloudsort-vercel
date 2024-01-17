@@ -5,24 +5,6 @@ import { contextCreator } from '../context-creator/context-creator'
 function useValue (props: {}): FormContextValue {
   const [fields, setFields] = useState<Record<string, Field>>({})
 
-  const register = useCallback((props: {
-    name: string
-    value?: string
-  }) => {
-    const field: Field = {
-      name: props.name,
-      ref: createRef<HTMLInputElement>(),
-      value: props.value ?? '',
-      error: ''
-    }
-    setFields((fields) => {
-      return {
-        ...fields,
-        [props.name]: field
-      }
-    })
-  }, [])
-
   const deregister = useCallback((props: {
     name: string
   }) => {
@@ -57,6 +39,24 @@ function useValue (props: {}): FormContextValue {
       return next
     })
   }
+
+  const register = useCallback((props: {
+    name: string
+    value?: string
+  }) => {
+    const field: Field = {
+      name: props.name,
+      ref: createRef<HTMLInputElement>(),
+      value: props.value ?? '',
+      error: ''
+    }
+    setFields((fields) => {
+      return {
+        ...fields,
+        [props.name]: field
+      }
+    })
+  }, [])
 
   const value: FormContextValue = {
     deregister,

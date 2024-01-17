@@ -4,9 +4,7 @@ import { Metadata } from 'next'
 import { Suspense } from 'react'
 import ThemeView from '@/lib/theme/theme-view'
 import serverAuth from '@/lib/auth/server-auth'
-import clsx from 'clsx'
 import LayoutView from '@/lib/layout/layout-view'
-import getThemeShade from '@/lib/theme/get-theme-shade'
 import AuthView from '@/lib/auth/auth-view'
 
 const title = 'CloudSort'
@@ -20,31 +18,27 @@ export const metadata: Metadata = {
     title,
     description
   },
-  metadataBase: new URL('https://clousort.io'),
+  metadataBase: new URL('https://cloudsort.io'),
   themeColor: '#FFF'
 }
 
-export default async function RootLayout ({
-  children
-}: {
+export default async function RootLayout (props: {
   children: React.ReactNode
 }): Promise<JSX.Element> {
   const authSession = await serverAuth()
-  const shade = getThemeShade({ sessionTheme: authSession?.user.theme })
-  const theme = shade === 'dark' ? 'pink-dark' : 'pink-light'
-  const htmlClass = clsx(theme, 'text-foreground', 'bg-background')
   return (
     <html
       lang='en'
-      className={htmlClass}
       suppressHydrationWarning
     >
-      <body>
+      <body suppressHydrationWarning>
         <Suspense fallback='Loading...'>
           <AuthView session={authSession}>
-            <ThemeView shade={shade}>
+            <ThemeView
+              shade={authSession?.user.theme}
+            >
               <LayoutView>
-                {children}
+                {props.children}
               </LayoutView>
             </ThemeView>
           </AuthView>

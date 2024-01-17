@@ -1,9 +1,7 @@
-import { MdDeleteForever } from 'react-icons/md'
-import SendRequestView from '../request/send-request-view'
-import ThemeIconView from '../theme/theme-icon-view'
 import ThemeLinkableView from '../theme/theme-linkable-view'
 import { List } from '@prisma/client'
 import { useLists } from './lists-context'
+import DeleteIconButtonView from '../delete-button/delete-icon-button-view'
 
 export default function ListCellsConsumer (props: {
   list: List
@@ -21,16 +19,7 @@ export default function ListCellsConsumer (props: {
         </ThemeLinkableView>
       </td>
       <td>
-        <SendRequestView
-          aria-label='Delete'
-          color='danger'
-          isIconOnly
-          send={send}
-          size='sm'
-          variant='light'
-        >
-          <ThemeIconView Icon={MdDeleteForever} />
-        </SendRequestView>
+        <DeleteIconButtonView send={send} />
       </td>
     </>
   )

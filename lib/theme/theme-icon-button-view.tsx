@@ -1,15 +1,15 @@
 import { forwardRef } from 'react'
 import { useTheme } from './theme-context'
-import { Button, ButtonProps } from '@chakra-ui/react'
+import { IconButton, IconButtonProps } from '@chakra-ui/react'
 
-const ThemeButtonView = forwardRef<HTMLButtonElement, ButtonProps>((
+const ThemeIconButtonView = forwardRef<HTMLButtonElement, IconButtonProps>((
   props,
   ref
 ) => {
   const theme = useTheme()
   const disabled = !theme.mounted
   return (
-    <Button
+    <IconButton
       size='sm'
       isDisabled={disabled}
       {...props}
@@ -17,4 +17,4 @@ const ThemeButtonView = forwardRef<HTMLButtonElement, ButtonProps>((
     />
   )
 })
-export default ThemeButtonView
+export default ThemeIconButtonView

@@ -1,10 +1,9 @@
 import { ChangeEvent, useRef, useState } from 'react'
 import ThemeInputView from '../theme/theme-input-view'
 import { useTable } from './table-context'
-import ThemeButtonView from '../theme/theme-button-view'
 import { MdClear } from 'react-icons/md'
-import ThemeIconView from '../theme/theme-icon-view'
 import { useHotkeys } from 'react-hotkeys-hook'
+import ThemeIconButtonView from '../theme/theme-icon-button-view'
 
 export default function TableSearchView (): JSX.Element {
   const table = useTable()
@@ -23,22 +22,19 @@ export default function TableSearchView (): JSX.Element {
     table.filterRows({ query: undefined })
   }
   const queried = query !== ''
-  const end = queried
-    ? (
-      <ThemeButtonView
-        onClick={handleClear}
-        isIconOnly
-        variant='light'
-      >
-        <ThemeIconView Icon={MdClear} />
-      </ThemeButtonView>
-      )
-    : <></>
+  const end = queried && (
+    <ThemeIconButtonView
+      aria-label='Clear search'
+      onClick={handleClear}
+      variant='light'
+      icon={<MdClear />}
+    />
+  )
 
   return (
     <>
       <ThemeInputView
-        endContent={end}
+        rightElement={end}
         label='Search'
         onChange={handleQueryChange}
         value={query}

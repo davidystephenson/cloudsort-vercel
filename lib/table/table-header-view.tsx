@@ -1,15 +1,12 @@
 import TableSearchView from './table-search-view'
 import { useTable } from './table-context'
-import { cn } from '@nextui-org/react'
 
 export default function TableHeaderView (): JSX.Element {
   const table = useTable()
   const columns = table.columns.map((column, index) => {
-    const first = index === 0
-    const firstClass = first && 'w-full'
-    const className = cn(firstClass, 'text-left')
+    // const first = index === 0
     return (
-      <th key={column} className={className}>
+      <th key={column}>
         {column}
       </th>
     )

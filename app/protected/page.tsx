@@ -1,12 +1,13 @@
 'use client'
 import ThemeLinkableView from '@/lib/theme/theme-linkable-view'
+import { Text } from '@chakra-ui/react'
 
 export default function Home (): JSX.Element {
   return (
     <>
-      <h1 className='text-lg'>
+      <Text>
         Sort your <ThemeLinkableView href='/lists'>lists</ThemeLinkableView>
-      </h1>
+      </Text>
     </>
   )
 }

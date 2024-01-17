@@ -1,20 +1,19 @@
-import { LinkProps } from '@nextui-org/react'
+import { LinkProps } from '@chakra-ui/next-js'
 import ThemeLinkView from './theme-link-view'
 import { ReactNode } from 'react'
 
-export default function ThemeLinkableView (props: LinkProps & {
+export default function ThemeLinkableView (props: Omit<LinkProps, 'href'> & {
   children: ReactNode
   href?: string | null
 }): JSX.Element {
-  const linked = props.href != null
-  if (linked) {
+  if (props.href == null) {
     return (
-      <ThemeLinkView {...props}>
-        {props.children}
-      </ThemeLinkView>
+      <>{props.children}</>
     )
   }
   return (
-    <>{props.children}</>
+    <ThemeLinkView {...props} href={props.href}>
+      {props.children}
+    </ThemeLinkView>
   )
 }

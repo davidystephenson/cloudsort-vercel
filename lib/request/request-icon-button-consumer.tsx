@@ -2,19 +2,20 @@
 
 import { ReactNode } from 'react'
 import { useRequest } from './request-context'
-import RequestButtonView from './request-button-view'
 import { ButtonContextValue } from '../button/button-types'
-import { ButtonProps } from '@nextui-org/react'
+import { IconButtonProps } from '@chakra-ui/react'
+import ButtonView from '../button/button-view'
 
-export default function SendRequestConsumer (props: {
-  children: ReactNode
-} & ButtonContextValue & ButtonProps): JSX.Element {
+export default function RequestIconButtonConsumer (props: {
+  children?: ReactNode
+  iconOnly?: boolean
+} & ButtonContextValue & IconButtonProps): JSX.Element {
   const request = useRequest()
   function handleClick (): void {
     void request.send()
   }
   return (
-    <RequestButtonView
+    <ButtonView
       handleClick={handleClick}
       loading={request.loading}
       error={request.errorMessage}

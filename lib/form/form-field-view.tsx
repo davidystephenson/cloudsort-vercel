@@ -1,11 +1,13 @@
-import React, { useEffect } from 'react'
+import React, { ReactNode, useEffect } from 'react'
 import { useForm } from './form-context'
-import { InputProps } from '@nextui-org/react'
 import ThemeInputView from '../theme/theme-input-view'
+import { InputProps } from '@chakra-ui/react'
 
 export default function FormFieldView (props: {
   debug?: boolean
   name: string
+  label?: string
+  rightElement?: ReactNode
 } & InputProps): JSX.Element {
   const form = useForm()
 
@@ -14,7 +16,7 @@ export default function FormFieldView (props: {
     const value = props.defaultValue ?? (dateField ? new Date().toISOString().slice(0, 10) : undefined)
     form.register({
       name: props.name,
-      value
+      value: String(value)
     })
 
     function cleanup (): void {
@@ -29,7 +31,6 @@ export default function FormFieldView (props: {
   return (
     <ThemeInputView
       autoComplete={props.autoComplete}
-      color='primary'
       debug={props.debug}
       errorMessage={field?.error}
       isDisabled={disabled}

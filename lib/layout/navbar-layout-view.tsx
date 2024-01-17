@@ -1,19 +1,16 @@
 'use client'
 
+import { HStack, Heading } from '@chakra-ui/react'
 import ProfileView from '../auth/profile-view'
 import ThemeLinkView from '../theme/theme-link-view'
 
 export default function NavbarLayoutView (): JSX.Element {
   return (
-    <div className='flex items-center justify-between'>
-      <ThemeLinkView
-        className='text-4xl'
-        href='/lists'
-        underline='none'
-      >
-        Cloudsort
+    <HStack>
+      <ThemeLinkView href='/lists'>
+        <Heading>Cloudsort</Heading>
       </ThemeLinkView>
       <ProfileView />
-    </div>
+    </HStack>
   )
 }

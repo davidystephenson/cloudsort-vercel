@@ -1,19 +1,21 @@
 'use client'
 
+import { Box, HStack } from '@chakra-ui/react'
 import ThemeSwitchSwitchView from './theme-switch-switch-view'
+import { MdDarkMode, MdLightMode } from 'react-icons/md'
 
 export default function ThemeSwitchView (): JSX.Element {
   return (
-    <div
-      className='flex items-center'
-    >
-      <span>
+    <HStack>
+      <Box>
         Light
-      </span>
+      </Box>
+      <MdLightMode />
       <ThemeSwitchSwitchView />
-      <span>
+      <MdDarkMode />
+      <Box>
         Dark
-      </span>
-    </div>
+      </Box>
+    </HStack>
   )
 }

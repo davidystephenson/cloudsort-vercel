@@ -2,15 +2,14 @@
 
 import { useButtonContext } from '@/lib/button/button-context'
 import { MdError } from 'react-icons/md'
-import ThemeButtonView from '../theme/theme-button-view'
-import { ButtonGroup, ButtonProps, Popover, PopoverArrow, PopoverBody, PopoverCloseButton, PopoverContent, PopoverTrigger } from '@chakra-ui/react'
+import { ButtonGroup, IconButtonProps, Popover, PopoverArrow, PopoverBody, PopoverCloseButton, PopoverContent, PopoverTrigger } from '@chakra-ui/react'
 import ThemeIconButtonView from '../theme/theme-icon-button-view'
 
-export default function ButtonConsumer (props: ButtonProps): JSX.Element {
+export default function IconButtonConsumer (props: IconButtonProps): JSX.Element {
   const button = useButtonContext()
   if (button.error == null) {
     return (
-      <ThemeButtonView
+      <ThemeIconButtonView
         isLoading={button.loading}
         onClick={button.handleClick}
         type={button.type}
@@ -21,7 +20,7 @@ export default function ButtonConsumer (props: ButtonProps): JSX.Element {
 
   return (
     <ButtonGroup>
-      <ThemeButtonView
+      <ThemeIconButtonView
         onClick={button.handleClick}
         isLoading={button.loading}
         type={button.type}

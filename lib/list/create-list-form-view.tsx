@@ -13,6 +13,9 @@ export default function CreateListFormView (): JSX.Element {
     if (fields.name == null) {
       throw new Error('There is no name')
     }
+    if (typeof fields.name.value !== 'string') {
+      throw new Error('Name is not a string')
+    }
     await lists.create({ name: fields.name.value })
   }
   const end = (
@@ -26,7 +29,7 @@ export default function CreateListFormView (): JSX.Element {
         name='name'
         label='Create'
         isRequired
-        endContent={end}
+        rightElement={end}
       />
     </RequestFormView>
   )

@@ -1,12 +1,13 @@
 'use client'
 
-import { Dropdown, DropdownItem, DropdownMenu, DropdownTrigger } from '@nextui-org/react'
 import { useAuth } from './auth-context'
 import { useRequest } from '../request/request-context'
 import { MdLogout } from 'react-icons/md'
 import ThemeButtonView from '../theme/theme-button-view'
 import ThemeSwitchView from '../theme/theme-switch-view'
 import { useTheme } from '../theme/theme-context'
+import { Menu, MenuButton, MenuItem, MenuList } from '@chakra-ui/react'
+import { MouseEvent } from 'react'
 
 export default function ProfileConsumer (): JSX.Element {
   const auth = useAuth()
@@ -16,40 +17,34 @@ export default function ProfileConsumer (): JSX.Element {
   if (auth.session == null) {
     throw new Error('There is no session')
   }
-  function handleClick (): void {
+  function handleLogout (): void {
     void request.send()
+  }
+  function handleToggleTheme (event: MouseEvent<HTMLButtonElement>): void {
+    event.stopPropagation()
+    event.preventDefault()
+    theme.toggleTheme({ debugLabel: 'ProfileConsumer' })
   }
 
   return (
-    <Dropdown>
-      <DropdownTrigger>
-        <ThemeButtonView
-          isLoading={request.loading}
-          color='primary'
-          size='sm'
-          className='text-md'
-        >
-          {auth.session.user?.email}
-        </ThemeButtonView>
-      </DropdownTrigger>
-      <DropdownMenu aria-label='Logout'>
-        <DropdownItem
-          key='theme'
-          onClick={theme.handleChangeTheme}
-          textValue='Change theme'
-          color='primary'
-        >
+    <Menu>
+      <MenuButton
+        as={ThemeButtonView}
+        isLoading={request.loading}
+      >
+        {auth.session.user?.email}
+      </MenuButton>
+      <MenuList>
+        <MenuItem onClick={handleToggleTheme}>
           <ThemeSwitchView />
-        </DropdownItem>
-        <DropdownItem
-          key='logout'
-          onClick={handleClick}
-          startContent={<MdLogout />}
-          color='primary'
+        </MenuItem>
+        <MenuItem
+          icon={<MdLogout />}
+          onClick={handleLogout}
         >
           Logout
-        </DropdownItem>
-      </DropdownMenu>
-    </Dropdown>
+        </MenuItem>
+      </MenuList>
+    </Menu>
   )
 }

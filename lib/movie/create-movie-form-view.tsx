@@ -1,5 +1,6 @@
 'use client'
 
+import { HStack } from '@chakra-ui/react'
 import FormFieldView from '../form/form-field-view'
 import { Fields } from '../form/form-types'
 import guardFields from '../guard/guard-fields'
@@ -60,11 +61,11 @@ export default function CreateMovieFormView (): JSX.Element {
         isRequired
         type='number'
       />
-      <div className='flex justify-end mt-2'>
+      <HStack justifyContent='end' mt='2px'>
         <SubmitRequestView>
           Add Movie
         </SubmitRequestView>
-      </div>
+      </HStack>
     </RequestFormView>
   )
 }

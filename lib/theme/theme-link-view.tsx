@@ -1,19 +1,12 @@
-import { Link } from '@nextui-org/react'
-import { usePathname } from 'next/navigation'
-import { ComponentProps } from 'react'
+import { ExternalLinkIcon } from '@chakra-ui/icons'
+import { Link, LinkProps } from '@chakra-ui/next-js'
 
-export default function ThemeLinkView (props: ComponentProps<typeof Link>): JSX.Element {
-  const pathname = usePathname()
-
-  const active = pathname === props.href
-  const underline = active ? 'always' : 'none'
-
+export default function ThemeLinkView (props: LinkProps): JSX.Element {
+  const iconView = props.isExternal === true && <ExternalLinkIcon mx='2px' />
   return (
-    <Link
-      href='/login'
-      color='primary'
-      underline={underline}
-      {...props}
-    />
+    <>
+      <Link fontWeight={700} {...props} />
+      {iconView}
+    </>
   )
 }

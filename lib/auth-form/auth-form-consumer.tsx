@@ -1,7 +1,7 @@
 'use client'
 
+import { Spacer } from '@chakra-ui/react'
 import AuthFormFieldsView from './auth-form-fields-view'
-import { Spacer } from '@nextui-org/react'
 
 export default function AuthFormConsumer (props: {
   children: React.ReactNode
@@ -9,7 +9,7 @@ export default function AuthFormConsumer (props: {
   return (
     <>
       <AuthFormFieldsView />
-      <Spacer y={8} />
+      <Spacer mb={8} />
       {props.children}
     </>
   )

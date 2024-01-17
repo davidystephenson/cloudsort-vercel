@@ -1,15 +1,13 @@
 'use client'
 
-import { ReactNode } from 'react'
 import { RequestProvider } from './request-context'
-import { ButtonProps } from '@chakra-ui/react'
+import { IconButtonProps } from '@chakra-ui/react'
 import RequestButtonConsumer from './request-button-consumer'
 
-export default function RequestButtonView (props: {
-  children: ReactNode
+export default function RequestIconButtonView (props: {
   endless?: boolean
   send: () => Promise<void>
-} & ButtonProps): JSX.Element {
+} & IconButtonProps): JSX.Element {
   const { endless, send, ...buttonProps } = props
   return (
     <RequestProvider

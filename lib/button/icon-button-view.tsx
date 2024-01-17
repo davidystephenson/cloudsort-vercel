@@ -1,11 +1,11 @@
 'use client'
 
 import { ButtonProvider } from '@/lib/button/button-context'
-import ButtonConsumer from './button-consumer'
 import { ButtonContextValue } from './button-types'
-import { ButtonProps } from '@chakra-ui/react'
+import { IconButtonProps } from '@chakra-ui/react'
+import IconButtonConsumer from './icon-button-consumer'
 
-export default function ButtonView (props: ButtonContextValue & ButtonProps): JSX.Element {
+export default function IconButtonView (props: ButtonContextValue & IconButtonProps): JSX.Element {
   const { error, handleClick, loading, type, ...restProps } = props
   function onClick (): void {
     handleClick?.()
@@ -17,7 +17,7 @@ export default function ButtonView (props: ButtonContextValue & ButtonProps): JS
       handleClick={onClick}
       type={type}
     >
-      <ButtonConsumer {...restProps} />
+      <IconButtonConsumer {...restProps} />
     </ButtonProvider>
   )
 }
