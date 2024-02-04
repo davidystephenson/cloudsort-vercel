@@ -18,9 +18,9 @@ export default function ButtonConsumer (props: ButtonProps): JSX.Element {
       />
     )
   }
-
+  const icon = <MdError />
   return (
-    <ButtonGroup>
+    <ButtonGroup isAttached>
       <ThemeButtonView
         onClick={button.handleClick}
         isLoading={button.loading}
@@ -29,7 +29,11 @@ export default function ButtonConsumer (props: ButtonProps): JSX.Element {
       />
       <Popover>
         <PopoverTrigger>
-          <ThemeIconButtonView aria-label='Error' icon={<MdError />} />
+          <ThemeIconButtonView
+            aria-label='Error'
+            colorScheme='red'
+            icon={icon}
+          />
         </PopoverTrigger>
         <PopoverContent>
           <PopoverArrow />

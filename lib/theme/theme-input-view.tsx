@@ -12,31 +12,32 @@ InputProps & {
 }
 >((props, ref) => {
   const theme = useTheme()
-  if (props.debug === true) {
+  const { debug, type, errorMessage, label, rightElement, ...restProps } = props
+  if (debug === true) {
     console.debug('mounted', theme.mounted)
   }
   const disabled = !theme.mounted
-  if (props.debug === true) {
+  if (debug === true) {
     console.debug('disabled', disabled)
   }
-  const dateField = props.type === 'date'
-  const type = disabled && dateField ? 'text' : props.type
-  const invalid = props.errorMessage != null
+  const dateField = type === 'date'
+  const inputType = disabled && dateField ? 'text' : type
+  const invalid = errorMessage != null
   const errorView = invalid && (
-    <FormErrorMessage>{props.errorMessage}</FormErrorMessage>
+    <FormErrorMessage>{errorMessage}</FormErrorMessage>
   )
-  const rightView = props.rightElement != null && (
-    <InputRightElement>{props.rightElement}</InputRightElement>
+  const rightView = rightElement != null && (
+    <InputRightElement w='fit-content'>{rightElement}</InputRightElement>
   )
   return (
     <FormControl isInvalid={invalid}>
-      <FormLabel>{props.label}</FormLabel>
+      <FormLabel>{label}</FormLabel>
       <InputGroup>
         <Input
           variant='underlined'
           isDisabled={disabled}
-          {...props}
-          type={type}
+          {...restProps}
+          type={inputType}
           ref={ref}
         />
         {rightView}
