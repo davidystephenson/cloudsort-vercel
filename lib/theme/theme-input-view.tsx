@@ -13,12 +13,12 @@ InputProps & {
 >((props, ref) => {
   const theme = useTheme()
   const { debug, type, errorMessage, label, rightElement, ...restProps } = props
-  if (debug === true) {
-    console.debug('mounted', theme.mounted)
-  }
+  const debugging = debug === true
   const disabled = !theme.mounted
-  if (debug === true) {
+  if (debugging) {
+    console.debug('mounted', theme.mounted)
     console.debug('disabled', disabled)
+    console.debug('restProps', restProps)
   }
   const dateField = type === 'date'
   const inputType = disabled && dateField ? 'text' : type

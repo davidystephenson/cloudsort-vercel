@@ -13,10 +13,14 @@ export default function FormFieldView (props: {
 
   useEffect(() => {
     const dateField = props.type === 'date'
-    const value = props.defaultValue ?? (dateField ? new Date().toISOString().slice(0, 10) : undefined)
+    const value = props.defaultValue != null
+      ? String(props.defaultValue)
+      : dateField
+        ? new Date().toISOString().slice(0, 10)
+        : undefined
     form.register({
       name: props.name,
-      value: String(value)
+      value
     })
 
     function cleanup (): void {
@@ -28,6 +32,10 @@ export default function FormFieldView (props: {
 
   const field = form.fields[props.name]
   const disabled = field == null
+  const value = field?.value ?? ''
+  if (props.debug === true) {
+    console.debug('value', value)
+  }
   return (
     <ThemeInputView
       autoComplete={props.autoComplete}
@@ -36,7 +44,7 @@ export default function FormFieldView (props: {
       isDisabled={disabled}
       onChange={form.handleChange}
       ref={field?.ref}
-      value={field?.value ?? ''}
+      value={value}
       {...props}
     />
   )

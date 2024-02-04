@@ -26,6 +26,7 @@ export default function CreateListFormView (): JSX.Element {
   return (
     <RequestFormView send={send}>
       <FormFieldView
+        debug
         name='name'
         label='Create'
         isRequired
