@@ -1,5 +1,6 @@
 'use client'
 
+import { useState } from 'react'
 import FormFieldView from '../form/form-field-view'
 import { Fields } from '../form/form-types'
 import RequestFormView from '../request/request-form-view'
@@ -8,8 +9,10 @@ import { useLists } from './lists-context'
 
 export default function CreateListFormView (): JSX.Element {
   const lists = useLists()
+  const [required, setRequired] = useState(false)
 
   async function send (fields: Fields): Promise<void> {
+    setRequired(true)
     if (fields.name == null) {
       throw new Error('There is no name')
     }
@@ -29,7 +32,7 @@ export default function CreateListFormView (): JSX.Element {
         debug
         name='name'
         label='Create'
-        isRequired
+        isRequired={required}
         rightElement={end}
       />
     </RequestFormView>

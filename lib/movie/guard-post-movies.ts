@@ -1,11 +1,11 @@
 import { ApiError } from 'next/dist/server/api-utils'
-import { PostMovieBody } from './movie-types'
+import { PostMoviesBody } from './movie-types'
 import guardNumber from '../guard/guard-number'
 import guardMovieData from './guard-movie-data'
 
-export default function guardPostMovie (props: {
+export default function guardPostMovies (props: {
   data: unknown
-}): PostMovieBody {
+}): PostMoviesBody {
   if (props.data == null) {
     throw new ApiError(400, 'There is no body')
   }
@@ -15,12 +15,21 @@ export default function guardPostMovie (props: {
   if (!('listId' in props.data)) {
     throw new ApiError(422, 'There is no listId')
   }
-  const movieData = guardMovieData({ data: props.data })
+  if (!('movies' in props.data)) {
+    throw new ApiError(422, 'There is no movies')
+  }
+  if (!Array.isArray(props.data.movies)) {
+    throw new ApiError(422, 'The movies is not an array')
+  }
+  const movies = props.data.movies.map((element, index) => {
+    const movie = guardMovieData({ data: element })
+    return movie
+  })
   try {
     const listId = guardNumber({ data: props.data.listId, label: 'listId' })
     return {
       listId,
-      ...movieData
+      movies
     }
   } catch (error) {
     const e = error as Error

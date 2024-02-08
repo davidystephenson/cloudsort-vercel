@@ -16,16 +16,16 @@ export async function POST (req: Request): Promise<Response> {
   }
   const json = await req.json()
   const body = guardPostMovie({ data: json })
+  const { listId, ...movieData } = body
   const exists = await prisma.movie.findFirst({
     where: {
-      imdbId: body.imdbId
+      imdbId: movieData.imdbId
     }
   })
   if (exists != null) {
     return apiError({ message: 'This movie already exists', status: 409 })
   }
-  const { listId, ...movieData } = body
-  const mergeChoiceList = await getMergeChoiceList({ listId: body.listId, userId: authSession.user.id })
+  const mergeChoiceList = await getMergeChoiceList({ listId, userId: authSession.user.id })
   const movie = await prisma.$transaction(async (transaction) => {
     const movie = await transaction.movie.create({
       data: movieData
@@ -35,7 +35,6 @@ export async function POST (req: Request): Promise<Response> {
       items: [movie],
       state: mergeChoiceList.state
     })
-    console.log('newState.choice', newState.choice)
     await saveStateToList({
       list: mergeChoiceList.list,
       state: newState,

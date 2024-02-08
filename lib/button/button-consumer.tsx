@@ -35,7 +35,7 @@ export default function ButtonConsumer (props: ButtonProps): JSX.Element {
             icon={icon}
           />
         </PopoverTrigger>
-        <PopoverContent>
+        <PopoverContent zIndex={1}>
           <PopoverArrow />
           <PopoverCloseButton />
           <PopoverBody>

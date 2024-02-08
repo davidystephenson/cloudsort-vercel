@@ -12,6 +12,7 @@ import { RelatedList } from './list-types'
 import { State } from '../mergeChoice/merge-choice-types'
 import ChooseView from '../choose/choose-view'
 import { HStack, Heading } from '@chakra-ui/react'
+import ImportMoviesView from '../movie/import-movies-view'
 
 export default function ListView (props: {
   state: State<Movie>
@@ -47,6 +48,7 @@ export default function ListView (props: {
             Close
           </ButtonView>
         </CurtainView>
+        <ImportMoviesView />
       </HStack>
       <CurtainView open={open}>
         <CreateMovieFormView />

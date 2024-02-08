@@ -7,10 +7,19 @@ export default async function Lists (props: {
   }
 }): Promise<JSX.Element> {
   const listId = Number(props.params.listId)
-  const mergeChoiceList = await getMergeChoiceList({ listId })
-  return (
-    <>
-      <ListView state={mergeChoiceList.state} row={mergeChoiceList.list} />
-    </>
-  )
+  try {
+    const mergeChoiceList = await getMergeChoiceList({ listId })
+    return (
+      <>
+        <ListView state={mergeChoiceList.state} row={mergeChoiceList.list} />
+      </>
+    )
+  } catch (error) {
+    console.error(error)
+    return (
+      <div>
+        Error
+      </div>
+    )
+  }
 }

@@ -47,8 +47,7 @@ function useValue (props: {}): FormContextValue {
     const field: Field = {
       name: props.name,
       ref: createRef<HTMLInputElement>(),
-      value: props.value ?? '',
-      error: ''
+      value: props.value ?? ''
     }
     setFields((fields) => {
       return {

@@ -3,7 +3,7 @@ import { RefObject } from 'react'
 export interface Field {
   name: string
   value: string
-  error: string
+  error?: string
   ref: RefObject<HTMLInputElement>
 }
 

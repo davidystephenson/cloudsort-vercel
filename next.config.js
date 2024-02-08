@@ -4,7 +4,7 @@ const nextConfig = {
     ignoreBuildErrors: true
   },
   swcMinify: true,
-  reactStrictMode: true,
+  reactStrictMode: false,
   experimental: {
     serverActions: true
   }

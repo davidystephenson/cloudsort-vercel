@@ -32,14 +32,14 @@ export default function TableConsumer<Row extends Identity> (props: {
     )
   }
   const Scroller: TableComponents['Scroller'] = forwardRef((props, ref) => {
-    return <TableContainer {...props} whiteSpace='normal' overflowX='clip' overflowY='clip' ref={ref} />
+    return <TableContainer {...props} whiteSpace='normal' overflowX='clip' overflowY='auto' ref={ref} />
   })
   const tableComponents: TableComponents<Row> = {
     Scroller,
     Table: (props) => <Table {...props} size='sm' />,
-    TableHead: Thead,
-    TableRow: Tr,
-    TableBody: forwardRef((props, ref) => <Tbody {...props} ref={ref} />)
+    TableBody: forwardRef((props, ref) => <Tbody {...props} ref={ref} />),
+    TableHead: forwardRef((props, ref) => <Thead {...props} ref={ref} zIndex='1 !important' background='var(--chakra-colors-chakra-body-bg)' />),
+    TableRow: Tr
   }
   return (
     <TableVirtuoso

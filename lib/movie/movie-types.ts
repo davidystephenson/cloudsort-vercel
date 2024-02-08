@@ -3,10 +3,21 @@ import { Calculated } from '../mergeChoice/merge-choice-types'
 
 export type MovieData = Omit<Movie, 'id' | 'updatedAt'>
 
-export type PostMovieBody = MovieData & { listId: number }
+export interface PostMovieBody extends MovieData {
+  listId: number
+}
 
-export type PostMovieResponse = Omit<Movie, 'updatedAt'> & {
+export interface PostMoviesBody {
+  listId: number
+  movies: MovieData[]
+}
+
+export type CreatedMovie = Omit<Movie, 'updatedAt'> & {
   updatedAt: string
+}
+
+export interface PostMoviesResponse {
+  movies: CreatedMovie[]
 }
 
 export interface DeleteMovieBody {
@@ -24,4 +35,14 @@ export interface MovieContextValue {
 export interface ChooseMovieBody {
   listId: number
   betterIndex: number
+}
+
+export interface CritickerRow {
+  ' Date Rated': string
+  ' Film Name': string
+  ' Year': string
+  ' Mini Review': string
+  ' URL': string
+  ' IMDB ID': string
+  Score: string
 }

@@ -2,7 +2,7 @@ import { ListContextValue, RelatedList } from './list-types'
 import { Movie } from '@prisma/client'
 import { contextCreator } from '../context-creator/context-creator'
 import { useListsUnsafe } from './lists-context'
-import { MovieData, PostMovieBody } from '../movie/movie-types'
+import { MovieData, PostMovieBody, PostMoviesBody } from '../movie/movie-types'
 import postMovie from '../movie/post-movie'
 import deleteList from './delete-list'
 import { useCallback, useEffect, useState } from 'react'
@@ -15,17 +15,20 @@ import importItems from '../mergeChoice/importItems'
 import removeItem from '../mergeChoice/removeItem'
 import chooseMovie from '../movie/choose-movie'
 import chooseOption from '../mergeChoice/chooseOption'
+import postMovies from '../movie/post-movies'
+import shuffleSlice from '../mergeChoice/shuffleSlice'
 
 function useValue (props: {
   row: RelatedList
   state?: State<Movie>
 }): ListContextValue {
+  console.log('row:', props.row)
+  console.log('state:', props.state)
   const lists = useListsUnsafe()
   const getDefaultState = useCallback(() => {
     return props.state ?? createYeastState<Movie>()
   }, [props.state])
   const [state, setState] = useState(getDefaultState)
-  console.log('state', state)
   const [movies, setMovies] = useState(() => {
     const sortedMovies = getSortedMovies({ state })
     return sortedMovies
@@ -68,6 +71,22 @@ function useValue (props: {
     await importMovies({ movies: [movie] })
     return movie
   }
+  async function createMovies (createMoviesProps: {
+    movies: MovieData[]
+    slice?: number
+  }): Promise<Movie[]> {
+    const sliced = shuffleSlice({
+      slice: createMoviesProps.slice,
+      items: createMoviesProps.movies
+    })
+    const body: PostMoviesBody = {
+      listId: props.row.id,
+      movies: sliced
+    }
+    const newMovies = await postMovies({ body })
+    await importMovies({ movies: newMovies })
+    return newMovies
+  }
   async function _delete (): Promise<void> {
     await deleteList({ id: props.row.id })
     lists?.delete({ id: props.row.id })
@@ -98,6 +117,7 @@ function useValue (props: {
   const value: ListContextValue = {
     choose,
     createMovie,
+    createMovies,
     delete: _delete,
     deleteMovie,
     filter,

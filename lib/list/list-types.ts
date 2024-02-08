@@ -5,6 +5,7 @@ import { State } from '../mergeChoice/merge-choice-types'
 export interface ListContextValue {
   choose: (props: { betterIndex: number }) => Promise<void>
   createMovie: (props: MovieData) => Promise<Movie>
+  createMovies: (props: { movies: MovieData[], slice?: number }) => Promise<Movie[]>
   delete: () => Promise<void>
   deleteMovie: (props: { movieId: number }) => void
   filter: (props: { query: string | undefined }) => void

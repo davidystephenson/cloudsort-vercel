@@ -2,16 +2,18 @@ import { Movie } from '@prisma/client'
 import { RelatedList } from './list-types'
 import { State } from '../mergeChoice/merge-choice-types'
 import { PrismaTransaction } from '../prisma/prisma-types'
+import prisma from '@/lib/prisma/prisma'
 
 export default async function saveStateToList (props: {
   list: RelatedList
   state: State<Movie>
-  transaction: PrismaTransaction
+  transaction?: PrismaTransaction
 }): Promise<void> {
+  const db = props.transaction ?? prisma
   const oldChoices = props.list.choices.filter((choice) => choice.mergeChoiceId !== props.state.choice?.mergeChoiceId)
   if (oldChoices.length > 0) {
     const oldChoiceIds = oldChoices.map((choice) => choice.id)
-    await props.transaction.choice.updateMany({
+    await db.choice.updateMany({
       where: {
         id: {
           in: oldChoiceIds
@@ -23,8 +25,7 @@ export default async function saveStateToList (props: {
     })
   }
   if (props.state.choice != null) {
-    console.log('save choice', props.state.choice)
-    await props.transaction.choice.create({
+    await db.choice.create({
       data: {
         ...props.state.choice,
         active: true,
@@ -54,7 +55,7 @@ export default async function saveStateToList (props: {
     return old
   })
   const oldOperationIds = oldOperations.map((operation) => operation.id)
-  await props.transaction.operation.deleteMany({
+  await db.operation.deleteMany({
     where: {
       id: {
         in: oldOperationIds
@@ -77,7 +78,7 @@ export default async function saveStateToList (props: {
     const active = activeOperation != null
     const better = betterOperation != null
     const worse = worseOperation != null
-    const operation = await props.transaction.operation.create({
+    const operation = await db.operation.create({
       data: {
         active,
         better,
@@ -87,14 +88,14 @@ export default async function saveStateToList (props: {
       }
     })
     const inputPromises = newOperation.input.map(async (inputIds, index) => {
-      const input = await props.transaction.input.create({
+      const input = await db.input.create({
         data: {
           index,
           operationId: operation.id
         }
       })
       const inputMoviePromises = inputIds.map(async (inputId, index) => {
-        const inputMovie = await props.transaction.inputMovie.create({
+        const inputMovie = await db.inputMovie.create({
           data: {
             index,
             inputId: input.id,
@@ -107,7 +108,7 @@ export default async function saveStateToList (props: {
     })
     await Promise.all(inputPromises)
     const outputPromises = newOperation.output.map(async (outputId, index) => {
-      const outputMovie = await props.transaction.outputMovie.create({
+      const outputMovie = await db.outputMovie.create({
         data: {
           index,
           movieId: Number(outputId),
@@ -144,7 +145,7 @@ export default async function saveStateToList (props: {
     const worseOperation = props.state.worseOperations[id]
     const operation = activeOperation ?? betterOperation ?? worseOperation
     if (oldOperation.inputs.length > operation.input.length) {
-      await props.transaction.input.deleteMany({
+      await db.input.deleteMany({
         where: {
           operationId: oldOperation.id,
           index: {
@@ -156,7 +157,7 @@ export default async function saveStateToList (props: {
     const updateInputPromises = operation.input.map(async (inputIds, index) => {
       const oldInput = oldOperation.inputs[index]
       if (oldInput == null) {
-        await props.transaction.input.create({
+        await db.input.create({
           data: {
             index,
             operationId: oldOperation.id,
@@ -172,7 +173,7 @@ export default async function saveStateToList (props: {
         })
       } else {
         if (oldInput.inputMovies.length > inputIds.length) {
-          await props.transaction.inputMovie.deleteMany({
+          await db.inputMovie.deleteMany({
             where: {
               inputId: oldInput.id,
               index: {
@@ -184,7 +185,7 @@ export default async function saveStateToList (props: {
         const updateInputMoviePromises = inputIds.map(async (inputId, index) => {
           const oldInputMovie = oldInput.inputMovies[index]
           if (oldInputMovie == null) {
-            await props.transaction.inputMovie.create({
+            await db.inputMovie.create({
               data: {
                 index,
                 inputId: oldInput.id,
@@ -192,7 +193,7 @@ export default async function saveStateToList (props: {
               }
             })
           } else if (oldInputMovie.movieId !== inputId) {
-            await props.transaction.inputMovie.update({
+            await db.inputMovie.update({
               where: {
                 id: oldInputMovie.id
               },
@@ -207,7 +208,7 @@ export default async function saveStateToList (props: {
     })
     await Promise.all(updateInputPromises)
     if (oldOperation.outputMovies.length > operation.output.length) {
-      await props.transaction.outputMovie.deleteMany({
+      await db.outputMovie.deleteMany({
         where: {
           operationId: oldOperation.id,
           index: {
@@ -219,7 +220,7 @@ export default async function saveStateToList (props: {
     const updateOutputPromises = operation.output.map(async (outputId, index) => {
       const oldOutput = oldOperation.outputMovies[index]
       if (oldOutput == null) {
-        await props.transaction.outputMovie.create({
+        await db.outputMovie.create({
           data: {
             index,
             operationId: oldOperation.id,
@@ -227,7 +228,7 @@ export default async function saveStateToList (props: {
           }
         })
       } else if (oldOutput.movieId !== outputId) {
-        await props.transaction.outputMovie.update({
+        await db.outputMovie.update({
           where: {
             id: oldOutput.id
           },
@@ -256,7 +257,7 @@ export default async function saveStateToList (props: {
       changes.worse = worse
     }
     if (changed) {
-      await props.transaction.operation.update({
+      await db.operation.update({
         where: {
           id: oldOperation.id
         },
@@ -270,7 +271,7 @@ export default async function saveStateToList (props: {
     const removed = !props.state.reserveIds.includes(id)
     return removed
   })
-  await props.transaction.movieReservation.deleteMany({
+  await db.movieReservation.deleteMany({
     where: {
       movieId: {
         in: removedReserveIds
@@ -286,7 +287,7 @@ export default async function saveStateToList (props: {
     return !existing
   })
   const reservePromises = addedReserveIds.map(async (id) => {
-    await props.transaction.movieReservation.create({
+    await db.movieReservation.create({
       data: {
         listId: props.list.id,
         movieId: Number(id)
@@ -296,7 +297,7 @@ export default async function saveStateToList (props: {
   await Promise.all(reservePromises)
 
   if (props.state.complete !== props.list.complete) {
-    await props.transaction.list.update({
+    await db.list.update({
       where: {
         id: props.list.id
       },

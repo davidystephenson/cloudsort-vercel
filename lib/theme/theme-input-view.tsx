@@ -34,7 +34,7 @@ InputProps & {
       <FormLabel>{label}</FormLabel>
       <InputGroup>
         <Input
-          variant='underlined'
+          variant='flushed'
           isDisabled={disabled}
           {...restProps}
           type={inputType}

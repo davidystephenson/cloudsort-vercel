@@ -36,6 +36,7 @@ export default async function getMergeChoiceList (props: {
       }
     }
   })
+  console.log('list', list)
   if (list == null) {
     throw new ApiError(404, 'This list does not exist')
   }

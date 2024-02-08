@@ -14,8 +14,8 @@ export default function TableHeaderView (): JSX.Element {
   const colSpan = table.columns.length + 1
   return (
     <>
-      <Tr background='var(--chakra-colors-chakra-body-bg)'>
-        <Th py='0' colSpan={colSpan}>
+      <Tr>
+        <Th py='0' colSpan={colSpan} borderBottom={0}>
           <TableSearchView />
         </Th>
       </Tr>

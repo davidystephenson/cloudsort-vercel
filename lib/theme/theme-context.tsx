@@ -51,7 +51,6 @@ function useValue (props: {
   function toggleTheme (props: {
     debugLabel?: string
   }): void {
-    console.log('handleChangeTheme', props.debugLabel)
     if (!mounted) {
       return
     }

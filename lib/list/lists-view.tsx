@@ -11,7 +11,7 @@ export default function ListsView (props: {
 }): JSX.Element {
   return (
     <ListsProvider rows={props.rows}>
-      <Heading>Lists</Heading>
+      <Heading size='lg'>Lists</Heading>
       <CreateListFormView />
       <ListsTableView />
     </ListsProvider>
