@@ -2,6 +2,7 @@ import ThemeLinkableView from '../theme/theme-linkable-view'
 import { List } from '@prisma/client'
 import { useLists } from './lists-context'
 import DeleteIconButtonView from '../delete-button/delete-icon-button-view'
+import ThemeTdView from '../theme/theme-td-view'
 
 export default function ListCellsConsumer (props: {
   list: List
@@ -13,14 +14,14 @@ export default function ListCellsConsumer (props: {
   const href = `/list/${props.list.id}`
   return (
     <>
-      <td className='w-full'>
+      <ThemeTdView w='100%'>
         <ThemeLinkableView href={href}>
           {props.list.name}
         </ThemeLinkableView>
-      </td>
-      <td>
+      </ThemeTdView>
+      <ThemeTdView>
         <DeleteIconButtonView send={send} />
-      </td>
+      </ThemeTdView>
     </>
   )
 }

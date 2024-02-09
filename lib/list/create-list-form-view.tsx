@@ -27,7 +27,7 @@ export default function CreateListFormView (): JSX.Element {
     </SubmitRequestView>
   )
   return (
-    <RequestFormView send={send}>
+    <RequestFormView send={send} style={{ zIndex: 3 }}>
       <FormFieldView
         debug
         name='name'

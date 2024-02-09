@@ -1,6 +1,7 @@
 import { useMovie } from '../movie/movie-context'
 import ThemeLinkableView from '../theme/theme-linkable-view'
 import DeleteIconButtonView from '../delete-button/delete-icon-button-view'
+import ThemeTdView from '../theme/theme-td-view'
 
 export default function MovieCellsConsumer (): JSX.Element {
   const movie = useMovie()
@@ -9,21 +10,18 @@ export default function MovieCellsConsumer (): JSX.Element {
   }
   return (
     <>
-      <td className='w-full'>
+      <ThemeTdView w='100%' borderBottomColor='var(--chakra-colors-gray-700);'>
         <ThemeLinkableView href={movie.calculated.url} isExternal>
           {movie.calculated.name}
         </ThemeLinkableView>
-      </td>
-      <td className='w-fit whitespace-nowrap'>
-        <div className='w-fit'>{movie.calculated.updatedAt.toLocaleString()}</div>
-      </td>
-      <td>
+      </ThemeTdView>
+      <ThemeTdView>
         {movie.calculated.score}
-      </td>
-      <td className='flex items-center'>
+      </ThemeTdView>
+      <ThemeTdView>
         {movie.calculated.points}
         <DeleteIconButtonView send={send} />
-      </td>
+      </ThemeTdView>
     </>
   )
 }

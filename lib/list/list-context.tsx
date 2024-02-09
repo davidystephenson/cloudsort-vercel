@@ -22,8 +22,6 @@ function useValue (props: {
   row: RelatedList
   state?: State<Movie>
 }): ListContextValue {
-  console.log('row:', props.row)
-  console.log('state:', props.state)
   const lists = useListsUnsafe()
   const getDefaultState = useCallback(() => {
     return props.state ?? createYeastState<Movie>()

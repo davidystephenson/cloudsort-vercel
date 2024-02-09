@@ -6,7 +6,7 @@ import ListsTableConsumer from './lists-table-consumer'
 
 export default function ListsTableView (): JSX.Element {
   const lists = useLists()
-  const columns = ['Name']
+  const columns = ['Name', '']
   return (
     <TableProvider
       columns={columns}

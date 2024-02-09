@@ -15,7 +15,9 @@ function useValue (props: {
   const mounted = useMounted()
   const colorMode = useColorMode()
   const systemDark = useSystemDark()
-  const darkened = useMemo(() => colorMode.colorMode === 'dark', [colorMode.colorMode])
+  console.log('props.shade', props.shade)
+  const darkened = useMemo(() => props.shade === 'dark', [props.shade])
+  console.log('darkened', darkened)
 
   useEffect(() => {
     const different = systemDark !== darkened
@@ -60,11 +62,13 @@ function useValue (props: {
       updateTheme({ theme: 'dark' })
     }
   }
+  const borderColor = darkened ? 'var(--chakra-colors-gray-700)' : 'var(--chakra-colors-gray-100)'
   const value: ThemeContextValue = {
-    toggleTheme,
+    borderColor,
     darkened,
     mounted,
-    shade: colorMode.colorMode
+    shade: colorMode.colorMode,
+    toggleTheme
   }
   return value
 }

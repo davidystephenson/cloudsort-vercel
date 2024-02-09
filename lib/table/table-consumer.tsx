@@ -4,8 +4,9 @@ import TableHeaderView from './table-header-view'
 import TableWrapperView from './table-wrapper-view'
 import { useTheme } from '../theme/theme-context'
 import { Identity } from './table-types'
-import { TableContainer, Table, Thead, Tr, Tbody } from '@chakra-ui/react'
+import { Box, Table, Tr, Tbody } from '@chakra-ui/react'
 import { forwardRef } from 'react'
+import ThemeTheadView from '../theme/theme-thead-view'
 
 export default function TableConsumer<Row extends Identity> (props: {
   CellsView: (props: { row: Row }) => JSX.Element
@@ -20,10 +21,10 @@ export default function TableConsumer<Row extends Identity> (props: {
     ))
     return (
       <TableWrapperView>
-        <Table>
-          <Thead>
+        <Table size='sm'>
+          <ThemeTheadView>
             <TableHeaderView />
-          </Thead>
+          </ThemeTheadView>
           <Tbody>
             {rows}
           </Tbody>
@@ -32,13 +33,13 @@ export default function TableConsumer<Row extends Identity> (props: {
     )
   }
   const Scroller: TableComponents['Scroller'] = forwardRef((props, ref) => {
-    return <TableContainer {...props} whiteSpace='normal' overflowX='clip' overflowY='auto' ref={ref} />
+    return <Box {...props} ref={ref} />
   })
   const tableComponents: TableComponents<Row> = {
     Scroller,
     Table: (props) => <Table {...props} size='sm' />,
     TableBody: forwardRef((props, ref) => <Tbody {...props} ref={ref} />),
-    TableHead: forwardRef((props, ref) => <Thead {...props} ref={ref} zIndex='1 !important' background='var(--chakra-colors-chakra-body-bg)' />),
+    TableHead: ThemeTheadView,
     TableRow: Tr
   }
   return (

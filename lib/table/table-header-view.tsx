@@ -1,27 +1,27 @@
 import TableSearchView from './table-search-view'
 import { useTable } from './table-context'
-import { Th, Tr } from '@chakra-ui/react'
+import { Tr } from '@chakra-ui/react'
+import ThemeThView from '../theme/theme-th-view'
 
 export default function TableHeaderView (): JSX.Element {
   const table = useTable()
   const columns = table.columns.map((column, index) => {
     return (
-      <Th key={column}>
+      <ThemeThView key={column}>
         {column}
-      </Th>
+      </ThemeThView>
     )
   })
-  const colSpan = table.columns.length + 1
+  const colSpan = table.columns.length
   return (
     <>
       <Tr>
-        <Th py='0' colSpan={colSpan} borderBottom={0}>
+        <ThemeThView py='0' colSpan={colSpan}>
           <TableSearchView />
-        </Th>
+        </ThemeThView>
       </Tr>
       <Tr>
         {columns}
-        <Th />
       </Tr>
     </>
   )
