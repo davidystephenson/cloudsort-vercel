@@ -19,16 +19,25 @@ export const {
     console.log('props.shade', props.shade)
     const auth = useAuth()
     const mounted = useMounted()
+    console.log('mounted', mounted)
     const colorMode = useColorMode()
     console.log('colorMode', colorMode)
     const systemDark = useSystemDark()
     // const systemic = colorMode.colorMode === 'system
-    const shade = props.shade
     // ? systemDark
     //   ? 'dark'
     //   : 'light'
     // : props.shade
-    const darkened = useMemo(() => shade === 'dark', [shade])
+    const shade = useMemo(() => {
+      if (mounted) {
+        return colorMode.colorMode
+      }
+      return props.shade
+    }, [props.shade, mounted, colorMode.colorMode])
+    console.log('shade', shade)
+    const darkened = useMemo(() => {
+      return shade === 'dark'
+    }, [shade])
 
     useEffect(() => {
       const different = systemDark !== darkened
