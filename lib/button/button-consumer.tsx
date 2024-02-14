@@ -26,6 +26,8 @@ export default function ButtonConsumer (props: ButtonProps): JSX.Element {
         isLoading={button.loading}
         type={button.type}
         {...props}
+        variant='outline'
+        colorScheme='red'
       />
       <Popover>
         <PopoverTrigger>
@@ -33,6 +35,7 @@ export default function ButtonConsumer (props: ButtonProps): JSX.Element {
             aria-label='Error'
             colorScheme='red'
             icon={icon}
+            size={props.size}
           />
         </PopoverTrigger>
         <PopoverContent zIndex={1}>

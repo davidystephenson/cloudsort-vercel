@@ -2,6 +2,7 @@ import { useMovie } from '../movie/movie-context'
 import ThemeLinkableView from '../theme/theme-linkable-view'
 import DeleteIconButtonView from '../delete-button/delete-icon-button-view'
 import ThemeTdView from '../theme/theme-td-view'
+import { HStack, Text } from '@chakra-ui/react'
 
 export default function MovieCellsConsumer (): JSX.Element {
   const movie = useMovie()
@@ -19,8 +20,10 @@ export default function MovieCellsConsumer (): JSX.Element {
         {movie.calculated.score}
       </ThemeTdView>
       <ThemeTdView>
-        {movie.calculated.points}
-        <DeleteIconButtonView send={send} />
+        <HStack>
+          <Text>{movie.calculated.points}</Text>
+          <DeleteIconButtonView send={send} />
+        </HStack>
       </ThemeTdView>
     </>
   )
