@@ -18,7 +18,7 @@ export default function RequestButtonConsumer (props: {
     <ButtonView
       handleClick={handleClick}
       loading={request.loading}
-      error={request.errorMessage}
+      errorMessage={request.errorMessage}
       {...props}
     />
   )

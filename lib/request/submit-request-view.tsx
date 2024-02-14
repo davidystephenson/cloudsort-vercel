@@ -16,7 +16,7 @@ export default function SubmitRequestView (props: {
   return (
     <ButtonView
       loading={request.loading}
-      error={request.errorMessage}
+      errorMessage={request.errorMessage}
       type='submit'
       handleClick={onClick}
     >

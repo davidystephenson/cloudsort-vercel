@@ -1,5 +1,6 @@
 import getMergeChoiceList from '@/lib/list/get-merge-choice-list'
 import ListView from '@/lib/list/list-view'
+import { Alert, AlertIcon } from '@chakra-ui/react'
 
 export default async function Lists (props: {
   params: {
@@ -16,10 +17,14 @@ export default async function Lists (props: {
     )
   } catch (error) {
     console.error(error)
-    return (
-      <div>
-        Error
-      </div>
-    )
+    if (error instanceof Error) {
+      return (
+        <Alert status='error'>
+          <AlertIcon />
+          {error.message}
+        </Alert>
+      )
+    }
+    throw error
   }
 }

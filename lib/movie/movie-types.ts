@@ -27,11 +27,6 @@ export interface DeleteMovieBody {
 
 export type CalculatedMovie = Calculated<Movie>
 
-export interface MovieContextValue {
-  delete: () => Promise<void>
-  calculated: CalculatedMovie
-}
-
 export interface ChooseMovieBody {
   listId: number
   betterIndex: number

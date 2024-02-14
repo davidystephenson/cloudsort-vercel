@@ -10,7 +10,7 @@ export default function MovieCellsConsumer (): JSX.Element {
   }
   return (
     <>
-      <ThemeTdView w='100%' borderBottomColor='var(--chakra-colors-gray-700);'>
+      <ThemeTdView w='100%'>
         <ThemeLinkableView href={movie.calculated.url} isExternal>
           {movie.calculated.name}
         </ThemeLinkableView>

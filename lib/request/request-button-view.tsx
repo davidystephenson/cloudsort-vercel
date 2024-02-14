@@ -4,6 +4,7 @@ import { ReactNode } from 'react'
 import { RequestProvider } from './request-context'
 import { ButtonProps } from '@chakra-ui/react'
 import RequestButtonConsumer from './request-button-consumer'
+import { ActionProvider } from '../action/action-context'
 
 export default function RequestButtonView (props: {
   children: ReactNode
@@ -12,11 +13,13 @@ export default function RequestButtonView (props: {
 } & ButtonProps): JSX.Element {
   const { endless, send, ...buttonProps } = props
   return (
-    <RequestProvider
-      endless={endless}
-      send={send}
-    >
-      <RequestButtonConsumer {...buttonProps} />
-    </RequestProvider>
+    <ActionProvider>
+      <RequestProvider
+        endless={endless}
+        send={send}
+      >
+        <RequestButtonConsumer {...buttonProps} />
+      </RequestProvider>
+    </ActionProvider>
   )
 }

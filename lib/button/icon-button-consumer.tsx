@@ -7,7 +7,7 @@ import ThemeIconButtonView from '../theme/theme-icon-button-view'
 
 export default function IconButtonConsumer (props: IconButtonProps): JSX.Element {
   const button = useButtonContext()
-  if (button.error == null) {
+  if (button.errorMessage == null) {
     return (
       <ThemeIconButtonView
         isLoading={button.loading}
@@ -19,22 +19,28 @@ export default function IconButtonConsumer (props: IconButtonProps): JSX.Element
   }
 
   return (
-    <ButtonGroup>
+    <ButtonGroup isAttached>
       <ThemeIconButtonView
         onClick={button.handleClick}
         isLoading={button.loading}
         type={button.type}
         {...props}
+        variant='outline'
+        colorScheme='red'
       />
       <Popover>
         <PopoverTrigger>
-          <ThemeIconButtonView aria-label='Error' icon={<MdError />} />
+          <ThemeIconButtonView
+            aria-label='Error'
+            icon={<MdError />}
+            colorScheme='red'
+          />
         </PopoverTrigger>
         <PopoverContent>
           <PopoverArrow />
           <PopoverCloseButton />
           <PopoverBody>
-            {button.error}
+            {button.errorMessage}
           </PopoverBody>
         </PopoverContent>
       </Popover>

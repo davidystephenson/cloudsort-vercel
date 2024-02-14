@@ -1,45 +1,50 @@
+import contextCreator from 'context-creator'
+import { ActionProvider, useAction } from '../action/action-context'
 import { AxiosError } from 'axios'
-import { ErrorBody, RequestContextValue } from './request-types'
-import { contextCreator } from '../context-creator/context-creator'
-import { useState } from 'react'
+import { ReactNode } from 'react'
 
-function useValue (props: {
-  children: React.ReactNode
-  send: () => Promise<void>
-  endless?: boolean
-}): RequestContextValue {
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState<AxiosError<ErrorBody>>()
-  const [errorMessage, setErrorMessage] = useState<string>()
-  async function sendRequest (): Promise<void> {
-    setLoading(true)
-    setError(undefined)
-    setErrorMessage(undefined)
-    try {
-      await props.send()
-    } catch (error) {
-      const e = error as AxiosError<ErrorBody>
-      setError(e)
-      setErrorMessage(e.response?.data?.error ?? e.message)
-      setLoading(false)
-    }
-    if (props.endless === true) {
-      return
-    }
-    setLoading(false)
-  }
-  const value: RequestContextValue = {
-    error,
-    errorMessage,
-    send: sendRequest,
-    loading
-  }
-  return value
-}
 export const {
-  useCreatedContext: useRequest,
-  CreatedProvider: RequestProvider
+  useContext: useRequest,
+  Provider: RequestProvider
 } = contextCreator({
   name: 'request',
-  useValue
+  useValue: (props: {
+    send: () => Promise<void>
+    endless?: boolean
+  }) => {
+    const action = useAction()
+    async function sendRequest (): Promise<void> {
+      action.start()
+      try {
+        await props.send()
+      } catch (error) {
+        if (error instanceof AxiosError) {
+          action.fail({ error, message: error.response?.data?.error })
+        } else if (error instanceof Error) {
+          action.fail({ error })
+        }
+        throw error
+      }
+      if (props.endless === true) {
+        return
+      }
+      action.succeed()
+    }
+    const value = {
+      ...action,
+      send: sendRequest
+    }
+    return value
+  },
+  Wrapper: (props: { children: ReactNode }) => {
+    return (
+      <span>
+        <ActionProvider>
+          <div>
+            {props.children}
+          </div>
+        </ActionProvider>
+      </span>
+    )
+  }
 })

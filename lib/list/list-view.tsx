@@ -32,7 +32,7 @@ export default function ListView (props: {
   )
   return (
     <ListProvider state={props.state} row={props.row}>
-      <Heading size='lg'>List</Heading>
+      <ChooseView />
       <HStack justify='space-between'>
         <Heading size='md'>{props.row.name}</Heading>
         <CurtainView
@@ -53,7 +53,6 @@ export default function ListView (props: {
       <CurtainView open={open}>
         <CreateMovieFormView />
       </CurtainView>
-      <ChooseView />
       <MoviesTableView />
     </ListProvider>
   )

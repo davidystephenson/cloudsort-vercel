@@ -1,23 +1,20 @@
 'use client'
 
-import { AuthContextValue } from './auth-types'
 import { Session } from 'next-auth'
-import { contextCreator } from '../context-creator/context-creator'
-
-function useValue (props: {
-  session: Session | null
-}): AuthContextValue {
-  const value: AuthContextValue = {
-    session: props.session
-  }
-
-  return value
-}
+import contextCreator from 'context-creator'
 
 export const {
-  useCreatedContext: useAuth,
-  CreatedProvider: AuthProvider
+  useContext: useAuth,
+  Provider: AuthProvider
 } = contextCreator({
   name: 'auth',
-  useValue
+  useValue: (props: {
+    session: Session | null
+  }) => {
+    const value = {
+      session: props.session
+    }
+
+    return value
+  }
 })

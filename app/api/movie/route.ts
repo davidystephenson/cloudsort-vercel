@@ -56,7 +56,7 @@ export async function DELETE (req: Request): Promise<Response> {
       id: body.movieId
     }
   })
-  if (movie == null) {
+  if (movie == null || true) {
     return apiError({ message: 'This movie does not exist', status: 404 })
   }
   const list = await prisma.list.findFirst({

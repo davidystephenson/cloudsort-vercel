@@ -1,14 +1,15 @@
-import { contextCreator } from '../context-creator/context-creator'
 import { ButtonContextValue } from './button-types'
-
-function useValue (props: ButtonContextValue): ButtonContextValue {
-  const value: ButtonContextValue = {
-    ...props
-  }
-  return value
-}
+import contextCreator from 'context-creator'
 
 export const {
-  useCreatedContext: useButtonContext,
-  CreatedProvider: ButtonProvider
-} = contextCreator({ name: 'button', useValue })
+  useContext: useButtonContext,
+  Provider: ButtonProvider
+} = contextCreator({
+  name: 'button',
+  useValue: (props: ButtonContextValue) => {
+    const value = {
+      ...props
+    }
+    return value
+  }
+})

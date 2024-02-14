@@ -1,5 +1,5 @@
 export interface ButtonContextValue {
-  error?: string | undefined
+  errorMessage?: string | undefined
   handleClick?: () => void
   loading?: boolean
   type?: 'button' | 'submit' | 'reset'

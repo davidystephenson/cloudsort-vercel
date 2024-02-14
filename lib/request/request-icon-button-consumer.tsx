@@ -4,7 +4,7 @@ import { ReactNode } from 'react'
 import { useRequest } from './request-context'
 import { ButtonContextValue } from '../button/button-types'
 import { IconButtonProps } from '@chakra-ui/react'
-import ButtonView from '../button/button-view'
+import IconButtonView from '../button/icon-button-view'
 
 export default function RequestIconButtonConsumer (props: {
   children?: ReactNode
@@ -15,10 +15,10 @@ export default function RequestIconButtonConsumer (props: {
     void request.send()
   }
   return (
-    <ButtonView
+    <IconButtonView
       handleClick={handleClick}
       loading={request.loading}
-      error={request.errorMessage}
+      errorMessage={request.errorMessage}
       {...props}
     />
   )

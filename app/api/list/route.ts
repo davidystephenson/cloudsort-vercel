@@ -3,6 +3,7 @@ import serverAuth from '@/lib/auth/server-auth'
 import prisma from '@/lib/prisma/prisma'
 import apiError from '@/lib/api/api-error'
 import { NextResponse } from 'next/server'
+import { setTimeout } from 'timers/promises'
 
 export async function POST (req: Request): Promise<Response> {
   const authSession = await serverAuth()
@@ -26,6 +27,7 @@ export async function POST (req: Request): Promise<Response> {
       userId: authSession.user.id
     }
   })
+  await setTimeout(100000)
   return NextResponse.json(list)
 }
 

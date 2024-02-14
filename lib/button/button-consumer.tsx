@@ -8,7 +8,7 @@ import ThemeIconButtonView from '../theme/theme-icon-button-view'
 
 export default function ButtonConsumer (props: ButtonProps): JSX.Element {
   const button = useButtonContext()
-  if (button.error == null) {
+  if (button.errorMessage == null) {
     return (
       <ThemeButtonView
         isLoading={button.loading}
@@ -39,7 +39,7 @@ export default function ButtonConsumer (props: ButtonProps): JSX.Element {
           <PopoverArrow />
           <PopoverCloseButton />
           <PopoverBody>
-            {button.error}
+            {button.errorMessage}
           </PopoverBody>
         </PopoverContent>
       </Popover>

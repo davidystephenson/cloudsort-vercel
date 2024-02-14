@@ -8,11 +8,3 @@ export interface Field {
 }
 
 export type Fields = Record<string, Field | undefined>
-
-export interface FormContextValue {
-  deregister: (props: { name: string }) => void
-  fields: Fields
-  register: (props: { name: string, value?: string }) => void
-  handleSubmit: () => void
-  handleChange: () => void
-}
