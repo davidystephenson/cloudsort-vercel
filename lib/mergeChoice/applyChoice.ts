@@ -46,7 +46,7 @@ export default async function applyChoice <ListItem extends Item> (props: {
     throw new Error('There is no worseId')
   }
   const worseItem = getItem({ id: worseId, items: props.state.items })
-  worseItem.updatedAt = new Date()
+  worseItem.updatedAt = Date.now()
   currentOperation.output.push(worseId)
   if (worseInput.length === 0) {
     currentOperation.output.push(...betterInput)
