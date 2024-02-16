@@ -20,7 +20,7 @@ export default function ButtonConsumer (props: ButtonProps): JSX.Element {
   }
   const icon = <MdError />
   return (
-    <ButtonGroup isAttached>
+    <ButtonGroup isAttached orientation={button.orientation}>
       <ThemeButtonView
         onClick={button.handleClick}
         isLoading={button.loading}

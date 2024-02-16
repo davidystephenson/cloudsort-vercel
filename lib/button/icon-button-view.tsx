@@ -6,7 +6,7 @@ import { IconButtonProps } from '@chakra-ui/react'
 import IconButtonConsumer from './icon-button-consumer'
 
 export default function IconButtonView (props: ButtonContextValue & IconButtonProps): JSX.Element {
-  const { errorMessage: error, handleClick, loading, type, ...restProps } = props
+  const { errorMessage: error, handleClick, loading, type, orientation, ...restProps } = props
   function onClick (): void {
     handleClick?.()
   }
@@ -15,6 +15,7 @@ export default function IconButtonView (props: ButtonContextValue & IconButtonPr
       errorMessage={error}
       loading={loading}
       handleClick={onClick}
+      orientation={orientation}
       type={type}
     >
       <IconButtonConsumer {...restProps} />

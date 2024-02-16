@@ -19,7 +19,7 @@ export default function IconButtonConsumer (props: IconButtonProps): JSX.Element
   }
 
   return (
-    <ButtonGroup isAttached>
+    <ButtonGroup isAttached orientation={button.orientation}>
       <ThemeIconButtonView
         onClick={button.handleClick}
         isLoading={button.loading}

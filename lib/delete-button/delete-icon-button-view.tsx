@@ -10,6 +10,7 @@ export default function DeleteIconButtonView (props: {
       icon={<MdDeleteForever />}
       send={props.send}
       variant='light'
+      orientation='vertical'
     />
   )
 }

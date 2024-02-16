@@ -3,4 +3,5 @@ export interface ButtonContextValue {
   handleClick?: () => void
   loading?: boolean
   type?: 'button' | 'submit' | 'reset'
+  orientation?: 'horizontal' | 'vertical'
 }
