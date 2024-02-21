@@ -6,8 +6,9 @@ import ThemeThView from '../theme/theme-th-view'
 export default function TableHeaderView (): JSX.Element {
   const table = useTable()
   const columns = table.columns.map((column, index) => {
+    const w = index === 0 && { w: '100%' }
     return (
-      <ThemeThView key={column}>
+      <ThemeThView key={column} {...w}>
         {column}
       </ThemeThView>
     )

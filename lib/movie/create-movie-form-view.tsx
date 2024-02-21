@@ -9,9 +9,14 @@ import RequestFormView from '../request/request-form-view'
 import SubmitRequestView from '../request/submit-request-view'
 import { MOVIE_DATA_KEYS } from './movie-constants'
 import { MovieData } from './movie-types'
+import { useHeading } from '../heading/heading-context'
 
 export default function CreateMovieFormView (): JSX.Element {
+  const heading = useHeading()
   const list = useList()
+  if (heading.selection !== 'create') {
+    return <></>
+  }
   async function send (fields: Fields): Promise<void> {
     const guarded = guardFields({
       fields,
@@ -63,7 +68,7 @@ export default function CreateMovieFormView (): JSX.Element {
       />
       <HStack justifyContent='end' mt='2px'>
         <SubmitRequestView>
-          Add Movie
+          Create Movie
         </SubmitRequestView>
       </HStack>
     </RequestFormView>

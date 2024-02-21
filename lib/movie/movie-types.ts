@@ -1,7 +1,7 @@
 import { Movie } from '@prisma/client'
 import { Calculated } from '../mergeChoice/merge-choice-types'
 
-export type MovieData = Omit<Movie, 'id' | 'updatedAt'>
+export type MovieData = Omit<Movie, 'id'>
 
 export interface PostMovieBody extends MovieData {
   listId: number

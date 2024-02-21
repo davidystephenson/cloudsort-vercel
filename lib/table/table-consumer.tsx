@@ -1,12 +1,12 @@
 'use client'
-import { TableComponents, TableVirtuoso } from 'react-virtuoso'
-import TableHeaderView from './table-header-view'
-import TableWrapperView from './table-wrapper-view'
+import { Tr, Tbody } from '@chakra-ui/react'
 import { useTheme } from '../theme/theme-context'
-import { Identity } from './table-types'
-import { Box, Table, Tr, Tbody } from '@chakra-ui/react'
-import { forwardRef } from 'react'
+import ThemeTableView from '../theme/theme-table-view'
 import ThemeTheadView from '../theme/theme-thead-view'
+import TableHeaderView from './table-header-view'
+import { Identity } from './table-types'
+import TableWrapperView from './table-wrapper-view'
+import VirtualTable from './virtual-table'
 
 export default function TableConsumer<Row extends Identity> (props: {
   CellsView: (props: { row: Row }) => JSX.Element
@@ -21,37 +21,18 @@ export default function TableConsumer<Row extends Identity> (props: {
     ))
     return (
       <TableWrapperView>
-        <Table size='sm'>
+        <ThemeTableView>
           <ThemeTheadView>
             <TableHeaderView />
           </ThemeTheadView>
           <Tbody>
             {rows}
           </Tbody>
-        </Table>
+        </ThemeTableView>
       </TableWrapperView>
     )
   }
-  const Scroller: TableComponents['Scroller'] = forwardRef((props, ref) => {
-    return <Box {...props} ref={ref} />
-  })
-  const tableComponents: TableComponents<Row> = {
-    Scroller,
-    Table: (props) => <Table {...props} size='sm' />,
-    TableBody: forwardRef((props, ref) => <Tbody {...props} ref={ref} />),
-    TableHead: ThemeTheadView,
-    TableRow: Tr
-  }
   return (
-    <TableVirtuoso
-      components={tableComponents}
-      style={{ height: '100%' }}
-      data={props.rows}
-      useWindowScroll
-      fixedHeaderContent={TableHeaderView}
-      itemContent={(index, row) => (
-        <props.CellsView row={row} />
-      )}
-    />
+    <VirtualTable {...props} />
   )
 }

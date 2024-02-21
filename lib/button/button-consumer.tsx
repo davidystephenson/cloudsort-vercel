@@ -19,6 +19,7 @@ export default function ButtonConsumer (props: ButtonProps): JSX.Element {
     )
   }
   const icon = <MdError />
+  const sizeProps = props.size == null ? {} : { size: props.size }
   return (
     <ButtonGroup isAttached orientation={button.orientation}>
       <ThemeButtonView
@@ -35,7 +36,7 @@ export default function ButtonConsumer (props: ButtonProps): JSX.Element {
             aria-label='Error'
             colorScheme='red'
             icon={icon}
-            size={props.size}
+            {...sizeProps}
           />
         </PopoverTrigger>
         <PopoverContent zIndex={1}>

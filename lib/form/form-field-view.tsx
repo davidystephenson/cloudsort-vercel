@@ -30,7 +30,7 @@ export default function FormFieldView (props: {
     return cleanup
   }, [props.name, props.type, form.register])
 
-  const field = form.fields[props.name]
+  const field = form.fields?.[props.name]
   const disabled = field == null
   const value = field?.value ?? ''
   if (props.debug === true) {

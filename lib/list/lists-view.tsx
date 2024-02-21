@@ -3,16 +3,17 @@
 import { List } from '@prisma/client'
 import { ListsProvider } from './lists-context'
 import ListsTableView from './lists-table-view'
-import CreateListFormView from './create-list-form-view'
-import { Heading } from '@chakra-ui/react'
+import ListsHeadingView from './lists-heading-view'
+import { HeadingProvider } from '../heading/heading-context'
 
 export default function ListsView (props: {
   rows: List[]
 }): JSX.Element {
   return (
     <ListsProvider rows={props.rows}>
-      <Heading size='lg'>Lists</Heading>
-      <CreateListFormView />
+      <HeadingProvider>
+        <ListsHeadingView />
+      </HeadingProvider>
       <ListsTableView />
     </ListsProvider>
   )

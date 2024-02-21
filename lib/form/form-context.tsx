@@ -8,12 +8,16 @@ export const {
 } = contextCreator({
   name: 'form',
   useValue: () => {
-    const [fields, setFields] = useState<Record<string, Field>>({})
+    const [fields, setFields] = useState<Record<string, Field>>()
 
     const deregister = useCallback((props: {
       name: string
     }) => {
       setFields((fields) => {
+        if (fields == null) {
+          throw new Error('There are no fields')
+        }
+
         const { [props.name]: deregistered, ...next } = fields
         return next
       })
