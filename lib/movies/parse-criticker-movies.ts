@@ -12,8 +12,7 @@ export default function parseCritickerMovies (props: {
       score,
       name: row[' Film Name'],
       year,
-      url: row[' URL'],
-      updatedAt: Date.now()
+      url: row[' URL']
     }
     return movie
   })

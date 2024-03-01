@@ -13,6 +13,9 @@ export default function RequestFormController (props: {
   const form = useForm()
   const { send, endless, ...restProps } = props
   async function sendRequest (): Promise<void> {
+    if (form.fields == null) {
+      throw new Error('There are no fields')
+    }
     await send(form.fields)
   }
   return (

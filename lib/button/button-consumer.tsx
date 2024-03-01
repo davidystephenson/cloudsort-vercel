@@ -3,7 +3,16 @@
 import { useButtonContext } from '@/lib/button/button-context'
 import { MdError } from 'react-icons/md'
 import ThemeButtonView from '../theme/theme-button-view'
-import { ButtonGroup, ButtonProps, Popover, PopoverArrow, PopoverBody, PopoverCloseButton, PopoverContent, PopoverTrigger } from '@chakra-ui/react'
+import {
+  ButtonGroup,
+  ButtonProps,
+  Popover,
+  PopoverArrow,
+  PopoverBody,
+  PopoverCloseButton,
+  PopoverContent,
+  PopoverTrigger
+} from '@chakra-ui/react'
 import ThemeIconButtonView from '../theme/theme-icon-button-view'
 
 export default function ButtonConsumer (props: ButtonProps): JSX.Element {

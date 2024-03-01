@@ -75,7 +75,6 @@ model Movie {
   score             Int
   imdbId            String
   review            String?
-  dateRated         Int
   url               String?
   year              Int
   inputMovies       InputMovie[]

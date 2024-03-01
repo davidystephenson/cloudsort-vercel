@@ -7,9 +7,7 @@ export default function MoviesHeadingContentView (): JSX.Element {
   if (heading.selection == null) {
     return <></>
   }
-  console.log('heading.selection', heading.selection)
   const creating = heading.selection === 'create'
-  console.log('creating', creating)
   if (creating) {
     return (
       <HeadingContentView>

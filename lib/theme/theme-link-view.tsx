@@ -5,7 +5,7 @@ import { usePathname } from 'next/navigation'
 export default function ThemeLinkView (props: LinkProps): JSX.Element {
   const pathname = usePathname()
   const active = pathname === props.href
-  const color = active ? 'pink' : 'inherit'
+  const color = active ? 'purple' : 'inherit'
   const iconView = props.isExternal === true && <ExternalLinkIcon mx='2px' />
   return (
     <>

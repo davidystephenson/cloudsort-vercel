@@ -11,7 +11,7 @@ export default function ListsView (props: {
 }): JSX.Element {
   return (
     <ListsProvider rows={props.rows}>
-      <HeadingProvider>
+      <HeadingProvider label='Lists'>
         <ListsHeadingView />
       </HeadingProvider>
       <ListsTableView />

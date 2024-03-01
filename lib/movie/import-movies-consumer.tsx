@@ -51,7 +51,6 @@ export default function ImportMoviesConsumer (): JSX.Element {
     inputRef.current.value = ''
   }
   function handleClick (): void {
-    console.log('handleClick')
     inputRef.current?.click()
   }
   return (

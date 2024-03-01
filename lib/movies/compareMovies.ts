@@ -7,13 +7,7 @@ export default function compareItems (props: {
 }): number {
   if (props.a.points === props.b.points) {
     if (props.b.score === props.a.score) {
-      if (props.a.updatedAt === props.b.updatedAt) {
-        return props.b.name.localeCompare(props.a.name) * -1
-      }
-      const bTime = props.b.updatedAt.getTime()
-      const aTime = props.a.updatedAt.getTime()
-      const difference = bTime - aTime
-      return difference
+      return props.b.name.localeCompare(props.a.name) * -1
     }
     if (props.worseFirst === true) {
       return props.a.score - props.b.score

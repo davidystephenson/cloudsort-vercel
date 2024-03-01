@@ -16,14 +16,10 @@ export const {
   useValue: (props: {
     shade?: string
   }) => {
-    console.log('props.shade', props.shade)
     const auth = useAuth()
     const mounted = useMounted()
-    console.log('mounted', mounted)
     const colorMode = useColorMode()
-    console.log('colorMode', colorMode)
     const systemDark = useSystemDark()
-    console.log('systemDark', systemDark)
     const systemic = useMemo(() => {
       return props.shade === 'system'
     }, [props.shade])
@@ -42,7 +38,6 @@ export const {
       }
       return themeMode
     }, [props.shade, themeMode, systemDark])
-    console.log('shade', shade)
     const darkened = useMemo(() => {
       return shade === 'dark'
     }, [shade])
@@ -50,25 +45,30 @@ export const {
       theme: string
     }) => {
       const body = JSON.stringify({ theme: props.theme })
-      const response = await axios.post('/api/theme', body)
-      console.log('response.data', response.data)
+      await axios.post('/api/theme', body)
     }, [])
     useEffect(() => {
-      if (mounted && systemic) {
+      if (mounted && systemic && auth.session != null) {
         if (systemDark) {
           void postTheme({ theme: 'dark' })
         } else {
           void postTheme({ theme: 'light' })
         }
       }
-    }, [mounted, systemic, systemDark, postTheme])
-
+    }, [mounted, systemic, systemDark, postTheme, auth.session])
     useEffect(() => {
-      const different = systemDark !== darkened
-      if (different && auth.session?.user.theme == null) {
-        colorMode.toggleColorMode()
+      if (auth.session?.user.theme == null) {
+        const different = systemDark !== darkened
+        if (different) {
+          colorMode.toggleColorMode()
+        }
+      } else {
+        const different = auth.session.user.theme !== shade
+        if (different) {
+          colorMode.toggleColorMode()
+        }
       }
-    }, [auth.session, colorMode, darkened, systemDark])
+    }, [auth.session, colorMode, darkened, shade, systemDark])
 
     function updateTheme (props: {
       theme: string

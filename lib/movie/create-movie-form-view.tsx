@@ -37,11 +37,6 @@ export default function CreateMovieFormView (): JSX.Element {
         isRequired
       />
       <FormFieldView
-        name='dateRated'
-        label='Date Rated'
-        type='date'
-      />
-      <FormFieldView
         name='imdbId'
         label='IMDB ID'
         isRequired

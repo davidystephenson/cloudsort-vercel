@@ -5,7 +5,7 @@ import { ListProvider } from './list-context'
 import MoviesTableView from '../movie/movies-table-view'
 import { RelatedList } from './list-types'
 import { State } from '../mergeChoice/merge-choice-types'
-import ChooseView from '../choose/choose-view'
+import OptionsView from '../option/options-view'
 import MoviesHeadingView from '../movie/movies-heading-view'
 
 export default function ListView (props: {
@@ -14,8 +14,8 @@ export default function ListView (props: {
 }): JSX.Element {
   return (
     <ListProvider state={props.state} row={props.row}>
-      <ChooseView />
       <MoviesHeadingView />
+      <OptionsView />
       <MoviesTableView />
     </ListProvider>
   )

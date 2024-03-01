@@ -26,7 +26,6 @@ export default async function RootLayout (props: {
   children: React.ReactNode
 }): Promise<JSX.Element> {
   const authSession = await serverAuth()
-  console.log('authSession', authSession)
   return (
     <html
       lang='en'

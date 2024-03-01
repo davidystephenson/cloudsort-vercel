@@ -10,9 +10,5 @@ export default async function postMovie (props: {
   AxiosResponse<CreatedMovie>,
   PostMovieBody
   >('/api/movie', props.body)
-  const movie: Movie = {
-    ...response.data,
-    updatedAt: new Date(response.data.updatedAt)
-  }
-  return movie
+  return response.data
 }

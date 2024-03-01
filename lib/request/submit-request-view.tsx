@@ -14,13 +14,15 @@ export default function SubmitRequestView (props: {
     form.handleSubmit()
   }
   return (
-    <ButtonView
-      loading={request.loading}
-      errorMessage={request.errorMessage}
-      type='submit'
-      handleClick={onClick}
-    >
-      {props.children}
-    </ButtonView>
+    <>
+      <ButtonView
+        loading={request.loading}
+        errorMessage={request.errorMessage}
+        type='submit'
+        handleClick={onClick}
+      >
+        {props.children}
+      </ButtonView>
+    </>
   )
 }
