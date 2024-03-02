@@ -21,7 +21,6 @@ export async function POST (req: Request): Promise<Response> {
   }
   const list = await prisma.list.create({
     data: {
-      complete: false,
       name: body.name,
       userId: authSession.user.id
     }

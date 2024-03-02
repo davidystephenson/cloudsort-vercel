@@ -9,6 +9,10 @@ export default function OptionView (props: {
 }): JSX.Element {
   const list = useList()
   const movie = list.state.items[props.id]
+  if (movie == null) {
+    console.log('list.state', list.state)
+    throw new Error('There is no movie')
+  }
   async function choose (): Promise<void> {
     await list.choose({ betterIndex: props.index })
   }

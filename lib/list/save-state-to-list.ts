@@ -295,15 +295,4 @@ export default async function saveStateToList (props: {
     })
   })
   await Promise.all(reservePromises)
-
-  if (props.state.complete !== props.list.complete) {
-    await db.list.update({
-      where: {
-        id: props.list.id
-      },
-      data: {
-        complete: props.state.complete
-      }
-    })
-  }
 }

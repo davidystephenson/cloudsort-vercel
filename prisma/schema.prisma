@@ -23,7 +23,6 @@ model User {
 model List {
   id                Int                @id @default(autoincrement())
   choices           Choice[]
-  complete          Boolean
   name              String
   operations        Operation[]
   user              User               @relation(fields: [userId], references: [id], onDelete: Cascade)

@@ -4,6 +4,7 @@ import OptionView from './option-view'
 
 export default function OptionsView (): JSX.Element {
   const list = useList()
+  console.log('list.state', list.state)
   if (list.state.complete) {
     return <></>
   }
