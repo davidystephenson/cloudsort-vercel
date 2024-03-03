@@ -11,6 +11,7 @@ const ThemeButtonView = forwardRef<HTMLButtonElement, ButtonProps>((
   const buttonView = (
     <>
       <Button
+        colorScheme='purple'
         size='sm'
         isDisabled={disabled}
         {...props}

@@ -18,7 +18,7 @@ export async function POST (
       id: session.user.id
     },
     data: {
-      theme: body.theme
+      shade: body.shade
     }
   })
   return NextResponse.json(user)

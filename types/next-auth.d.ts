@@ -8,7 +8,7 @@ declare module 'next-auth' {
     user: {
       id: number
       email: string
-      theme?: 'light' | 'dark'
+      shade?: 'light' | 'dark'
     }
   }
 }

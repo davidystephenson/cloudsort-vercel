@@ -5,7 +5,7 @@ import { signOut } from 'next-auth/react'
 import ProfileConsumer from './profile-consumer'
 import { RequestProvider } from '../request/request-context'
 import ThemeLinkView from '../theme/theme-link-view'
-import { HStack } from '@chakra-ui/react'
+import { Box, HStack } from '@chakra-ui/react'
 
 export default function ProfileView (): JSX.Element {
   const auth = useAuth()
@@ -19,11 +19,13 @@ export default function ProfileView (): JSX.Element {
     )
   }
   return (
-    <RequestProvider
-      send={signOut}
-      endless
-    >
-      <ProfileConsumer />
-    </RequestProvider>
+    <Box zIndex={4}>
+      <RequestProvider
+        send={signOut}
+        endless
+      >
+        <ProfileConsumer />
+      </RequestProvider>
+    </Box>
   )
 }

@@ -10,7 +10,6 @@ export default function OptionView (props: {
   const list = useList()
   const movie = list.state.items[props.id]
   if (movie == null) {
-    console.log('list.state', list.state)
     throw new Error('There is no movie')
   }
   async function choose (): Promise<void> {

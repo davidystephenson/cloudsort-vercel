@@ -19,7 +19,7 @@ export default function ProfileConsumer (): JSX.Element {
   function handleToggleTheme (event: MouseEvent<HTMLButtonElement>): void {
     event.stopPropagation()
     event.preventDefault()
-    theme.toggleTheme({ debugLabel: 'ProfileConsumer' })
+    theme.toggleShade()
   }
 
   return (

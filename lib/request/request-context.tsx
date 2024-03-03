@@ -1,7 +1,6 @@
 import contextCreator from 'context-creator'
 import { ActionProvider, useAction } from '../action/action-context'
 import { AxiosError } from 'axios'
-import { ReactNode } from 'react'
 
 export const {
   useContext: useRequest,
@@ -36,15 +35,11 @@ export const {
     }
     return value
   },
-  Wrapper: (props: { children: ReactNode }) => {
+  Wrapper: (props) => {
     return (
-      <span>
-        <ActionProvider>
-          <div>
-            {props.children}
-          </div>
-        </ActionProvider>
-      </span>
+      <ActionProvider>
+        {props.children}
+      </ActionProvider>
     )
   }
 })

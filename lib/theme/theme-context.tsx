@@ -7,6 +7,7 @@ import { useCallback, useEffect, useMemo } from 'react'
 import { useColorMode } from '@chakra-ui/react'
 import contextCreator from 'context-creator'
 import axios from 'axios'
+import { useRouter } from 'next/navigation'
 
 export const {
   useContext: useTheme,
@@ -14,18 +15,34 @@ export const {
 } = contextCreator({
   name: 'theme',
   useValue: (props: {
+    debug?: boolean
     shade?: string
   }) => {
+    console.log('props.shade', props.shade)
+    const router = useRouter()
+    const debugging = props.debug ?? false
     const auth = useAuth()
     const mounted = useMounted()
+    const unshadedUser = useMemo(() => {
+      return auth.session != null && auth.session.user.shade == null
+    }, [auth.session])
+    if (debugging) {
+      console.debug('mounted', mounted)
+    }
     const colorMode = useColorMode()
+    if (debugging) {
+      console.log('colorMode', colorMode)
+    }
     const systemDark = useSystemDark()
+    if (debugging) {
+      console.debug('props.shade', props.shade)
+    }
     const systemic = useMemo(() => {
       return props.shade == null
     }, [props.shade])
-    console.log('mounted', mounted)
-    console.log('props.shade', props.shade)
-    console.log('colorMode', colorMode)
+    if (debugging) {
+      console.debug('systemic', systemic)
+    }
     const shade = useMemo(() => {
       if (mounted) {
         return colorMode.colorMode
@@ -38,21 +55,28 @@ export const {
       }
       return props.shade
     }, [colorMode.colorMode, mounted, props.shade, systemic, systemDark])
-    console.log('shade', shade)
+    if (debugging) {
+      console.debug('shade', shade)
+    }
     const darkened = useMemo(() => {
       return shade === 'dark'
     }, [shade])
-    console.log('darkened', darkened)
+    if (debugging) {
+      console.debug('darkened', darkened)
+    }
     const postShade = useCallback(async (props: {
       shade: string
     }) => {
-      const body = JSON.stringify({ theme: props.shade })
-      await axios.post('/api/theme', body)
+      const body = JSON.stringify({ shade: props.shade })
+      await axios.post('/api/shade', body)
+      document.cookie = 'newShade=none;'
     }, [])
     const updateShade = useCallback((props: {
       shade: string
     }) => {
       document.cookie = `shade=${props.shade}`
+      document.cookie = `newShade=${props.shade}; expires=0;`
+      router.refresh()
       if (auth.session == null) {
         return
       }
@@ -66,42 +90,53 @@ export const {
           void updateShade({ shade: 'light' })
         }
       }
-    }, [mounted, systemic, systemDark, updateShade, auth.session])
+    }, [mounted, systemic, systemDark, updateShade])
     useEffect(() => {
       if (systemic) {
         const different = systemDark !== darkened
         if (different) {
+          console.log('system different')
           colorMode.toggleColorMode()
         }
       } else {
         const different = props.shade !== shade
         if (different) {
+          console.log('personal different')
+          console.log('props.shade', props.shade)
+          console.log('shade', shade)
           colorMode.toggleColorMode()
         }
       }
     }, [colorMode, darkened, props.shade, shade, systemic, systemDark])
-
-    function toggleTheme (props: {
-      debugLabel?: string
-    }): void {
+    useEffect(() => {
+      if (unshadedUser && shade != null) {
+        void postShade({ shade })
+      }
+    }, [postShade, shade, unshadedUser])
+    const toggleShade = useCallback(() => {
+      console.log('toggleShade')
       if (!mounted) {
         return
       }
-      colorMode.toggleColorMode()
       if (darkened) {
         updateShade({ shade: 'light' })
       } else {
         updateShade({ shade: 'dark' })
       }
-    }
+      colorMode.toggleColorMode()
+    }, [colorMode, darkened, mounted, updateShade])
     const borderColor = darkened
       ? 'var(--chakra-colors-gray-700)'
       : 'var(--chakra-colors-gray-100)'
+    const colorScheme = darkened
+      ? 'var(--chakra-colors-purple-200)'
+      : 'var(--chakra-colors-purple-600)'
     const value = {
+      colorScheme,
       borderColor,
       darkened,
       mounted,
-      toggleTheme
+      toggleShade
     }
     console.log('theme value', value)
     return value
