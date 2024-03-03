@@ -56,6 +56,7 @@ export default async function populate <ListItem extends Item> (props: {
     const maxSteps = getOperationsSteps({ operations: newState.activeOperations })
     if (maxSteps === 0) {
       newState.complete = true
+      delete newState.choice
       return { state: newState, items: newItems }
     }
     newState.choice = await createActiveChoice({

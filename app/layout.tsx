@@ -6,6 +6,7 @@ import ThemeView from '@/lib/theme/theme-view'
 import serverAuth from '@/lib/auth/server-auth'
 import LayoutView from '@/lib/layout/layout-view'
 import AuthView from '@/lib/auth/auth-view'
+import { cookies } from 'next/headers'
 
 const title = 'CloudSort'
 const description = 'Sort your lists.'
@@ -22,10 +23,19 @@ export const metadata: Metadata = {
   themeColor: '#FFF'
 }
 
+function isShady (value: unknown): asserts value is 'light' | 'dark' | undefined {
+  if (value != null && value !== 'light' && value !== 'dark') {
+    throw new Error('Invalid shade')
+  }
+}
+
 export default async function RootLayout (props: {
   children: React.ReactNode
 }): Promise<JSX.Element> {
   const authSession = await serverAuth()
+  const shadeCookie = cookies().get('shade')
+  isShady(shadeCookie?.value)
+  const shade = authSession?.user.theme ?? shadeCookie?.value
   return (
     <html
       lang='en'
@@ -34,9 +44,7 @@ export default async function RootLayout (props: {
       <body suppressHydrationWarning>
         <Suspense fallback='Loading...'>
           <AuthView session={authSession}>
-            <ThemeView
-              shade={authSession?.user.theme}
-            >
+            <ThemeView shade={shade}>
               <LayoutView>
                 {props.children}
               </LayoutView>

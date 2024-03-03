@@ -21,64 +21,65 @@ export const {
     const colorMode = useColorMode()
     const systemDark = useSystemDark()
     const systemic = useMemo(() => {
-      return props.shade === 'system'
+      return props.shade == null
     }, [props.shade])
-    const themeMode = useMemo(() => {
+    console.log('mounted', mounted)
+    console.log('props.shade', props.shade)
+    console.log('colorMode', colorMode)
+    const shade = useMemo(() => {
       if (mounted) {
         return colorMode.colorMode
       }
-      return props.shade
-    }, [props.shade, mounted, colorMode.colorMode])
-    const shade = useMemo(() => {
       if (systemic) {
         if (systemDark) {
           return 'dark'
         }
         return 'light'
       }
-      return themeMode
-    }, [props.shade, themeMode, systemDark])
+      return props.shade
+    }, [colorMode.colorMode, mounted, props.shade, systemic, systemDark])
+    console.log('shade', shade)
     const darkened = useMemo(() => {
       return shade === 'dark'
     }, [shade])
-    const postTheme = useCallback(async (props: {
-      theme: string
+    console.log('darkened', darkened)
+    const postShade = useCallback(async (props: {
+      shade: string
     }) => {
-      const body = JSON.stringify({ theme: props.theme })
+      const body = JSON.stringify({ theme: props.shade })
       await axios.post('/api/theme', body)
     }, [])
+    const updateShade = useCallback((props: {
+      shade: string
+    }) => {
+      document.cookie = `shade=${props.shade}`
+      if (auth.session == null) {
+        return
+      }
+      void postShade({ shade: props.shade })
+    }, [auth.session, postShade])
     useEffect(() => {
-      if (mounted && systemic && auth.session != null) {
+      if (mounted && systemic) {
         if (systemDark) {
-          void postTheme({ theme: 'dark' })
+          void updateShade({ shade: 'dark' })
         } else {
-          void postTheme({ theme: 'light' })
+          void updateShade({ shade: 'light' })
         }
       }
-    }, [mounted, systemic, systemDark, postTheme, auth.session])
+    }, [mounted, systemic, systemDark, updateShade, auth.session])
     useEffect(() => {
-      if (auth.session?.user.theme == null) {
+      if (systemic) {
         const different = systemDark !== darkened
         if (different) {
           colorMode.toggleColorMode()
         }
       } else {
-        const different = auth.session.user.theme !== shade
+        const different = props.shade !== shade
         if (different) {
           colorMode.toggleColorMode()
         }
       }
-    }, [auth.session, colorMode, darkened, shade, systemDark])
-
-    function updateTheme (props: {
-      theme: string
-    }): void {
-      colorMode.toggleColorMode()
-      if (auth.session == null) {
-        return
-      }
-      void postTheme({ theme: props.theme })
-    }
+    }, [colorMode, darkened, props.shade, shade, systemic, systemDark])
 
     function toggleTheme (props: {
       debugLabel?: string
@@ -86,20 +87,23 @@ export const {
       if (!mounted) {
         return
       }
+      colorMode.toggleColorMode()
       if (darkened) {
-        updateTheme({ theme: 'light' })
+        updateShade({ shade: 'light' })
       } else {
-        updateTheme({ theme: 'dark' })
+        updateShade({ shade: 'dark' })
       }
     }
-    const borderColor = darkened ? 'var(--chakra-colors-gray-700)' : 'var(--chakra-colors-gray-100)'
+    const borderColor = darkened
+      ? 'var(--chakra-colors-gray-700)'
+      : 'var(--chakra-colors-gray-100)'
     const value = {
       borderColor,
       darkened,
       mounted,
-      colorMode: colorMode.colorMode,
       toggleTheme
     }
+    console.log('theme value', value)
     return value
   }
 })

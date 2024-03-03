@@ -31,14 +31,18 @@ export default function ProfileConsumer (): JSX.Element {
         <ProfileLabel />
       </MenuButton>
       <MenuList>
-        <MenuItem onClick={handleToggleTheme}>
-          <ThemeSwitchView />
-        </MenuItem>
         <MenuItem
           icon={<MdLogout />}
           onClick={handleLogout}
         >
           Logout
+        </MenuItem>
+        <MenuItem>
+          Profile
+        </MenuItem>
+
+        <MenuItem onClick={handleToggleTheme}>
+          <ThemeSwitchView />
         </MenuItem>
       </MenuList>
     </Menu>
