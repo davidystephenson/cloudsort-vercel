@@ -3,7 +3,7 @@
 import { useAuth } from '../auth/auth-context'
 import useMounted from '../mounted/use-mounted'
 import useSystemDark from '../use-system-dark/useSystemDark'
-import { useCallback, useEffect, useMemo } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useColorMode } from '@chakra-ui/react'
 import contextCreator from 'context-creator'
 import axios from 'axios'
@@ -17,12 +17,13 @@ export const {
   useValue: (props: {
     debug?: boolean
     shade?: string
+    shadeCookie?: string
   }) => {
-    console.log('props.shade', props.shade)
     const router = useRouter()
     const debugging = props.debug ?? false
     const auth = useAuth()
     const mounted = useMounted()
+    const [toggling, setToggling] = useState(false)
     const unshadedUser = useMemo(() => {
       return auth.session != null && auth.session.user.shade == null
     }, [auth.session])
@@ -82,6 +83,15 @@ export const {
       }
       void postShade({ shade: props.shade })
     }, [auth.session, postShade])
+    const toggleShade = useCallback(() => {
+      setToggling(true)
+      colorMode.toggleColorMode()
+      if (darkened) {
+        updateShade({ shade: 'light' })
+      } else {
+        updateShade({ shade: 'dark' })
+      }
+    }, [colorMode, darkened, updateShade])
     useEffect(() => {
       if (mounted && systemic) {
         if (systemDark) {
@@ -95,16 +105,12 @@ export const {
       if (systemic) {
         const different = systemDark !== darkened
         if (different) {
-          console.log('system different')
-          colorMode.toggleColorMode()
+          toggleShade()
         }
       } else {
         const different = props.shade !== shade
-        if (different) {
-          console.log('personal different')
-          console.log('props.shade', props.shade)
-          console.log('shade', shade)
-          colorMode.toggleColorMode()
+        if (different && !toggling) {
+          toggleShade()
         }
       }
     }, [colorMode, darkened, props.shade, shade, systemic, systemDark])
@@ -113,18 +119,11 @@ export const {
         void postShade({ shade })
       }
     }, [postShade, shade, unshadedUser])
-    const toggleShade = useCallback(() => {
-      console.log('toggleShade')
-      if (!mounted) {
-        return
+    useEffect(() => {
+      if (toggling) {
+        setToggling(false)
       }
-      if (darkened) {
-        updateShade({ shade: 'light' })
-      } else {
-        updateShade({ shade: 'dark' })
-      }
-      colorMode.toggleColorMode()
-    }, [colorMode, darkened, mounted, updateShade])
+    }, [toggling])
     const borderColor = darkened
       ? 'var(--chakra-colors-gray-700)'
       : 'var(--chakra-colors-gray-100)'
@@ -138,7 +137,6 @@ export const {
       mounted,
       toggleShade
     }
-    console.log('theme value', value)
     return value
   }
 })

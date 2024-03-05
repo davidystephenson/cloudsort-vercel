@@ -1,16 +1,14 @@
 import { ReactNode } from 'react'
 import NavbarLayoutView from './navbar-layout-view'
+import { Container } from '@chakra-ui/react'
 
 export default async function LayoutView (props: {
   children: ReactNode
 }): Promise<JSX.Element | null> {
   return (
-    <div
-      className='flex flex-col w-full sm:w-[640px] mx-auto p-2 h-screen'
-      style={{ fontFamily: 'sans-serif' }}
-    >
+    <Container>
       <NavbarLayoutView />
       {props.children}
-    </div>
+    </Container>
   )
 }

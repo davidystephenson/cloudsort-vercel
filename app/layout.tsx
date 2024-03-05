@@ -40,11 +40,7 @@ export default async function RootLayout (props: {
     ? newShadeCookie.value
     : undefined
   isShady(newShade)
-  console.log('newShade', newShade)
-  console.log('authSession?.user.shade', authSession?.user.shade)
-  console.log('shadeCookie?.value', shadeCookie?.value)
   const shade = newShade ?? authSession?.user.shade ?? shadeCookie?.value
-  console.log('shade', shade)
   return (
     <html
       lang='en'
