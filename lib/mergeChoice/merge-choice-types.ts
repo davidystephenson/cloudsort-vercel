@@ -68,8 +68,3 @@ export interface Population <ListItem extends Item> {
   state: State<ListItem>
   items: ListItem[]
 }
-export type CreateOperation = (props?: {
-  input?: [ItemId[], ItemId[]]
-  output?: ItemId[]
-}) => Promise<Operation>
-export type CreateChoice = (props: ChoiceData) => Promise<Choice>

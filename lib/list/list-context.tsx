@@ -8,7 +8,6 @@ import { useCallback, useEffect, useState } from 'react'
 import useFilter from '../filter/use-filter'
 import filterMovie from '../movie/filterMovie'
 import { State } from '../mergeChoice/merge-choice-types'
-import createYeastState from '../mergeChoice/createYeastState'
 import getSortedMovies from '../movies/getSortedMovies'
 import importItems from '../mergeChoice/importItems'
 import removeItem from '../mergeChoice/removeItem'
@@ -17,6 +16,7 @@ import chooseOption from '../mergeChoice/chooseOption'
 import postMovies from '../movie/post-movies'
 import shuffleSlice from '../mergeChoice/shuffleSlice'
 import contextCreator from 'context-creator'
+import createState from '../mergeChoice/createState'
 
 export const {
   useContext: useList,
@@ -29,7 +29,7 @@ export const {
   }) => {
     const lists = useOptionalLists()
     const getDefaultState = useCallback(() => {
-      return props.state ?? createYeastState<Movie>()
+      return props.state ?? createState<Movie>()
     }, [props.state])
     const [state, setState] = useState(getDefaultState)
     const [movies, setMovies] = useState(() => {

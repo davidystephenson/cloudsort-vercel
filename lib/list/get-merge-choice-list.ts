@@ -46,6 +46,7 @@ export default async function getMergeChoiceList (props: {
   if (activeChoices.length > 1) {
     throw new Error('There is more than one active choice')
   }
+  const activeChoice = activeChoices[0]
 
   const stateOperations = list.operations.map((operation) => {
     const inputIds = operation.inputs.map((input) => input.inputMovies.map((inputMovie) => inputMovie.movieId))
@@ -85,7 +86,7 @@ export default async function getMergeChoiceList (props: {
     }
   }, {})
   const reserveIds = list.movieReservations.map((reservation) => reservation.movieId)
-  const complete = activeChoices.length === 0
+  const complete = activeChoice == null && Object.keys(items).length > 0
   const state: State<Movie> = {
     activeIds,
     activeOperations,
@@ -98,7 +99,7 @@ export default async function getMergeChoiceList (props: {
     worseOperations,
     worseIds
   }
-  if (!complete) {
+  if (activeChoice != null) {
     const activeChoice = activeChoices[0]
     const options = activeChoice.options.map((option) => option.movieId)
     const choice = {

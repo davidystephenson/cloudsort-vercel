@@ -1,6 +1,5 @@
 import respondAuthError from '@/lib/auth/respond-auth-error'
 import serverAuth from '@/lib/auth/server-auth'
-import apiError from '@/lib/api/api-error'
 import prisma from '@/lib/prisma/prisma'
 import { NextResponse } from 'next/server'
 import importItems from '@/lib/mergeChoice/importItems'
@@ -23,34 +22,44 @@ export async function POST (req: Request): Promise<Response> {
       }
     }
   })
-  if (exists.length === 1) {
-    const movie = exists[0]
-    const message = `${movie.imdbId} already exists`
-    return apiError({ message, status: 409 })
-  }
-  if (exists.length > 1) {
-    const imdbIds = exists.map((movie) => movie.imdbId).join(', ')
-    const message = `${imdbIds} already exist`
-    return apiError({ message, status: 409 })
-  }
-  const mergeChoiceList = await getMergeChoiceList({ listId: body.listId, userId: authSession.user.id })
-  await prisma.movie.createMany({
-    data: body.movies
+  const existsImdbIds = exists.map((movie) => movie.imdbId)
+  const newMovieImdbIds = imdbIds.filter((imdbId) => !existsImdbIds.includes(imdbId))
+  const newMovies = body
+    .movies
+    .filter((movie) => newMovieImdbIds.includes(movie.imdbId))
+  const mergeChoiceList = await getMergeChoiceList({
+    listId: body.listId,
+    userId: authSession.user.id
   })
-  const movies = await prisma.movie.findMany({
-    where: {
-      imdbId: {
-        in: imdbIds
+  const movies = await prisma.$transaction(async (tx) => {
+    await tx.movie.createMany({
+      data: newMovies
+    })
+    const currentItems = Object.values(mergeChoiceList.state.items)
+    const newItems = body.movies.filter((movie) => {
+      const exists = currentItems.some((item) => {
+        return item.imdbId === movie.imdbId
+      })
+      return !exists
+    })
+    const newItemImdbIds = newItems.map((movie) => movie.imdbId)
+    const newListMovies = await tx.movie.findMany({
+      where: {
+        imdbId: {
+          in: newItemImdbIds
+        }
       }
-    }
-  })
-  const newState = await importItems({
-    items: movies,
-    state: mergeChoiceList.state
-  })
-  await saveStateToList({
-    list: mergeChoiceList.list,
-    state: newState
+    })
+    const newState = importItems({
+      items: newListMovies,
+      state: mergeChoiceList.state
+    })
+    await saveStateToList({
+      list: mergeChoiceList.list,
+      state: newState,
+      tx
+    })
+    return newListMovies
   })
   return NextResponse.json({ movies })
 }

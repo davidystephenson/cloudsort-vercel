@@ -37,7 +37,7 @@ export async function POST (req: Request): Promise<Response> {
     await saveStateToList({
       list: mergeChoiceList.list,
       state: newState,
-      transaction
+      tx: transaction
     })
     return movie
   })

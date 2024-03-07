@@ -20,28 +20,28 @@ export const {
     shadeCookie?: string
   }) => {
     const router = useRouter()
-    const debugging = props.debug ?? false
+    const debug = props.debug ?? false
     const auth = useAuth()
     const mounted = useMounted()
     const [toggling, setToggling] = useState(false)
     const unshadedUser = useMemo(() => {
       return auth.session != null && auth.session.user.shade == null
     }, [auth.session])
-    if (debugging) {
+    if (debug) {
       console.debug('mounted', mounted)
     }
     const colorMode = useColorMode()
-    if (debugging) {
-      console.log('colorMode', colorMode)
+    if (debug) {
+      console.debug('colorMode', colorMode)
     }
     const systemDark = useSystemDark()
-    if (debugging) {
+    if (debug) {
       console.debug('props.shade', props.shade)
     }
     const systemic = useMemo(() => {
       return props.shade == null
     }, [props.shade])
-    if (debugging) {
+    if (debug) {
       console.debug('systemic', systemic)
     }
     const shade = useMemo(() => {
@@ -56,13 +56,13 @@ export const {
       }
       return props.shade
     }, [colorMode.colorMode, mounted, props.shade, systemic, systemDark])
-    if (debugging) {
+    if (debug) {
       console.debug('shade', shade)
     }
     const darkened = useMemo(() => {
       return shade === 'dark'
     }, [shade])
-    if (debugging) {
+    if (debug) {
       console.debug('darkened', darkened)
     }
     const postShade = useCallback(async (props: {

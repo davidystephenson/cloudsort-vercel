@@ -1,6 +1,7 @@
 import getMergeChoiceList from '@/lib/list/get-merge-choice-list'
 import ListView from '@/lib/list/list-view'
 import { Alert, AlertIcon } from '@chakra-ui/react'
+import { ApiError } from 'next/dist/server/api-utils'
 
 export default async function Lists (props: {
   params: {
@@ -16,8 +17,7 @@ export default async function Lists (props: {
       </>
     )
   } catch (error) {
-    console.error(error)
-    if (error instanceof Error) {
+    if (error instanceof ApiError && error.statusCode === 404) {
       return (
         <Alert status='error'>
           <AlertIcon />

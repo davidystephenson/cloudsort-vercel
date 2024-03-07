@@ -7,9 +7,9 @@ import prisma from '@/lib/prisma/prisma'
 export default async function saveStateToList (props: {
   list: RelatedList
   state: State<Movie>
-  transaction?: PrismaTransaction
+  tx?: PrismaTransaction
 }): Promise<void> {
-  const db = props.transaction ?? prisma
+  const db = props.tx ?? prisma
   const oldChoices = props.list.choices.filter((choice) => choice.mergeChoiceId !== props.state.choice?.mergeChoiceId)
   if (oldChoices.length > 0) {
     const oldChoiceIds = oldChoices.map((choice) => choice.id)
