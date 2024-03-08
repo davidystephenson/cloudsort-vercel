@@ -1,4 +1,4 @@
-import CreateListButtonView from '@/lib/list/create-list-button-view'
+import CreateListButtonView from '@/list/create-list-button-view'
 import Link from 'next/link'
 
 export default async function Home (): Promise<JSX.Element> {

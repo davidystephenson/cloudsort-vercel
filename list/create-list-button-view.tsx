@@ -1,6 +1,6 @@
 'use client'
 
-import postList from '@/lib/list/post-list'
+import postList from '@/list/post-list'
 import RequestButtonView from '../request/request-button-view'
 
 export default function CreateListButtonView (): JSX.Element {

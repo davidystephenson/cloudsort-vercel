@@ -1,5 +1,5 @@
 'use client'
-import ThemeLinkableView from '@/lib/theme/theme-linkable-view'
+import ThemeLinkableView from '@/theme/theme-linkable-view'
 import { Text } from '@chakra-ui/react'
 
 export default function Home (): JSX.Element {

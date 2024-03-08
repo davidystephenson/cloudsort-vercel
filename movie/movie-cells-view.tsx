@@ -1,4 +1,4 @@
-import { MovieProvider } from '../movie/movie-context'
+import { MovieProvider } from './movie-context'
 import MovieCellsConsumer from './movie-cells-consumer'
 import { CalculatedMovie } from './movie-types'
 

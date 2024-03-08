@@ -1,4 +1,4 @@
-import { useHeading } from '../heading/heading-context'
+import { useHeading } from './heading-context'
 import { ButtonGroup } from '@chakra-ui/react'
 import ThemeButtonView from '../theme/theme-button-view'
 import ThemeIconButtonView from '../theme/theme-icon-button-view'

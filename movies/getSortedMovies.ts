@@ -1,4 +1,4 @@
-import { State } from '@/lib/mergeChoice/merge-choice-types'
+import { State } from '@/mergeChoice/merge-choice-types'
 import sortMovies from './sortMovies'
 import { Movie } from '@prisma/client'
 import { CalculatedMovie } from '../movie/movie-types'

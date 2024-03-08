@@ -1,6 +1,6 @@
 'use client'
 
-import { ButtonProvider } from '@/lib/button/button-context'
+import { ButtonProvider } from '@/button/button-context'
 import { ButtonContextValue } from './button-types'
 import { IconButtonProps } from '@chakra-ui/react'
 import IconButtonConsumer from './icon-button-consumer'

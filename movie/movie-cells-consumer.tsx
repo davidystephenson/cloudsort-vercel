@@ -1,4 +1,4 @@
-import { useMovie } from '../movie/movie-context'
+import { useMovie } from './movie-context'
 import ThemeLinkableView from '../theme/theme-linkable-view'
 import DeleteIconButtonView from '../delete-button/delete-icon-button-view'
 import ThemeTdView from '../theme/theme-td-view'

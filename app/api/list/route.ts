@@ -1,7 +1,7 @@
-import respondAuthError from '@/lib/auth/respond-auth-error'
-import serverAuth from '@/lib/auth/server-auth'
-import prisma from '@/lib/prisma/prisma'
-import apiError from '@/lib/api/api-error'
+import respondAuthError from '@/auth/respond-auth-error'
+import serverAuth from '@/auth/server-auth'
+import prisma from '@/prisma/prisma'
+import apiError from '@/api/api-error'
 import { NextResponse } from 'next/server'
 
 export async function POST (req: Request): Promise<Response> {

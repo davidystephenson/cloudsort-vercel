@@ -1,5 +1,5 @@
-import getMergeChoiceList from '@/lib/list/get-merge-choice-list'
-import ListView from '@/lib/list/list-view'
+import getMergeChoiceList from '@/list/get-merge-choice-list'
+import ListView from '@/list/list-view'
 import { Alert, AlertIcon } from '@chakra-ui/react'
 import { ApiError } from 'next/dist/server/api-utils'
 

@@ -2,7 +2,7 @@ import { Movie } from '@prisma/client'
 import { RelatedList } from './list-types'
 import { State } from '../mergeChoice/merge-choice-types'
 import { PrismaTransaction } from '../prisma/prisma-types'
-import prisma from '@/lib/prisma/prisma'
+import prisma from '@/prisma/prisma'
 
 export default async function saveStateToList (props: {
   list: RelatedList

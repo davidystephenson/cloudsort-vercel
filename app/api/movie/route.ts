@@ -1,13 +1,13 @@
-import respondAuthError from '@/lib/auth/respond-auth-error'
-import serverAuth from '@/lib/auth/server-auth'
-import apiError from '@/lib/api/api-error'
-import prisma from '@/lib/prisma/prisma'
-import { DeleteMovieBody } from '@/lib/movie/movie-types'
+import respondAuthError from '@/auth/respond-auth-error'
+import serverAuth from '@/auth/server-auth'
+import apiError from '@/api/api-error'
+import prisma from '@/prisma/prisma'
+import { DeleteMovieBody } from '@/movie/movie-types'
 import { NextResponse } from 'next/server'
-import importItems from '@/lib/mergeChoice/importItems'
-import getMergeChoiceList from '@/lib/list/get-merge-choice-list'
-import guardPostMovie from '@/lib/movie/guard-post-movie'
-import saveStateToList from '@/lib/list/save-state-to-list'
+import importItems from '@/mergeChoice/importItems'
+import getMergeChoiceList from '@/list/get-merge-choice-list'
+import guardPostMovie from '@/movie/guard-post-movie'
+import saveStateToList from '@/list/save-state-to-list'
 
 export async function POST (req: Request): Promise<Response> {
   const authSession = await serverAuth()

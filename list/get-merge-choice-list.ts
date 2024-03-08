@@ -3,7 +3,7 @@ import { ApiError } from 'next/dist/server/api-utils'
 import arrayToDictionary from '../mergeChoice/arrayToDictionary'
 import getItemIdsFromOperations from '../mergeChoice/getItemIdsFromOperations'
 import { State, ItemId } from '../mergeChoice/merge-choice-types'
-import prisma from '@/lib/prisma/prisma'
+import prisma from '@/prisma/prisma'
 import { MergechoiceList } from './list-types'
 
 export default async function getMergeChoiceList (props: {

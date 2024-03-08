@@ -1,7 +1,7 @@
 'use client'
 
 import { ReactNode } from 'react'
-import { ThemeProvider } from '@/lib/theme/theme-context'
+import { ThemeProvider } from '@/theme/theme-context'
 import { ChakraProvider, ColorModeScript, Theme } from '@chakra-ui/react'
 import { extendTheme, type ThemeConfig } from '@chakra-ui/react'
 

@@ -1,6 +1,6 @@
 'use client'
 
-import { useButtonContext } from '@/lib/button/button-context'
+import { useButtonContext } from '@/button/button-context'
 import { MdError } from 'react-icons/md'
 import ThemeButtonView from '../theme/theme-button-view'
 import {

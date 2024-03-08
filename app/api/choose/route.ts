@@ -1,13 +1,13 @@
-import respondAuthError from '@/lib/auth/respond-auth-error'
-import serverAuth from '@/lib/auth/server-auth'
-import prisma from '@/lib/prisma/prisma'
+import respondAuthError from '@/auth/respond-auth-error'
+import serverAuth from '@/auth/server-auth'
+import prisma from '@/prisma/prisma'
 import { NextResponse } from 'next/server'
-import getMergeChoiceList from '@/lib/list/get-merge-choice-list'
-import guardChooseMovie from '@/lib/movie/guard-choose-movie'
-import saveStateToList from '@/lib/list/save-state-to-list'
-import chooseOption from '@/lib/mergeChoice/chooseOption'
+import getMergeChoiceList from '@/list/get-merge-choice-list'
+import guardChooseMovie from '@/movie/guard-choose-movie'
+import saveStateToList from '@/list/save-state-to-list'
+import chooseOption from '@/mergeChoice/chooseOption'
 import { ApiError } from 'next/dist/server/api-utils'
-import apiError from '@/lib/api/api-error'
+import apiError from '@/api/api-error'
 
 export async function POST (req: Request): Promise<Response> {
   const authSession = await serverAuth()
