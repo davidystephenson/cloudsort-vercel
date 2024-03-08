@@ -24,7 +24,6 @@ export const {
       message?: string
     }): void {
       setError(props.error)
-      console.trace()
       const message = props.message ?? props.error.message
       setErrorMessage(message)
       setLoading(false)
