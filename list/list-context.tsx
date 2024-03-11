@@ -11,7 +11,7 @@ import { State } from '../mergeChoice/merge-choice-types'
 import getSortedMovies from '../movies/getSortedMovies'
 import importItems from '../mergeChoice/importItems'
 import removeItem from '../mergeChoice/removeItem'
-import chooseMovie from '../movie/choose-movie'
+import postChooseMovie from '../movie/post-choose-movie'
 import chooseOption from '../mergeChoice/chooseOption'
 import postMovies from '../movie/post-movies'
 import shuffleSlice from '../mergeChoice/shuffleSlice'
@@ -28,6 +28,7 @@ export const {
     state?: State<Movie>
   }) => {
     const lists = useOptionalLists()
+    const [requests, setRequests] = useState<Array<() => Promise<unknown>>>([])
     const getDefaultState = useCallback(() => {
       return props.state ?? createState<Movie>()
     }, [props.state])
@@ -39,7 +40,19 @@ export const {
     useEffect(() => {
       const state = getDefaultState()
       setState(state)
-    }, [props.state])
+    }, [getDefaultState])
+    useEffect(() => {
+      async function run (): Promise<void> {
+        const request = requests.shift()
+        if (request == null) {
+          return
+        }
+        await request()
+        setRequests(current => current.filter(item => item !== request))
+      }
+      void run()
+    }, [requests])
+
     const { filter, filtered } = useFilter({
       rows: movies,
       filter: filterMovie
@@ -50,12 +63,12 @@ export const {
       setMovies(sortedMovies)
       setState(newState)
     }
-    async function importMovies (props: {
+    function importMovies (props: {
       movies: Movie[]
       slice?: number
-    }): Promise<void> {
+    }): void {
       void updateState(async current => {
-        const newState = await importItems({
+        const newState = importItems({
           items: props.movies,
           slice: props.slice,
           state: current
@@ -71,7 +84,7 @@ export const {
         ...createMovieProps
       }
       const movie = await postMovie({ body })
-      await importMovies({ movies: [movie] })
+      importMovies({ movies: [movie] })
       return movie
     }
     async function createMovies (createMoviesProps: {
@@ -87,7 +100,7 @@ export const {
         movies: sliced
       }
       const newMovies = await postMovies({ body })
-      await importMovies({ movies: newMovies })
+      importMovies({ movies: newMovies })
       return newMovies
     }
     async function _delete (): Promise<void> {
@@ -98,7 +111,7 @@ export const {
       movieId: number
     }): void {
       void updateState(async current => {
-        const newState = await removeItem({ id: props.movieId, state: current })
+        const newState = removeItem({ id: props.movieId, state: current })
         return newState
       })
     }
@@ -106,14 +119,19 @@ export const {
       betterIndex: number
     }): Promise<void> {
       await updateState(async current => {
-        const body = {
-          betterIndex: chooseProps.betterIndex,
-          listId: props.row.id
-        }
-        await chooseMovie({ body })
-        const newState = await chooseOption({
+        const newState = chooseOption({
           betterIndex: chooseProps.betterIndex, state: current
         })
+        async function request (): Promise<void> {
+          const body = {
+            betterIndex: chooseProps.betterIndex,
+            choice: newState.choice,
+            listId: props.row.id
+          }
+          await postChooseMovie({ body })
+        }
+        setRequests(current => [...current, request])
+
         return newState
       })
     }

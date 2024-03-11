@@ -1,7 +1,8 @@
 import { ApiError } from 'next/dist/server/api-utils'
-import guardString from '../guard/guard-string'
-import guardNumber from '../guard/guard-number'
 import { MovieData } from './movie-types'
+import guardNumberProp from '@/guard/guard-number-prop'
+import guardStringProp from '@/guard/guard-string-prop'
+import guardStringNullProp from '@/guard/guard-string-null-prop'
 
 export default function guardMovieData (props: {
   data: unknown
@@ -25,16 +26,12 @@ export default function guardMovieData (props: {
     throw new ApiError(422, 'There is no year')
   }
   try {
-    const name = guardString({ data: props.data.name, label: 'title' })
-    const score = guardNumber({ data: props.data.score, label: 'score' })
-    const imdbId = guardString({ data: props.data.imdbId, label: 'imdbId' })
-    const review = 'review' in props.data
-      ? guardString({ data: props.data.review, label: 'review' })
-      : null
-    const url = 'url' in props.data
-      ? guardString({ data: props.data.url, label: 'url' })
-      : null
-    const year = guardNumber({ data: props.data.year, label: 'year' })
+    const name = guardStringProp({ data: props.data, key: 'title' })
+    const score = guardNumberProp({ data: props.data, key: 'score' })
+    const imdbId = guardStringProp({ data: props.data, key: 'imdbId' })
+    const review = guardStringNullProp({ data: props.data, key: 'review' })
+    const url = guardStringNullProp({ data: props.data, key: 'url' })
+    const year = guardNumberProp({ data: props.data, key: 'year' })
     return {
       name,
       score,

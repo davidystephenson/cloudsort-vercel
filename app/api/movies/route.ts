@@ -15,6 +15,8 @@ export async function POST (req: Request): Promise<Response> {
   const json = await req.json()
   const body = guardPostMovies({ data: json })
   const imdbIds = body.movies.map((movie) => movie.imdbId)
+  console.log('begin exists')
+  console.time('exists')
   const exists = await prisma.movie.findMany({
     where: {
       imdbId: {
@@ -22,19 +24,26 @@ export async function POST (req: Request): Promise<Response> {
       }
     }
   })
+  console.timeEnd('exists')
   const existsImdbIds = exists.map((movie) => movie.imdbId)
   const newMovieImdbIds = imdbIds.filter((imdbId) => !existsImdbIds.includes(imdbId))
   const newMovies = body
     .movies
     .filter((movie) => newMovieImdbIds.includes(movie.imdbId))
+  console.log('begin getMergeChoiceList')
+  console.time('getMergeChoiceList')
   const mergeChoiceList = await getMergeChoiceList({
     listId: body.listId,
     userId: authSession.user.id
   })
+  console.timeEnd('getMergeChoiceList')
   const movies = await prisma.$transaction(async (tx) => {
+    console.log('begin create newMovies')
+    console.time('create newMovies')
     await tx.movie.createMany({
       data: newMovies
     })
+    console.timeEnd('create newMovies')
     const currentItems = Object.values(mergeChoiceList.state.items)
     const newItems = body.movies.filter((movie) => {
       const exists = currentItems.some((item) => {
@@ -43,6 +52,8 @@ export async function POST (req: Request): Promise<Response> {
       return !exists
     })
     const newItemImdbIds = newItems.map((movie) => movie.imdbId)
+    console.log('begin find newListMovies')
+    console.time('find newListMovies')
     const newListMovies = await tx.movie.findMany({
       where: {
         imdbId: {
@@ -50,16 +61,27 @@ export async function POST (req: Request): Promise<Response> {
         }
       }
     })
+    console.timeEnd('find newListMovies')
+    console.log('begin importItems')
+    console.time('importItems')
     const newState = importItems({
       items: newListMovies,
       state: mergeChoiceList.state
     })
+    console.timeEnd('importItems')
+    console.log('begin saveStateToList')
+    console.time('saveStateToList')
     await saveStateToList({
       list: mergeChoiceList.list,
       state: newState,
       tx
     })
+    console.timeEnd('saveStateToList')
+    console.log('end saveStateToList')
     return newListMovies
+  }, {
+    maxWait: 5000, // default: 200
+    timeout: 100000 // default: 5000
   })
   return NextResponse.json({ movies })
 }

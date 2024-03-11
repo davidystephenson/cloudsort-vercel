@@ -1,7 +1,7 @@
 import { ApiError } from 'next/dist/server/api-utils'
 import { PostMoviesBody } from './movie-types'
-import guardNumber from '../guard/guard-number'
 import guardMovieData from './guard-movie-data'
+import guardNumberProp from '@/guard/guard-number-prop'
 
 export default function guardPostMovies (props: {
   data: unknown
@@ -26,7 +26,7 @@ export default function guardPostMovies (props: {
     return movie
   })
   try {
-    const listId = guardNumber({ data: props.data.listId, label: 'listId' })
+    const listId = guardNumberProp({ data: props.data, key: 'listId' })
     return {
       listId,
       movies

@@ -1,27 +1,20 @@
 import { ApiError } from 'next/dist/server/api-utils'
 import { ChooseMovieBody } from './movie-types'
-import guardNumber from '../guard/guard-number'
+import guardObject from '@/guard/guard-object'
+import guardNumberProp from '@/guard/guard-number-prop'
+import guardChoiceUndefinedProp from '@/guard/guard-choice-undefined-prop'
 
 export default function guardChooseMovie (props: {
   data: unknown
 }): ChooseMovieBody {
-  if (props.data == null) {
-    throw new ApiError(400, 'There is no body')
-  }
-  if (typeof props.data !== 'object') {
-    throw new ApiError(422, 'The body is not an object')
-  }
-  if (!('betterIndex' in props.data)) {
-    throw new ApiError(422, 'There is no betterIndex')
-  }
-  if (!('listId' in props.data)) {
-    throw new ApiError(422, 'There is no listId')
-  }
+  const data = guardObject({ data: props.data })
   try {
-    const betterIndex = guardNumber({ data: props.data.betterIndex, label: 'betterId' })
-    const listId = guardNumber({ data: props.data.listId, label: 'listId' })
+    const betterIndex = guardNumberProp({ data, key: 'betterIndex' })
+    const listId = guardNumberProp({ data, key: 'listId' })
+    const choice = guardChoiceUndefinedProp({ data, key: 'choice' })
     return {
       betterIndex,
+      choice,
       listId
     }
   } catch (error) {

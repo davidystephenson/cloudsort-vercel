@@ -1,3 +1,4 @@
+import { useHotkeys } from 'react-hotkeys-hook'
 import { useList } from '../list/list-context'
 import { ItemId } from '../mergeChoice/merge-choice-types'
 import RequestButtonView from '../request/request-button-view'
@@ -16,6 +17,9 @@ export default function OptionView (props: {
   async function choose (): Promise<void> {
     await list.choose({ betterIndex: props.index })
   }
+  useHotkeys(props.letter, () => {
+    void choose()
+  })
   return (
     <RequestButtonView send={choose}>
       [{props.letter}]

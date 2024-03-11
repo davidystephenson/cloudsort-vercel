@@ -2,7 +2,7 @@ import { ChooseMovieBody } from './movie-types'
 import axios, { AxiosResponse } from 'axios'
 import { OkResponse } from '../api/api-types'
 
-export default async function chooseMovie (props: {
+export default async function postChooseMovie (props: {
   body: ChooseMovieBody
 }): Promise<OkResponse> {
   const response = await axios.post<

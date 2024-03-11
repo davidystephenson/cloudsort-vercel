@@ -12,10 +12,10 @@ export interface Operation extends Identity {
   output: ItemId[]
 }
 export interface ChoiceData {
-  options: ItemId[]
-  operationMergeChoiceId?: string | null
   aIndex: number
   bIndex: number
+  operationMergeChoiceId?: string | null
+  options: ItemId[]
   random: boolean
 }
 export type Choice = ChoiceData & Identity
