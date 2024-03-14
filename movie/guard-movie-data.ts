@@ -26,7 +26,7 @@ export default function guardMovieData (props: {
     throw new ApiError(422, 'There is no year')
   }
   try {
-    const name = guardStringProp({ data: props.data, key: 'title' })
+    const name = guardStringProp({ data: props.data, key: 'name' })
     const score = guardNumberProp({ data: props.data, key: 'score' })
     const imdbId = guardStringProp({ data: props.data, key: 'imdbId' })
     const review = guardStringNullProp({ data: props.data, key: 'review' })

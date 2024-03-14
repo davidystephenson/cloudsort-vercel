@@ -31,6 +31,7 @@ export interface ChooseMovieBody {
   betterIndex: number
   choice: Choice | undefined
   listId: number
+  movieId: number
 }
 
 export interface CritickerRow {

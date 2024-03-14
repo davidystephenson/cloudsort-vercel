@@ -16,6 +16,7 @@ async function sleep (ms: number): Promise<void> {
 }
 
 export async function POST (req: Request): Promise<Response> {
+  console.log('begin choose')
   const authSession = await serverAuth()
   if (authSession == null) {
     return respondAuthError()
@@ -24,8 +25,15 @@ export async function POST (req: Request): Promise<Response> {
   const body = guardChooseMovie({ data: json })
   await sleep(10000)
   try {
-    const mergeChoiceList = await getMergeChoiceList({ listId: body.listId, userId: authSession.user.id })
     await prisma.$transaction(async (transaction) => {
+      const mergeChoiceList = await getMergeChoiceList({ listId: body.listId, userId: authSession.user.id })
+      console.log('choice', mergeChoiceList.state.choice)
+      console.log('options', mergeChoiceList.state.choice?.options)
+      console.log('body.movieId', body.movieId)
+      const optioned = mergeChoiceList.state.choice?.options.includes(body.movieId)
+      if (optioned !== true) {
+        throw new ApiError(422, 'There is no option')
+      }
       const newState = chooseOption({
         betterIndex: body.betterIndex,
         state: mergeChoiceList.state
@@ -36,6 +44,8 @@ export async function POST (req: Request): Promise<Response> {
         state: newState,
         tx: transaction
       })
+    }, {
+      isolationLevel: 'Serializable'
     })
     return NextResponse.json({ ok: true })
   } catch (error) {

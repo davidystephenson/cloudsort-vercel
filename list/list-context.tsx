@@ -28,7 +28,6 @@ export const {
     state?: State<Movie>
   }) => {
     const lists = useOptionalLists()
-    const [requests, setRequests] = useState<Array<() => Promise<unknown>>>([])
     const getDefaultState = useCallback(() => {
       return props.state ?? createState<Movie>()
     }, [props.state])
@@ -41,17 +40,6 @@ export const {
       const state = getDefaultState()
       setState(state)
     }, [getDefaultState])
-    useEffect(() => {
-      async function run (): Promise<void> {
-        const request = requests.shift()
-        if (request == null) {
-          return
-        }
-        await request()
-        setRequests(current => current.filter(item => item !== request))
-      }
-      void run()
-    }, [requests])
 
     const { filter, filtered } = useFilter({
       rows: movies,
@@ -117,8 +105,10 @@ export const {
     }
     async function choose (chooseProps: {
       betterIndex: number
+      movieId: number
     }): Promise<void> {
       await updateState(async current => {
+        console.log('current', current)
         const newState = chooseOption({
           betterIndex: chooseProps.betterIndex, state: current
         })
@@ -126,11 +116,12 @@ export const {
           const body = {
             betterIndex: chooseProps.betterIndex,
             choice: newState.choice,
-            listId: props.row.id
+            listId: props.row.id,
+            movieId: chooseProps.movieId
           }
           await postChooseMovie({ body })
         }
-        setRequests(current => [...current, request])
+        void request()
 
         return newState
       })

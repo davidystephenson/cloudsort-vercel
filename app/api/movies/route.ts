@@ -81,7 +81,7 @@ export async function POST (req: Request): Promise<Response> {
     return newListMovies
   }, {
     maxWait: 5000, // default: 200
-    timeout: 100000 // default: 5000
+    timeout: 1000000 // default: 5000
   })
   return NextResponse.json({ movies })
 }

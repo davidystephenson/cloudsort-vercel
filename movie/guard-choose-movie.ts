@@ -12,10 +12,12 @@ export default function guardChooseMovie (props: {
     const betterIndex = guardNumberProp({ data, key: 'betterIndex' })
     const listId = guardNumberProp({ data, key: 'listId' })
     const choice = guardChoiceUndefinedProp({ data, key: 'choice' })
+    const movieId = guardNumberProp({ data, key: 'movieId' })
     return {
       betterIndex,
       choice,
-      listId
+      listId,
+      movieId
     }
   } catch (error) {
     const e = error as Error
