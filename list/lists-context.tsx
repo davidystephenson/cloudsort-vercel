@@ -4,6 +4,7 @@ import postList from './post-list'
 import filterList from './filter-list'
 import useFilter from '../filter/use-filter'
 import contextCreator from 'context-creator'
+import deleteList from './delete-list'
 
 export const {
   useContext: useLists,
@@ -29,9 +30,11 @@ export const {
       })
       return row
     }
-    function _delete (props: {
+    async function _delete (props: {
       id: number
-    }): void {
+    }): Promise<void> {
+      const body = { listId: props.id }
+      await deleteList({ body })
       setRows((rows) => {
         const newRows = rows.filter((row) => {
           const keep = row.id !== props.id

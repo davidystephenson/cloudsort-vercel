@@ -15,7 +15,6 @@ export default function OptionView (props: {
     return <>THere is no movie</>
   }
   async function choose (): Promise<void> {
-    console.log('choose')
     await list.choose({ betterIndex: props.index, movieId: movie.id })
   }
   useHotkeys(props.letter, () => {

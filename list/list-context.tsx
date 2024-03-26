@@ -14,9 +14,9 @@ import removeItem from '../mergeChoice/removeItem'
 import postChooseMovie from '../movie/post-choose-movie'
 import chooseOption from '../mergeChoice/chooseOption'
 import postMovies from '../movie/post-movies'
-import shuffleSlice from '../mergeChoice/shuffleSlice'
 import contextCreator from 'context-creator'
 import createState from '../mergeChoice/createState'
+import shuffleSlice from '@/shuffleSlice/shuffleSlice'
 
 export const {
   useContext: useList,
@@ -58,7 +58,6 @@ export const {
       void updateState(async current => {
         const newState = importItems({
           items: props.movies,
-          slice: props.slice,
           state: current
         })
         return newState
@@ -92,8 +91,9 @@ export const {
       return newMovies
     }
     async function _delete (): Promise<void> {
-      await deleteList({ id: props.row.id })
-      lists?.delete({ id: props.row.id })
+      const body = { listId: props.row.id }
+      await deleteList({ body })
+      await lists?.delete({ id: props.row.id })
     }
     function deleteMovie (props: {
       movieId: number
@@ -108,20 +108,17 @@ export const {
       movieId: number
     }): Promise<void> {
       await updateState(async current => {
-        console.log('current', current)
         const newState = chooseOption({
           betterIndex: chooseProps.betterIndex, state: current
         })
         async function request (): Promise<void> {
           const body = {
             betterIndex: chooseProps.betterIndex,
-            choice: newState.choice,
-            listId: props.row.id,
-            movieId: chooseProps.movieId
+            listId: props.row.id
           }
           await postChooseMovie({ body })
         }
-        void request()
+        await request()
 
         return newState
       })

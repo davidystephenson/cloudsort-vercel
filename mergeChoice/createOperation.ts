@@ -1,13 +1,19 @@
-import yeast from 'yeast'
-import { ItemId, Operation } from './merge-choice-types'
+import getRandom from './getRandom'
+import { Item, ItemId, Operation, State } from './merge-choice-types'
 
-export default function createOperation (props?: {
+export default function createOperation <ListItem extends Item> (props: {
   input?: [ItemId[], ItemId[]]
   output?: ItemId[]
+  state: State<ListItem>
 }): Operation {
-  return {
-    mergeChoiceId: yeast(),
+  const seed = `${props.state.seed}${props.state.operationCount}`
+  const priority = getRandom({ seed })
+  const operation = {
     input: props?.input ?? [[], []],
-    output: props?.output ?? []
+    mergeChoiceId: props.state.operationCount,
+    output: props?.output ?? [],
+    priority
   }
+  props.state.operationCount += 1
+  return operation
 }

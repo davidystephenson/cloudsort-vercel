@@ -3,6 +3,7 @@ import serverAuth from '@/auth/server-auth'
 import prisma from '@/prisma/prisma'
 import apiError from '@/api/api-error'
 import { NextResponse } from 'next/server'
+import guardDeleteList from '@/list/guard-delete-list'
 
 export async function POST (req: Request): Promise<Response> {
   const authSession = await serverAuth()
@@ -22,7 +23,8 @@ export async function POST (req: Request): Promise<Response> {
   const list = await prisma.list.create({
     data: {
       name: body.name,
-      userId: authSession.user.id
+      userId: authSession.user.id,
+      seed: String(Math.random())
     }
   })
   return NextResponse.json(list)
@@ -33,10 +35,11 @@ export async function DELETE (req: Request): Promise<Response> {
   if (authSession == null) {
     return respondAuthError()
   }
-  const body = await req.json()
+  const data: unknown = await req.json()
+  const body = guardDeleteList({ data })
   const list = await prisma.list.findFirst({
     where: {
-      id: body.id,
+      id: body.listId,
       userId: authSession.user.id
     }
   })
@@ -45,7 +48,7 @@ export async function DELETE (req: Request): Promise<Response> {
   }
   await prisma.list.delete({
     where: {
-      id: body.id
+      id: body.listId
     }
   })
   return NextResponse.json(list)

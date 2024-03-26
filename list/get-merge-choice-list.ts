@@ -27,9 +27,6 @@ export default async function getMergeChoiceList (props: {
       },
       movieReservations: true,
       choices: {
-        where: {
-          active: true
-        },
         include: {
           options: true
         }
@@ -58,6 +55,7 @@ export default async function getMergeChoiceList (props: {
       input: inputIds,
       mergeChoiceId: operation.mergeChoiceId,
       output: outputIds,
+      priority: operation.priority,
       worse: operation.worse
     }
     return stateOperation
@@ -92,10 +90,13 @@ export default async function getMergeChoiceList (props: {
     activeOperations,
     betterIds,
     betterOperations,
+    choiceCount: list.choiceCount,
     complete,
     history: [],
     items,
+    operationCount: list.operationCount,
     reserveIds,
+    seed: list.seed,
     worseOperations,
     worseIds
   }

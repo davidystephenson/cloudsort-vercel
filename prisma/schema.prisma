@@ -22,24 +22,28 @@ model User {
 
 model List {
   id                Int                @id @default(autoincrement())
+  choiceCount       Int                @default(0)
   choices           Choice[]
   name              String
+  movieReservations MovieReservation[]
+  operationCount    Int                @default(0)
   operations        Operation[]
   user              User               @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId            Int
-  movieReservations MovieReservation[]
+  seed              String
 }
 
 model Operation {
-  id           Int           @id @default(autoincrement())
-  active       Boolean
-  better       Boolean
-  list         List          @relation(fields: [listId], references: [id], onDelete: Cascade)
-  listId       Int
-  mergeChoiceId String
-  inputs       Input[]
-  outputMovies OutputMovie[]
-  worse        Boolean
+  id            Int           @id @default(autoincrement())
+  active        Boolean
+  better        Boolean
+  list          List          @relation(fields: [listId], references: [id], onDelete: Cascade)
+  listId        Int
+  mergeChoiceId Int
+  inputs        Input[]
+  outputMovies  OutputMovie[]
+  priority      Float
+  worse         Boolean
 }
 
 model Input {
@@ -83,16 +87,16 @@ model Movie {
 }
 
 model Choice {
-  id            Int        @id @default(autoincrement())
-  aIndex        Int
-  bIndex        Int
-  active        Boolean
-  listId        Int
-  list          List       @relation(fields: [listId], references: [id], onDelete: Cascade)
-  mergeChoiceId String
-  operationMergeChoiceId   String?
-  options Option[]
-  random        Boolean
+  id                     Int      @id @default(autoincrement())
+  aIndex                 Int
+  bIndex                 Int
+  active                 Boolean
+  listId                 Int
+  list                   List     @relation(fields: [listId], references: [id], onDelete: Cascade)
+  mergeChoiceId          Int
+  operationMergeChoiceId Int?
+  options                Option[]
+  random                 Boolean
 }
 
 model Option {

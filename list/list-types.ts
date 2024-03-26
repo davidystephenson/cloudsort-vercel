@@ -1,6 +1,10 @@
 import { List, Movie, Prisma } from '@prisma/client'
 import { State } from '../mergeChoice/merge-choice-types'
 
+export interface DeleteListBody {
+  listId: number
+}
+
 export interface ListsContextValue {
   create: (props: { name: string }) => Promise<List>
   delete: (props: { id: number }) => void

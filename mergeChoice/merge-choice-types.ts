@@ -1,6 +1,6 @@
-export type ItemId = string | number
+export type ItemId = number
 export interface Identity {
-  mergeChoiceId: string
+  mergeChoiceId: number
 }
 export interface Item {
   id: ItemId
@@ -10,34 +10,38 @@ export type Calculated<T> = T & { points: number }
 export interface Operation extends Identity {
   input: ItemId[][]
   output: ItemId[]
+  priority: number
 }
 export interface ChoiceData {
+  options: ItemId[]
+  operationMergeChoiceId?: number | null
   aIndex: number
   bIndex: number
-  operationMergeChoiceId?: string | null
-  options: ItemId[]
   random: boolean
 }
 export type Choice = ChoiceData & Identity
-export type OperationDictionary = Record<string, Operation>
-export interface State <ListItem extends Item> {
+export type OperationDictionary = Record<number, Operation>
+export interface State<ListItem extends Item> {
   activeIds: ItemId[]
   activeOperations: OperationDictionary
   betterIds: ItemId[]
   betterOperations: OperationDictionary
   choice?: Choice
+  choiceCount: number
   complete: boolean
   history: Array<HistoryEvent<ListItem>>
   items: Record<ItemId, ListItem>
+  operationCount: number
   reserveIds: ItemId[]
+  seed: string
   worseIds: ItemId[]
   worseOperations: OperationDictionary
 }
 
-export type PreviousState <ListItem extends Item> = Omit<State<ListItem>, 'history'> & {
+export type PreviousState<ListItem extends Item> = Omit<State<ListItem>, 'history'> & {
   history?: Array<HistoryEvent<ListItem>>
 }
-export interface HistoryEvent <ListItem extends Item> extends Identity {
+export interface HistoryEvent<ListItem extends Item> extends Identity {
   createdAt: number
   choice?: {
     aBetter: boolean
@@ -64,7 +68,10 @@ export interface CountRange {
   maximum: number
   minimum: number
 }
-export interface Population <ListItem extends Item> {
+export interface Population<ListItem extends Item> {
   state: State<ListItem>
   items: ListItem[]
+}
+export interface Prioritized {
+  priority: number
 }

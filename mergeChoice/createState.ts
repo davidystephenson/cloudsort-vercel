@@ -1,23 +1,27 @@
-import createChoice from './createChoice'
 import { Item, State } from './merge-choice-types'
 
 export default function createState <ListItem extends Item> (): State<ListItem> {
+  const seed = String(Math.random())
   return {
     activeIds: [],
     activeOperations: {},
-    choice: createChoice({
-      options: [],
+    betterIds: [],
+    betterOperations: {},
+    choice: {
       aIndex: 0,
       bIndex: 1,
+      mergeChoiceId: 0,
+      options: [],
       random: false
-    }),
-    history: [],
+    },
+    choiceCount: 0,
     complete: false,
-    betterIds: [],
-    worseIds: [],
-    betterOperations: {},
-    reserveIds: [],
+    history: [],
     items: {},
+    operationCount: 0,
+    reserveIds: [],
+    seed,
+    worseIds: [],
     worseOperations: {}
   }
 }

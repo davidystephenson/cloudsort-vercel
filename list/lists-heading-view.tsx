@@ -4,7 +4,7 @@ import ListsHeadingContentView from './lists-heading-content-view'
 
 export default function ListsHeadingView (): JSX.Element {
   return (
-    <HeadingView content={<ListsHeadingContentView />} label='Lists'>
+    <HeadingView content={<ListsHeadingContentView />} label='Lists' zIndex={4} position='relative'>
       <ListsHeadingCreateView />
     </HeadingView>
   )

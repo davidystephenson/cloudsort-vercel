@@ -1,22 +1,18 @@
-import yeast from 'yeast'
 import populate from './populate'
 import { Item, State, HistoryEvent } from './merge-choice-types'
-import getShuffled from './getShuffled'
 import setupChoice from './setupChoice'
 
 export default function importItems <ListItem extends Item> (props: {
   items: ListItem[]
-  slice?: number
   state: State<ListItem>
 }): State<ListItem> {
-  const shuffled = getShuffled(props.items)
-  const items = props.slice == null
-    ? shuffled
-    : shuffled.slice(0, props.slice)
+  if (props.state.choice?.random === true) {
+    throw new Error('You cannot import during a random choice')
+  }
   const { history, ...previousState } = props.state
   void history
   const population = populate({
-    items,
+    items: props.items,
     state: props.state
   })
   const calculated = population.items.map(item => {
@@ -30,7 +26,7 @@ export default function importItems <ListItem extends Item> (props: {
   })
   const historyEvent: HistoryEvent<ListItem> = {
     createdAt: Date.now(),
-    mergeChoiceId: yeast(),
+    mergeChoiceId: setupState.history.length,
     import: {
       items: calculated
     },

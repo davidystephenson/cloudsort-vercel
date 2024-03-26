@@ -1,8 +1,9 @@
-import { Movie } from '@prisma/client'
+import { Movie, Prisma } from '@prisma/client'
 import { RelatedList } from './list-types'
 import { State } from '../mergeChoice/merge-choice-types'
 import { PrismaTransaction } from '../prisma/prisma-types'
 import prisma from '@/prisma/prisma'
+import getNumberKeys from '@/get-number-keys/get-number-keys'
 
 export default async function saveStateToList (props: {
   list: RelatedList
@@ -10,7 +11,22 @@ export default async function saveStateToList (props: {
   tx?: PrismaTransaction
 }): Promise<void> {
   const db = props.tx ?? prisma
+
   const finalPromises: Array<Promise<unknown>> = []
+  const listChanges: Prisma.ListUpdateInput = {}
+  if (props.list.operationCount !== props.state.operationCount) {
+    listChanges.operationCount = props.state.operationCount
+  }
+  if (props.list.choiceCount !== props.state.choiceCount) {
+    listChanges.choiceCount = props.state.choiceCount
+  }
+  const listPromise = db.list.update({
+    where: {
+      id: props.list.id
+    },
+    data: listChanges
+  })
+  finalPromises.push(listPromise)
   const oldChoices = props.list.choices.filter((choice) => choice.mergeChoiceId !== props.state.choice?.mergeChoiceId)
   if (oldChoices.length > 0) {
     const oldChoiceIds = oldChoices.map((choice) => choice.id)
@@ -48,10 +64,16 @@ export default async function saveStateToList (props: {
       }
     })
     finalPromises.push(newChoicePromise)
+    // const oldActiveChoice = props.list.choices.find((choice) => choice.active)
+    // if (oldActiveChoice != null) {
+    //   const oldChoicePromise = db.choice.update({
+    //     where: {
+    //       id: props.list.choices[0].id
+    //     },
   }
-  const activeOperationIds = Object.keys(props.state.activeOperations)
-  const betterOperationIds = Object.keys(props.state.betterOperations)
-  const worseOperationIds = Object.keys(props.state.worseOperations)
+  const activeOperationIds = getNumberKeys({ object: props.state.activeOperations })
+  const betterOperationIds = getNumberKeys({ object: props.state.betterOperations })
+  const worseOperationIds = getNumberKeys({ object: props.state.worseOperations })
   const newStateOperationIds = [...activeOperationIds, ...betterOperationIds, ...worseOperationIds]
   const oldOperations = props.list.operations.filter((operation) => {
     const old = !newStateOperationIds.includes(operation.mergeChoiceId)
@@ -87,6 +109,7 @@ export default async function saveStateToList (props: {
         active,
         better,
         listId: props.list.id,
+        priority: newOperation.priority,
         mergeChoiceId: id,
         worse
       }

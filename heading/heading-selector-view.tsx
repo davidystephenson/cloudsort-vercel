@@ -18,7 +18,7 @@ export default function HeadingSelectorView (props: {
       <ButtonGroup isAttached>
         <ThemeIconButtonView
           aria-label='Close'
-          colorScheme='red'
+          colorScheme='purple'
           icon={<MdClose />}
           onClick={handleClose}
         />

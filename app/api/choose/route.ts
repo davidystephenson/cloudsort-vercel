@@ -9,43 +9,38 @@ import chooseOption from '@/mergeChoice/chooseOption'
 import { ApiError } from 'next/dist/server/api-utils'
 import apiError from '@/api/api-error'
 
-async function sleep (ms: number): Promise<void> {
-  return await new Promise((resolve) => {
-    setTimeout(resolve, ms)
-  })
-}
+// async function sleep (ms: number): Promise<void> {
+//   return await new Promise((resolve) => {
+//     setTimeout(resolve, ms)
+//   })
+// }
 
 export async function POST (req: Request): Promise<Response> {
-  console.log('begin choose')
   const authSession = await serverAuth()
   if (authSession == null) {
     return respondAuthError()
   }
   const json = await req.json()
   const body = guardChooseMovie({ data: json })
-  await sleep(10000)
   try {
     await prisma.$transaction(async (transaction) => {
-      const mergeChoiceList = await getMergeChoiceList({ listId: body.listId, userId: authSession.user.id })
-      console.log('choice', mergeChoiceList.state.choice)
-      console.log('options', mergeChoiceList.state.choice?.options)
-      console.log('body.movieId', body.movieId)
-      const optioned = mergeChoiceList.state.choice?.options.includes(body.movieId)
-      if (optioned !== true) {
-        throw new ApiError(422, 'There is no option')
-      }
+      const mergeChoiceList = await getMergeChoiceList({
+        listId: body.listId,
+        userId: authSession.user.id
+      })
       const newState = chooseOption({
         betterIndex: body.betterIndex,
         state: mergeChoiceList.state
       })
-      newState.choice = body.choice
       await saveStateToList({
         list: mergeChoiceList.list,
         state: newState,
         tx: transaction
       })
     }, {
-      isolationLevel: 'Serializable'
+      isolationLevel: 'Serializable',
+      maxWait: 5000, // default: 200
+      timeout: 1000000 // default: 5000
     })
     return NextResponse.json({ ok: true })
   } catch (error) {

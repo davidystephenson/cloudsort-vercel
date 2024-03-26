@@ -25,7 +25,7 @@ export default function CreateListFormView (): JSX.Element {
   }
 
   return (
-    <RequestFormView send={send} style={{ zIndex: 3 }}>
+    <RequestFormView send={send}>
       <CreateListNameView />
     </RequestFormView>
   )

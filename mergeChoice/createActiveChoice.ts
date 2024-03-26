@@ -1,15 +1,15 @@
 import createChoice from './createChoice'
 import getChoiceOperation from './getChoiceOperation'
 import getOperation from './getOperation'
-import getRandom from './getRandom'
-import { Choice, ChoiceData, OperationDictionary } from './merge-choice-types'
+import getRandomRange from './getRandomRange'
+import { Choice, ChoiceData, Item, State } from './merge-choice-types'
 
-export default function createActiveChoice (props: {
-  activeOperations: OperationDictionary
+export default function createActiveChoice <ListItem extends Item> (props: {
+  state: State<ListItem>
 }): Choice {
-  const choiceOperation = getChoiceOperation({ operations: props.activeOperations })
+  const choiceOperation = getChoiceOperation({ operations: props.state.activeOperations })
   const currentOperation = getOperation({
-    operations: props.activeOperations,
+    operations: props.state.activeOperations,
     id: choiceOperation.mergeChoiceId
   })
   const firstOption = currentOperation.input[0][0]
@@ -20,7 +20,8 @@ export default function createActiveChoice (props: {
   if (secondOption == null) {
     throw new Error('There is no second option.')
   }
-  const aIndex = getRandom([0, 1])
+  const seed = `${props.state.seed}${props.state.choiceCount}`
+  const aIndex = getRandomRange({ seed, maximum: 2 })
   const bIndex = 1 - aIndex
   const newChoiceData: ChoiceData = {
     options: [firstOption, secondOption],
@@ -29,6 +30,9 @@ export default function createActiveChoice (props: {
     bIndex,
     random: false
   }
-  const newChoice = createChoice(newChoiceData)
+  const newChoice = createChoice({
+    choice: newChoiceData,
+    state: props.state
+  })
   return newChoice
 }
