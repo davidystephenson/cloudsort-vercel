@@ -3,6 +3,7 @@ import ThemeLinkableView from '../theme/theme-linkable-view'
 import DeleteIconButtonView from '../delete-button/delete-icon-button-view'
 import ThemeTdView from '../theme/theme-td-view'
 import { HStack, Text } from '@chakra-ui/react'
+import MovieLabelView from './movie-label-view'
 
 export default function MovieCellsConsumer (): JSX.Element {
   const movie = useMovie()
@@ -12,8 +13,8 @@ export default function MovieCellsConsumer (): JSX.Element {
   return (
     <>
       <ThemeTdView w='100%'>
-        <ThemeLinkableView href={movie.calculated.url} isExternal>
-          {movie.calculated.name}
+        <ThemeLinkableView href={movie.imdbUrl} isExternal>
+          <MovieLabelView />
         </ThemeLinkableView>
       </ThemeTdView>
       <ThemeTdView>

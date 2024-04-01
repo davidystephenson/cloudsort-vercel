@@ -1,32 +1,28 @@
-import { useHotkeys } from 'react-hotkeys-hook'
 import { useList } from '../list/list-context'
-import { ItemId } from '../mergeChoice/merge-choice-types'
-import RequestButtonView from '../request/request-button-view'
+import { MovieProvider } from '@/movie/movie-context'
+import { OptionProvider } from './option-context'
+import OptionConsumer from './option-consumer'
 
 export default function OptionView (props: {
-  letter: string
+  chooseLetter: string
   index: number
-  id: ItemId
+  id: number
+  openLetter: string
 }): JSX.Element {
   const list = useList()
-  const movie = list.state.items[props.id]
+  const movie = list.movies.find(movie => movie.id === props.id)
   if (movie == null) {
-    // throw new Error('There is no movie')
-    return <>THere is no movie</>
+    return <>There is no movie</>
   }
-  async function choose (): Promise<void> {
-    await list.choose({ betterIndex: props.index, movieId: movie.id })
-  }
-  useHotkeys(props.letter, () => {
-    void choose()
-  })
   return (
-    <RequestButtonView send={choose}>
-      [{props.letter}]
-      {' '}
-      {movie.name}
-      {' '}
-      ({movie.year})
-    </RequestButtonView>
+    <MovieProvider calculated={movie}>
+      <OptionProvider
+        chooseLetter={props.chooseLetter}
+        index={props.index}
+        openLetter={props.openLetter}
+      >
+        <OptionConsumer />
+      </OptionProvider>
+    </MovieProvider>
   )
 }

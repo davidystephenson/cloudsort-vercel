@@ -1,16 +1,19 @@
 'use client'
 
-import { ReactNode } from 'react'
+import { ForwardedRef, ReactNode, forwardRef } from 'react'
 import { RequestProvider } from './request-context'
 import { ButtonProps } from '@chakra-ui/react'
 import RequestButtonConsumer from './request-button-consumer'
 import { ActionProvider } from '../action/action-context'
 
-export default function RequestButtonView (props: {
-  children: ReactNode
-  endless?: boolean
-  send: () => Promise<void>
-} & ButtonProps): JSX.Element {
+function View (
+  props: {
+    children: ReactNode
+    endless?: boolean
+    send: () => Promise<void>
+  } & ButtonProps,
+  ref: ForwardedRef<HTMLButtonElement>
+): JSX.Element {
   const { endless, send, ...buttonProps } = props
   return (
     <ActionProvider>
@@ -18,8 +21,12 @@ export default function RequestButtonView (props: {
         endless={endless}
         send={send}
       >
-        <RequestButtonConsumer {...buttonProps} />
+        <RequestButtonConsumer ref={ref} {...buttonProps} />
       </RequestProvider>
     </ActionProvider>
   )
 }
+
+const RequestButtonView = forwardRef(View)
+
+export default RequestButtonView

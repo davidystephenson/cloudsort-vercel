@@ -307,10 +307,6 @@ export default async function saveStateToList (props: {
   })
   finalPromises.push(deleteReservePromise)
   const addedReserveIds = props.state.reserveIds.filter((id) => {
-    if (typeof id !== 'number') {
-      const message = `The id ${id} is not a number`
-      throw new Error(message)
-    }
     const existing = oldReserveIds.includes(id)
     return !existing
   })

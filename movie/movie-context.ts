@@ -16,9 +16,15 @@ export const {
       await deleteMovie({ listId: list.row.id, movieId: props.calculated.id })
       list.deleteMovie({ movieId: props.calculated.id })
     }
+    const imdbUrl = `https://www.imdb.com/title/${props.calculated.imdbId}`
+    function open (): void {
+      window.open(imdbUrl, '_blank')
+    }
     const value = {
+      calculated: props.calculated,
       delete: _delete,
-      calculated: props.calculated
+      imdbUrl,
+      open
     }
     return value
   }

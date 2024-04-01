@@ -1,5 +1,6 @@
 'use client'
 
+import { forwardRef, ForwardedRef } from 'react'
 import { useButtonContext } from '@/button/button-context'
 import { MdError } from 'react-icons/md'
 import ThemeButtonView from '../theme/theme-button-view'
@@ -15,7 +16,7 @@ import {
 } from '@chakra-ui/react'
 import ThemeIconButtonView from '../theme/theme-icon-button-view'
 
-export default function ButtonConsumer (props: ButtonProps): JSX.Element {
+function Consumer (props: ButtonProps, ref: ForwardedRef<HTMLButtonElement>): JSX.Element {
   const button = useButtonContext()
   if (button.errorMessage == null) {
     return (
@@ -23,6 +24,7 @@ export default function ButtonConsumer (props: ButtonProps): JSX.Element {
         isLoading={button.loading}
         onClick={button.handleClick}
         type={button.type}
+        ref={ref}
         {...props}
       />
     )
@@ -35,6 +37,7 @@ export default function ButtonConsumer (props: ButtonProps): JSX.Element {
         onClick={button.handleClick}
         isLoading={button.loading}
         type={button.type}
+        ref={ref}
         {...props}
         variant='outline'
         colorScheme='red'
@@ -59,3 +62,7 @@ export default function ButtonConsumer (props: ButtonProps): JSX.Element {
     </ButtonGroup>
   )
 }
+
+const ButtonConsumer = forwardRef(Consumer)
+
+export default ButtonConsumer
