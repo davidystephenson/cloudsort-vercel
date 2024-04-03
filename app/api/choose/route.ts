@@ -9,11 +9,11 @@ import chooseOption from '@/mergeChoice/chooseOption'
 import { ApiError } from 'next/dist/server/api-utils'
 import apiError from '@/api/api-error'
 
-// async function sleep (ms: number): Promise<void> {
-//   return await new Promise((resolve) => {
-//     setTimeout(resolve, ms)
-//   })
-// }
+async function sleep (ms: number): Promise<void> {
+  return await new Promise((resolve) => {
+    setTimeout(resolve, ms)
+  })
+}
 
 export async function POST (req: Request): Promise<Response> {
   const authSession = await serverAuth()
@@ -23,6 +23,7 @@ export async function POST (req: Request): Promise<Response> {
   const json = await req.json()
   const body = guardChooseMovie({ data: json })
   try {
+    await sleep(10000)
     await prisma.$transaction(async (transaction) => {
       const mergeChoiceList = await getMergeChoiceList({
         listId: body.listId,

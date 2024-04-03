@@ -17,6 +17,8 @@ import postMovies from '../movie/post-movies'
 import contextCreator from 'context-creator'
 import createState from '../mergeChoice/createState'
 import shuffleSlice from '@/shuffleSlice/shuffleSlice'
+import { OkResponse } from '@/api/api-types'
+import useQueue from '@/useQueue/useQueue'
 
 export const {
   useContext: useList,
@@ -28,6 +30,7 @@ export const {
     state?: State<Movie>
   }) => {
     const lists = useOptionalLists()
+    const queue = useQueue()
     const getDefaultState = useCallback(() => {
       return props.state ?? createState<Movie>()
     }, [props.state])
@@ -107,18 +110,18 @@ export const {
       betterIndex: number
       movieId: number
     }): Promise<void> {
+      async function request (): Promise<OkResponse> {
+        const body = {
+          betterIndex: chooseProps.betterIndex,
+          listId: props.row.id
+        }
+        return await postChooseMovie({ body })
+      }
+      void queue.add({ action: request, label: 'choose' })
       await updateState(async current => {
         const newState = chooseOption({
           betterIndex: chooseProps.betterIndex, state: current
         })
-        async function request (): Promise<void> {
-          const body = {
-            betterIndex: chooseProps.betterIndex,
-            listId: props.row.id
-          }
-          await postChooseMovie({ body })
-        }
-        await request()
 
         return newState
       })
