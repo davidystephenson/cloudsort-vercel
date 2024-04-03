@@ -5,9 +5,9 @@ import prisma from '@/prisma/prisma'
 import { DeleteMovieBody } from '@/movie/movie-types'
 import { NextResponse } from 'next/server'
 import importItems from '@/mergeChoice/importItems'
-import getMergeChoiceList from '@/list/get-merge-choice-list'
 import guardPostMovie from '@/movie/guard-post-movie'
 import saveStateToList from '@/list/save-state-to-list'
+import guardUserMergechoiceList from '@/list/guard-user-mergechoice-list'
 
 export async function POST (req: Request): Promise<Response> {
   const authSession = await serverAuth()
@@ -25,7 +25,7 @@ export async function POST (req: Request): Promise<Response> {
   if (exists != null) {
     return apiError({ message: 'This movie already exists', status: 409 })
   }
-  const mergeChoiceList = await getMergeChoiceList({ listId, userId: authSession.user.id })
+  const mergeChoiceList = await guardUserMergechoiceList({ listId, userId: authSession.user.id })
   const movie = await prisma.$transaction(async (transaction) => {
     const movie = await transaction.movie.create({
       data: movieData

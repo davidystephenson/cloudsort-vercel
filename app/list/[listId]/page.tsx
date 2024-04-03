@@ -1,4 +1,4 @@
-import getMergeChoiceList from '@/list/get-merge-choice-list'
+import guardMergechoiceList from '@/list/guard-mergechoice-list'
 import ListView from '@/list/list-view'
 import { Alert, AlertIcon } from '@chakra-ui/react'
 import { ApiError } from 'next/dist/server/api-utils'
@@ -10,7 +10,7 @@ export default async function Lists (props: {
 }): Promise<JSX.Element> {
   const listId = Number(props.params.listId)
   try {
-    const mergeChoiceList = await getMergeChoiceList({ listId })
+    const mergeChoiceList = await guardMergechoiceList({ listId })
     return (
       <>
         <ListView state={mergeChoiceList.state} row={mergeChoiceList.list} />

@@ -3,9 +3,9 @@ import serverAuth from '@/auth/server-auth'
 import prisma from '@/prisma/prisma'
 import { NextResponse } from 'next/server'
 import importItems from '@/mergeChoice/importItems'
-import getMergeChoiceList from '@/list/get-merge-choice-list'
 import saveStateToList from '@/list/save-state-to-list'
 import guardPostMovies from '@/movie/guard-post-movies'
+import guardUserMergechoiceList from '@/list/guard-user-mergechoice-list'
 
 export async function POST (req: Request): Promise<Response> {
   const authSession = await serverAuth()
@@ -32,7 +32,7 @@ export async function POST (req: Request): Promise<Response> {
     .filter((movie) => newMovieImdbIds.includes(movie.imdbId))
   console.log('begin getMergeChoiceList')
   console.time('getMergeChoiceList')
-  const mergeChoiceList = await getMergeChoiceList({
+  const mergeChoiceList = await guardUserMergechoiceList({
     listId: body.listId,
     userId: authSession.user.id
   })

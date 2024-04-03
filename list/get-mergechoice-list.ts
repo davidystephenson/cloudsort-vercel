@@ -1,51 +1,20 @@
 import { Movie } from '@prisma/client'
-import { ApiError } from 'next/dist/server/api-utils'
 import arrayToDictionary from '../mergeChoice/arrayToDictionary'
 import getItemIdsFromOperations from '../mergeChoice/getItemIdsFromOperations'
 import { State, ItemId } from '../mergeChoice/merge-choice-types'
 import prisma from '@/prisma/prisma'
-import { MergechoiceList } from './list-types'
+import { MergechoiceList, RelatedList } from './list-types'
 
-export default async function getMergeChoiceList (props: {
-  listId: number
-  userId?: number
+export default async function getMergechoiceList (props: {
+  list: RelatedList
 }): Promise<MergechoiceList> {
-  const list = await prisma.list.findFirst({
-    where: {
-      id: props.listId
-    },
-    include: {
-      operations: {
-        include: {
-          inputs: {
-            include: {
-              inputMovies: true
-            }
-          },
-          outputMovies: true
-        }
-      },
-      movieReservations: true,
-      choices: {
-        include: {
-          options: true
-        }
-      }
-    }
-  })
-  if (list == null) {
-    throw new ApiError(404, 'This list does not exist')
-  }
-  if (props.userId != null && list.userId !== props.userId) {
-    throw new ApiError(403, 'This is not your list')
-  }
-  const activeChoices = list.choices.filter((choice) => choice.active)
+  const activeChoices = props.list.choices.filter((choice) => choice.active)
   if (activeChoices.length > 1) {
     throw new Error('There is more than one active choice')
   }
   const activeChoice = activeChoices[0]
 
-  const stateOperations = list.operations.map((operation) => {
+  const stateOperations = props.list.operations.map((operation) => {
     const inputIds = operation.inputs.map((input) => input.inputMovies.map((inputMovie) => inputMovie.movieId))
     const outputIds = operation.outputMovies.map((outputMovie) => outputMovie.movieId)
     const stateOperation = {
@@ -83,20 +52,20 @@ export default async function getMergeChoiceList (props: {
       [movie.id]: movie
     }
   }, {})
-  const reserveIds = list.movieReservations.map((reservation) => reservation.movieId)
+  const reserveIds = props.list.movieReservations.map((reservation) => reservation.movieId)
   const complete = activeChoice == null && Object.keys(items).length > 0
   const state: State<Movie> = {
     activeIds,
     activeOperations,
     betterIds,
     betterOperations,
-    choiceCount: list.choiceCount,
+    choiceCount: props.list.choiceCount,
     complete,
     history: [],
     items,
-    operationCount: list.operationCount,
+    operationCount: props.list.operationCount,
     reserveIds,
-    seed: list.seed,
+    seed: props.list.seed,
     worseOperations,
     worseIds
   }
@@ -110,7 +79,7 @@ export default async function getMergeChoiceList (props: {
     state.choice = choice
   }
   return {
-    list,
+    list: props.list,
     state
   }
 }
