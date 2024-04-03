@@ -10,10 +10,10 @@ import { State } from '@/mergeChoice/merge-choice-types'
 import { Movie } from '@prisma/client'
 import guardUserMergechoiceList from './guard-user-mergechoice-list'
 
-export default async function handleListUpdate <Body extends ListWhere> (props: {
+export default async function handleListUpdate <Body extends ListWhere, Result> (props: {
   guard: (props: { data: unknown }) => Body
   request: Request
-  respond: (props?: { body?: Body, list?: RelatedList, state?: State<Movie> }) => Response
+  respond: (props?: { body?: Body, list?: RelatedList, state?: State<Movie> }) => Result
   update: (props: { body: Body, state: State<Movie> }) => State<Movie>
 }): Promise<Response> {
   const authSession = await serverAuth()
