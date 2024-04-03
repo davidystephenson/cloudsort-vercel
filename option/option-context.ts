@@ -15,9 +15,9 @@ export const {
   }) => {
     const movie = useMovie()
     const list = useList()
-    async function choose (): Promise<void> {
+    function choose (): void {
       console.log('choosing...')
-      await list.choose({ betterIndex: props.index, movieId: movie.calculated.id })
+      list.choose({ betterIndex: props.index, movieId: movie.calculated.id })
     }
     useHotkeys(props.openLetter, () => {
       void movie.open()

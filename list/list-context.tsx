@@ -48,17 +48,28 @@ export const {
       rows: movies,
       filter: filterMovie
     })
-    async function updateState (callback: (current: State<Movie>) => Promise<State<Movie>>): Promise<void> {
-      const newState = await callback(state)
+    function updateState (callback: (current: State<Movie>) => State<Movie>): void {
+      const newState = callback(state)
       const sortedMovies = getSortedMovies({ state: newState })
       setMovies(sortedMovies)
       setState(newState)
+    }
+    function queueState (props: {
+      action: () => Promise<unknown>
+      label: string
+      callback: (current: State<Movie>) => State<Movie>
+    }): void {
+      void queue.add({
+        action: props.action,
+        label: props.label
+      })
+      updateState(props.callback)
     }
     function importMovies (props: {
       movies: Movie[]
       slice?: number
     }): void {
-      void updateState(async current => {
+      updateState(current => {
         const newState = importItems({
           items: props.movies,
           state: current
@@ -101,29 +112,45 @@ export const {
     function deleteMovie (props: {
       movieId: number
     }): void {
-      void updateState(async current => {
+      updateState(current => {
         const newState = removeItem({ id: props.movieId, state: current })
         return newState
       })
     }
-    async function choose (chooseProps: {
+    function choose (chooseProps: {
       betterIndex: number
       movieId: number
-    }): Promise<void> {
-      async function request (): Promise<OkResponse> {
+    }): void {
+      async function action (): Promise<OkResponse> {
         const body = {
           betterIndex: chooseProps.betterIndex,
           listId: props.row.id
         }
         return await postChooseMovie({ body })
       }
-      void queue.add({ action: request, label: 'choose' })
-      await updateState(async current => {
+      function update (current: State<Movie>): State<Movie> {
         const newState = chooseOption({
-          betterIndex: chooseProps.betterIndex, state: current
+          betterIndex: chooseProps.betterIndex,
+          state: current
         })
-
         return newState
+      }
+      const betterId = state.choice?.options[chooseProps.betterIndex]
+      if (betterId == null) {
+        throw new Error('There is no betterId')
+      }
+      const worseIndex = 1 - chooseProps.betterIndex
+      const worseId = state.choice?.options[worseIndex]
+      if (worseId == null) {
+        throw new Error('There is no worseId')
+      }
+      const betterItem = state.items[betterId]
+      const worseItem = state.items[worseId]
+      const label = `${betterItem.name} > ${worseItem.name}`
+      queueState({
+        action,
+        label,
+        callback: update
       })
     }
     const value = {
@@ -135,6 +162,7 @@ export const {
       filter,
       filtered,
       movies,
+      queue,
       row: props.row,
       state
     }

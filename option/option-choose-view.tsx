@@ -10,8 +10,11 @@ export default function OptionChooseView (): JSX.Element {
   useHotkeys(option.chooseLetter, () => {
     ref.current?.click()
   })
+  async function send (): Promise<void> {
+    option.choose()
+  }
   return (
-    <RequestButtonView ref={ref} send={option.choose}>
+    <RequestButtonView ref={ref} send={send}>
       [{option.chooseLetter}]
       {' '}
       <MovieLabelView />

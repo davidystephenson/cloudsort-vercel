@@ -8,7 +8,6 @@ export const {
   name: 'heading',
   useValue: (props: {
     content?: JSX.Element
-    label: string
   }) => {
     const [selection, setSelection] = useState<string>()
     function deselect (): void {
@@ -19,7 +18,6 @@ export const {
     }
     return {
       deselect,
-      label: props.label,
       select,
       selection,
       content: props.content

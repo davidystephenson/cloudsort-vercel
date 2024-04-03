@@ -6,11 +6,10 @@ import { TableProps } from '@chakra-ui/react'
 export default function HeadingView (props: {
   children?: ReactNode
   content?: JSX.Element
-  label: string
 } & Omit<TableProps, 'content'>): JSX.Element {
-  const { content, label, children, ...restProps } = props
+  const { content, children, ...restProps } = props
   return (
-    <HeadingProvider content={props.content} label={props.label}>
+    <HeadingProvider content={props.content}>
       <HeadingConsumer {...restProps}>
         {props.children}
       </HeadingConsumer>

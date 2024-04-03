@@ -1,14 +1,17 @@
 import { useCallback, useRef, useState } from 'react'
 import { TaskQueue, TaskRunner, useTaskQueue } from 'rondonjon-react-task-queue'
-import { Queue, Task } from './useQueueTypes'
+import { Message, Queue, Task } from './useQueueTypes'
 
 export default function useQueue<Result> (): Queue<Result> {
-  const [log, setLog] = useState<string[]>([])
+  const [log, setLog] = useState<Array<Message<Result>>>([])
   const [history, setHistory] = useState<string[]>([])
 
   const runner: TaskRunner<Task<Result>, Result> = useCallback(async (task) => {
     setLog((log) => {
-      const message = `Starting: #${task.label}`
+      const message = {
+        label: task.label,
+        status: 'start'
+      } as const
       return [...log, message]
     })
 
@@ -22,23 +25,33 @@ export default function useQueue<Result> (): Queue<Result> {
   const add = useCallback(
     async (task: Task<Result>) => {
       setLog((log) => {
-        const message = `Adding: ${task.label}`
+        const message = {
+          label: task.label,
+          status: 'add'
+        } as const
         return [...log, message]
       })
       setHistory((history) => [...history, task.label])
 
       try {
         const result = await taskQueue.add(task)
-        const string = String(result)
         setLog((log) => {
-          const message = `Finished: ${task.label} (result: ${string})`
+          const message = {
+            label: task.label,
+            result,
+            status: 'complete'
+          } as const
           return [...log, message]
         })
         return result
       } catch (error) {
         setLog((log) => {
           if (error instanceof Error) {
-            const message = `Failed: ${task.label} (${error.message})`
+            const message = {
+              error,
+              label: task.label,
+              status: 'error'
+            } as const
             return [...log, message]
           }
           throw error

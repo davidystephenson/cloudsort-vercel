@@ -1,4 +1,4 @@
-import { Tbody, Heading, HStack, TableProps } from '@chakra-ui/react'
+import { Tbody, HStack, TableProps } from '@chakra-ui/react'
 import ThemeTableView from '../theme/theme-table-view'
 import { useHeading } from './heading-context'
 import { ReactNode } from 'react'
@@ -14,7 +14,6 @@ export default function HeadingConsumer (props: {
       <Tbody>
         <HeadingContentView>
           <HStack justifyContent='space-between'>
-            <Heading size='lg'>{heading.label}</Heading>
             <HStack>{children}</HStack>
           </HStack>
         </HeadingContentView>
