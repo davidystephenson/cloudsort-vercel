@@ -1,6 +1,6 @@
 import { ChooseMovieBody } from './movie-types'
 import axios, { AxiosResponse } from 'axios'
-import { OkResponse } from '../api/api-types'
+import { OkResponse } from '../respond/respond-types'
 
 export default async function postChooseMovie (props: {
   body: ChooseMovieBody
@@ -9,6 +9,6 @@ export default async function postChooseMovie (props: {
   OkResponse,
   AxiosResponse<OkResponse>,
   ChooseMovieBody
-  >('/api/choose', props.body)
+  >('/api/movie/choose', props.body)
   return response.data
 }

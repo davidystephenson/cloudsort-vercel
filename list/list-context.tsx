@@ -3,7 +3,6 @@ import { Movie } from '@prisma/client'
 import { useOptionalLists } from './lists-context'
 import { MovieData, PostMovieBody, PostMoviesBody } from '../movie/movie-types'
 import postMovie from '../movie/post-movie'
-import deleteList from './delete-list'
 import { useCallback, useEffect, useState } from 'react'
 import useFilter from '../filter/use-filter'
 import filterMovie from '../movie/filterMovie'
@@ -17,8 +16,9 @@ import postMovies from '../movie/post-movies'
 import contextCreator from 'context-creator'
 import createState from '../mergeChoice/createState'
 import shuffleSlice from '@/shuffleSlice/shuffleSlice'
-import { OkResponse } from '@/api/api-types'
 import useQueue from '@/useQueue/useQueue'
+import { OkResponse } from '@/respond/respond-types'
+import postDeleteMovie from '@/movie/post-delete-movie'
 
 export const {
   useContext: useList,
@@ -48,8 +48,13 @@ export const {
       rows: movies,
       filter: filterMovie
     })
-    function updateState (callback: (current: State<Movie>) => State<Movie>): void {
-      const newState = callback(state)
+    async function _delete (): Promise<void> {
+      await lists?.delete({ id: props.row.id })
+    }
+    function updateState (props: {
+      update: (props: { state: State<Movie> }) => State<Movie>
+    }): void {
+      const newState = props.update({ state })
       const sortedMovies = getSortedMovies({ state: newState })
       setMovies(sortedMovies)
       setState(newState)
@@ -57,25 +62,26 @@ export const {
     function queueState (props: {
       action: () => Promise<unknown>
       label: string
-      callback: (current: State<Movie>) => State<Movie>
+      update: (props: { state: State<Movie> }) => State<Movie>
     }): void {
       void queue.add({
         action: props.action,
         label: props.label
       })
-      updateState(props.callback)
+      updateState({ update: props.update })
     }
     function importMovies (props: {
       movies: Movie[]
       slice?: number
     }): void {
-      updateState(current => {
+      function update (updateProps: { state: State<Movie> }): State<Movie> {
         const newState = importItems({
           items: props.movies,
-          state: current
+          state: updateProps.state
         })
         return newState
-      })
+      }
+      updateState({ update })
     }
     async function createMovie (
       createMovieProps: MovieData
@@ -104,17 +110,29 @@ export const {
       importMovies({ movies: newMovies })
       return newMovies
     }
-    async function _delete (): Promise<void> {
-      const body = { listId: props.row.id }
-      await deleteList({ body })
-      await lists?.delete({ id: props.row.id })
-    }
-    function deleteMovie (props: {
+    function deleteMovie (deleteMovieProps: {
       movieId: number
     }): void {
-      updateState(current => {
-        const newState = removeItem({ id: props.movieId, state: current })
+      async function action (): Promise<OkResponse> {
+        const body = {
+          listId: props.row.id,
+          movieId: deleteMovieProps.movieId
+        }
+        return await postDeleteMovie({ body })
+      }
+      function update (updateProps: { state: State<Movie> }): State<Movie> {
+        const newState = removeItem({
+          id: deleteMovieProps.movieId,
+          state: updateProps.state
+        })
         return newState
+      }
+      const item = state.items[deleteMovieProps.movieId]
+      const label = `Delete ${item.name}`
+      queueState({
+        action,
+        label,
+        update
       })
     }
     function choose (chooseProps: {
@@ -128,10 +146,10 @@ export const {
         }
         return await postChooseMovie({ body })
       }
-      function update (current: State<Movie>): State<Movie> {
+      function update (props: { state: State<Movie> }): State<Movie> {
         const newState = chooseOption({
           betterIndex: chooseProps.betterIndex,
-          state: current
+          state: props.state
         })
         return newState
       }
@@ -150,7 +168,7 @@ export const {
       queueState({
         action,
         label,
-        callback: update
+        update
       })
     }
     const value = {

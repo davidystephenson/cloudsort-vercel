@@ -1,9 +1,9 @@
 import respondAuthError from '@/auth/respond-auth-error'
 import serverAuth from '@/auth/server-auth'
 import prisma from '@/prisma/prisma'
-import apiError from '@/api/api-error'
 import { NextResponse } from 'next/server'
 import guardDeleteList from '@/list/guard-delete-list'
+import respondError from '@/respond/respond-error'
 
 export async function POST (req: Request): Promise<Response> {
   const authSession = await serverAuth()
@@ -18,7 +18,7 @@ export async function POST (req: Request): Promise<Response> {
     }
   })
   if (exists != null) {
-    return apiError({ message: 'This list already exists', status: 409 })
+    return respondError({ message: 'This list already exists', status: 409 })
   }
   const list = await prisma.list.create({
     data: {
@@ -44,7 +44,7 @@ export async function DELETE (req: Request): Promise<Response> {
     }
   })
   if (list == null) {
-    return apiError({ message: 'This list does not exist', status: 404 })
+    return respondError({ message: 'This list does not exist', status: 404 })
   }
   await prisma.list.delete({
     where: {

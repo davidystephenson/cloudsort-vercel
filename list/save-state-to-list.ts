@@ -20,17 +20,23 @@ export default async function saveStateToList (props: {
   if (props.list.choiceCount !== props.state.choiceCount) {
     listChanges.choiceCount = props.state.choiceCount
   }
-  const listPromise = db.list.update({
+  console.log('props.list', props.list)
+  const lists = await db.list.findMany({
+    where: {
+      id: props.list.id
+    }
+  })
+  console.log('lists', lists)
+  await db.list.update({
     where: {
       id: props.list.id
     },
     data: listChanges
   })
-  finalPromises.push(listPromise)
   const oldChoices = props.list.choices.filter((choice) => choice.mergeChoiceId !== props.state.choice?.mergeChoiceId)
   if (oldChoices.length > 0) {
     const oldChoiceIds = oldChoices.map((choice) => choice.id)
-    const deactivatePromise = db.choice.updateMany({
+    await db.choice.updateMany({
       where: {
         id: {
           in: oldChoiceIds
@@ -40,10 +46,10 @@ export default async function saveStateToList (props: {
         active: false
       }
     })
-    finalPromises.push(deactivatePromise)
   }
-  if (props.state.choice != null) {
-    const newChoicePromise = db.choice.create({
+  const activeChoice = props.list.choices.find((choice) => choice.mergeChoiceId === props.state.choice?.mergeChoiceId)
+  if (props.state.choice != null && props.state.choice.mergeChoiceId !== activeChoice?.mergeChoiceId) {
+    await db.choice.create({
       data: {
         ...props.state.choice,
         active: true,
@@ -63,13 +69,6 @@ export default async function saveStateToList (props: {
         options: true
       }
     })
-    finalPromises.push(newChoicePromise)
-    // const oldActiveChoice = props.list.choices.find((choice) => choice.active)
-    // if (oldActiveChoice != null) {
-    //   const oldChoicePromise = db.choice.update({
-    //     where: {
-    //       id: props.list.choices[0].id
-    //     },
   }
   const activeOperationIds = getNumberKeys({ object: props.state.activeOperations })
   const betterOperationIds = getNumberKeys({ object: props.state.betterOperations })
@@ -80,14 +79,13 @@ export default async function saveStateToList (props: {
     return old
   })
   const oldOperationIds = oldOperations.map((operation) => operation.id)
-  const deleteOperationPromise = db.operation.deleteMany({
+  await db.operation.deleteMany({
     where: {
       id: {
         in: oldOperationIds
       }
     }
   })
-  finalPromises.push(deleteOperationPromise)
   const newOperationIds = newStateOperationIds.filter((id) => {
     const old = props.list.operations.some((operation) => {
       const match = operation.mergeChoiceId === id
@@ -293,7 +291,10 @@ export default async function saveStateToList (props: {
     }
   })
   finalPromises.push(...updateOperationPromises)
-  const oldReserveIds = props.list.movieReservations.map((reservation) => reservation.movieId)
+  const oldReserveIds = props
+    .list
+    .movieReservations
+    .map((reservation) => reservation.movieId)
   const removedReserveIds = oldReserveIds.filter((id) => {
     const removed = !props.state.reserveIds.includes(id)
     return removed

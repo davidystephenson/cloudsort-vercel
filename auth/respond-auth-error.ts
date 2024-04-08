@@ -1,7 +1,7 @@
-import apiError from '../api/api-error'
+import respondError from '../respond/respond-error'
 
 export default function respondAuthError (): Response {
-  return apiError({
+  return respondError({
     message: 'There is no session',
     status: 401
   })
