@@ -1,6 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -10,80 +7,6 @@ datasource db {
   url               = env("POSTGRES_PRISMA_URL") // uses connection pooling
   directUrl         = env("POSTGRES_URL_NON_POOLING") // uses a direct connection
   shadowDatabaseUrl = env("POSTGRES_URL_NON_POOLING") // used for migrations
-}
-
-model User {
-  id       Int     @id @default(autoincrement())
-  email    String  @unique
-  password String
-  shade    String?
-  lists    List[]
-}
-
-model List {
-  id                Int                @id @default(autoincrement())
-  choiceCount       Int                @default(0)
-  choices           Choice[]
-  name              String
-  movieReservations MovieReservation[]
-  operationCount    Int                @default(0)
-  operations        Operation[]
-  user              User               @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId            Int
-  seed              String
-}
-
-model Operation {
-  id            Int           @id @default(autoincrement())
-  active        Boolean
-  better        Boolean
-  list          List          @relation(fields: [listId], references: [id], onDelete: Cascade)
-  listId        Int
-  mergeChoiceId Int
-  inputs        Input[]
-  outputMovies  OutputMovie[]
-  priority      Float
-  worse         Boolean
-}
-
-model Input {
-  id          Int          @id @default(autoincrement())
-  index       Int
-  operationId Int
-  operation   Operation    @relation(fields: [operationId], references: [id], onDelete: Cascade)
-  inputMovies InputMovie[]
-}
-
-model InputMovie {
-  id      Int   @id @default(autoincrement())
-  index   Int
-  movieId Int
-  inputId Int
-  input   Input @relation(fields: [inputId], references: [id], onDelete: Cascade)
-  movie   Movie @relation(fields: [movieId], references: [id])
-}
-
-model OutputMovie {
-  id          Int       @id @default(autoincrement())
-  index       Int
-  movieId     Int
-  movie       Movie     @relation(fields: [movieId], references: [id])
-  operationId Int
-  operation   Operation @relation(fields: [operationId], references: [id], onDelete: Cascade)
-}
-
-model Movie {
-  id                Int                @id @default(autoincrement())
-  name              String
-  score             Int
-  imdbId            String
-  review            String?
-  url               String?
-  year              Int
-  inputMovies       InputMovie[]
-  outputMovies      OutputMovie[]
-  options           Option[]
-  movieReservations MovieReservation[]
 }
 
 model Choice {
@@ -99,19 +22,105 @@ model Choice {
   random                 Boolean
 }
 
+model Input {
+  id          Int          @id @default(autoincrement())
+  index       Int
+  operationId Int
+  operation   Operation    @relation(fields: [operationId], references: [id], onDelete: Cascade)
+  inputMovies InputMovie[]
+}
+
+model InputMovie {
+  id        Int       @id @default(autoincrement())
+  index     Int
+  movieId   Int
+  inputId   Int
+  input     Input     @relation(fields: [inputId], references: [id], onDelete: Cascade)
+  listMovie ListMovie @relation(fields: [movieId], references: [id])
+}
+
+model List {
+  id                Int                @id @default(autoincrement())
+  choiceCount       Int                @default(0)
+  choices           Choice[]
+  itemCount         Int                @default(0)
+  listMovies        ListMovie[]
+  movieReservations MovieReservation[]
+  name              String
+  operationCount    Int                @default(0)
+  operations        Operation[]
+  user              User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId            Int
+  seed              String
+}
+
+model ListMovie {
+  id                Int                @id @default(autoincrement())
+  inputMovies       InputMovie[]
+  listId            Int
+  list              List               @relation(fields: [listId], references: [id], onDelete: Cascade)
+  mergeChoiceId     Int
+  movieId           Int
+  movie             Movie              @relation(fields: [movieId], references: [id])
+  movieReservations MovieReservation[]
+  options           Option[]
+  outputMovies      OutputMovie[]
+}
+
+model Movie {
+  id         Int         @id @default(autoincrement())
+  imdbId     String
+  listMovies ListMovie[]
+  name       String
+  review     String?
+  score      Int
+  url        String?
+  year       Int
+}
+
+model Operation {
+  id            Int           @id @default(autoincrement())
+  active        Boolean
+  better        Boolean
+  list          List          @relation(fields: [listId], references: [id], onDelete: Cascade)
+  listId        Int
+  mergeChoiceId Int
+  inputs        Input[]
+  outputMovies  OutputMovie[]
+  priority      Float
+  worse         Boolean
+}
+
+model OutputMovie {
+  id          Int       @id @default(autoincrement())
+  index       Int
+  movieId     Int
+  listMovie   ListMovie @relation(fields: [movieId], references: [id])
+  operationId Int
+  operation   Operation @relation(fields: [operationId], references: [id], onDelete: Cascade)
+}
+
 model Option {
-  id       Int    @id @default(autoincrement())
-  index    Int
-  movieId  Int
-  choice   Choice @relation(fields: [choiceId], references: [id], onDelete: Cascade)
-  choiceId Int
-  movie    Movie  @relation(fields: [movieId], references: [id])
+  choice    Choice    @relation(fields: [choiceId], references: [id], onDelete: Cascade)
+  choiceId  Int
+  id        Int       @id @default(autoincrement())
+  index     Int
+  listMovie ListMovie @relation(fields: [movieId], references: [id])
+  movieId   Int
 }
 
 model MovieReservation {
-  id      Int   @id @default(autoincrement())
-  movieId Int
-  movie   Movie @relation(fields: [movieId], references: [id])
-  listId  Int
-  list    List  @relation(fields: [listId], references: [id], onDelete: Cascade)
+  id        Int       @id @default(autoincrement())
+  movieId   Int
+  listMovie ListMovie @relation(fields: [movieId], references: [id])
+  listId    Int
+  list      List      @relation(fields: [listId], references: [id], onDelete: Cascade)
+}
+
+model User {
+  id       Int     @id @default(autoincrement())
+  email    String  @unique
+  password String
+  shade    String?
+  lists    List[]
 }
