@@ -1,7 +1,7 @@
-import { Movie } from '@prisma/client'
+import { ListedMovie } from './movie-types'
 
 export default function filterMovie (props: {
-  row: Movie
+  row: ListedMovie
   query: string
 }): boolean {
   if (props.row.name.includes(props.query)) {

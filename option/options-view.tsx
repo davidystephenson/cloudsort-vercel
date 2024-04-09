@@ -12,13 +12,13 @@ export default function OptionsView (): JSX.Element {
       <OptionView
         chooseLetter='a'
         index={0}
-        id={list.state.choice.options[0]}
+        itemId={list.state.choice.options[0]}
         openLetter='c'
       />
       <OptionView
         chooseLetter='b'
         index={1}
-        id={list.state.choice.options[1]}
+        itemId={list.state.choice.options[1]}
         openLetter='v'
       />
     </HStack>

@@ -1,6 +1,6 @@
-import { CalculatedMovie } from '../movie/movie-types'
+import { CalculatedMovie } from '@/movie/movie-types'
 
-export default function compareItems (props: {
+export default function compareMovies (props: {
   a: CalculatedMovie
   b: CalculatedMovie
   worseFirst?: boolean

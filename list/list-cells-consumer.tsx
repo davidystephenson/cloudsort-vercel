@@ -9,7 +9,7 @@ export default function ListCellsConsumer (props: {
 }): JSX.Element {
   const lists = useLists()
   async function send (): Promise<void> {
-    await lists.delete({ id: props.list.id })
+    await lists.delete({ listId: props.list.id })
   }
   const href = `/list/${props.list.id}`
   return (

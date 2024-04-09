@@ -1,4 +1,4 @@
-import { CalculatedMovie } from '../movie/movie-types'
+import { CalculatedMovie } from '@/movie/movie-types'
 import searchMovie from './searchMovie'
 
 export default function isResult ({

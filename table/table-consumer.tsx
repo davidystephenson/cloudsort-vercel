@@ -14,11 +14,14 @@ export default function TableConsumer<Row extends Identity> (props: {
 }): JSX.Element {
   const theme = useTheme()
   if (!theme.mounted) {
-    const rows = props.rows.map((row) => (
-      <Tr key={row.id}>
-        <props.CellsView row={row} />
-      </Tr>
-    ))
+    const rows = props.rows.map((row) => {
+      const id = ('id' in row) ? row.id : row.mergeChoiceId
+      return (
+        <Tr key={id}>
+          <props.CellsView row={row} />
+        </Tr>
+      )
+    })
     return (
       <TableWrapperView>
         <ThemeTableView>

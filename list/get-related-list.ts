@@ -9,6 +9,17 @@ export default async function getRelatedList (props: {
       id: props.listId
     },
     include: {
+      choices: {
+        include: {
+          options: true
+        }
+      },
+      listMovies: {
+        include: {
+          movie: true
+        }
+      },
+      movieReservations: true,
       operations: {
         include: {
           inputs: {
@@ -17,12 +28,6 @@ export default async function getRelatedList (props: {
             }
           },
           outputMovies: true
-        }
-      },
-      movieReservations: true,
-      choices: {
-        include: {
-          options: true
         }
       }
     }

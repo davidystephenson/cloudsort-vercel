@@ -1,5 +1,6 @@
-import { List, Movie, Prisma } from '@prisma/client'
-import { State } from '../mergeChoice/merge-choice-types'
+import { List, Prisma } from '@prisma/client'
+import { State } from '../mergeChoice/mergeChoiceTypes'
+import { ListedMovie } from '@/movie/movie-types'
 
 export interface ListWhere {
   listId: number
@@ -19,6 +20,17 @@ export interface ListsContextValue {
 }
 export type RelatedList = Prisma.ListGetPayload<{
   include: {
+    choices: {
+      include: {
+        options: true
+      }
+    }
+    listMovies: {
+      include: {
+        movie: true
+      }
+    }
+    movieReservations: true
     operations: {
       include: {
         inputs: {
@@ -29,15 +41,10 @@ export type RelatedList = Prisma.ListGetPayload<{
         outputMovies: true
       }
     }
-    movieReservations: true
-    choices: {
-      include: {
-        options: true
-      }
-    }
   }
 }>
+export type MovieState = State<ListedMovie>
 export interface MergechoiceList {
   list: RelatedList
-  state: State<Movie>
+  state: MovieState
 }

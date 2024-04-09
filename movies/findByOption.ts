@@ -1,5 +1,5 @@
-import { Movie } from '@prisma/client'
-import { Choice } from '../mergeChoice/merge-choice-types'
+import { ListedMovie } from '@/movie/movie-types'
+import { Choice } from '../mergeChoice/mergeChoiceTypes'
 
 export default function findByOption ({
   choice,
@@ -9,9 +9,9 @@ export default function findByOption ({
 }: {
   choice: Choice
   finalized: boolean
-  movies: Record<string, Movie>
+  movies: Record<string, ListedMovie>
   optionIndex: number
-}): Movie | undefined {
+}): ListedMovie | undefined {
   if (finalized) {
     return undefined
   }

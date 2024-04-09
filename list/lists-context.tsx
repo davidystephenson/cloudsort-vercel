@@ -31,13 +31,13 @@ export const {
       return row
     }
     async function _delete (props: {
-      id: number
+      listId: number
     }): Promise<void> {
-      const body = { listId: props.id }
+      const body = { listId: props.listId }
       await deleteList({ body })
       setRows((rows) => {
         const newRows = rows.filter((row) => {
-          const keep = row.id !== props.id
+          const keep = row.id !== props.listId
           return keep
         })
         return newRows

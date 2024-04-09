@@ -6,11 +6,11 @@ import OptionConsumer from './option-consumer'
 export default function OptionView (props: {
   chooseLetter: string
   index: number
-  id: number
+  itemId: number
   openLetter: string
 }): JSX.Element {
   const list = useList()
-  const movie = list.movies.find(movie => movie.id === props.id)
+  const movie = list.movies.find(movie => movie.mergeChoiceId === props.itemId)
   if (movie == null) {
     return <>There is no movie</>
   }

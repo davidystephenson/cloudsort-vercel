@@ -1,12 +1,11 @@
-import { RelatedList } from './list-types'
+import { MovieState, RelatedList } from './list-types'
 import { Movie } from '@prisma/client'
 import { useOptionalLists } from './lists-context'
-import { MovieData, PostMovieBody, PostMoviesBody } from '../movie/movie-types'
+import { ListedMovie, MovieData, PostMovieBody, PostMoviesBody } from '../movie/movie-types'
 import postMovie from '../movie/post-movie'
 import { useCallback, useEffect, useState } from 'react'
 import useFilter from '../filter/use-filter'
 import filterMovie from '../movie/filterMovie'
-import { State } from '../mergeChoice/merge-choice-types'
 import getSortedMovies from '../movies/getSortedMovies'
 import importItems from '../mergeChoice/importItems'
 import removeItem from '../mergeChoice/removeItem'
@@ -27,12 +26,12 @@ export const {
   name: 'list',
   useValue: (props: {
     row: RelatedList
-    state?: State<Movie>
+    state?: MovieState
   }) => {
     const lists = useOptionalLists()
     const queue = useQueue()
     const getDefaultState = useCallback(() => {
-      return props.state ?? createState<Movie>()
+      return props.state ?? createState<ListedMovie>()
     }, [props.state])
     const [state, setState] = useState(getDefaultState)
     const [movies, setMovies] = useState(() => {
@@ -49,10 +48,10 @@ export const {
       filter: filterMovie
     })
     async function _delete (): Promise<void> {
-      await lists?.delete({ id: props.row.id })
+      await lists?.delete({ listId: props.row.id })
     }
     function updateState (props: {
-      update: (props: { state: State<Movie> }) => State<Movie>
+      update: (props: { state: MovieState }) => MovieState
     }): void {
       const newState = props.update({ state })
       const sortedMovies = getSortedMovies({ state: newState })
@@ -62,7 +61,7 @@ export const {
     function queueState (props: {
       action: () => Promise<unknown>
       label: string
-      update: (props: { state: State<Movie> }) => State<Movie>
+      update: (props: { state: MovieState }) => MovieState
     }): void {
       void queue.add({
         action: props.action,
@@ -74,9 +73,10 @@ export const {
       movies: Movie[]
       slice?: number
     }): void {
-      function update (updateProps: { state: State<Movie> }): State<Movie> {
+      function update (updateProps: { state: MovieState }): MovieState {
+        const items: MovieData[] = props.movies
         const newState = importItems({
-          items: props.movies,
+          items,
           state: updateProps.state
         })
         return newState
@@ -120,9 +120,9 @@ export const {
         }
         return await postDeleteMovie({ body })
       }
-      function update (updateProps: { state: State<Movie> }): State<Movie> {
+      function update (updateProps: { state: MovieState }): MovieState {
         const newState = removeItem({
-          id: deleteMovieProps.movieId,
+          itemId: deleteMovieProps.movieId,
           state: updateProps.state
         })
         return newState
@@ -146,7 +146,7 @@ export const {
         }
         return await postChooseMovie({ body })
       }
-      function update (props: { state: State<Movie> }): State<Movie> {
+      function update (props: { state: MovieState }): MovieState {
         const newState = chooseOption({
           betterIndex: chooseProps.betterIndex,
           state: props.state

@@ -1,26 +1,29 @@
-import { Movie, Prisma } from '@prisma/client'
-import { RelatedList } from './list-types'
-import { State } from '../mergeChoice/merge-choice-types'
+import { Prisma } from '@prisma/client'
+import { MovieState, RelatedList } from './list-types'
 import { PrismaTransaction } from '../prisma/prisma-types'
 import prisma from '@/prisma/prisma'
 import getNumberKeys from '@/get-number-keys/get-number-keys'
 
 export default async function saveStateToList (props: {
   list: RelatedList
-  state: State<Movie>
+  state: MovieState
   tx?: PrismaTransaction
 }): Promise<void> {
   const db = props.tx ?? prisma
+  console.log('props.list', props.list)
+  console.log('props.state', props.state)
 
   const finalPromises: Array<Promise<unknown>> = []
   const listChanges: Prisma.ListUpdateInput = {}
-  if (props.list.operationCount !== props.state.operationCount) {
-    listChanges.operationCount = props.state.operationCount
-  }
   if (props.list.choiceCount !== props.state.choiceCount) {
     listChanges.choiceCount = props.state.choiceCount
   }
-  console.log('props.list', props.list)
+  if (props.list.itemCount !== props.state.itemCount) {
+    listChanges.itemCount = props.state.itemCount
+  }
+  if (props.list.operationCount !== props.state.operationCount) {
+    listChanges.operationCount = props.state.operationCount
+  }
   const lists = await db.list.findMany({
     where: {
       id: props.list.id
@@ -33,6 +36,30 @@ export default async function saveStateToList (props: {
     },
     data: listChanges
   })
+  const stateItems = Object.values(props.state.items)
+  const newItems = stateItems.filter((item) => {
+    const existing = props.list.listMovies.some((listMovie) => {
+      const match = listMovie.mergeChoiceId === item.mergeChoiceId
+      return match
+    })
+    const _new = existing == null
+    return _new
+  })
+  const newMoviePromises = newItems.map(async (item) => {
+    const movie = await db.movie.create({
+      data: {
+        ...item,
+        listMovies: {
+          create: {
+            listId: props.list.id,
+            mergeChoiceId: item.mergeChoiceId
+          }
+        }
+      }
+    })
+    return movie
+  })
+  await Promise.all(newMoviePromises)
   const oldChoices = props.list.choices.filter((choice) => choice.mergeChoiceId !== props.state.choice?.mergeChoiceId)
   if (oldChoices.length > 0) {
     const oldChoiceIds = oldChoices.map((choice) => choice.id)

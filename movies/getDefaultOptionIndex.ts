@@ -1,14 +1,14 @@
-import { Movie } from '@prisma/client'
-import { Choice } from '../mergeChoice/merge-choice-types'
+import { ListedMovie } from '@/movie/movie-types'
+import { Choice } from '../mergeChoice/mergeChoiceTypes'
 
 export default function getDefaultOptionIndex ({
   choice,
   movies
 }: {
   choice: Choice | undefined
-  movies: Record<string, Movie>
+  movies: Record<string, ListedMovie>
 }): number | undefined {
-  if (choice == null || choice.options.length === 0) {
+  if (choice == null || choice.options.length === 0 || choice.random) {
     return undefined
   }
   const choices = choice.options.map(option => {
@@ -21,7 +21,7 @@ export default function getDefaultOptionIndex ({
       ? firstItem
       : secondItem
   const defaultOptionIndex = choice.options.findIndex(option => {
-    return option === defaultItem?.id
+    return option === defaultItem?.mergeChoiceId
   })
   if (defaultOptionIndex === -1) {
     return undefined

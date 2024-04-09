@@ -1,5 +1,5 @@
 import { Movie } from '@prisma/client'
-import { Calculated } from '../mergeChoice/merge-choice-types'
+import { Calculated } from '../mergeChoice/mergeChoiceTypes'
 
 export type MovieData = Omit<Movie, 'id'>
 
@@ -25,8 +25,6 @@ export interface DeleteMovieBody {
   movieId: number
 }
 
-export type CalculatedMovie = Calculated<Movie>
-
 export interface ChooseMovieBody {
   betterIndex: number
   listId: number
@@ -41,3 +39,9 @@ export interface CritickerRow {
   ' IMDB ID': string
   Score: string
 }
+
+export interface ListedMovie extends MovieData {
+  mergeChoiceId: number
+}
+
+export type CalculatedMovie = Calculated<ListedMovie>

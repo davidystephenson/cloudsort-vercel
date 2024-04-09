@@ -1,3 +1,1 @@
-export interface Identity {
-  id: number
-}
+export type Identity = { id: number } | { mergeChoiceId: number }

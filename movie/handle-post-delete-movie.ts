@@ -12,7 +12,7 @@ export default async function handlePostDeleteMovie (props: {
     respond: () => NextResponse.json({ ok: true }),
     update: ({ body, state }) => {
       return removeItem({
-        id: body.movieId,
+        itemId: body.movieId,
         state
       })
     }

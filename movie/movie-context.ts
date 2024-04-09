@@ -12,7 +12,7 @@ export const {
   }) => {
     const list = useList()
     async function _delete (): Promise<void> {
-      list.deleteMovie({ movieId: props.calculated.id })
+      list.deleteMovie({ movieId: props.calculated.mergeChoiceId })
     }
     const imdbUrl = `https://www.imdb.com/title/${props.calculated.imdbId}`
     function open (): void {

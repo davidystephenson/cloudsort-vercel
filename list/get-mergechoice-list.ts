@@ -1,9 +1,7 @@
-import { Movie } from '@prisma/client'
 import arrayToDictionary from '../mergeChoice/arrayToDictionary'
 import getItemIdsFromOperations from '../mergeChoice/getItemIdsFromOperations'
-import { State, ItemId } from '../mergeChoice/merge-choice-types'
-import prisma from '@/prisma/prisma'
-import { MergechoiceList, RelatedList } from './list-types'
+import { MovieState, MergechoiceList, RelatedList } from './list-types'
+import { ListedMovie } from '@/movie/movie-types'
 
 export default async function getMergechoiceList (props: {
   list: RelatedList
@@ -38,23 +36,22 @@ export default async function getMergechoiceList (props: {
   const worseOperationArray = stateOperations.filter((operation) => operation.worse)
   const worseOperations = arrayToDictionary({ array: worseOperationArray })
   const worseIds = getItemIdsFromOperations({ operations: worseOperations })
-  const itemIds = [...activeIds, ...betterIds, ...worseIds].map((id) => Number(id))
-  const movies = await prisma.movie.findMany({
-    where: {
-      id: {
-        in: itemIds
-      }
+  const movies = props.list.listMovies.map((listMovie) => {
+    const movie: ListedMovie = {
+      mergeChoiceId: listMovie.mergeChoiceId,
+      ...listMovie.movie
     }
+    return movie
   })
-  const items = movies.reduce<Record<ItemId, Movie>>((items, movie) => {
+  const items = movies.reduce<Record<number, ListedMovie>>((items, movie) => {
     return {
       ...items,
-      [movie.id]: movie
+      [movie.mergeChoiceId]: movie
     }
   }, {})
   const reserveIds = props.list.movieReservations.map((reservation) => reservation.movieId)
   const complete = activeChoice == null && Object.keys(items).length > 0
-  const state: State<Movie> = {
+  const state: MovieState = {
     activeIds,
     activeOperations,
     betterIds,
@@ -62,6 +59,7 @@ export default async function getMergechoiceList (props: {
     choiceCount: props.list.choiceCount,
     complete,
     history: [],
+    itemCount: props.list.itemCount,
     items,
     operationCount: props.list.operationCount,
     reserveIds,

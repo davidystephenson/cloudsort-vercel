@@ -6,6 +6,7 @@ import importItems from '@/mergeChoice/importItems'
 import saveStateToList from '@/list/save-state-to-list'
 import guardPostMovies from '@/movie/guard-post-movies'
 import guardUserMergechoiceList from '@/list/guard-user-mergechoice-list'
+import { MovieData } from '@/movie/movie-types'
 
 export async function POST (req: Request): Promise<Response> {
   const authSession = await serverAuth()
@@ -54,7 +55,7 @@ export async function POST (req: Request): Promise<Response> {
     const newItemImdbIds = newItems.map((movie) => movie.imdbId)
     console.log('begin find newListMovies')
     console.time('find newListMovies')
-    const newListMovies = await tx.movie.findMany({
+    const newListMovies: MovieData[] = await tx.movie.findMany({
       where: {
         imdbId: {
           in: newItemImdbIds

@@ -1,4 +1,4 @@
-import { Choice } from '@/mergeChoice/merge-choice-types'
+import { Choice } from '@/mergeChoice/mergeChoiceTypes'
 import guardNumberProp from './guard-number-prop'
 import guardBooleanProp from './guard-boolean-prop'
 import guardNumberNullProp from './guard-number-null-prop'

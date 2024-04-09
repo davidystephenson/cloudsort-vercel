@@ -4,9 +4,7 @@ import saveStateToList from './save-state-to-list'
 import serverAuth from '@/auth/server-auth'
 import respondAuthError from '@/auth/respond-auth-error'
 import prisma from '@/prisma/prisma'
-import { ListWhere, RelatedList } from './list-types'
-import { State } from '@/mergeChoice/merge-choice-types'
-import { Movie } from '@prisma/client'
+import { ListWhere, MovieState, RelatedList } from './list-types'
 import guardUserMergechoiceList from './guard-user-mergechoice-list'
 import respondError from '@/respond/respond-error'
 import respondOk from '@/respond/respond-ok'
@@ -17,9 +15,9 @@ export default async function updateList <Body extends ListWhere, Result> (props
   respond: (props?: {
     body?: Body
     list?: RelatedList
-    state?: State<Movie>
+    state?: MovieState
   }) => Result
-  update: (props: { body: Body, state: State<Movie> }) => State<Movie>
+  update: (props: { body: Body, state: MovieState }) => MovieState
 }): Promise<Response> {
   const respond = props.respond ?? respondOk
   const authSession = await serverAuth()

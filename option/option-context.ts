@@ -17,7 +17,10 @@ export const {
     const list = useList()
     function choose (): void {
       console.log('choosing...')
-      list.choose({ betterIndex: props.index, movieId: movie.calculated.id })
+      list.choose({
+        betterIndex: props.index,
+        movieId: movie.calculated.mergeChoiceId
+      })
     }
     useHotkeys(props.openLetter, () => {
       void movie.open()
