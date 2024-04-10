@@ -6,7 +6,7 @@ export default async function postMovies (props: {
   body: PostMoviesBody
 }): Promise<Movie[]> {
   const response = await axios.post<
-  PostMoviesResponse,
+  unknown,
   AxiosResponse<PostMoviesResponse>,
   PostMoviesBody
   >('/api/movies', props.body)

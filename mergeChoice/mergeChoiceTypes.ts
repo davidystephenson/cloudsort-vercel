@@ -1,4 +1,4 @@
-export type ItemId = number
+export type ItemId = number | string
 export interface Identity {
   mergeChoiceId: number
 }
@@ -41,18 +41,23 @@ export interface State<ListItem extends Item> {
 export type PreviousState<ListItem extends Item> = Omit<State<ListItem>, 'history'> & {
   history?: Array<HistoryEvent<ListItem>>
 }
+export interface HistoryChoice <ListItem extends Item> {
+  aBetter: boolean
+  aId: ItemId
+  aItem: Calculated<ListItem>
+  bId: ItemId
+  bItem: Calculated<ListItem>
+  fresh: boolean
+  newFirstOutput: ItemId
+  operationId: number
+  random: boolean
+  worseIndex: number
+}
 export interface HistoryEvent<ListItem extends Item> extends Identity {
   createdAt: number
-  choice?: {
-    aBetter: boolean
-    aId: ItemId
-    aItem: Calculated<ListItem>
-    bId: ItemId
-    bItem: Calculated<ListItem>
-    random: boolean
-  }
+  choice?: HistoryChoice<ListItem>
   remove?: {
-    id: ItemId
+    itemId: ItemId
     item: Calculated<ListItem>
   }
   import?: {
@@ -74,4 +79,8 @@ export interface Population<ListItem extends Item> {
 }
 export interface Prioritized {
   priority: number
+}
+export interface ChoiceSetup<ListItem extends Item> {
+  state: State<ListItem>
+  fresh: boolean
 }

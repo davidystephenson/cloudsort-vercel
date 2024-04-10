@@ -1,5 +1,5 @@
 import { List, Movie, Prisma } from '@prisma/client'
-import { State } from '../mergeChoice/merge-choice-types'
+import { State } from '../mergeChoice/mergeChoiceTypes'
 
 export interface ListWhere {
   listId: number

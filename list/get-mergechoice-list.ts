@@ -1,7 +1,7 @@
 import { Movie } from '@prisma/client'
 import arrayToDictionary from '../mergeChoice/arrayToDictionary'
 import getItemIdsFromOperations from '../mergeChoice/getItemIdsFromOperations'
-import { State, ItemId } from '../mergeChoice/merge-choice-types'
+import { State, ItemId } from '../mergeChoice/mergeChoiceTypes'
 import prisma from '@/prisma/prisma'
 import { MergechoiceList, RelatedList } from './list-types'
 

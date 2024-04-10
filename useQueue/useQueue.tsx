@@ -15,7 +15,7 @@ export default function useQueue<Result> (): Queue<Result> {
       return [...log, message]
     })
 
-    const result = await task.action()
+    const result = await task.perform()
     return result
   }, [history.length])
 
@@ -23,21 +23,21 @@ export default function useQueue<Result> (): Queue<Result> {
   const taskQueue = useTaskQueue(currentQueue)
 
   const add = useCallback(
-    async (task: Task<Result>) => {
+    async (props: { task: Task<Result> }) => {
       setLog((log) => {
         const message = {
-          label: task.label,
+          label: props.task.label,
           status: 'add'
         } as const
         return [...log, message]
       })
-      setHistory((history) => [...history, task.label])
+      setHistory((history) => [...history, props.task.label])
 
       try {
-        const result = await taskQueue.add(task)
+        const result = await taskQueue.add(props.task)
         setLog((log) => {
           const message = {
-            label: task.label,
+            label: props.task.label,
             result,
             status: 'complete'
           } as const
@@ -49,7 +49,7 @@ export default function useQueue<Result> (): Queue<Result> {
           if (error instanceof Error) {
             const message = {
               error,
-              label: task.label,
+              label: props.task.label,
               status: 'error'
             } as const
             return [...log, message]

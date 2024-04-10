@@ -1,5 +1,5 @@
 import { Movie } from '@prisma/client'
-import { Calculated } from '../mergeChoice/merge-choice-types'
+import { Calculated } from '../mergeChoice/mergeChoiceTypes'
 
 export type MovieData = Omit<Movie, 'id'>
 
@@ -10,6 +10,11 @@ export interface PostMovieBody extends MovieData {
 export interface PostMoviesBody {
   listId: number
   movies: MovieData[]
+}
+
+export interface PostImportMoviesBody {
+  listId: number
+  movies: Movie[]
 }
 
 export type CreatedMovie = Omit<Movie, 'updatedAt'> & {

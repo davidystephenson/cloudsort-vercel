@@ -1,5 +1,5 @@
 import { Movie } from '@prisma/client'
-import { HistoryEvent } from '../mergeChoice/merge-choice-types'
+import { HistoryEvent } from '../mergeChoice/mergeChoiceTypes'
 import isResult from './isResult'
 
 export default function isEventResult ({

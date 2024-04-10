@@ -1,6 +1,6 @@
 import { Movie, Prisma } from '@prisma/client'
 import { RelatedList } from './list-types'
-import { State } from '../mergeChoice/merge-choice-types'
+import { State } from '../mergeChoice/mergeChoiceTypes'
 import { PrismaTransaction } from '../prisma/prisma-types'
 import prisma from '@/prisma/prisma'
 import getNumberKeys from '@/get-number-keys/get-number-keys'
@@ -308,6 +308,9 @@ export default async function saveStateToList (props: {
   })
   finalPromises.push(deleteReservePromise)
   const addedReserveIds = props.state.reserveIds.filter((id) => {
+    if (typeof id !== 'number') {
+      return false
+    }
     const existing = oldReserveIds.includes(id)
     return !existing
   })

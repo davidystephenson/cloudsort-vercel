@@ -1,5 +1,5 @@
 import populate from './populate'
-import { Item, State, HistoryEvent } from './merge-choice-types'
+import { Item, State, HistoryEvent } from './mergeChoiceTypes'
 import setupChoice from './setupChoice'
 
 export default function importItems <ListItem extends Item> (props: {
@@ -21,17 +21,17 @@ export default function importItems <ListItem extends Item> (props: {
       points: 0
     }
   })
-  const setupState = setupChoice({
+  const choiceSetup = setupChoice({
     state: population.state
   })
   const historyEvent: HistoryEvent<ListItem> = {
     createdAt: Date.now(),
-    mergeChoiceId: setupState.history.length,
+    mergeChoiceId: choiceSetup.state.history.length,
     import: {
       items: calculated
     },
     previousState
   }
-  setupState.history.unshift(historyEvent)
-  return setupState
+  choiceSetup.state.history.unshift(historyEvent)
+  return choiceSetup.state
 }

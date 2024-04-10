@@ -1,7 +1,7 @@
 import { useTaskQueue } from 'rondonjon-react-task-queue'
 
 export interface Task<Result> {
-  action: () => Promise<Result>
+  perform: () => Promise<Result>
   label: string
 }
 interface AddMessage {
@@ -26,6 +26,6 @@ type TaskQueue<Result> = ReturnType<typeof useTaskQueue<Task<Result>, Result>>
 export interface Queue<Result> {
   log: Array<Message<Result>>
   history: string[]
-  add: (task: Task<Result>) => Promise<Result>
+  add: (props: { task: Task<Result> }) => Promise<Result>
   taskQueue: TaskQueue<Result>
 }

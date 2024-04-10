@@ -1,12 +1,16 @@
 import range from './range'
-import { Item, Operation, OperationDictionary, State } from './merge-choice-types'
+import { Item, Operation, OperationDictionary, State } from './mergeChoiceTypes'
 import arrayToDictionary from './arrayToDictionary'
 import createOperation from './createOperation'
 
 export default function getOperations <ListItem extends Item> (props: {
   activeOperations: OperationDictionary
+  debug?: boolean
   state: State<ListItem>
 }): OperationDictionary {
+  if (props.debug === true) {
+    console.log('getOperations props.state', props.state)
+  }
   const values = Object.values(props.activeOperations)
   const blocks = values.map(operation => operation.output)
   blocks.sort((a, b) => b.length - a.length)

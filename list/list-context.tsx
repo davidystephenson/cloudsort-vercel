@@ -6,7 +6,7 @@ import postMovie from '../movie/post-movie'
 import { useCallback, useEffect, useState } from 'react'
 import useFilter from '../filter/use-filter'
 import filterMovie from '../movie/filterMovie'
-import { State } from '../mergeChoice/merge-choice-types'
+import { State } from '../mergeChoice/mergeChoiceTypes'
 import getSortedMovies from '../movies/getSortedMovies'
 import importItems from '../mergeChoice/importItems'
 import removeItem from '../mergeChoice/removeItem'
@@ -19,6 +19,7 @@ import shuffleSlice from '@/shuffleSlice/shuffleSlice'
 import useQueue from '@/useQueue/useQueue'
 import { OkResponse } from '@/respond/respond-types'
 import postDeleteMovie from '@/movie/post-delete-movie'
+import postImportMovies from '@/movie/post-import-movies'
 
 export const {
   useContext: useList,
@@ -60,15 +61,16 @@ export const {
       setState(newState)
     }
     function queueState (props: {
-      action: () => Promise<unknown>
+      remote: () => Promise<unknown>
       label: string
-      update: (props: { state: State<Movie> }) => State<Movie>
+      local: (props: { state: State<Movie> }) => State<Movie>
     }): void {
-      void queue.add({
-        action: props.action,
+      const task = {
+        perform: props.remote,
         label: props.label
-      })
-      updateState({ update: props.update })
+      }
+      void queue.add({ task })
+      updateState({ update: props.local })
     }
     function importMovies (props: {
       movies: Movie[]
@@ -97,62 +99,57 @@ export const {
     async function createMovies (createMoviesProps: {
       movies: MovieData[]
       slice?: number
-    }): Promise<Movie[]> {
+    }): Promise<void> {
       const sliced = shuffleSlice({
-        slice: createMoviesProps.slice,
         items: createMoviesProps.movies
       })
       const body: PostMoviesBody = {
         listId: props.row.id,
         movies: sliced
       }
-      const newMovies = await postMovies({ body })
-      importMovies({ movies: newMovies })
-      return newMovies
+      const movies = await postMovies({ body })
+      const label = `Import ${movies.length} movies`
+      function local (updateProps: { state: State<Movie> }): State<Movie> {
+        const newState = importItems({
+          items: movies,
+          state: updateProps.state
+        })
+        return newState
+      }
+      async function remote (): Promise<OkResponse> {
+        const body = {
+          listId: props.row.id,
+          movies
+        }
+        return await postImportMovies({ body })
+      }
+      queueState({ label, local, remote })
     }
     function deleteMovie (deleteMovieProps: {
       movieId: number
     }): void {
-      async function action (): Promise<OkResponse> {
+      const item = state.items[deleteMovieProps.movieId]
+      const label = `Delete ${item.name}`
+      function local (updateProps: { state: State<Movie> }): State<Movie> {
+        const newState = removeItem({
+          itemId: deleteMovieProps.movieId,
+          state: updateProps.state
+        })
+        return newState
+      }
+      async function remote (): Promise<OkResponse> {
         const body = {
           listId: props.row.id,
           movieId: deleteMovieProps.movieId
         }
         return await postDeleteMovie({ body })
       }
-      function update (updateProps: { state: State<Movie> }): State<Movie> {
-        const newState = removeItem({
-          id: deleteMovieProps.movieId,
-          state: updateProps.state
-        })
-        return newState
-      }
-      const item = state.items[deleteMovieProps.movieId]
-      const label = `Delete ${item.name}`
-      queueState({
-        action,
-        label,
-        update
-      })
+      queueState({ label, local, remote })
     }
     function choose (chooseProps: {
       betterIndex: number
       movieId: number
     }): void {
-      async function action (): Promise<OkResponse> {
-        const body = {
-          betterIndex: chooseProps.betterIndex,
-          listId: props.row.id
-        }
-        return await postChooseMovie({ body })
-      }
-      function update (props: { state: State<Movie> }): State<Movie> {
-        const newState = chooseOption({
-          betterIndex: chooseProps.betterIndex,
-          state: props.state
-        })
-        return newState
-      }
       const betterId = state.choice?.options[chooseProps.betterIndex]
       if (betterId == null) {
         throw new Error('There is no betterId')
@@ -165,11 +162,21 @@ export const {
       const betterItem = state.items[betterId]
       const worseItem = state.items[worseId]
       const label = `${betterItem.name} > ${worseItem.name}`
-      queueState({
-        action,
-        label,
-        update
-      })
+      function local (props: { state: State<Movie> }): State<Movie> {
+        const newState = chooseOption({
+          betterIndex: chooseProps.betterIndex,
+          state: props.state
+        })
+        return newState
+      }
+      async function remote (): Promise<OkResponse> {
+        const body = {
+          betterIndex: chooseProps.betterIndex,
+          listId: props.row.id
+        }
+        return await postChooseMovie({ body })
+      }
+      queueState({ label, local, remote })
     }
     const value = {
       choose,

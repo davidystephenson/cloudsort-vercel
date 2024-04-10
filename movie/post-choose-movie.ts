@@ -6,7 +6,7 @@ export default async function postChooseMovie (props: {
   body: ChooseMovieBody
 }): Promise<OkResponse> {
   const response = await axios.post<
-  OkResponse,
+  unknown,
   AxiosResponse<OkResponse>,
   ChooseMovieBody
   >('/api/movie/choose', props.body)

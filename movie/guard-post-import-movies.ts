@@ -1,13 +1,13 @@
-import { PostMoviesBody } from './movie-types'
+import { PostImportMoviesBody } from './movie-types'
 import guardNumberProp from '@/guard/guard-number-prop'
 import guardObject from '@/guard/guard-object'
-import guardMovieDataArrayProp from './guard-movie-data-array-prop'
+import guardMovieArrayProp from './guard-movie-array-prop'
 
-export default function guardPostMovies (props: {
+export default function guardPostImportMovies (props: {
   data: unknown
-}): PostMoviesBody {
+}): PostImportMoviesBody {
   const object = guardObject({ data: props.data })
-  const movies = guardMovieDataArrayProp({ data: object, key: 'movies' })
+  const movies = guardMovieArrayProp({ data: object, key: 'movies' })
   const listId = guardNumberProp({ data: object, key: 'listId' })
   return {
     listId,
