@@ -36,8 +36,6 @@ export default function chooseOption <ListItem extends Item> (props: {
   }
   const { history, ...previousState } = oldState
   void history
-  console.log('oldState', oldState)
-  console.log('props.betterIndex', props.betterIndex)
   const worseIndex = 1 - props.betterIndex
   const choiceOperation = getOperation({
     operations: oldState.activeOperations,

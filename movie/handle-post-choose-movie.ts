@@ -1,13 +1,14 @@
 import chooseOption from '@/mergeChoice/chooseOption'
 import { NextResponse } from 'next/server'
-import guardChooseMovie from './guard-choose-movie'
-import handleUpdateList from '@/list/update-list'
+import guardPostChooseMovie from './guard-post-choose-movie'
+import updateList from '@/list/update-list'
 
 export default async function handlePostChooseMovie (props: {
   request: Request
 }): Promise<Response> {
-  return await handleUpdateList({
-    guard: guardChooseMovie,
+  return await updateList({
+    guard: guardPostChooseMovie,
+    guardLabel: '/movie/choose body',
     request: props.request,
     respond: () => NextResponse.json({ ok: true }),
     update: ({ body, state }) => {

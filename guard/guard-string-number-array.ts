@@ -2,12 +2,12 @@ import guardArrayType from './guard-array-type'
 import guardStringNumber from './guard-string-number'
 
 export default function guardStringNumberArray (props: {
-  data: unknown
   label: string
+  value: unknown
 }): Array<string | number> {
   return guardArrayType({
-    data: props.data,
     guard: guardStringNumber,
-    label: props.label
+    label: props.label,
+    value: props.value
   })
 }

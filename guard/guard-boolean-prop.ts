@@ -2,11 +2,13 @@ import guardPropType from './guard-prop-type'
 import guardBoolean from './guard-boolean'
 
 export default function guardBooleanProp (props: {
-  data: object
   key: string
+  label: string
+  value: object
 }): boolean {
   const prop = guardPropType({
-    data: props.data,
+    value: props.value,
+    label: props.label,
     guard: guardBoolean,
     key: props.key
   })

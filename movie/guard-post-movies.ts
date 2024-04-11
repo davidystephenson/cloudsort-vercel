@@ -4,11 +4,23 @@ import guardObject from '@/guard/guard-object'
 import guardMovieDataArrayProp from './guard-movie-data-array-prop'
 
 export default function guardPostMovies (props: {
-  data: unknown
+  label: string
+  value: unknown
 }): PostMoviesBody {
-  const object = guardObject({ data: props.data })
-  const movies = guardMovieDataArrayProp({ data: object, key: 'movies' })
-  const listId = guardNumberProp({ data: object, key: 'listId' })
+  const object = guardObject({
+    label: props.label,
+    value: props.value
+  })
+  const movies = guardMovieDataArrayProp({
+    key: 'movies',
+    label: props.label,
+    value: object
+  })
+  const listId = guardNumberProp({
+    key: 'listId',
+    label: props.label,
+    value: object
+  })
   return {
     listId,
     movies

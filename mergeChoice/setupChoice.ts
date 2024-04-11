@@ -12,9 +12,7 @@ export default function setupChoice <ListItem extends Item> (props: {
   state: State<ListItem>
 }): ChoiceSetup<ListItem> {
   const maxSteps1 = getOperationsSteps({ operations: props.state.activeOperations })
-  console.log('maxSteps', maxSteps1)
   if (maxSteps1 > 0) {
-    console.log('basic choice')
     const newChoice = createActiveChoice({
       state: props.state
     })

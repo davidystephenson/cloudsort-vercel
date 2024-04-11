@@ -13,7 +13,7 @@ export async function POST (req: Request): Promise<Response> {
     return respondAuthError()
   }
   const json = await req.json()
-  const body = guardPostImportMovies({ data: json })
+  const body = guardPostImportMovies({ label: '/movies/import body', value: json })
   await prisma.$transaction(async (tx) => {
     const mergeChoiceList = await guardUserMergechoiceList({
       listId: body.listId,

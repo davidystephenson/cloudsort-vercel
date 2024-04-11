@@ -3,12 +3,14 @@ import guardPropType from './guard-prop-type'
 import guardChoiceUndefined from './guard-choice-undefined'
 
 export default function guardChoiceUndefinedProp (props: {
-  data: object
   key: string
+  label: string
+  value: object
 }): Choice | undefined {
   return guardPropType({
-    data: props.data,
+    label: props.label,
     guard: guardChoiceUndefined,
-    key: props.key
+    key: props.key,
+    value: props.value
   })
 }

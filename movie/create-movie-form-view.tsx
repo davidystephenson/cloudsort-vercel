@@ -2,14 +2,11 @@
 
 import { HStack } from '@chakra-ui/react'
 import FormFieldView from '../form/form-field-view'
-import { Fields } from '../form/form-types'
 import { useList } from '../list/list-context'
 import RequestFormView from '../request/request-form-view'
 import SubmitRequestView from '../request/submit-request-view'
-import { MOVIE_DATA, MOVIE_DATA_KEYS } from './movie-constants'
-import { MovieData } from './movie-types'
 import { useHeading } from '../heading/heading-context'
-import guardStringModel from '@/guard/guard-string-model'
+import guardMovieData from './guard-movie-data'
 
 export default function CreateMovieFormView (): JSX.Element {
   const heading = useHeading()
@@ -17,21 +14,15 @@ export default function CreateMovieFormView (): JSX.Element {
   if (heading.selection !== 'create') {
     return <></>
   }
-  async function send (fields: Fields): Promise<void> {
-    console.log('fields', fields)
-    console.log('MOVIE_DATA_KEYS', MOVIE_DATA_KEYS)
-    const guarded = guardStringModel({
-      fields,
-      model: MOVIE_DATA
-    })
-    console.log('guarded', guarded)
-    const movieData: MovieData = {
-      ...guarded,
-      score: Number(guarded.score),
-      year: Number(guarded.year)
+  async function send (props: { values: Record<string, string> }): Promise<void> {
+    const fieldData = {
+      ...props.values,
+      score: Number(props.values.score),
+      year: Number(props.values.year)
     }
+    const movieData = guardMovieData({ label: 'Create movie form data', value: fieldData })
     const movies = [movieData]
-    await list.createMovies({ movies })
+    await list.importMovies({ movies })
   }
   return (
     <RequestFormView send={send}>

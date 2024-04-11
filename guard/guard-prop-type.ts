@@ -2,16 +2,18 @@ import guardProp from './guard-prop'
 
 export default function guardPropType <Type> (props: {
   guard: (props: {
-    data: unknown
     label: string
+    value: unknown
   }) => Type
-  data: object
+  label: string
   key: string
+  value: object
 }): Type {
-  const prop = guardProp({ data: props.data, key: props.key })
+  const prop = guardProp({ value: props.value, key: props.key })
+  const keyLabel = `${props.label}.${props.key}`
   const typed = props.guard({
-    data: prop,
-    label: props.key
+    label: keyLabel,
+    value: prop
   })
   return typed
 }

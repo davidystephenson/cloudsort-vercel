@@ -21,14 +21,14 @@ export interface PostMoviesResponse {
   movies: CreatedMovie[]
 }
 
-export interface DeleteMovieBody {
+export interface PostDeleteMovieBody {
   listId: number
   movieId: number
 }
 
 export type CalculatedMovie = Calculated<Movie>
 
-export interface ChooseMovieBody {
+export interface PostChooseMovieBody {
   betterIndex: number
   listId: number
 }

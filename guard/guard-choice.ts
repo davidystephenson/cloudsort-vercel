@@ -5,15 +5,39 @@ import guardNumberNullProp from './guard-number-null-prop'
 import guardNumberArrayProp from './guard-number-array-prop'
 
 export default function guardChoice (props: {
-  data: object
-  key: string
+  label: string
+  value: object
 }): Choice {
-  const aIndex = guardNumberProp({ data: props.data, key: 'aIndex' })
-  const bIndex = guardNumberProp({ data: props.data, key: 'bIndex' })
-  const mergeChoiceId = guardNumberProp({ data: props.data, key: 'mergeChoiceId' })
-  const operationMergeChoiceId = guardNumberNullProp({ data: props.data, key: 'operationMergeChoiceId' })
-  const options = guardNumberArrayProp({ data: props.data, key: 'options' })
-  const random = guardBooleanProp({ data: props.data, key: 'random' })
+  const aIndex = guardNumberProp({
+    key: 'aIndex',
+    label: props.label,
+    value: props.value
+  })
+  const bIndex = guardNumberProp({
+    key: 'bIndex',
+    label: props.label,
+    value: props.value
+  })
+  const mergeChoiceId = guardNumberProp({
+    key: 'mergeChoiceId',
+    label: props.label,
+    value: props.value
+  })
+  const operationMergeChoiceId = guardNumberNullProp({
+    key: 'operationMergeChoiceId',
+    label: props.label,
+    value: props.value
+  })
+  const options = guardNumberArrayProp({
+    key: 'options',
+    label: props.label,
+    value: props.value
+  })
+  const random = guardBooleanProp({
+    value: props.value,
+    label: props.label,
+    key: 'random'
+  })
 
   return {
     aIndex,

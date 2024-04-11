@@ -1,13 +1,14 @@
 import { ApiError } from 'next/dist/server/api-utils'
 
 export default function guardObject (props: {
-  data: unknown
+  label: string
+  value: unknown
 }): object {
-  if (props.data == null) {
-    throw new ApiError(400, 'There is no body')
+  if (props.value == null) {
+    throw new ApiError(400, `There is no ${props.label}`)
   }
-  if (typeof props.data !== 'object') {
-    throw new ApiError(422, 'The body is not an object')
+  if (typeof props.value !== 'object') {
+    throw new ApiError(422, `${props.label} is not an object`)
   }
-  return props.data
+  return props.value
 }

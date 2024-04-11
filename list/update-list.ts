@@ -12,7 +12,11 @@ import respondError from '@/respond/respond-error'
 import respondOk from '@/respond/respond-ok'
 
 export default async function updateList <Body extends ListWhere, Result> (props: {
-  guard: (props: { data: unknown }) => Body
+  guard: (props: {
+    label: string
+    value: unknown
+  }) => Body
+  guardLabel: string
   request: Request
   respond: (props?: {
     body?: Body
@@ -26,17 +30,14 @@ export default async function updateList <Body extends ListWhere, Result> (props
   if (authSession == null) {
     return respondAuthError()
   }
-  console.log('authSession.user', authSession.user)
   const json = await props.request.json()
-  const body = props.guard({ data: json })
+  const body = props.guard({ label: props.guardLabel, value: json })
   try {
     const response = await prisma.$transaction(async (transaction) => {
-      console.log('authSession.user.id', authSession.user.id)
       const mergeChoiceList = await guardUserMergechoiceList({
         listId: body.listId,
         userId: authSession.user.id
       })
-      console.log('mergeChoiceList', mergeChoiceList)
       const newState = props.update({
         body,
         state: mergeChoiceList.state

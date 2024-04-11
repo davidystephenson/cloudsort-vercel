@@ -5,11 +5,11 @@ function hasKey<Data extends Object, Key extends string> (data: Data, key: Key):
 }
 
 export default function guardKey <Data extends Object, Key extends string> (props: {
-  data: Data
   key: Key
+  value: Data
 }): Data & Record<Key, unknown> {
-  if (!hasKey(props.data, props.key)) {
+  if (!hasKey(props.value, props.key)) {
     throw new ApiError(422, `There is no ${props.key}`)
   }
-  return props.data
+  return props.value
 }

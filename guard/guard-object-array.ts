@@ -1,13 +1,13 @@
 import guardObject from './guard-object'
 
 export default function guardObjectArray (props: {
-  data: unknown[]
   label: string
+  value: unknown[]
 }): object[] {
-  const objects = props.data.map((element, index) => {
-    const object = guardObject({ data: element })
+  const elementLabel = `${props.label} element`
+  const objects = props.value.map((element, index) => {
+    const object = guardObject({ label: elementLabel, value: element })
     return object
   })
-
   return objects
 }

@@ -3,12 +3,12 @@ import guardMovieData from './guard-movie-data'
 import { MovieData } from './movie-types'
 
 export default function guardMovieDataArray (props: {
-  data: unknown
   label: string
+  value: unknown
 }): MovieData[] {
   return guardObjectArrayType({
-    data: props.data,
     guard: guardMovieData,
-    label: props.label
+    label: props.label,
+    value: props.value
   })
 }

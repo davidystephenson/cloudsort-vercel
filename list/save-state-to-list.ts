@@ -20,13 +20,6 @@ export default async function saveStateToList (props: {
   if (props.list.choiceCount !== props.state.choiceCount) {
     listChanges.choiceCount = props.state.choiceCount
   }
-  console.log('props.list', props.list)
-  const lists = await db.list.findMany({
-    where: {
-      id: props.list.id
-    }
-  })
-  console.log('lists', lists)
   await db.list.update({
     where: {
       id: props.list.id

@@ -2,12 +2,14 @@ import guardPropType from './guard-prop-type'
 import guardStringNull from './guard-string-null'
 
 export default function guardStringNullProp (props: {
-  data: object
   key: string
+  label: string
+  value: object
 }): string | null {
   return guardPropType({
     guard: guardStringNull,
-    data: props.data,
-    key: props.key
+    key: props.key,
+    label: props.label,
+    value: props.value
   })
 }

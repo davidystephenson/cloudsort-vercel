@@ -1,8 +1,8 @@
 import respondAuthError from '@/auth/respond-auth-error'
 import serverAuth from '@/auth/server-auth'
+import guardPostMovies from '@/movie/guard-post-movies'
 import prisma from '@/prisma/prisma'
 import { NextResponse } from 'next/server'
-import guardPostMovies from '@/movie/guard-post-movies'
 
 export async function POST (req: Request): Promise<Response> {
   const authSession = await serverAuth()
@@ -10,7 +10,10 @@ export async function POST (req: Request): Promise<Response> {
     return respondAuthError()
   }
   const json = await req.json()
-  const body = guardPostMovies({ data: json })
+  const body = guardPostMovies({
+    label: '/api/movies body',
+    value: json
+  })
   const movies = await prisma.$transaction(async (tx) => {
     const imdbIds = body.movies.map((movie) => movie.imdbId)
     const existingMovies = await tx.movie.findMany({

@@ -16,12 +16,12 @@ export const {
     const movie = useMovie()
     const list = useList()
     function choose (): void {
-      console.log('choosing...')
       list.choose({ betterIndex: props.index, movieId: movie.calculated.id })
     }
     useHotkeys(props.openLetter, () => {
       void movie.open()
     })
+    useHotkeys(props.chooseLetter, choose)
 
     const value = {
       choose,

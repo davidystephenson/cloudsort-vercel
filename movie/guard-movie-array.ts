@@ -5,19 +5,19 @@ import guardObjectArray from '@/guard/guard-object-array'
 import guardArray from '@/guard/guard-array'
 
 export default function guardMovieArray (props: {
-  data: unknown
   label: string
+  value: unknown
 }): Movie[] {
   const array = guardArray({
-    data: props.data,
-    label: props.label
+    label: props.label,
+    value: props.value
   })
   const objectArray = guardObjectArray({
-    data: array,
+    value: array,
     label: props.label
   })
   return guardObjectArrayType({
-    data: objectArray,
+    value: objectArray,
     guard: guardMovie,
     label: props.label
   })

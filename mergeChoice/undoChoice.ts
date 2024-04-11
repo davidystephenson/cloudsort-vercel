@@ -10,7 +10,6 @@ export default function undoChoice<ListItem extends Item> (props: {
   state: State<ListItem>
   historyChoice: HistoryChoice<ListItem>
 }): State<ListItem> {
-  console.log('props.state', props.state)
   console.log('props.choice', props.historyChoice)
   const newFirstOutputItem = getItem({
     itemId: props.historyChoice.newFirstOutput,

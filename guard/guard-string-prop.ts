@@ -2,12 +2,14 @@ import guardPropType from './guard-prop-type'
 import guardString from './guard-string'
 
 export default function guardStringProp (props: {
-  data: object
   key: string
+  label: string
+  value: object
 }): string {
   return guardPropType({
     guard: guardString,
-    data: props.data,
-    key: props.key
+    label: props.label,
+    key: props.key,
+    value: props.value
   })
 }

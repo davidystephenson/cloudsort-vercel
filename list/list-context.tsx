@@ -17,8 +17,8 @@ import createState from '../mergeChoice/createState'
 import shuffleSlice from '@/shuffleSlice/shuffleSlice'
 import useQueue from '@/useQueue/useQueue'
 import { OkResponse } from '@/respond/respond-types'
-import postDeleteMovie from '@/movie/post-delete-movie'
 import postImportMovies from '@/movie/post-import-movies'
+import postDeleteMovie from '@/movie/post-delete-movie'
 
 export const {
   useContext: useList,
@@ -71,7 +71,7 @@ export const {
       void queue.add({ task })
       updateState({ update: props.local })
     }
-    async function createMovies (createMoviesProps: {
+    async function importMovies (createMoviesProps: {
       movies: MovieData[]
       slice?: number
     }): Promise<void> {
@@ -155,7 +155,7 @@ export const {
     }
     const value = {
       choose,
-      createMovies,
+      importMovies,
       delete: _delete,
       deleteMovie,
       filter,

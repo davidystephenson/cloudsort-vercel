@@ -2,21 +2,24 @@ import guardArray from './guard-array'
 import guardObjectArray from './guard-object-array'
 
 export default function guardObjectArrayType <Type> (props: {
-  data: unknown
-  guard: (props: { data: object, label: string }) => Type
+  guard: (props: {
+    label: string
+    value: object
+  }) => Type
   label: string
+  value: unknown
 }): Type[] {
   const array = guardArray({
-    data: props.data,
+    value: props.value,
     label: props.label
   })
   const objectArray = guardObjectArray({
-    data: array,
+    value: array,
     label: props.label
   })
   const typedArray: Type[] = []
   for (const element of objectArray) {
-    const typed = props.guard({ data: element, label: props.label })
+    const typed = props.guard({ value: element, label: props.label })
     typedArray.push(typed)
   }
   return typedArray

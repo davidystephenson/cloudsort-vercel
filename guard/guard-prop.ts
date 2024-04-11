@@ -1,10 +1,13 @@
 import guardKey from './guard-key'
 
 export default function guardProp (props: {
-  data: object
   key: string
+  value: object
 }): unknown {
-  const keyed = guardKey({ data: props.data, key: props.key })
+  const keyed = guardKey({
+    key: props.key,
+    value: props.value
+  })
   const value = keyed[props.key]
   return value
 }

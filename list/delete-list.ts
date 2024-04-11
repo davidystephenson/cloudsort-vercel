@@ -4,6 +4,6 @@ import { DeleteListBody } from './list-types'
 export default async function deleteList (props: {
   body: DeleteListBody
 }): Promise<void> {
-  const response = await axios.delete('/api/list', { data: props.body })
+  const response = await axios.post('/api/list/delete', props.body)
   return response.data
 }

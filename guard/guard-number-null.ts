@@ -1,12 +1,12 @@
 import { ApiError } from 'next/dist/server/api-utils'
 
 export default function guardNumberNull (props: {
-  data: unknown
   label: string
+  value: unknown
 }): number | null {
-  if (typeof props.data !== 'number' && props.data !== null) {
+  if (typeof props.value !== 'number' && props.value !== null) {
     const message = `${props.label} is not a string or null`
     throw new ApiError(422, message)
   }
-  return props.data
+  return props.value
 }
