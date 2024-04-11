@@ -3,10 +3,6 @@ import { Calculated } from '../mergeChoice/mergeChoiceTypes'
 
 export type MovieData = Omit<Movie, 'id'>
 
-export interface PostMovieBody extends MovieData {
-  listId: number
-}
-
 export interface PostMoviesBody {
   listId: number
   movies: MovieData[]

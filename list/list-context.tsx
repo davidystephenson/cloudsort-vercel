@@ -1,8 +1,7 @@
 import { RelatedList } from './list-types'
 import { Movie } from '@prisma/client'
 import { useOptionalLists } from './lists-context'
-import { MovieData, PostMovieBody, PostMoviesBody } from '../movie/movie-types'
-import postMovie from '../movie/post-movie'
+import { MovieData, PostMoviesBody } from '../movie/movie-types'
 import { useCallback, useEffect, useState } from 'react'
 import useFilter from '../filter/use-filter'
 import filterMovie from '../movie/filterMovie'
@@ -71,30 +70,6 @@ export const {
       }
       void queue.add({ task })
       updateState({ update: props.local })
-    }
-    function importMovies (props: {
-      movies: Movie[]
-      slice?: number
-    }): void {
-      function update (updateProps: { state: State<Movie> }): State<Movie> {
-        const newState = importItems({
-          items: props.movies,
-          state: updateProps.state
-        })
-        return newState
-      }
-      updateState({ update })
-    }
-    async function createMovie (
-      createMovieProps: MovieData
-    ): Promise<Movie> {
-      const body: PostMovieBody = {
-        listId: props.row.id,
-        ...createMovieProps
-      }
-      const movie = await postMovie({ body })
-      importMovies({ movies: [movie] })
-      return movie
     }
     async function createMovies (createMoviesProps: {
       movies: MovieData[]
@@ -180,7 +155,6 @@ export const {
     }
     const value = {
       choose,
-      createMovie,
       createMovies,
       delete: _delete,
       deleteMovie,

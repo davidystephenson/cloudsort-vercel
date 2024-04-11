@@ -1,15 +1,16 @@
 import { Fields } from '../form/form-types'
 import guardString from './guard-string'
 
-export default function guardFields <FieldName extends string> (props: {
+export default function guardStringModel <FieldName extends string> (props: {
   fields: Fields
-  names: FieldName[]
+  model: { [K in FieldName]: unknown }
 }): Record<FieldName, string> {
-  const entries: Array<[FieldName, string]> = props.names.map((name) => {
+  const keys = Object.keys(props.model) as FieldName[]
+  const entries: Array<[FieldName, string]> = keys.map((name) => {
     const field = props.fields[name]
     const value = guardString({
-      data: field?.value,
-      label: name
+      label: `${name}`,
+      data: field?.value
     })
     return [name, value]
   })

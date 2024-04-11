@@ -1,10 +1,10 @@
-export default function guardDefined <Value> (props: {
-  name: string
-  value: Value
-}): NonNullable<Value> {
-  if (props.value == null) {
-    const message = `There is no ${props.name}`
+export default function guardDefined (props: {
+  data: unknown
+  label: string
+}): NonNullable<unknown> {
+  if (props.data == null) {
+    const message = `There is no ${props.label}`
     throw new Error(message)
   }
-  return props.value
+  return props.data
 }
