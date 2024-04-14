@@ -3,6 +3,8 @@ import { MovieProvider } from '@/movie/movie-context'
 import { OptionProvider } from './option-context'
 import OptionConsumer from './option-consumer'
 import { ItemId } from '@/mergeChoice/mergeChoiceTypes'
+import { VStack, HStack } from '@chakra-ui/react'
+import OptionOpenView from './option-open-view'
 
 export default function OptionView (props: {
   chooseLetter: string
@@ -22,7 +24,12 @@ export default function OptionView (props: {
         index={props.index}
         openLetter={props.openLetter}
       >
-        <OptionConsumer />
+        <VStack>
+          <HStack>
+            <OptionConsumer />
+          </HStack>
+          <OptionOpenView />
+        </VStack>
       </OptionProvider>
     </MovieProvider>
   )

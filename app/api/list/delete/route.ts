@@ -1,30 +1,14 @@
-import respondAuthError from '@/auth/respond-auth-error'
-import serverAuth from '@/auth/server-auth'
-import guardDeleteList from '@/list/guard-delete-list'
-import respondError from '@/respond/respond-error'
-import { NextResponse } from 'next/server'
-import prisma from '@/prisma/prisma'
+import guardPostDeleteList from '@/list/guard-post-delete-list'
+import { handleAuthPost } from '@/post/handle-auth-post'
+import { PostDeleteListBody } from '@/list/list-types'
+import { Ok } from '@/respond/respond-types'
+import handlePostDeleteList from '@/list/handle-post-delete-list'
 
-export async function POST (req: Request): Promise<Response> {
-  const authSession = await serverAuth()
-  if (authSession == null) {
-    return respondAuthError()
-  }
-  const data: unknown = await req.json()
-  const body = guardDeleteList({ label: '/list/delete body', value: data })
-  const list = await prisma.list.findFirst({
-    where: {
-      id: body.listId,
-      userId: authSession.user.id
-    }
+export async function POST (request: Request): Promise<Response> {
+  return await handleAuthPost<PostDeleteListBody, Ok>({
+    guard: guardPostDeleteList,
+    guardLabel: '/list/delete body',
+    handle: handlePostDeleteList,
+    request
   })
-  if (list == null) {
-    return respondError({ message: 'This list does not exist', status: 404 })
-  }
-  await prisma.list.delete({
-    where: {
-      id: body.listId
-    }
-  })
-  return NextResponse.json(list)
 }

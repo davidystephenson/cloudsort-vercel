@@ -16,7 +16,7 @@ export const {
     const movie = useMovie()
     const list = useList()
     function choose (): void {
-      list.choose({ betterIndex: props.index, movieId: movie.calculated.id })
+      list.choose({ betterIndex: props.index })
     }
     useHotkeys(props.openLetter, () => {
       void movie.open()
@@ -26,6 +26,7 @@ export const {
     const value = {
       choose,
       chooseLetter: props.chooseLetter,
+      index: props.index,
       openLetter: props.openLetter
     }
     return value

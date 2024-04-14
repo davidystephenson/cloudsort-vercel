@@ -10,7 +10,7 @@ export default function createActiveChoice <ListItem extends Item> (props: {
   const choiceOperation = getChoiceOperation({ operations: props.state.activeOperations })
   const currentOperation = getOperation({
     operations: props.state.activeOperations,
-    itemId: choiceOperation.mergeChoiceId
+    operationId: choiceOperation.mergeChoiceId
   })
   const firstOption = currentOperation.input[0][0]
   if (firstOption == null) {

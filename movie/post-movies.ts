@@ -1,20 +1,12 @@
 import { Movie } from '@prisma/client'
-import { PostMoviesBody, PostMoviesResponse } from './movie-types'
-import axios, { AxiosResponse } from 'axios'
+import { PostMoviesBody } from './movie-types'
+import post from '@/post/post'
 
 export default async function postMovies (props: {
   body: PostMoviesBody
 }): Promise<Movie[]> {
-  const response = await axios.post<
-  unknown,
-  AxiosResponse<PostMoviesResponse>,
-  PostMoviesBody
-  >('/api/movies', props.body)
-  const movies: Movie[] = response.data.movies.map((movie) => {
-    return {
-      ...movie,
-      updatedAt: new Date(movie.updatedAt)
-    }
+  return await post({
+    body: props.body,
+    url: '/api/movies'
   })
-  return movies
 }

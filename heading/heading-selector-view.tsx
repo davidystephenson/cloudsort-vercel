@@ -21,6 +21,7 @@ export default function HeadingSelectorView (props: {
           colorScheme='purple'
           icon={<MdClose />}
           onClick={handleClose}
+          variant='solid'
         />
         <ThemeButtonView isActive>
           {props.children}

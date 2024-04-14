@@ -1,15 +1,19 @@
 import { ApiError } from 'next/dist/server/api-utils'
 
-function hasKey<Data extends Object, Key extends string> (data: Data, key: Key): data is Data & Record<Key, unknown> {
-  return key in data
+function hasKey<Value extends object, Key extends string> (
+  key: Key,
+  value: Value
+): value is Value & Record<Key, unknown> {
+  return key in value
 }
 
-export default function guardKey <Data extends Object, Key extends string> (props: {
+export default function guardKey <Value extends object, Key extends string> (props: {
   key: Key
-  value: Data
-}): Data & Record<Key, unknown> {
-  if (!hasKey(props.value, props.key)) {
-    throw new ApiError(422, `There is no ${props.key}`)
+  label: string
+  value: Value
+}): Value & Record<Key, unknown> {
+  if (!hasKey(props.key, props.value)) {
+    throw new ApiError(422, `${props.label} has no ${props.key}`)
   }
   return props.value
 }

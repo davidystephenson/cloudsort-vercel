@@ -33,7 +33,8 @@ export const {
       }
     }
     function handleQueryChange (event: ChangeEvent<HTMLInputElement>): void {
-      setQuery(event.target.value)
+      const lower = event.target.value.toLowerCase()
+      setQuery(lower)
       props.filterRows({ query: event.target.value })
       setAutoFocus(true)
     }

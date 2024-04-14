@@ -9,7 +9,11 @@ export default function guardPropType <Type> (props: {
   key: string
   value: object
 }): Type {
-  const prop = guardProp({ value: props.value, key: props.key })
+  const prop = guardProp({
+    key: props.key,
+    label: props.label,
+    value: props.value
+  })
   const keyLabel = `${props.label}.${props.key}`
   const typed = props.guard({
     label: keyLabel,

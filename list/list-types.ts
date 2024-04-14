@@ -6,7 +6,11 @@ export interface ListWhere {
   userId?: number
 }
 
-export interface DeleteListBody {
+export interface PostListBody {
+  name: string
+}
+
+export interface PostDeleteListBody {
   listId: number
 }
 

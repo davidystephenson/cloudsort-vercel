@@ -4,7 +4,7 @@ import postList from './post-list'
 import filterList from './filter-list'
 import useFilter from '../filter/use-filter'
 import contextCreator from 'context-creator'
-import deleteList from './delete-list'
+import postDeleteList from './post-delete-list'
 
 export const {
   useContext: useLists,
@@ -23,7 +23,8 @@ export const {
     async function create (props: {
       name: string
     }): Promise<List> {
-      const row = await postList({ name: props.name })
+      const body = { name: props.name }
+      const row = await postList({ body })
       setRows((rows) => {
         const newRows = [row, ...rows]
         return newRows
@@ -34,7 +35,7 @@ export const {
       id: number
     }): Promise<void> {
       const body = { listId: props.id }
-      await deleteList({ body })
+      await postDeleteList({ body })
       setRows((rows) => {
         const newRows = rows.filter((row) => {
           const keep = row.id !== props.id

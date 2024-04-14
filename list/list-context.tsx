@@ -16,9 +16,10 @@ import contextCreator from 'context-creator'
 import createState from '../mergeChoice/createState'
 import shuffleSlice from '@/shuffleSlice/shuffleSlice'
 import useQueue from '@/useQueue/useQueue'
-import { OkResponse } from '@/respond/respond-types'
+import { Ok } from '@/respond/respond-types'
 import postImportMovies from '@/movie/post-import-movies'
 import postDeleteMovie from '@/movie/post-delete-movie'
+import getDefaultOptionIndex from '@/mergeChoice/getDefaultOptionIndex'
 
 export const {
   useContext: useList,
@@ -48,6 +49,10 @@ export const {
       rows: movies,
       filter: filterMovie
     })
+    const defaultOptionIndex = getDefaultOptionIndex({
+      movies: state.items,
+      choice: state.choice
+    })
     async function _delete (): Promise<void> {
       await lists?.delete({ id: props.row.id })
     }
@@ -76,7 +81,8 @@ export const {
       slice?: number
     }): Promise<void> {
       const sliced = shuffleSlice({
-        items: createMoviesProps.movies
+        items: createMoviesProps.movies,
+        slice: createMoviesProps.slice
       })
       const body: PostMoviesBody = {
         listId: props.row.id,
@@ -91,7 +97,7 @@ export const {
         })
         return newState
       }
-      async function remote (): Promise<OkResponse> {
+      async function remote (): Promise<Ok> {
         const body = {
           listId: props.row.id,
           movies
@@ -112,7 +118,7 @@ export const {
         })
         return newState
       }
-      async function remote (): Promise<OkResponse> {
+      async function remote (): Promise<Ok> {
         const body = {
           listId: props.row.id,
           movieId: deleteMovieProps.movieId
@@ -123,12 +129,11 @@ export const {
     }
     function choose (chooseProps: {
       betterIndex: number
-      movieId: number
     }): void {
-      const betterId = state.choice?.options[chooseProps.betterIndex]
-      if (betterId == null) {
-        throw new Error('There is no betterId')
+      if (state.choice == null) {
+        throw new Error('There is no choice')
       }
+      const betterId = state.choice?.options[chooseProps.betterIndex]
       const worseIndex = 1 - chooseProps.betterIndex
       const worseId = state.choice?.options[worseIndex]
       if (worseId == null) {
@@ -144,18 +149,27 @@ export const {
         })
         return newState
       }
-      async function remote (): Promise<OkResponse> {
+      async function remote (): Promise<Ok> {
         const body = {
           betterIndex: chooseProps.betterIndex,
-          listId: props.row.id
+          listId: props.row.id,
+          movieId: betterId
         }
         return await postChooseMovie({ body })
       }
       queueState({ label, local, remote })
     }
+    function defer (): void {
+      if (defaultOptionIndex == null) {
+        throw new Error('There is no defaultOptionIndex')
+      }
+      choose({ betterIndex: defaultOptionIndex })
+    }
     const value = {
       choose,
       importMovies,
+      defaultOptionIndex,
+      defer,
       delete: _delete,
       deleteMovie,
       filter,

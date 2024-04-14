@@ -1,4 +1,4 @@
-import { SignInResponse, signIn as nextAuthSignIn } from 'next-auth/react'
+import { SignInResponse, signIn } from 'next-auth/react'
 
 export default async function login ({ email, password }: {
   email: string
@@ -9,7 +9,7 @@ export default async function login ({ email, password }: {
     email,
     password
   }
-  const result = await nextAuthSignIn('credentials', body)
+  const result = await signIn('credentials', body)
   if (result == null) {
     throw new Error('There is no result')
   }

@@ -10,8 +10,10 @@ const ThemeIconButtonView = forwardRef<HTMLButtonElement, IconButtonProps>((
   const disabled = !theme.mounted
   return (
     <IconButton
-      size='sm'
+      colorScheme='red'
       isDisabled={disabled}
+      size='sm'
+      variant='link'
       {...props}
       ref={ref}
     />

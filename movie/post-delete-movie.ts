@@ -1,14 +1,12 @@
-import axios from 'axios'
+import post from '@/post/post'
 import { PostDeleteMovieBody } from './movie-types'
-import { OkResponse } from '@/respond/respond-types'
+import { Ok } from '@/respond/respond-types'
 
 export default async function postDeleteMovie (props: {
   body: PostDeleteMovieBody
-}): Promise<OkResponse> {
-  const response = await axios.post<
-  unknown,
-  OkResponse,
-  PostDeleteMovieBody
-  >('/api/movie/delete', props.body)
-  return response
+}): Promise<Ok> {
+  return await post({
+    body: props.body,
+    url: '/api/movie/delete'
+  })
 }

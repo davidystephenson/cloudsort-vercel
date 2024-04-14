@@ -6,8 +6,8 @@ import useSystemDark from '../use-system-dark/useSystemDark'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useColorMode } from '@chakra-ui/react'
 import contextCreator from 'context-creator'
-import axios from 'axios'
 import { useRouter } from 'next/navigation'
+import postShade from '@/shade/post-shade'
 
 export const {
   useContext: useTheme,
@@ -65,13 +65,6 @@ export const {
     if (debug) {
       console.debug('darkened', darkened)
     }
-    const postShade = useCallback(async (props: {
-      shade: string
-    }) => {
-      const body = JSON.stringify({ shade: props.shade })
-      await axios.post('/api/shade', body)
-      document.cookie = 'newShade=none;'
-    }, [])
     const updateShade = useCallback((props: {
       shade: string
     }) => {
@@ -82,7 +75,7 @@ export const {
         return
       }
       void postShade({ shade: props.shade })
-    }, [auth.session, postShade])
+    }, [auth.session])
     const toggleShade = useCallback(() => {
       setToggling(true)
       colorMode.toggleColorMode()
@@ -118,7 +111,7 @@ export const {
       if (unshadedUser && shade != null) {
         void postShade({ shade })
       }
-    }, [postShade, shade, unshadedUser])
+    }, [shade, unshadedUser])
     useEffect(() => {
       if (toggling) {
         setToggling(false)

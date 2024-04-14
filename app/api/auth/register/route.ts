@@ -1,25 +1,14 @@
-import prisma from '@/prisma/prisma'
-import { hash } from 'bcrypt'
-import { NextResponse } from 'next/server'
+import { handlePost } from '@/post/handle-post'
+import { AuthBody } from '@/auth/auth-types'
+import guardAuthBody from '@/auth/guard-auth-body'
+import { User } from '@prisma/client'
+import handlePostRegister from '@/auth/handle-post-register'
 
-export async function POST (req: Request): Promise<Response> {
-  const { email, password } = await req.json()
-  const exists = await prisma.user.findUnique({
-    where: {
-      email
-    }
+export async function POST (request: Request): Promise<Response> {
+  return await handlePost<AuthBody, User>({
+    guard: guardAuthBody,
+    guardLabel: '/auth/register body',
+    handle: handlePostRegister,
+    request
   })
-  if (exists != null) {
-    const body = { error: 'User already exists' }
-    const options = { status: 400 }
-    return NextResponse.json(body, options)
-  } else {
-    const user = await prisma.user.create({
-      data: {
-        email,
-        password: await hash(password, 10)
-      }
-    })
-    return NextResponse.json(user)
-  }
 }

@@ -1,10 +1,12 @@
 import { List } from '@prisma/client'
-import axios from 'axios'
+import { PostListBody } from './list-types'
+import post from '@/post/post'
 
 export default async function postList (props: {
-  name: string
+  body: PostListBody
 }): Promise<List> {
-  const body = { name: props.name }
-  const response = await axios.post('/api/list', body)
-  return response.data
+  return await post({
+    body: props.body,
+    url: '/api/list'
+  })
 }

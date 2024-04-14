@@ -1,6 +1,7 @@
-import { HStack } from '@chakra-ui/react'
+import { Center, HStack } from '@chakra-ui/react'
 import { useList } from '../list/list-context'
 import OptionView from './option-view'
+import DeferView from '@/defer/defer-view'
 
 export default function OptionsView (): JSX.Element {
   const list = useList()
@@ -8,19 +9,24 @@ export default function OptionsView (): JSX.Element {
     return <></>
   }
   return (
-    <HStack flexWrap='wrap' justifyContent='center'>
-      <OptionView
-        chooseLetter='a'
-        index={0}
-        id={list.state.choice.options[0]}
-        openLetter='c'
-      />
-      <OptionView
-        chooseLetter='b'
-        index={1}
-        id={list.state.choice.options[1]}
-        openLetter='v'
-      />
-    </HStack>
+    <>
+      <HStack flexWrap='wrap' justifyContent='center'>
+        <OptionView
+          chooseLetter='a'
+          index={0}
+          id={list.state.choice.options[0]}
+          openLetter='c'
+        />
+        <OptionView
+          chooseLetter='b'
+          index={1}
+          id={list.state.choice.options[1]}
+          openLetter='v'
+        />
+      </HStack>
+      <Center>
+        <DeferView />
+      </Center>
+    </>
   )
 }

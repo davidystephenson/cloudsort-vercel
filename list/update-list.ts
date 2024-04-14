@@ -1,68 +1,43 @@
-import { ApiError } from 'next/dist/server/api-utils'
-import { NextResponse } from 'next/server'
 import saveStateToList from './save-state-to-list'
-import serverAuth from '@/auth/server-auth'
-import respondAuthError from '@/auth/respond-auth-error'
-import prisma from '@/prisma/prisma'
-import { ListWhere, RelatedList } from './list-types'
+import { ListWhere } from './list-types'
 import { State } from '@/mergeChoice/mergeChoiceTypes'
 import { Movie } from '@prisma/client'
 import guardUserMergechoiceList from './guard-user-mergechoice-list'
-import respondError from '@/respond/respond-error'
-import respondOk from '@/respond/respond-ok'
+import { handleAuthPost } from '@/post/handle-auth-post'
 
-export default async function updateList <Body extends ListWhere, Result> (props: {
-  guard: (props: {
+export default async function updateList <Body extends ListWhere> (props: {
+  guardBody: (props: {
     label: string
     value: unknown
   }) => Body
   guardLabel: string
+  guardUpdate?: (props: { body: Body, state: State<Movie> }) => Promise<void>
   request: Request
-  respond: (props?: {
-    body?: Body
-    list?: RelatedList
-    state?: State<Movie>
-  }) => Result
   update: (props: { body: Body, state: State<Movie> }) => State<Movie>
 }): Promise<Response> {
-  const respond = props.respond ?? respondOk
-  const authSession = await serverAuth()
-  if (authSession == null) {
-    return respondAuthError()
-  }
-  const json = await props.request.json()
-  const body = props.guard({ label: props.guardLabel, value: json })
-  try {
-    const response = await prisma.$transaction(async (transaction) => {
+  return await handleAuthPost({
+    guard: props.guardBody,
+    guardLabel: props.guardLabel,
+    handle: async (handleProps) => {
       const mergeChoiceList = await guardUserMergechoiceList({
-        listId: body.listId,
-        userId: authSession.user.id
+        listId: handleProps.body.listId,
+        userId: handleProps.authSession.user.id
+      })
+      await props.guardUpdate?.({
+        body: handleProps.body,
+        state: mergeChoiceList.state
       })
       const newState = props.update({
-        body,
+        body: handleProps.body,
         state: mergeChoiceList.state
       })
       await saveStateToList({
         list: mergeChoiceList.list,
         state: newState,
-        tx: transaction
+        tx: handleProps.tx
       })
-      const response = respond({
-        body,
-        list: mergeChoiceList.list,
-        state: newState
-      })
-      return response
-    }, {
-      isolationLevel: 'Serializable',
-      maxWait: 5000, // default: 200
-      timeout: 1000000 // default: 5000
-    })
-    return NextResponse.json(response)
-  } catch (error) {
-    if (error instanceof ApiError) {
-      return respondError({ message: error.message, status: error.statusCode })
-    }
-    throw error
-  }
+      return { ok: true }
+    },
+    request: props.request
+  })
 }

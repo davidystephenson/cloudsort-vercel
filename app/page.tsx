@@ -1,4 +1,3 @@
-import CreateListButtonView from '@/list/create-list-button-view'
 import Link from 'next/link'
 
 export default async function Home (): Promise<JSX.Element> {
@@ -11,9 +10,6 @@ export default async function Home (): Promise<JSX.Element> {
         >
           Protected Page
         </Link>
-      </div>
-      <div>
-        <CreateListButtonView />
       </div>
     </>
   )

@@ -1,6 +1,7 @@
 import { PostChooseMovieBody } from './movie-types'
 import guardObject from '@/guard/guard-object'
 import guardNumberProp from '@/guard/guard-number-prop'
+import guardStringNumberProp from '@/guard/guard-string-number-prop'
 
 export default function guardPostChooseMovie (props: {
   label: string
@@ -20,8 +21,14 @@ export default function guardPostChooseMovie (props: {
     label: props.label,
     value: data
   })
+  const movieId = guardStringNumberProp({
+    key: 'movieId',
+    label: props.label,
+    value: data
+  })
   return {
     betterIndex,
-    listId
+    listId,
+    movieId
   }
 }

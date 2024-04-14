@@ -1,16 +1,19 @@
-import { MdDeleteForever } from 'react-icons/md'
 import RequestIconButtonView from '../request/request-icon-button-view'
+import { OptionallyLabeledIconButtonProps } from '@/theme/theme-types'
+import { DeleteIcon } from '@chakra-ui/icons'
 
 export default function DeleteIconButtonView (props: {
   send: () => Promise<void>
-}): JSX.Element {
+} & OptionallyLabeledIconButtonProps): JSX.Element {
+  const ariaLabel = props['aria-label'] ?? 'Delete'
   return (
     <RequestIconButtonView
-      aria-label='Delete'
-      icon={<MdDeleteForever />}
-      send={props.send}
-      variant='light'
+      colorScheme='red'
+      icon={<DeleteIcon />}
       orientation='vertical'
+      variant='ghost'
+      {...props}
+      aria-label={ariaLabel}
     />
   )
 }

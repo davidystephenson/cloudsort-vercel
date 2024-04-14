@@ -1,3 +1,3 @@
-export interface OkResponse {
+export interface Ok {
   ok: true
 }
