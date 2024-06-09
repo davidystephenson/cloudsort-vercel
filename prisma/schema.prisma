@@ -6,10 +6,117 @@ generator client {
 }
 
 datasource db {
-  provider          = "postgresql"
-  url               = env("POSTGRES_PRISMA_URL") // uses connection pooling
-  directUrl         = env("POSTGRES_URL_NON_POOLING") // uses a direct connection
-  shadowDatabaseUrl = env("POSTGRES_URL_NON_POOLING") // used for migrations
+  provider  = "postgresql"
+  url       = env("POSTGRES_PRISMA_URL") // uses connection pooling
+  directUrl = env("POSTGRES_URL_NON_POOLING") // uses a direct connection
+  // shadowDatabaseUrl = env("POSTGRES_URL_NON_POOLING") // used for migrations
+}
+
+model List {
+  id             Int     @id @default(autoincrement())
+  choiceCount    Int     @default(0)
+  events         Event[]
+  name           String
+  operationCount Int     @default(0)
+  user           User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId         Int
+  seed           String
+}
+
+model ChoiceEvent {
+  aBetter       Boolean
+  aId           Int
+  aIndex        Int
+  aItem         EventItem @relation("aItems", fields: [aId], references: [id])
+  bId           Int
+  bIndex        Int
+  bItem         EventItem @relation("bItems", fields: [bId], references: [id])
+  event         Event     @relation(fields: [eventId], references: [id])
+  eventId       Int       @unique
+  id            Int       @id @default(autoincrement())
+  mergeChoiceId Int
+  random        Boolean
+  seeded        Boolean
+}
+
+model Event {
+  choiceEvent ChoiceEvent?
+  createdAt   DateTime     @default(now())
+  id          Int          @id @default(autoincrement())
+  import      Import?
+  list        List         @relation(fields: [listId], references: [id], onDelete: Cascade)
+  listId      Int
+  random      Random?
+  remove      Remove?
+}
+
+model EventItem {
+  id            Int           @id @default(autoincrement())
+  item          Item          @relation(fields: [itemId], references: [id])
+  itemId        Int
+  seed          Int?
+  aChoiceEvents ChoiceEvent[] @relation("aItems")
+  bChoiceEvents ChoiceEvent[] @relation("bItems")
+  importItem    ImportItem?
+  firstRandom   Random?       @relation("firstRandom")
+  secondRandom  Random?       @relation("secondRandom")
+  removes       Remove[]
+  resets        Reset[]
+}
+
+model Import {
+  event       Event        @relation(fields: [eventId], references: [id])
+  eventId     Int          @unique
+  id          Int          @id @default(autoincrement())
+  importItems ImportItem[]
+}
+
+model ImportItem {
+  id       Int
+  item     EventItem @relation(fields: [itemId], references: [id])
+  itemId   Int       @unique
+  import   Import    @relation(fields: [importId], references: [id])
+  importId Int
+}
+
+model Item {
+  id         Int         @id @default(autoincrement())
+  name       String
+  movie      Movie?
+  eventItems EventItem[]
+}
+
+model Movie {
+  id     Int     @id @default(autoincrement())
+  imdbId String
+  item   Item    @relation(fields: [itemId], references: [id])
+  itemId Int     @unique
+  url    String?
+  year   Int
+}
+
+model Random {
+  id         Int       @id @default(autoincrement())
+  firstItem  EventItem @relation("firstRandom", fields: [firstId], references: [id])
+  firstId    Int       @unique
+  secondItem EventItem @relation("secondRandom", fields: [secondId], references: [id])
+  secondId   Int       @unique
+  event      Event     @relation(fields: [eventId], references: [id])
+  eventId    Int       @unique
+}
+
+model Remove {
+  event   Event     @relation(fields: [eventId], references: [id])
+  eventId Int       @unique
+  id      Int       @id @default(autoincrement())
+  item    EventItem @relation(fields: [itemId], references: [id])
+  itemId  Int
+}
+
+model Reset {
+  id     Int       @id @default(autoincrement())
+  item   EventItem @relation(fields: [itemId], references: [id])
+  itemId Int
 }
 
 model User {
@@ -18,100 +125,4 @@ model User {
   password String
   shade    String?
   lists    List[]
-}
-
-model List {
-  id                Int                @id @default(autoincrement())
-  choiceCount       Int                @default(0)
-  choices           Choice[]
-  name              String
-  movieReservations MovieReservation[]
-  operationCount    Int                @default(0)
-  operations        Operation[]
-  user              User               @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId            Int
-  seed              String
-}
-
-model Operation {
-  id            Int           @id @default(autoincrement())
-  active        Boolean
-  better        Boolean
-  list          List          @relation(fields: [listId], references: [id], onDelete: Cascade)
-  listId        Int
-  mergeChoiceId Int
-  inputs        Input[]
-  outputMovies  OutputMovie[]
-  priority      Float
-  worse         Boolean
-}
-
-model Input {
-  id          Int          @id @default(autoincrement())
-  index       Int
-  operationId Int
-  operation   Operation    @relation(fields: [operationId], references: [id], onDelete: Cascade)
-  inputMovies InputMovie[]
-}
-
-model InputMovie {
-  id      Int   @id @default(autoincrement())
-  index   Int
-  movieId Int
-  inputId Int
-  input   Input @relation(fields: [inputId], references: [id], onDelete: Cascade)
-  movie   Movie @relation(fields: [movieId], references: [id])
-}
-
-model OutputMovie {
-  id          Int       @id @default(autoincrement())
-  index       Int
-  movieId     Int
-  movie       Movie     @relation(fields: [movieId], references: [id])
-  operationId Int
-  operation   Operation @relation(fields: [operationId], references: [id], onDelete: Cascade)
-}
-
-model Movie {
-  id                Int                @id @default(autoincrement())
-  name              String
-  score             Int
-  imdbId            String
-  review            String?
-  url               String?
-  year              Int
-  inputMovies       InputMovie[]
-  outputMovies      OutputMovie[]
-  options           Option[]
-  movieReservations MovieReservation[]
-}
-
-model Choice {
-  id                     Int      @id @default(autoincrement())
-  aIndex                 Int
-  bIndex                 Int
-  active                 Boolean
-  listId                 Int
-  list                   List     @relation(fields: [listId], references: [id], onDelete: Cascade)
-  mergeChoiceId          Int
-  operationMergeChoiceId Int?
-  options                Option[]
-  random                 Boolean
-}
-
-model Option {
-  id       Int    @id @default(autoincrement())
-  index    Int
-  movieId  Int
-  choice   Choice @relation(fields: [choiceId], references: [id], onDelete: Cascade)
-  choiceId Int
-  movie    Movie  @relation(fields: [movieId], references: [id])
-}
-
-model MovieReservation {
-  id      Int   @id @default(autoincrement())
-  movieId Int
-  movie   Movie @relation(fields: [movieId], references: [id])
-  listId  Int
-  list    List  @relation(fields: [listId], references: [id], onDelete: Cascade)
 }

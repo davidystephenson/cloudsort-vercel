@@ -1,13 +1,13 @@
 import guardUnion from './guard-union'
 import guardString from './guard-string'
-import guardNull from './guard-null'
+import guardUndefined from './guard-undefined'
 
-export default function guardStringNull (props: {
+export default function guardStringUndefined (props: {
   label: string
   value: unknown
-}): string | null {
+}): string | undefined {
   const guarded = guardUnion({
-    guards: [guardString, guardNull],
+    guards: [guardString, guardUndefined],
     label: props.label,
     value: props.value
   })

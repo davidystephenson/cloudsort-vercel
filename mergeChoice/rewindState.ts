@@ -1,26 +1,20 @@
+import deduceState from './deduceState'
 import { ItemId, Item, State } from './mergeChoiceTypes'
 
-export default function rewindState <ListItem extends Item> ({
-  historyEventId,
-  state
-}: {
+export default function rewindState <ListItem extends Item> (props: {
   historyEventId: ItemId
   state: State<ListItem>
 }): State<ListItem> {
-  const historyEvent = state.history.find(event => event.mergeChoiceId === historyEventId)
-  if (historyEvent == null) {
-    const message = `There is no history event with id ${historyEventId}.`
-    throw new Error(message)
+  const index = props.state.history.findIndex(
+    event => event.mergeChoiceId === props.historyEventId
+  )
+  if (index === -1) {
+    throw new Error('There is no event')
   }
-  if (historyEvent.previousState == null) {
-    const message = `There is no previous state for history event with id ${historyEventId}.`
-    throw new Error(message)
-  }
-  const index = state.history.indexOf(historyEvent)
-  const previousHistory = state.history.slice(index + 1)
-  const newState = {
-    ...historyEvent.previousState,
-    history: previousHistory
-  }
+  const events = props.state.history.slice(index + 1)
+  const newState = deduceState({
+    history: events,
+    seed: props.state.seed
+  })
   return newState
 }

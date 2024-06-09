@@ -3,6 +3,7 @@ import { ApiError } from 'next/dist/server/api-utils'
 import { NextResponse } from 'next/server'
 import prisma from '@/prisma/prisma'
 import { PrismaTransaction } from '@/prisma/prisma-types'
+import guardRequest from '@/guard/guard-request'
 
 export async function handlePost <Body, Result> (props: {
   guard: (props: {
@@ -17,8 +18,11 @@ export async function handlePost <Body, Result> (props: {
   request: Request
 }): Promise<Response> {
   try {
-    const data = await props.request.json()
-    const body = props.guard({ label: props.guardLabel, value: data })
+    const body = await guardRequest({
+      guard: props.guard,
+      guardLabel: props.guardLabel,
+      request: props.request
+    })
     const result = await prisma.$transaction(async (transaction) => {
       const result = await props.handle({ body, transaction })
       return result

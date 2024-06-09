@@ -1,11 +1,11 @@
-import { ItemId, Choice, Item } from './mergeChoiceTypes'
+import { Choice, Item, ItemDictionary } from './mergeChoiceTypes'
 
 export default function getDefaultOptionIndex ({
   choice,
   movies
 }: {
   choice: Choice | undefined
-  movies: Record<ItemId, Item>
+  movies: ItemDictionary<Item>
 }): number | undefined {
   if (choice == null || choice.options.length === 0 || choice.random) {
     return undefined
@@ -14,9 +14,9 @@ export default function getDefaultOptionIndex ({
     return movies[option]
   })
   const [firstItem, secondItem] = choices
-  const defaultItem = firstItem.score === secondItem.score
+  const defaultItem = firstItem.seed === secondItem.seed || firstItem.seed == null || secondItem.seed == null
     ? undefined
-    : firstItem.score > secondItem.score
+    : firstItem.seed > secondItem.seed
       ? firstItem
       : secondItem
   const defaultOptionIndex = choice.options.findIndex(option => {

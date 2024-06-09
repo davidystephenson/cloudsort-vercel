@@ -1,8 +1,8 @@
+import guardBooleanProp from '@/guard/guard-boolean-prop'
+import guardNumberArrayProp from '@/guard/guard-number-array-prop'
+import guardNumberNullProp from '@/guard/guard-number-null-prop'
+import guardNumberProp from '@/guard/guard-number-prop'
 import { Choice } from '@/mergeChoice/mergeChoiceTypes'
-import guardNumberProp from './guard-number-prop'
-import guardBooleanProp from './guard-boolean-prop'
-import guardNumberNullProp from './guard-number-null-prop'
-import guardNumberArrayProp from './guard-number-array-prop'
 
 export default function guardChoice (props: {
   label: string
