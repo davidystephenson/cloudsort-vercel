@@ -12,18 +12,15 @@ datasource db {
   // shadowDatabaseUrl = env("POSTGRES_URL_NON_POOLING") // used for migrations
 }
 
-model List {
-  id             Int     @id @default(autoincrement())
-  choiceCount    Int     @default(0)
-  events         Event[]
-  name           String
-  operationCount Int     @default(0)
-  user           User    @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId         Int
-  seed           String
+model Archive {
+  event   Event     @relation(fields: [eventId], references: [id])
+  eventId Int       @unique
+  id      Int       @id @default(autoincrement())
+  item    EventItem @relation(fields: [itemId], references: [id])
+  itemId  Int
 }
 
-model ChoiceEvent {
+model Choice {
   aBetter       Boolean
   aId           Int
   aIndex        Int
@@ -40,28 +37,33 @@ model ChoiceEvent {
 }
 
 model Event {
-  choiceEvent ChoiceEvent?
-  createdAt   DateTime     @default(now())
-  id          Int          @id @default(autoincrement())
-  import      Import?
-  list        List         @relation(fields: [listId], references: [id], onDelete: Cascade)
-  listId      Int
-  random      Random?
-  remove      Remove?
+  archive   Archive?
+  choice    Choice?
+  createdAt DateTime   @default(now())
+  id        Int        @id @default(autoincrement())
+  import    Import?
+  list      List       @relation(fields: [listId], references: [id], onDelete: Cascade)
+  listId    Int
+  random    Random?
+  remove    Remove?
+  reset     Reset?
+  unarchive Unarchive?
 }
 
 model EventItem {
-  id            Int           @id @default(autoincrement())
-  item          Item          @relation(fields: [itemId], references: [id])
+  id            Int         @id @default(autoincrement())
+  item          Item        @relation(fields: [itemId], references: [id])
   itemId        Int
   seed          Int?
-  aChoiceEvents ChoiceEvent[] @relation("aItems")
-  bChoiceEvents ChoiceEvent[] @relation("bItems")
+  aChoiceEvents Choice[]    @relation("aItems")
+  bChoiceEvents Choice[]    @relation("bItems")
   importItem    ImportItem?
-  firstRandom   Random?       @relation("firstRandom")
-  secondRandom  Random?       @relation("secondRandom")
-  removes       Remove[]
+  firstRandom   Random?     @relation("firstRandom")
+  secondRandom  Random?     @relation("secondRandom")
+  removals      Remove[]
   resets        Reset[]
+  archives      Archive[]
+  Unarchive     Unarchive[]
 }
 
 model Import {
@@ -86,6 +88,17 @@ model Item {
   eventItems EventItem[]
 }
 
+model List {
+  id             Int     @id @default(autoincrement())
+  choiceCount    Int     @default(0)
+  events         Event[]
+  name           String
+  operationCount Int     @default(0)
+  user           User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId         Int
+  seed           String
+}
+
 model Movie {
   id     Int     @id @default(autoincrement())
   imdbId String
@@ -97,12 +110,12 @@ model Movie {
 
 model Random {
   id         Int       @id @default(autoincrement())
+  event      Event     @relation(fields: [eventId], references: [id])
+  eventId    Int       @unique
   firstItem  EventItem @relation("firstRandom", fields: [firstId], references: [id])
   firstId    Int       @unique
   secondItem EventItem @relation("secondRandom", fields: [secondId], references: [id])
   secondId   Int       @unique
-  event      Event     @relation(fields: [eventId], references: [id])
-  eventId    Int       @unique
 }
 
 model Remove {
@@ -114,9 +127,19 @@ model Remove {
 }
 
 model Reset {
-  id     Int       @id @default(autoincrement())
-  item   EventItem @relation(fields: [itemId], references: [id])
-  itemId Int
+  event   Event     @relation(fields: [eventId], references: [id])
+  eventId Int       @unique
+  id      Int       @id @default(autoincrement())
+  item    EventItem @relation(fields: [itemId], references: [id])
+  itemId  Int
+}
+
+model Unarchive {
+  event   Event     @relation(fields: [eventId], references: [id])
+  eventId Int       @unique
+  id      Int       @id @default(autoincrement())
+  item    EventItem @relation(fields: [itemId], references: [id])
+  itemId  Int
 }
 
 model User {
