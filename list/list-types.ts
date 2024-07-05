@@ -1,47 +1,20 @@
-import { List, Movie, Prisma } from '@prisma/client'
+import { Prisma } from '@prisma/client'
 import { State } from '../mergeChoice/mergeChoiceTypes'
+import { ListMovie } from '@/movie/movie-types'
+import { EventsRelation } from '@/event/event-types'
 
 export interface ListWhere {
   listId: number
   userId?: number
 }
-
-export interface PostListBody {
+export interface CreateListRequest {
   name: string
 }
-
-export interface PostDeleteListBody {
+export interface DeleteListRequest {
   listId: number
 }
-
-export interface ListsContextValue {
-  create: (props: { name: string }) => Promise<List>
-  delete: (props: { id: number }) => void
-  filter: (filterProps: { query: string | undefined }) => void
-  filtered: List[]
-  rows: List[]
-}
-export type RelatedList = Prisma.ListGetPayload<{
-  include: {
-    operations: {
-      include: {
-        inputs: {
-          include: {
-            inputMovies: true
-          }
-        }
-        outputMovies: true
-      }
-    }
-    movieReservations: true
-    choices: {
-      include: {
-        options: true
-      }
-    }
-  }
-}>
+export type RelatedList = Prisma.ListGetPayload<EventsRelation>
 export interface MergechoiceList {
   list: RelatedList
-  state: State<Movie>
+  state: State<ListMovie>
 }

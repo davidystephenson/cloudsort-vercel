@@ -1,7 +1,7 @@
 import { RelatedList } from './list-types'
 import { Movie } from '@prisma/client'
 import { useOptionalLists } from './lists-context'
-import { MovieData, PostMoviesBody } from '../movie/movie-types'
+import { MovieData, CreateMoviesRequest } from '../movie/movie-types'
 import { useCallback, useEffect, useState } from 'react'
 import useFilter from '../filter/use-filter'
 import filterMovie from '../movie/filterMovie'
@@ -84,7 +84,7 @@ export const {
         items: createMoviesProps.movies,
         slice: createMoviesProps.slice
       })
-      const body: PostMoviesBody = {
+      const body: CreateMoviesRequest = {
         listId: props.row.id,
         movies: sliced
       }

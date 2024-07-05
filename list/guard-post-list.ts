@@ -1,11 +1,11 @@
 import guardObject from '@/guard/guard-object'
-import { PostListBody } from './list-types'
+import { CreateListRequest } from './list-types'
 import guardStringProp from '@/guard/guard-string-prop'
 
 export default function guardPostList (props: {
   label: string
   value: unknown
-}): PostListBody {
+}): CreateListRequest {
   const data = guardObject({
     label: props.label,
     value: props.value

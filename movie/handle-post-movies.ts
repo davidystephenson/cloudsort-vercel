@@ -1,9 +1,9 @@
 import { Movie } from '@prisma/client'
-import { PostMoviesBody } from './movie-types'
+import { CreateMoviesRequest } from './movie-types'
 import { PrismaTransaction } from '@/prisma/prisma-types'
 
 export default async function handlePostMovies (props: {
-  body: PostMoviesBody
+  body: CreateMoviesRequest
   tx: PrismaTransaction
 }): Promise<Movie[]> {
   const imdbIds = props.body.movies.map((movie) => movie.imdbId)

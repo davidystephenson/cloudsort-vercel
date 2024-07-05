@@ -1,13 +1,14 @@
-import { Movie, Prisma } from '@prisma/client'
+import { Prisma } from '@prisma/client'
 import { RelatedList } from './list-types'
 import { State } from '../mergeChoice/mergeChoiceTypes'
 import { PrismaTransaction } from '../prisma/prisma-types'
 import prisma from '@/prisma/prisma'
 import getNumberKeys from '@/get-number-keys/get-number-keys'
+import { ListMovie } from '@/movie/movie-types'
 
 export default async function saveStateToList (props: {
   list: RelatedList
-  state: State<Movie>
+  state: State<ListMovie>
   tx?: PrismaTransaction
 }): Promise<void> {
   const db = props.tx ?? prisma

@@ -1,12 +1,12 @@
 import { ApiError } from 'next/dist/server/api-utils'
 import { List } from '@prisma/client'
 import { PrismaTransaction } from '@/prisma/prisma-types'
-import { PostListBody } from './list-types'
+import { CreateListRequest } from './list-types'
 import { Session } from 'next-auth'
 
 export default async function handlePostList (props: {
   authSession: Session
-  body: PostListBody
+  body: CreateListRequest
   tx: PrismaTransaction
 }): Promise<List> {
   const existing = await props.tx.list.findFirst({

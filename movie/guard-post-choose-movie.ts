@@ -16,6 +16,11 @@ export default function guardPostChooseMovie (props: {
     label: props.label,
     value: data
   })
+  const lastChoiceMergechoiceId = guardStringNumberProp({
+    key: 'lastChoiceId',
+    label: props.label,
+    value: data
+  })
   const listId = guardNumberProp({
     key: 'listId',
     label: props.label,
@@ -26,9 +31,11 @@ export default function guardPostChooseMovie (props: {
     label: props.label,
     value: data
   })
-  return {
+  const postChooseMovieBody: PostChooseMovieBody = {
     betterIndex,
+    lastChoiceMergechoiceId,
     listId,
     movieId
   }
+  return postChooseMovieBody
 }

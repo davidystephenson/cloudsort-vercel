@@ -1,4 +1,4 @@
-import { PostMoviesBody } from './movie-types'
+import { CreateMoviesRequest } from './movie-types'
 import guardNumberProp from '@/guard/guard-number-prop'
 import guardObject from '@/guard/guard-object'
 import guardMovieDataArrayProp from './guard-movie-data-array-prop'
@@ -6,7 +6,7 @@ import guardMovieDataArrayProp from './guard-movie-data-array-prop'
 export default function guardPostMovies (props: {
   label: string
   value: unknown
-}): PostMoviesBody {
+}): CreateMoviesRequest {
   const object = guardObject({
     label: props.label,
     value: props.value

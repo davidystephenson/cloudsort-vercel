@@ -13,87 +13,79 @@ datasource db {
 }
 
 model Archive {
-  event   Event     @relation(fields: [eventId], references: [id])
-  eventId Int       @unique
-  id      Int       @id @default(autoincrement())
-  item    EventItem @relation(fields: [itemId], references: [id])
-  itemId  Int
+  event       Event     @relation(fields: [eventId], references: [id])
+  eventId     Int       @unique
+  eventItem   EventItem @relation(fields: [eventItemId], references: [id])
+  eventItemId Int       @unique
+  id          Int       @id @default(autoincrement())
 }
 
 model Choice {
   aBetter       Boolean
-  aId           Int
-  aIndex        Int
-  aItem         EventItem @relation("aItems", fields: [aId], references: [id])
-  bId           Int
-  bIndex        Int
-  bItem         EventItem @relation("bItems", fields: [bId], references: [id])
+  aId           Int       @unique
+  aEventItem    EventItem @relation("aItem", fields: [aId], references: [id])
+  betterIndex   Int
+  bId           Int       @unique
+  bEventItem    EventItem @relation("bItem", fields: [bId], references: [id])
   event         Event     @relation(fields: [eventId], references: [id])
   eventId       Int       @unique
   id            Int       @id @default(autoincrement())
-  mergeChoiceId Int
   random        Boolean
   seeded        Boolean
 }
 
 model Event {
-  archive   Archive?
-  choice    Choice?
-  createdAt DateTime   @default(now())
-  id        Int        @id @default(autoincrement())
-  import    Import?
-  list      List       @relation(fields: [listId], references: [id], onDelete: Cascade)
-  listId    Int
-  random    Random?
-  remove    Remove?
-  reset     Reset?
-  unarchive Unarchive?
+  archive       Archive?
+  choice        Choice?
+  createdAt     DateTime   @default(now())
+  id            Int        @id @default(autoincrement())
+  import        Import?
+  list          List       @relation(fields: [listId], references: [id], onDelete: Cascade)
+  listId        Int
+  mergeChoiceId Int
+  random        Random?
+  remove        Remove?
+  reset         Reset?
+  unarchive     Unarchive?
 }
 
 model EventItem {
-  id            Int         @id @default(autoincrement())
-  item          Item        @relation(fields: [itemId], references: [id])
-  itemId        Int
-  seed          Int?
-  aChoiceEvents Choice[]    @relation("aItems")
-  bChoiceEvents Choice[]    @relation("bItems")
-  importItem    ImportItem?
-  firstRandom   Random?     @relation("firstRandom")
-  secondRandom  Random?     @relation("secondRandom")
-  removals      Remove[]
-  resets        Reset[]
-  archives      Archive[]
-  Unarchive     Unarchive[]
+  aChoiceEvent Choice?     @relation("aItem")
+  archive      Archive?
+  bChoiceEvent Choice?     @relation("bItem")
+  firstRandom  Random?     @relation("firstRandom")
+  id           Int         @id @default(autoincrement())
+  item         Item        @relation(fields: [itemId], references: [id])
+  itemId       Int
+  import       Import?     @relation(fields: [importId], references: [id])
+  importId     Int?
+  points       Int
+  removal      Remove?
+  reset        Reset?
+  secondRandom Random?     @relation("secondRandom")
+  seed         Int?
+  seeding      Boolean
+  unarchive    Unarchive[]
 }
 
 model Import {
-  event       Event        @relation(fields: [eventId], references: [id])
-  eventId     Int          @unique
-  id          Int          @id @default(autoincrement())
-  importItems ImportItem[]
-}
-
-model ImportItem {
-  id       Int
-  item     EventItem @relation(fields: [itemId], references: [id])
-  itemId   Int       @unique
-  import   Import    @relation(fields: [importId], references: [id])
-  importId Int
+  event      Event       @relation(fields: [eventId], references: [id])
+  eventId    Int         @unique
+  eventItems EventItem[]
+  id         Int         @id @default(autoincrement())
 }
 
 model Item {
+  eventItems EventItem[]
   id         Int         @id @default(autoincrement())
   name       String
   movie      Movie?
-  eventItems EventItem[]
 }
 
 model List {
-  id             Int     @id @default(autoincrement())
-  choiceCount    Int     @default(0)
   events         Event[]
+  id             Int     @id @default(autoincrement())
   name           String
-  operationCount Int     @default(0)
   user           User    @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId         Int
   seed           String
@@ -109,37 +101,37 @@ model Movie {
 }
 
 model Random {
-  id         Int       @id @default(autoincrement())
-  event      Event     @relation(fields: [eventId], references: [id])
-  eventId    Int       @unique
-  firstItem  EventItem @relation("firstRandom", fields: [firstId], references: [id])
-  firstId    Int       @unique
-  secondItem EventItem @relation("secondRandom", fields: [secondId], references: [id])
-  secondId   Int       @unique
+  event           Event     @relation(fields: [eventId], references: [id])
+  eventId         Int       @unique
+  firstEventItem  EventItem @relation("firstRandom", fields: [firstId], references: [id])
+  firstId         Int       @unique
+  id              Int       @id @default(autoincrement())
+  secondEventItem EventItem @relation("secondRandom", fields: [secondId], references: [id])
+  secondId        Int       @unique
 }
 
 model Remove {
-  event   Event     @relation(fields: [eventId], references: [id])
-  eventId Int       @unique
-  id      Int       @id @default(autoincrement())
-  item    EventItem @relation(fields: [itemId], references: [id])
-  itemId  Int
+  event       Event     @relation(fields: [eventId], references: [id])
+  eventId     Int       @unique
+  id          Int       @id @default(autoincrement())
+  eventItemId Int       @unique
+  eventItem   EventItem @relation(fields: [eventItemId], references: [id])
 }
 
 model Reset {
-  event   Event     @relation(fields: [eventId], references: [id])
-  eventId Int       @unique
-  id      Int       @id @default(autoincrement())
-  item    EventItem @relation(fields: [itemId], references: [id])
-  itemId  Int
+  event       Event     @relation(fields: [eventId], references: [id])
+  eventId     Int       @unique
+  id          Int       @id @default(autoincrement())
+  eventItem   EventItem @relation(fields: [eventItemId], references: [id])
+  eventItemId Int       @unique
 }
 
 model Unarchive {
-  event   Event     @relation(fields: [eventId], references: [id])
-  eventId Int       @unique
-  id      Int       @id @default(autoincrement())
-  item    EventItem @relation(fields: [itemId], references: [id])
-  itemId  Int
+  event     Event     @relation(fields: [eventId], references: [id])
+  eventId   Int       @unique
+  id        Int       @id @default(autoincrement())
+  eventItem EventItem @relation(fields: [itemId], references: [id])
+  itemId    Int
 }
 
 model User {

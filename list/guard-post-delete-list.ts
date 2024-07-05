@@ -1,11 +1,11 @@
 import guardObject from '@/guard/guard-object'
 import guardNumberProp from '@/guard/guard-number-prop'
-import { PostDeleteListBody } from './list-types'
+import { DeleteListRequest } from './list-types'
 
 export default function guardPostDeleteList (props: {
   label: string
   value: unknown
-}): PostDeleteListBody {
+}): DeleteListRequest {
   const data = guardObject({
     label: props.label,
     value: props.value

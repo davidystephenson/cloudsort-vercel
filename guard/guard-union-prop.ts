@@ -1,15 +1,16 @@
 import GuardError from './guard-error'
+import { ArrayMap } from './guard-types'
 
-export default function guardUnionProp <Guarded> (props: {
-  guards: Array<(props: {
+export default function guardUnionProp <Guards extends unknown[]> (props: {
+  guards: ArrayMap<Guards, {
     key: string
     label: string
-    value: object
-  }) => Guarded>
+    value: unknown
+  }>
   key: string
   label: string
   value: object
-}): Guarded {
+}): Guards[number] {
   const labels: string[] = []
   const guard = props.guards.find(guard => {
     try {
