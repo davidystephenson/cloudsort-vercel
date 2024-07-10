@@ -1,11 +1,11 @@
+import handleEvent from '@/event/handle-event'
 import importItems from '@/mergeChoice/importItems'
 import guardPostImportMovies from '@/movie/guard-post-import-movies'
-import updateList from '@/list/update-list'
 
 export async function POST (request: Request): Promise<Response> {
-  return await updateList({
-    guardBody: guardPostImportMovies,
-    guardLabel: '/movie/delete body',
+  const response = handleEvent({
+    guard: guardPostImportMovies,
+    label: '/movie/import',
     request,
     update: (props) => {
       return importItems({
@@ -14,4 +14,5 @@ export async function POST (request: Request): Promise<Response> {
       })
     }
   })
+  return await response
 }

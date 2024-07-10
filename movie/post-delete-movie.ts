@@ -1,12 +1,12 @@
 import post from '@/post/post'
-import { PostDeleteMovieBody } from './movie-types'
+import { RemoveMovieRequest } from './movie-types'
 import { Ok } from '@/respond/respond-types'
 
 export default async function postDeleteMovie (props: {
-  body: PostDeleteMovieBody
+  body: RemoveMovieRequest
 }): Promise<Ok> {
   return await post({
     body: props.body,
-    url: '/api/movie/delete'
+    url: '/api/movie/remove'
   })
 }

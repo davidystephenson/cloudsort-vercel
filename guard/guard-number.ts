@@ -1,4 +1,4 @@
-import { ApiError } from 'next/dist/server/api-utils'
+import GuardError from './guard-error'
 
 export default function guardNumber (props: {
   label: string
@@ -6,7 +6,7 @@ export default function guardNumber (props: {
 }): number {
   if (typeof props.value !== 'number') {
     const message = `${props.label} is not a number`
-    throw new ApiError(422, message)
+    throw new GuardError({ label: 'number', message })
   }
   return props.value
 }

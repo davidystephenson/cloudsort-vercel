@@ -4,23 +4,22 @@ import { NextResponse } from 'next/server'
 import prisma from '@/prisma/prisma'
 import { PrismaTransaction } from '@/prisma/prisma-types'
 import guardRequest from '@/guard/guard-request'
+import { Guard } from '@/guard/guard-types'
+import { HandledResponse } from './handle-types'
 
-export async function handlePost <Body, Result> (props: {
-  guard: (props: {
-    label: string
-    value: unknown
-  }) => Body
-  guardLabel: string
+export async function handleBody <Body, Result> (props: {
+  guard: Guard<Body>
+  label: string
   handle: (props: {
     body: Body
     transaction: PrismaTransaction
   }) => Promise<Result>
   request: Request
-}): Promise<Response> {
+}): HandledResponse<Result> {
   try {
     const body = await guardRequest({
       guard: props.guard,
-      guardLabel: props.guardLabel,
+      label: props.label,
       request: props.request
     })
     const result = await prisma.$transaction(async (transaction) => {
@@ -31,10 +30,16 @@ export async function handlePost <Body, Result> (props: {
       maxWait: 5000, // default: 200
       timeout: 1000000 // default: 5000
     })
-    return NextResponse.json(result)
+    const payload = { ok: true, ...result } as const
+    const response = NextResponse.json(payload)
+    return response
   } catch (error) {
     if (error instanceof ApiError) {
-      return respondError({ message: error.message, status: 500 })
+      const response = respondError({
+        message: error.message,
+        status: error.statusCode
+      })
+      return response
     }
     throw error
   }

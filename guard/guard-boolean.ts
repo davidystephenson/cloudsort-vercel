@@ -1,4 +1,4 @@
-import { ApiError } from 'next/dist/server/api-utils'
+import GuardError from './guard-error'
 
 export default function guardBoolean (props: {
   label: string
@@ -6,7 +6,7 @@ export default function guardBoolean (props: {
 }): boolean {
   if (typeof props.value !== 'boolean') {
     const message = `${props.label} is not a boolean`
-    throw new ApiError(422, message)
+    throw new GuardError({ label: 'boolean', message })
   }
   return props.value
 }

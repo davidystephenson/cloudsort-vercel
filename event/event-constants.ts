@@ -14,6 +14,10 @@ export const EVENT_ITEM_DATA_RELATION = {
   }
 } as const
 
+export const REMOVE_RELATION = {
+  remove: EVENT_ITEM_DATA_RELATION
+} as const
+
 export const IMPORT_RELATION = {
   include: {
     eventItems: EVENT_ITEM_RELATION

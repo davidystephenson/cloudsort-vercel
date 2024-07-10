@@ -1,4 +1,4 @@
-import { ApiError } from 'next/dist/server/api-utils'
+import GuardError from './guard-error'
 
 function hasKey<Value extends object, Key extends string> (
   key: Key,
@@ -13,7 +13,9 @@ export default function guardKey <Value extends object, Key extends string> (pro
   value: Value
 }): Value & Record<Key, unknown> {
   if (!hasKey(props.key, props.value)) {
-    throw new ApiError(422, `${props.label} has no ${props.key}`)
+    const label = `key ${props.key}`
+    const message = `${props.label} has no ${props.key}`
+    throw new GuardError({ label, message })
   }
   return props.value
 }

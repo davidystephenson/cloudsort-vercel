@@ -1,14 +1,16 @@
-import { ApiError } from 'next/dist/server/api-utils'
+import GuardError from './guard-error'
 
 export default function guardObject (props: {
   label: string
   value: unknown
 }): object {
   if (props.value == null) {
-    throw new ApiError(400, `There is no ${props.label}`)
+    const message = `${props.label} is not defined`
+    throw new GuardError({ label: 'defined', message })
   }
   if (typeof props.value !== 'object') {
-    throw new ApiError(422, `${props.label} is not an object`)
+    const message = `${props.label} is not an object`
+    throw new GuardError({ label: 'object', message })
   }
   return props.value
 }

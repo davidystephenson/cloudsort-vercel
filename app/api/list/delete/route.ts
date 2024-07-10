@@ -1,13 +1,13 @@
 import guardPostDeleteList from '@/list/guard-post-delete-list'
-import { handleAuthPost } from '@/post/handle-auth-post'
-import { DeleteListRequest } from '@/list/list-types'
+import { ListRequest } from '@/list/list-types'
 import { Ok } from '@/respond/respond-types'
 import handlePostDeleteList from '@/list/handle-post-delete-list'
+import { handleAuth } from '@/handle/handle-auth'
 
 export async function POST (request: Request): Promise<Response> {
-  return await handleAuthPost<DeleteListRequest, Ok>({
+  return await handleAuth<ListRequest, Ok>({
     guard: guardPostDeleteList,
-    guardLabel: '/list/delete body',
+    label: '/list/delete body',
     handle: handlePostDeleteList,
     request
   })

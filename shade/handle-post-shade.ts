@@ -16,6 +16,5 @@ export default async function handlePostShade (props: {
       shade: props.body.shade
     }
   })
-
   return { ok: true }
 }

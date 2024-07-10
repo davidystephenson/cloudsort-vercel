@@ -1,12 +1,11 @@
+import { Guard } from './guard-types'
+
 export default async function guardRequest <Body> (props: {
-  guard: (props: {
-    label: string
-    value: unknown
-  }) => Body
-  guardLabel: string
+  guard: Guard<Body>
+  label: string
   request: Request
 }): Promise<Body> {
   const data = await props.request.json()
-  const body = props.guard({ label: props.guardLabel, value: data })
+  const body = props.guard({ label: props.label, value: data })
   return body
 }

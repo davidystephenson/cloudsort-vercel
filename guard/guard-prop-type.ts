@@ -1,10 +1,8 @@
 import guardProp from './guard-prop'
+import { Guard } from './guard-types'
 
 export default function guardPropType <Type> (props: {
-  guard: (props: {
-    label: string
-    value: unknown
-  }) => Type
+  guard: Guard<Type>
   label: string
   key: string
   value: object

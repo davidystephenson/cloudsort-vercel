@@ -1,13 +1,13 @@
 import guardNull from './guard-null'
-import guardNumber from './guard-number'
+import guardUndefined from './guard-undefined'
 import guardUnion from './guard-union'
 
-export default function guardNumberNull (props: {
+export default function guardNullish (props: {
   label: string
   value: unknown
-}): number | null {
+}): null | undefined {
   const union = guardUnion({
-    guards: [guardNumber, guardNull],
+    guards: [guardNull, guardUndefined],
     label: props.label,
     value: props.value
   })

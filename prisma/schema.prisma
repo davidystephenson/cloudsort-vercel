@@ -21,17 +21,17 @@ model Archive {
 }
 
 model Choice {
-  aBetter       Boolean
-  aId           Int       @unique
-  aEventItem    EventItem @relation("aItem", fields: [aId], references: [id])
-  betterIndex   Int
-  bId           Int       @unique
-  bEventItem    EventItem @relation("bItem", fields: [bId], references: [id])
-  event         Event     @relation(fields: [eventId], references: [id])
-  eventId       Int       @unique
-  id            Int       @id @default(autoincrement())
-  random        Boolean
-  seeded        Boolean
+  aBetter      Boolean
+  aEventItemId Int       @unique
+  aEventItem   EventItem @relation("aItem", fields: [aEventItemId], references: [id])
+  betterIndex  Int
+  bEventItemId Int       @unique
+  bEventItem   EventItem @relation("bItem", fields: [bEventItemId], references: [id])
+  event        Event     @relation(fields: [eventId], references: [id])
+  eventId      Int       @unique
+  id           Int       @id @default(autoincrement())
+  random       Boolean
+  seeded       Boolean
 }
 
 model Event {
@@ -83,12 +83,12 @@ model Item {
 }
 
 model List {
-  events         Event[]
-  id             Int     @id @default(autoincrement())
-  name           String
-  user           User    @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId         Int
-  seed           String
+  events Event[]
+  id     Int     @id @default(autoincrement())
+  name   String
+  user   User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId Int
+  seed   String
 }
 
 model Movie {
@@ -101,13 +101,13 @@ model Movie {
 }
 
 model Random {
-  event           Event     @relation(fields: [eventId], references: [id])
-  eventId         Int       @unique
-  firstEventItem  EventItem @relation("firstRandom", fields: [firstId], references: [id])
-  firstId         Int       @unique
-  id              Int       @id @default(autoincrement())
-  secondEventItem EventItem @relation("secondRandom", fields: [secondId], references: [id])
-  secondId        Int       @unique
+  event             Event     @relation(fields: [eventId], references: [id])
+  eventId           Int       @unique
+  firstEventItem    EventItem @relation("firstRandom", fields: [firstEventItemId], references: [id])
+  firstEventItemId  Int       @unique
+  id                Int       @id @default(autoincrement())
+  secondEventItem   EventItem @relation("secondRandom", fields: [secondEventItemId], references: [id])
+  secondEventItemId Int       @unique
 }
 
 model Remove {
@@ -127,11 +127,11 @@ model Reset {
 }
 
 model Unarchive {
-  event     Event     @relation(fields: [eventId], references: [id])
-  eventId   Int       @unique
-  id        Int       @id @default(autoincrement())
-  eventItem EventItem @relation(fields: [itemId], references: [id])
-  itemId    Int
+  event       Event     @relation(fields: [eventId], references: [id])
+  eventId     Int       @unique
+  id          Int       @id @default(autoincrement())
+  eventItem   EventItem @relation(fields: [eventItemId], references: [id])
+  eventItemId Int
 }
 
 model User {

@@ -5,12 +5,12 @@ import { EventsRelation } from '@/event/event-types'
 
 export interface ListWhere {
   listId: number
-  userId?: number
+  lastMergechoiceId: number
 }
 export interface CreateListRequest {
   name: string
 }
-export interface DeleteListRequest {
+export interface ListRequest {
   listId: number
 }
 export type RelatedList = Prisma.ListGetPayload<EventsRelation>

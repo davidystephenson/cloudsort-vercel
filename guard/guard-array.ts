@@ -1,4 +1,4 @@
-import { ApiError } from 'next/dist/server/api-utils'
+import GuardError from './guard-error'
 
 export default function guardArray (props: {
   label: string
@@ -6,7 +6,7 @@ export default function guardArray (props: {
 }): unknown[] {
   if (!Array.isArray(props.value)) {
     const message = `${props.label} is not an array`
-    throw new ApiError(422, message)
+    throw new GuardError({ label: 'array', message })
   }
   return props.value
 }

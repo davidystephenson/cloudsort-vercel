@@ -1,13 +1,13 @@
+import guardBoolean from './guard-boolean'
 import guardNull from './guard-null'
-import guardNumber from './guard-number'
 import guardUnion from './guard-union'
 
-export default function guardNumberNull (props: {
+export default function guardBooleanNull (props: {
   label: string
   value: unknown
-}): number | null {
+}): boolean | null {
   const union = guardUnion({
-    guards: [guardNumber, guardNull],
+    guards: [guardBoolean, guardNull],
     label: props.label,
     value: props.value
   })
