@@ -66,7 +66,7 @@ export interface HistoryRandomData<ListItem extends Item> {
   first: Calculated<ListItem>
   second: Calculated<ListItem>
 }
-export interface HistoryDataMapped<ListItem extends Item> {
+export interface Parts<ListItem extends Item> {
   archive: HistoryArchiveData<ListItem>
   choice: HistoryChoiceData<ListItem>
   import: HistoryImportData<ListItem>
@@ -75,23 +75,13 @@ export interface HistoryDataMapped<ListItem extends Item> {
   reset: HistoryResetData<ListItem>
   unarchive: HistoryUnarchiveData<ListItem>
 }
-export type HistoryDataKey<ListItem extends Item> = keyof HistoryDataMapped<ListItem>
+export type PartKey<ListItem extends Item> = keyof Parts<ListItem>
 export type AtLeastOne<T, U = { [K in keyof T]: Pick<T, K> }> = Partial<T> & U[keyof U]
-export type HistoryData <ListItem extends Item> = HistoryDataMapped<ListItem>[HistoryDataKey<ListItem>]
-export type HistoryDataMap<ListItem extends Item> = AtLeastOne<HistoryDataMapped<ListItem>>
-export interface HistoryEvent<ListItem extends Item> extends Identity, Partial<HistoryDataMapped<ListItem>> {
+export type Part <ListItem extends Item> = AtLeastOne<Parts<ListItem>>
+export interface HistoryEventBase extends Identity {
   createdAt: number
 }
-
-export type HistoryDataMapper<ListItem extends Item, Key extends HistoryDataKey<ListItem>, Result> = (props: {
-  data: HistoryDataMapped<ListItem>[Key]
-  key: Key
-}) => Result
-export type HistoryDataMappers<ListItem extends Item, Result> = {
-  [Key in HistoryDataKey<ListItem>]: HistoryDataMapper<ListItem, Key, Result>
-}
-
-export type Restorers<ListItem extends Item> = HistoryDataMappers<ListItem, State<ListItem>>
+export type HistoryEvent<ListItem extends Item> = HistoryEventBase & Part<ListItem>
 
 export interface RemovalFromOperations {
   emptiedOperationId?: ItemId
