@@ -61,16 +61,16 @@ export default function restoreEventState<ListItem extends Item> (props: {
   event: HistoryDataPart<ListItem>
   state: State<ListItem>
 }): State<ListItem> {
-  const actors: Actors<{ state: State<ListItem> }, State<ListItem>, HistoryDataPart<ListItem>> = {
-    archive: restoreArchive,
-    choice: restoreChoice,
-    import: restoreImport,
-    random: restoreRandom,
-    remove: restoreRemove,
-    reset: restoreReset,
-    unarchive: restoreUnarchive
-  }
-  void actors
+  // const actors: Actors<{ state: State<ListItem> }, State<ListItem>, HistoryDataPart<ListItem>> = {
+  //   archive: restoreArchive,
+  //   choice: restoreChoice,
+  //   import: restoreImport,
+  //   random: restoreRandom,
+  //   remove: restoreRemove,
+  //   reset: restoreReset,
+  //   unarchive: restoreUnarchive
+  // }
+  // void actors
   const restoredState = marionEventState({
     // actors,
     actors: {

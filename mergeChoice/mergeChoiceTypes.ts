@@ -66,15 +66,29 @@ export interface HistoryRandomData<ListItem extends Item> {
   first: Calculated<ListItem>
   second: Calculated<ListItem>
 }
-export interface HistoryEvent<ListItem extends Item> extends Identity {
+export interface HistoryArchivePart <ListItem extends Item> {
   archive?: HistoryArchiveData<ListItem> | null
-  createdAt: number | null
+}
+export interface HistoryChoicePart<ListItem extends Item> {
   choice?: HistoryChoiceData<ListItem> | null
+}
+export interface HistoryImportPart<ListItem extends Item> {
   import?: HistoryImportData<ListItem> | null
+}
+export interface HistoryRandomPart<ListItem extends Item> {
   random?: HistoryRandomData<ListItem> | null
+}
+export interface HistoryRemovePart<ListItem extends Item> {
   remove?: HistoryRemoveData<ListItem> | null
+}
+export interface HistoryResetPart<ListItem extends Item> {
   reset?: HistoryResetData<ListItem> | null
+}
+export interface HistoryUnarchivePart<ListItem extends Item> {
   unarchive?: HistoryUnarchiveData<ListItem> | null
+}
+export interface HistoryEvent<ListItem extends Item> extends Identity, HistoryArchivePart<ListItem>, HistoryChoicePart<ListItem>, HistoryImportPart<ListItem>, HistoryRandomPart<ListItem>, HistoryRemovePart<ListItem>, HistoryResetPart<ListItem>, HistoryUnarchivePart<ListItem> {
+  createdAt: number | null
 }
 export interface UnknownParts {
   archive?: unknown
