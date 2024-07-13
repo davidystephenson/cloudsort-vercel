@@ -1,10 +1,11 @@
 import { RelatedArchive, RelatedChoice, RelatedEvent, RelatedImport, RelatedRandom, RelatedRemove, RelatedReset, RelatedUnarchive } from '@/event/event-types'
 import deduceState from '@/mergeChoice/deduceState'
-import { marion } from '@/mergeChoice/restoreEventState'
 import getMovieFromEventItem from '@/movie/getMovieFromEventItem'
 import { ListMovie } from '@/movie/movie-types'
-import { Actors, HistoryArchivePart, HistoryChoiceData, HistoryChoicePart, HistoryDataPart, HistoryEvent, HistoryImportData, HistoryImportPart, HistoryRandomData, HistoryRandomPart, HistoryRemoveData, HistoryRemovePart, HistoryResetPart, Part } from '../mergeChoice/mergeChoiceTypes'
+import { HistoryArchivePart, HistoryChoiceData, HistoryChoicePart, HistoryEvent, HistoryImportData, HistoryImportPart, HistoryRandomData, HistoryRandomPart, HistoryRemoveData, HistoryRemovePart, HistoryResetPart } from '../mergeChoice/mergeChoiceTypes'
 import { MergechoiceList, RelatedList } from './list-types'
+import { marion } from '@/mergeChoice/marion/marion'
+import { HistoryDataPart, Actors, Part } from '@/mergeChoice/marion/marionTypes'
 
 function archiveToHistoryArchive (props: {
   input: RelatedArchive
@@ -94,7 +95,7 @@ export function marionEventPart<Complement> (props: {
 
 type EventPart = Part<RelatedEvent>
 
-export function rowToEvent (props: {
+export function eventToHistoryEvent (props: {
   event: RelatedEvent
 }): HistoryEvent<ListMovie> {
   const data = marionEventPart({
@@ -119,7 +120,7 @@ export default async function getMergechoiceList (props: {
   list: RelatedList
 }): Promise<MergechoiceList> {
   const history: Array<HistoryEvent<ListMovie>> = props.list.events.map((event) => {
-    const historyEvent = rowToEvent({ event })
+    const historyEvent = eventToHistoryEvent({ event })
     return historyEvent
   })
   const state = deduceState({ history, seed: props.list.seed })

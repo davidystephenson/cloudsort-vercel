@@ -1,41 +1,31 @@
-import { REMOVE_RELATION } from '@/event/event-constants'
+import { EVENT_PARTS_RELATION } from '@/event/event-constants'
+import { EventResponse } from '@/event/event-types'
 import handleEvent from '@/event/handle-event'
 import guardRemoveMovieRequest from '@/movie/gaurd-remove-movie-request'
 
-export async function POST (request: Request): Promise<Response> {
-  // return handleEvent({
-  //   guard: guardPostDeleteMovie,
-  //   label: '/movie/delete body',
-  //   request,
-  //   update: (props) => {
-  //     return removeItem({
-  //       itemId: props.body.movieId,
-  //       state: props.state
-  //     })
-  //   }
-  // })
+export async function POST (request: Request): EventResponse {
   const response = await handleEvent({
     guard: guardRemoveMovieRequest,
     label: '/movie/choose',
-    createEvent: async (eventProps) => {
-      const event = await eventProps.tx.event.create({
+    createEvent: async (props) => {
+      const event = await props.tx.event.create({
         data: {
           remove: {
             create: {
               eventItem: {
                 create: {
-                  itemId: eventProps.body.remove.item.id,
-                  points: eventProps.body.remove.item.points,
-                  seed: eventProps.body.remove.item.seed,
-                  seeding: eventProps.body.remove.item.seeding
+                  itemId: props.body.remove.item.id,
+                  points: props.body.remove.item.points,
+                  seed: props.body.remove.item.seed,
+                  seeding: props.body.remove.item.seeding
                 }
               }
             }
           },
-          listId: eventProps.body.listId,
-          mergeChoiceId: eventProps.events.length
+          listId: props.body.listId,
+          mergeChoiceId: props.events.length
         },
-        include: REMOVE_RELATION
+        include: EVENT_PARTS_RELATION
       })
       return event
     },

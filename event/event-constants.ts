@@ -38,16 +38,18 @@ export const RANDOM_RELATION = {
   }
 } as const
 
+export const EVENT_PARTS_RELATION = {
+  archive: EVENT_ITEM_DATA_RELATION,
+  choice: CHOICE_RELATION,
+  import: IMPORT_RELATION,
+  random: RANDOM_RELATION,
+  remove: EVENT_ITEM_DATA_RELATION,
+  reset: EVENT_ITEM_DATA_RELATION,
+  unarchive: EVENT_ITEM_DATA_RELATION
+} as const
+
 export const EVENT_RELATION = {
-  include: {
-    archive: EVENT_ITEM_DATA_RELATION,
-    choice: CHOICE_RELATION,
-    import: IMPORT_RELATION,
-    random: RANDOM_RELATION,
-    remove: EVENT_ITEM_DATA_RELATION,
-    reset: EVENT_ITEM_DATA_RELATION,
-    unarchive: EVENT_ITEM_DATA_RELATION
-  }
+  include: EVENT_PARTS_RELATION
 } as const
 
 export const EVENTS_RELATION = {

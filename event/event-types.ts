@@ -1,6 +1,9 @@
 import { Prisma } from '@prisma/client'
 import { CHOICE_RELATION, EVENTS_RELATION, EVENT_ITEM_DATA_RELATION, EVENT_ITEM_RELATION, EVENT_RELATION, IMPORT_RELATION, RANDOM_RELATION } from './event-constants'
 import { ListRequest } from '@/list/list-types'
+import { HandledResponse } from '@/handle/handle-types'
+import { HistoryEvent } from '@/mergeChoice/mergeChoiceTypes'
+import { ListMovie } from '@/movie/movie-types'
 
 export type ChoiceRelation = typeof CHOICE_RELATION
 export type EventRelation = typeof EVENT_RELATION
@@ -19,3 +22,4 @@ export type RelatedReset = Prisma.ResetGetPayload<EventItemDataRelation>
 export type RelatedUnarchive = Prisma.UnarchiveGetPayload<EventItemDataRelation>
 export type RelatedEvent = Prisma.EventGetPayload<EventRelation>
 export type RelatedEventItem = Prisma.EventItemGetPayload<EventItemRelation>
+export type EventResponse = HandledResponse<{ event: HistoryEvent<ListMovie> }>

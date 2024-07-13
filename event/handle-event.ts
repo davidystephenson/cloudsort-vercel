@@ -3,15 +3,20 @@ import { Event } from '@prisma/client'
 import { Guard } from '@/guard/guard-types'
 import { ApiError } from 'next/dist/server/api-utils'
 import { PrismaTransaction } from '@/prisma/prisma-types'
-import { HandledResponse } from '@/handle/handle-types'
 import { handleAuth } from '@/handle/handle-auth'
+import { eventToHistoryEvent } from '@/list/get-mergechoice-list'
+import { EventResponse, RelatedEvent } from './event-types'
 
 export default async function handleEvent<Body extends ListWhere> (props: {
   guard: Guard<Body>
   label: string
-  createEvent: (props: { body: Body, events: Event[], tx: PrismaTransaction }) => Promise<Event>
+  createEvent: (props: {
+    body: Body
+    events: Event[]
+    tx: PrismaTransaction
+  }) => Promise<RelatedEvent>
   request: Request
-}): HandledResponse<{ event: Event }> {
+}): EventResponse {
   const response = await handleAuth({
     guard: props.guard,
     label: props.label,
@@ -34,7 +39,7 @@ export default async function handleEvent<Body extends ListWhere> (props: {
         return 0
       })
       const lastEvent = sortedEvents[sortedEvents.length - 1]
-      const eventWrong = lastEvent != null && lastEvent.mergeChoiceId === authProps.body.lastChoiceMergechoiceId
+      const eventWrong = lastEvent != null && lastEvent.mergeChoiceId === authProps.body.lastMergechoiceId
       if (eventWrong) {
         throw new ApiError(400, 'That is not the last event.')
       }
@@ -43,7 +48,8 @@ export default async function handleEvent<Body extends ListWhere> (props: {
         events,
         tx: authProps.tx
       })
-      return { ok: true, event }
+      const historyEvent = eventToHistoryEvent({ event })
+      return { ok: true, event: historyEvent }
     },
     request: props.request
   })

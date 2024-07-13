@@ -12,8 +12,9 @@ export type MovieData = Omit<ListMovie, 'id'>
 export interface CreateMoviesRequest extends EventRequest {
   movies: MovieData[]
 }
+export type CalculatedMovie = Calculated<ListMovie>
 export interface ImportMoviesRequest extends EventRequest {
-  movies: Movie[]
+  movies: CalculatedMovie[]
 }
 export type CreatedMovie = Omit<Movie, 'updatedAt'> & {
   updatedAt: string
@@ -24,7 +25,6 @@ export interface PostMoviesResponse extends EventRequest {
 export interface RemoveMovieRequest extends EventRequest {
   remove: HistoryRemoveData<ListMovie>
 }
-export type CalculatedMovie = Calculated<ListMovie>
 export interface ChooseMovieRequest extends EventRequest {
   choice: HistoryChoiceData<ListMovie>
 }
