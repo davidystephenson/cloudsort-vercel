@@ -45,10 +45,10 @@ export interface State<ListItem extends Item> {
 export interface HistoryItemData<ListItem extends Item> {
   item: Calculated<ListItem>
 }
-export interface HistoryArchiveData<ListItem extends Item> extends HistoryItemData<ListItem> {}
-export interface HistoryRemoveData<ListItem extends Item> extends HistoryItemData<ListItem> {}
-export interface HistoryResetData<ListItem extends Item> extends HistoryItemData<ListItem> {}
-export interface HistoryUnarchiveData<ListItem extends Item> extends HistoryItemData<ListItem> {}
+export interface HistoryArchiveData<ListItem extends Item> extends HistoryItemData<ListItem> { }
+export interface HistoryRemoveData<ListItem extends Item> extends HistoryItemData<ListItem> { }
+export interface HistoryResetData<ListItem extends Item> extends HistoryItemData<ListItem> { }
+export interface HistoryUnarchiveData<ListItem extends Item> extends HistoryItemData<ListItem> { }
 export interface HistoryChoiceData<ListItem extends Item> {
   aBetter: boolean
   aId: ItemId
@@ -66,22 +66,46 @@ export interface HistoryRandomData<ListItem extends Item> {
   first: Calculated<ListItem>
   second: Calculated<ListItem>
 }
-export interface Parts<ListItem extends Item> {
-  archive: HistoryArchiveData<ListItem>
-  choice: HistoryChoiceData<ListItem>
-  import: HistoryImportData<ListItem>
-  random: HistoryRandomData<ListItem>
-  remove: HistoryRemoveData<ListItem>
-  reset: HistoryResetData<ListItem>
-  unarchive: HistoryUnarchiveData<ListItem>
+export interface HistoryEvent<ListItem extends Item> extends Identity {
+  archive?: HistoryArchiveData<ListItem> | null
+  createdAt: number | null
+  choice?: HistoryChoiceData<ListItem> | null
+  import?: HistoryImportData<ListItem> | null
+  random?: HistoryRandomData<ListItem> | null
+  remove?: HistoryRemoveData<ListItem> | null
+  reset?: HistoryResetData<ListItem> | null
+  unarchive?: HistoryUnarchiveData<ListItem> | null
 }
-export type PartKey<ListItem extends Item> = keyof Parts<ListItem>
+export interface UnknownParts {
+  archive?: unknown
+  choice?: unknown
+  import?: unknown
+  random?: unknown
+  remove?: unknown
+  reset?: unknown
+  unarchive?: unknown
+}
+export interface Parts<P extends UnknownParts> {
+  archive?: P['archive']
+  choice?: P['choice']
+  import?: P['import']
+  random?: P['random']
+  remove?: P['remove']
+  reset?: P['reset']
+  unarchive?: P['unarchive']
+}
 export type AtLeastOne<T, U = { [K in keyof T]: Pick<T, K> }> = Partial<T> & U[keyof U]
-export type Part <ListItem extends Item> = AtLeastOne<Parts<ListItem>>
-export interface HistoryEventBase extends Identity {
-  createdAt: number
+export type Part <P extends Parts<P>,> = NonNullable<AtLeastOne<P>>
+export type HistoryDataPart<ListItem extends Item> = Part<HistoryEvent<ListItem>>
+
+export type Input<P extends UnknownParts, K extends keyof P> = NonNullable<P[K]>
+export type Actor<Complement, O, P extends UnknownParts, K extends keyof P> = (props: Complement & {
+  input: Input<P, K>
+}) => O
+export type Actors<Complement, O, P extends UnknownParts> = {
+  [K in keyof P]: Actor<Complement, O, P, K>
 }
-export type HistoryEvent<ListItem extends Item> = HistoryEventBase & Part<ListItem>
+export type PartListItem<P extends HistoryDataPart<any>> = P extends HistoryDataPart<infer T> ? T : unknown
 
 export interface RemovalFromOperations {
   emptiedOperationId?: ItemId
