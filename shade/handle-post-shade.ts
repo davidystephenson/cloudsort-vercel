@@ -1,4 +1,4 @@
-import { Ok } from '@/respond/respond-types'
+import { Ok } from '@/ok/ok-types'
 import { PostShadeBody } from './shade-types'
 import { PrismaTransaction } from '@/prisma/prisma-types'
 import { Session } from 'next-auth'

@@ -19,7 +19,7 @@ export default function RegisterView (): JSX.Element {
       email: values.email,
       password: values.password
     }
-    await postRegister({ body })
+    await postRegister({ body, label: 'RegisterView' })
     router.refresh()
     router.push('/login')
   }

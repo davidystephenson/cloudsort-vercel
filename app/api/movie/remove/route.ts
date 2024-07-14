@@ -1,7 +1,7 @@
 import { EVENT_PARTS_RELATION } from '@/event/event-constants'
 import { EventResponse } from '@/event/event-types'
 import handleEvent from '@/event/handle-event'
-import guardRemoveMovieRequest from '@/movie/gaurd-remove-movie-request'
+import guardRemoveMovieRequest from '@/movie/guard-remove-movie-request'
 
 export async function POST (request: Request): EventResponse {
   const response = await handleEvent({

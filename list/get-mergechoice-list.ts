@@ -2,10 +2,10 @@ import { RelatedArchive, RelatedChoice, RelatedEvent, RelatedImport, RelatedRand
 import deduceState from '@/mergeChoice/deduceState'
 import getMovieFromEventItem from '@/movie/getMovieFromEventItem'
 import { ListMovie } from '@/movie/movie-types'
-import { HistoryArchivePart, HistoryChoiceData, HistoryChoicePart, HistoryEvent, HistoryImportData, HistoryImportPart, HistoryRandomData, HistoryRandomPart, HistoryRemoveData, HistoryRemovePart, HistoryResetPart } from '../mergeChoice/mergeChoiceTypes'
+import { HistoryArchivePart, HistoryChoiceData, HistoryChoicePart, HistoryDataPart, HistoryEvent, HistoryImportData, HistoryImportPart, HistoryRandomData, HistoryRandomPart, HistoryRemoveData, HistoryRemovePart, HistoryResetPart } from '../mergeChoice/mergeChoiceTypes'
 import { MergechoiceList, RelatedList } from './list-types'
 import { marion } from '@/mergeChoice/marion/marion'
-import { HistoryDataPart, Actors, Part } from '@/mergeChoice/marion/marionTypes'
+import { Actors, Part } from '@/mergeChoice/marion/marionTypes'
 
 function archiveToHistoryArchive (props: {
   input: RelatedArchive

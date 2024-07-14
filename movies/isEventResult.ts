@@ -1,12 +1,12 @@
-import { Movie } from '@prisma/client'
-import { HistoryEventBase } from '../mergeChoice/mergeChoiceTypes'
 import isResult from './isResult'
+import { HistoryEvent } from '@/mergeChoice/mergeChoiceTypes'
+import { ListMovie } from '@/movie/movie-types'
 
 export default function isEventResult ({
   event,
   query
 }: {
-  event: HistoryEventBase<Movie>
+  event: HistoryEvent<ListMovie>
   query: string
 }): boolean {
   if (query === '') {

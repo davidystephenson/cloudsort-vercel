@@ -1,15 +1,15 @@
 'use client'
 
-import { Movie } from '@prisma/client'
 import { ListProvider } from './list-context'
 import MoviesTableView from '../movie/movies-table-view'
 import { RelatedList } from './list-types'
 import { State } from '../mergeChoice/mergeChoiceTypes'
 import OptionsView from '../option/options-view'
 import MoviesHeadingView from '../movie/movies-heading-view'
+import { ListMovie } from '@/movie/movie-types'
 
 export default function ListView (props: {
-  state: State<Movie>
+  state: State<ListMovie>
   row: RelatedList
 }): JSX.Element {
   return (

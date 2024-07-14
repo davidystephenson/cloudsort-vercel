@@ -15,7 +15,7 @@ export default function MovieCellsConsumer (): JSX.Element {
         </ThemeLinkableView>
       </ThemeTdView>
       <ThemeTdView>
-        {movie.calculated.score}
+        {movie.calculated.seed}
       </ThemeTdView>
       <ThemeTdView>
         <HStack>

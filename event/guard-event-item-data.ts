@@ -1,14 +1,14 @@
-import { ListMovie } from '@/movie/movie-types'
-import { HistoryItemData } from './guard-history-event'
 import guardModel from '@/guard/guard-model'
-import guardMovie from '@/movie/guard-movie'
+import { HistoryItemData } from '@/mergeChoice/mergeChoiceTypes'
+import guardCalculatedMovie from '@/movie/guard-calculated-movie'
+import { ListMovie } from '@/movie/movie-types'
 
 export default function guardEventItemData (props: {
   label: string
   value: unknown
 }): HistoryItemData<ListMovie> {
   const guards = {
-    item: guardMovie
+    item: guardCalculatedMovie
   }
   const guarded = guardModel({
     guards,

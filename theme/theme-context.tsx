@@ -74,7 +74,7 @@ export const {
       if (auth.session == null) {
         return
       }
-      void postShade({ shade: props.shade })
+      void postShade({ label: 'updateShade', shade: props.shade })
     }, [auth.session])
     const toggleShade = useCallback(() => {
       setToggling(true)
@@ -109,7 +109,7 @@ export const {
     }, [colorMode, darkened, props.shade, shade, systemic, systemDark])
     useEffect(() => {
       if (unshadedUser && shade != null) {
-        void postShade({ shade })
+        void postShade({ label: 'unshadedUser effect', shade })
       }
     }, [shade, unshadedUser])
     useEffect(() => {

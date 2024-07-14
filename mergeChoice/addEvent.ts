@@ -1,4 +1,4 @@
-import { HistoryEvent, Item, HistoryDataPart, State } from './mergeChoiceTypes'
+import { HistoryDataPart, HistoryEvent, Item, State } from './mergeChoiceTypes'
 
 export default function addEvent<ListItem extends Item> (props: {
   data: HistoryDataPart<ListItem>

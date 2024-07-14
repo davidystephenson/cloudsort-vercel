@@ -17,7 +17,7 @@ export default function CreateMovieFormView (): JSX.Element {
   async function send (props: { values: Record<string, string> }): Promise<void> {
     const fieldData = {
       ...props.values,
-      score: Number(props.values.score),
+      seed: Number(props.values.seed),
       year: Number(props.values.year)
     }
     const movieData = guardMovieData({ label: 'Create movie form data', value: fieldData })
@@ -41,8 +41,8 @@ export default function CreateMovieFormView (): JSX.Element {
         label='Review'
       />
       <FormFieldView
-        name='score'
-        label='Score'
+        name='seed'
+        label='Seed'
         isRequired
         type='number'
       />

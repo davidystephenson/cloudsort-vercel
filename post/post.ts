@@ -1,5 +1,7 @@
+import { Guard } from '@/guard/guard-types'
+
 export default async function post <Request, Response> (props: {
-  guard: (props: { label: string, value: unknown }) => Response
+  guard: Guard<Response>
   label: string
   body: Request
   url: string

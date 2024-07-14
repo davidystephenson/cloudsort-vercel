@@ -1,4 +1,4 @@
-import guardModelProp from './gaurd-model-prop'
+import guardModelProp from './guard-model-prop'
 import guardObject from './guard-object'
 import { Guards } from './guard-types'
 

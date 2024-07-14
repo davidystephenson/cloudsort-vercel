@@ -6,7 +6,7 @@ import MoviesTableConsumer from './movies-table-consumer'
 
 export default function MoviesTableView (): JSX.Element {
   const list = useList()
-  const columns = ['Name', 'Score', 'Points']
+  const columns = ['Name', 'Seed', 'Points']
   return (
     <TableProvider
       columns={columns}

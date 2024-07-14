@@ -1,3 +1,5 @@
+import { Part } from './marion/marionTypes'
+
 export type ItemId = number | string
 export interface Identity {
   mergeChoiceId: number
@@ -41,7 +43,8 @@ export interface State<ListItem extends Item> {
   worseIds: ItemId[]
   worseOperations: OperationDictionary
 }
-
+export type HistoryDataPart<ListItem extends Item> = Part<HistoryEvent<ListItem>>
+export type HistoryDataPartListItem<P extends HistoryDataPart<any>> = P extends HistoryDataPart<infer T> ? T : unknown
 export interface HistoryItemData<ListItem extends Item> {
   item: Calculated<ListItem>
 }

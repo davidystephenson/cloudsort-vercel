@@ -1,8 +1,8 @@
 import { ApiError } from 'next/dist/server/api-utils'
 import { ListRequest } from './list-types'
-import { Ok } from '@/respond/respond-types'
 import { Session } from 'next-auth'
 import { PrismaTransaction } from '@/prisma/prisma-types'
+import { Ok } from '@/ok/ok-types'
 
 export default async function handlePostDeleteList (props: {
   authSession: Session

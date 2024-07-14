@@ -1,6 +1,6 @@
 import { marion } from './marion/marion'
-import { HistoryDataPart, Actors, PartListItem } from './marion/marionTypes'
-import { Item, State } from './mergeChoiceTypes'
+import { Actors } from './marion/marionTypes'
+import { HistoryDataPart, HistoryDataPartListItem, Item, State } from './mergeChoiceTypes'
 import restoreArchive from './restoreArchive'
 import restoreChoice from './restoreChoice'
 import restoreImport from './restoreImport'
@@ -10,10 +10,10 @@ import restoreReset from './restoreReset'
 import restoreUnarchive from './restoreUnarchive'
 
 export function marionEventState<ListItem extends Item, Complement, P extends HistoryDataPart<ListItem>> (props: {
-  actors: Actors<Complement, State<PartListItem<P>>, P>
+  actors: Actors<Complement, State<HistoryDataPartListItem<P>>, P>
   complement: Complement
   part: P
-}): State<PartListItem<P>> {
+}): State<HistoryDataPartListItem<P>> {
   const mapped = marion(props)
   return mapped
 }

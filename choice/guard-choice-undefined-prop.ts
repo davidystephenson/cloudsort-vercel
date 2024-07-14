@@ -1,6 +1,6 @@
 import { Choice } from '@/mergeChoice/mergeChoiceTypes'
-import guardPropType from './guard-prop-type'
 import guardChoiceUndefined from './guard-choice-undefined'
+import guardPropType from '@/guard/guard-prop-type'
 
 export default function guardChoiceUndefinedProp (props: {
   key: string

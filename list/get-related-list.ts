@@ -1,5 +1,6 @@
 import prisma from '@/prisma/prisma'
 import { RelatedList } from './list-types'
+import { EVENT_RELATION } from '@/event/event-constants'
 
 export default async function getRelatedList (props: {
   listId: number
@@ -9,22 +10,7 @@ export default async function getRelatedList (props: {
       id: props.listId
     },
     include: {
-      operations: {
-        include: {
-          inputs: {
-            include: {
-              inputMovies: true
-            }
-          },
-          outputMovies: true
-        }
-      },
-      movieReservations: true,
-      choices: {
-        include: {
-          options: true
-        }
-      }
+      events: EVENT_RELATION
     }
   })
   return list

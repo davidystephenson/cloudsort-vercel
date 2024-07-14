@@ -24,7 +24,7 @@ export const {
       name: string
     }): Promise<List> {
       const body = { name: props.name }
-      const row = await postList({ body })
+      const row = await postList({ body, label: 'create' })
       setRows((rows) => {
         const newRows = [row, ...rows]
         return newRows
@@ -35,7 +35,7 @@ export const {
       id: number
     }): Promise<void> {
       const body = { listId: props.id }
-      await postDeleteList({ body })
+      await postDeleteList({ body, label: '_delete' })
       setRows((rows) => {
         const newRows = rows.filter((row) => {
           const keep = row.id !== props.id

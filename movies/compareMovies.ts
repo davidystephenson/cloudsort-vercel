@@ -6,13 +6,22 @@ export default function compareItems (props: {
   worseFirst?: boolean
 }): number {
   if (props.a.points === props.b.points) {
-    if (props.b.score === props.a.score) {
+    if (props.b.seed === props.a.seed) {
       return props.b.name.localeCompare(props.a.name) * -1
     }
-    if (props.worseFirst === true) {
-      return props.a.score - props.b.score
+    if (props.a.seed == null && props.b.seed != null) {
+      return 0
     }
-    return props.b.score - props.a.score
+    if (props.a.seed == null) {
+      return 1
+    }
+    if (props.b.seed == null) {
+      return -1
+    }
+    if (props.worseFirst === true) {
+      return props.a.seed - props.b.seed
+    }
+    return props.b.seed - props.a.seed
   }
   if (props.worseFirst === true) {
     return props.a.points - props.b.points
