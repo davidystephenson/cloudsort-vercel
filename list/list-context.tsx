@@ -1,25 +1,24 @@
-import { RelatedList } from './list-types'
-import { Movie } from '@prisma/client'
-import { useOptionalLists } from './lists-context'
-import { MovieData, CreateMoviesRequest } from '../movie/movie-types'
-import { useCallback, useEffect, useState } from 'react'
-import useFilter from '../filter/use-filter'
-import filterMovie from '../movie/filterMovie'
-import { State } from '../mergeChoice/mergeChoiceTypes'
-import getSortedMovies from '../movies/getSortedMovies'
-import importItems from '../mergeChoice/importItems'
-import removeItem from '../mergeChoice/removeItem'
-import postChooseMovie from '../movie/post-choose-movie'
-import chooseOption from '../mergeChoice/chooseOption'
-import postMovies from '../movie/post-movies'
-import contextCreator from 'context-creator'
-import createState from '../mergeChoice/createState'
+import getDefaultOptionIndex from '@/mergeChoice/getDefaultOptionIndex'
+import postDeleteMovie from '@/movie/post-delete-movie'
+import { Ok } from '@/respond/respond-types'
 import shuffleSlice from '@/shuffleSlice/shuffleSlice'
 import useQueue from '@/useQueue/useQueue'
-import { Ok } from '@/respond/respond-types'
-import postImportMovies from '@/movie/post-import-movies'
-import postDeleteMovie from '@/movie/post-delete-movie'
-import getDefaultOptionIndex from '@/mergeChoice/getDefaultOptionIndex'
+import { Movie } from '@prisma/client'
+import contextCreator from 'context-creator'
+import { useCallback, useEffect, useState } from 'react'
+import useFilter from '../filter/use-filter'
+import chooseOption from '../mergeChoice/chooseOption'
+import createState from '../mergeChoice/createState'
+import { State } from '../mergeChoice/mergeChoiceTypes'
+import removeItem from '../mergeChoice/removeItem'
+import filterMovie from '../movie/filterMovie'
+import { CreateMoviesRequest, ListMovie, MovieData } from '../movie/movie-types'
+import postChooseMovie from '../movie/post-choose-movie'
+import postMovies from '../movie/post-movies'
+import getSortedMovies from '../movies/getSortedMovies'
+import { RelatedList } from './list-types'
+import { useOptionalLists } from './lists-context'
+import shiftEvent from '@/event/shift-event'
 
 export const {
   useContext: useList,
@@ -28,12 +27,12 @@ export const {
   name: 'list',
   useValue: (props: {
     row: RelatedList
-    state?: State<Movie>
+    state?: State<ListMovie>
   }) => {
     const lists = useOptionalLists()
     const queue = useQueue()
     const getDefaultState = useCallback(() => {
-      return props.state ?? createState<Movie>()
+      return props.state ?? createState<ListMovie>({ seed: props.row.seed })
     }, [props.state])
     const [state, setState] = useState(getDefaultState)
     const [movies, setMovies] = useState(() => {
@@ -57,7 +56,7 @@ export const {
       await lists?.delete({ id: props.row.id })
     }
     function updateState (props: {
-      update: (props: { state: State<Movie> }) => State<Movie>
+      update: (props: { state: State<ListMovie> }) => State<ListMovie>
     }): void {
       const newState = props.update({ state })
       const sortedMovies = getSortedMovies({ state: newState })
@@ -65,9 +64,9 @@ export const {
       setState(newState)
     }
     function queueState (props: {
-      remote: () => Promise<unknown>
+      remote?: () => Promise<unknown>
       label: string
-      local: (props: { state: State<Movie> }) => State<Movie>
+      local: (props: { state: State<ListMovie> }) => State<ListMovie>
     }): void {
       const task = {
         perform: props.remote,
@@ -85,33 +84,30 @@ export const {
         slice: createMoviesProps.slice
       })
       const body: CreateMoviesRequest = {
+        lastMergechoiceId: state.history[0].mergeChoiceId,
         listId: props.row.id,
         movies: sliced
       }
-      const movies = await postMovies({ body })
-      const label = `Import ${movies.length} movies`
-      function local (updateProps: { state: State<Movie> }): State<Movie> {
-        const newState = importItems({
-          items: movies,
+      const historyEvent = await postMovies({ body })
+      if (historyEvent.import == null) {
+        throw new Error('There is no import')
+      }
+      const label = `Import ${historyEvent.import.items.length} movies`
+      function local (updateProps: { state: State<ListMovie> }): State<ListMovie> {
+        const newState = shiftEvent({
+          historyEvent,
           state: updateProps.state
         })
         return newState
       }
-      async function remote (): Promise<Ok> {
-        const body = {
-          listId: props.row.id,
-          movies
-        }
-        return await postImportMovies({ body })
-      }
-      queueState({ label, local, remote })
+      queueState({ label, local })
     }
     function deleteMovie (deleteMovieProps: {
       movieId: number
     }): void {
       const item = state.items[deleteMovieProps.movieId]
       const label = `Delete ${item.name}`
-      function local (updateProps: { state: State<Movie> }): State<Movie> {
+      function local (updateProps: { state: State<ListMovie> }): State<ListMovie> {
         const newState = removeItem({
           itemId: deleteMovieProps.movieId,
           state: updateProps.state
