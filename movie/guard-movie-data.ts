@@ -12,7 +12,6 @@ export default function guardMovieData (props: {
 }): MovieData {
   const guards = {
     name: guardString,
-    score: guardNumber,
     imdbId: guardString,
     seed: guardNumberUndefined,
     seeding: guardBoolean,

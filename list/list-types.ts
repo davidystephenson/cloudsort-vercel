@@ -5,7 +5,7 @@ import { EventsRelation } from '@/event/event-types'
 
 export interface ListWhere {
   listId: number
-  lastMergechoiceId: number
+  lastMergechoiceId: number | null
 }
 export interface CreateListRequest {
   name: string

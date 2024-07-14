@@ -1,12 +1,11 @@
 import guardPostMovies from '@/movie/guard-post-movies'
 import handlePostMovies from '@/movie/handle-post-movies'
-
 import handleEvent from '@/event/handle-event'
 
 export async function POST (request: Request): Promise<Response> {
   const response = await handleEvent({
     guard: guardPostMovies,
-    label: '/movie/choose',
+    label: '/movies',
     createEvent: async (props) => {
       const event = handlePostMovies({
         events: props.events,

@@ -6,7 +6,7 @@ import ThemeLinkView from '../theme/theme-link-view'
 
 export default function NavbarLayoutView (): JSX.Element {
   return (
-    <HStack>
+    <HStack justifyContent='space-between'>
       <ThemeLinkView href='/lists'>
         <Heading>Cloudsort</Heading>
       </ThemeLinkView>

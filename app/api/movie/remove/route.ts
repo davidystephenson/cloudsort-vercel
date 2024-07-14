@@ -6,7 +6,7 @@ import guardRemoveMovieRequest from '@/movie/guard-remove-movie-request'
 export async function POST (request: Request): EventResponse {
   const response = await handleEvent({
     guard: guardRemoveMovieRequest,
-    label: '/movie/choose',
+    label: '/movie/remove',
     createEvent: async (props) => {
       const event = await props.tx.event.create({
         data: {

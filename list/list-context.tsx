@@ -135,9 +135,13 @@ export const {
         slice: createMoviesProps.slice
       })
       const body: CreateMoviesRequest = {
-        lastMergechoiceId: state.history[0].mergeChoiceId,
+        lastMergechoiceId: state.history[0]?.mergeChoiceId ?? null,
         listId: props.row.id,
         movies: sliced
+      }
+      const lastHistoryEvent = state.history[0]
+      if (lastHistoryEvent != null) {
+        body.lastMergechoiceId = lastHistoryEvent.mergeChoiceId
       }
       const historyEvent = await postMovies({ body, label: 'importMovies' })
       if (historyEvent.import == null) {

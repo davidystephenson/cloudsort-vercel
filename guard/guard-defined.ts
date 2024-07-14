@@ -6,7 +6,7 @@ export default function guardDefined (props: {
 }): NonNullable<unknown> {
   if (props.value == null) {
     const message = `There is no ${props.label}`
-    throw new GuardError({ label: 'defeined', message })
+    throw new GuardError({ label: 'defined', message })
   }
   return props.value
 }

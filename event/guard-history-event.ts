@@ -4,28 +4,24 @@ import { ListMovie } from '@/movie/movie-types'
 import guardEventItemData from './guard-event-item-data'
 import guardEventChoiceData from './guard-event-choice-data'
 import guardModel from '@/guard/guard-model'
-import guardCalculatedMovie from '@/movie/guard-calculated-movie'
-import guardCalculatedMovieArray from '@/movie/guard-calculated-movie-array'
+import guardUndefined from '@/guard/guard-undefined'
+import guardEventImportData from './guard-event-import-data'
+import guardEventRandomData from './guard-event-random-data'
 
 export default function guardHistoryEvent (props: {
   label: string
   value: unknown
 }): HistoryEvent<ListMovie> {
   const guards = {
-    archive: guardEventItemData,
-    choice: guardEventChoiceData,
+    archive: [guardEventItemData, guardUndefined],
+    choice: [guardEventChoiceData, guardUndefined],
     createdAt: guardNumber,
-    import: {
-      items: guardCalculatedMovieArray
-    },
+    import: [guardEventImportData, guardUndefined],
     mergeChoiceId: guardNumber,
-    random: {
-      first: guardCalculatedMovie,
-      second: guardCalculatedMovie
-    },
-    remove: guardEventItemData,
-    reset: guardEventItemData,
-    unarchive: guardEventItemData
+    random: [guardEventRandomData, guardUndefined],
+    remove: [guardEventItemData, guardUndefined],
+    reset: [guardEventItemData, guardUndefined],
+    unarchive: [guardEventItemData, guardUndefined]
   }
   const guarded = guardModel({
     guards,

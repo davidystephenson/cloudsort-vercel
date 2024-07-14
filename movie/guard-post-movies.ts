@@ -2,13 +2,14 @@ import { CreateMoviesRequest } from './movie-types'
 import guardNumber from '@/guard/guard-number'
 import guardMovieDataArray from './guard-movie-data-array'
 import guardModel from '@/guard/guard-model'
+import guardNumberNull from '@/guard/guard-number-null'
 
 export default function guardPostMovies (props: {
   label: string
   value: unknown
 }): CreateMoviesRequest {
   const guards = {
-    lastMergechoiceId: guardNumber,
+    lastMergechoiceId: guardNumberNull,
     listId: guardNumber,
     movies: guardMovieDataArray
   }

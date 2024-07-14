@@ -13,6 +13,8 @@ export default function guardUnionProp <Guards extends unknown[]> (props: {
 }): Guards[number] {
   const labels: string[] = []
   const guard = props.guards.find(guard => {
+    console.log('guard', guard)
+    console.log('props', props)
     try {
       guard({
         key: props.key,
@@ -30,7 +32,7 @@ export default function guardUnionProp <Guards extends unknown[]> (props: {
   })
   if (guard == null) {
     const label = labels.join(' or ')
-    const message = `${props.label} is not a union of ${label}`
+    const message = `${props.label}.${props.key} is not a union of ${label}`
     throw new GuardError({
       label,
       message

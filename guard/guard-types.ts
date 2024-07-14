@@ -20,3 +20,8 @@ export type GuardsValue<Guarded, Key extends keyof Guarded> = (
 export type KeyGuard<Guarded, Key extends keyof Guarded> = Guard<Guarded[Key]>
 export type KeyGuardArray<Guarded, Key extends keyof Guarded> = Array<Guard<Guarded[Key]>>
 export type KeyGuards<Guarded, Key extends keyof Guarded> = Guards<Guarded[Key]>
+export interface Issue {
+  key?: string
+  label: string
+  message: string
+}

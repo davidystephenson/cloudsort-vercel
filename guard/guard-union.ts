@@ -16,7 +16,6 @@ export default function guardUnion<Guards extends unknown[]> (props: {
       return true
     } catch (error) {
       if (error instanceof GuardError) {
-        console.log('error', error)
         labels.push(error.label)
         return false
       }

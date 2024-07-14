@@ -6,7 +6,7 @@ import createImportEvent from '@/event/create-import-event'
 export async function POST (request: Request): EventResponse {
   const response = await handleEvent({
     guard: guardImportMoviesRequest,
-    label: '/movie/choose',
+    label: '/movie/import',
     createEvent: async (props) => {
       const event = await createImportEvent({
         events: props.events,
