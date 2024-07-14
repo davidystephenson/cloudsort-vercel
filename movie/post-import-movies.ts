@@ -6,7 +6,7 @@ export default async function postImportMovies (props: {
   body: ImportMoviesRequest
 }): Promise<Ok> {
   return await post({
-    body: props.body,
+    payload: props.body,
     url: '/api/movies/import'
   })
 }

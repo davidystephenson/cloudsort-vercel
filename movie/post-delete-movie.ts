@@ -6,7 +6,7 @@ export default async function postDeleteMovie (props: {
   body: RemoveMovieRequest
 }): Promise<Ok> {
   return await post({
-    body: props.body,
+    payload: props.body,
     url: '/api/movie/remove'
   })
 }

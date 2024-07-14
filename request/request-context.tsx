@@ -1,6 +1,5 @@
 import contextCreator from 'context-creator'
 import { ActionProvider, useAction } from '../action/action-context'
-import { AxiosError } from 'axios'
 
 export const {
   useContext: useRequest,
@@ -17,12 +16,10 @@ export const {
       try {
         await props.send()
       } catch (error) {
-        if (error instanceof AxiosError) {
-          action.fail({ error, message: error.response?.data?.error })
-        } else if (error instanceof Error) {
-          action.fail({ error })
+        if (!(error instanceof Error)) {
+          throw error
         }
-        throw error
+        action.fail({ error })
       }
       if (props.endless === true) {
         return

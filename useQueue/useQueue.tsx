@@ -3,10 +3,10 @@ import { TaskQueue, TaskRunner, useTaskQueue } from 'rondonjon-react-task-queue'
 import { Message, Queue, Task } from './useQueueTypes'
 
 export default function useQueue<Result> (): Queue<Result> {
-  const [log, setLog] = useState<Array<Message<Result>>>([])
+  const [log, setLog] = useState<Array<Message<Result | undefined>>>([])
   const [history, setHistory] = useState<string[]>([])
 
-  const runner: TaskRunner<Task<Result>, Result> = useCallback(async (task) => {
+  const runner: TaskRunner<Task<Result | undefined>, Result | undefined> = useCallback(async (task) => {
     setLog((log) => {
       const message = {
         label: task.label,
@@ -15,15 +15,15 @@ export default function useQueue<Result> (): Queue<Result> {
       return [...log, message]
     })
 
-    const result = await task.perform()
+    const result = await task.perform?.()
     return result
   }, [history.length])
 
-  const currentQueue = useRef(new TaskQueue<Task<Result>, Result>(runner)).current
+  const currentQueue = useRef(new TaskQueue<Task<Result | undefined>, Result | undefined>(runner)).current
   const taskQueue = useTaskQueue(currentQueue)
 
   const add = useCallback(
-    async (props: { task: Task<Result> }) => {
+    async (props: { task: Task<Result | undefined> }) => {
       setLog((log) => {
         const message = {
           label: props.task.label,

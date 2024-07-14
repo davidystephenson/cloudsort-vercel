@@ -1,10 +1,9 @@
 import { State } from '@/mergeChoice/mergeChoiceTypes'
 import sortMovies from './sortMovies'
-import { Movie } from '@prisma/client'
-import { CalculatedMovie } from '../movie/movie-types'
+import { CalculatedMovie, ListMovie } from '../movie/movie-types'
 
 export default function getSortedMovies (props: {
-  state: State<Movie>
+  state: State<ListMovie>
 }): CalculatedMovie[] {
   const better = sortMovies({ ids: props.state.betterIds, state: props.state })
   const active = sortMovies({ ids: props.state.activeIds, state: props.state })

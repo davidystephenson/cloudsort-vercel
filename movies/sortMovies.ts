@@ -1,13 +1,12 @@
-import { Movie } from '@prisma/client'
 import getItem from '../mergeChoice/getItem'
 import getPoints from '../mergeChoice/getPoints'
 import { ItemId, State } from '../mergeChoice/mergeChoiceTypes'
-import { CalculatedMovie } from '../movie/movie-types'
+import { CalculatedMovie, ListMovie } from '../movie/movie-types'
 import compareMovies from './compareMovies'
 
 export default function sortMovies (props: {
   ids: ItemId[]
-  state: State<Movie>
+  state: State<ListMovie>
   worseFirst?: boolean
 }): CalculatedMovie[] {
   const calculatedMovies = props.ids.map((itemId) => {

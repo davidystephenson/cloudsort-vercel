@@ -67,28 +67,28 @@ export interface HistoryRandomData<ListItem extends Item> {
   second: Calculated<ListItem>
 }
 export interface HistoryArchivePart <ListItem extends Item> {
-  archive?: HistoryArchiveData<ListItem> | null
+  archive?: HistoryArchiveData<ListItem>
 }
 export interface HistoryChoicePart<ListItem extends Item> {
-  choice?: HistoryChoiceData<ListItem> | null
+  choice?: HistoryChoiceData<ListItem>
 }
 export interface HistoryImportPart<ListItem extends Item> {
-  import?: HistoryImportData<ListItem> | null
+  import?: HistoryImportData<ListItem>
 }
 export interface HistoryRandomPart<ListItem extends Item> {
-  random?: HistoryRandomData<ListItem> | null
+  random?: HistoryRandomData<ListItem>
 }
 export interface HistoryRemovePart<ListItem extends Item> {
-  remove?: HistoryRemoveData<ListItem> | null
+  remove?: HistoryRemoveData<ListItem>
 }
 export interface HistoryResetPart<ListItem extends Item> {
-  reset?: HistoryResetData<ListItem> | null
+  reset?: HistoryResetData<ListItem>
 }
 export interface HistoryUnarchivePart<ListItem extends Item> {
-  unarchive?: HistoryUnarchiveData<ListItem> | null
+  unarchive?: HistoryUnarchiveData<ListItem>
 }
 export interface HistoryEvent<ListItem extends Item> extends Identity, HistoryArchivePart<ListItem>, HistoryChoicePart<ListItem>, HistoryImportPart<ListItem>, HistoryRandomPart<ListItem>, HistoryRemovePart<ListItem>, HistoryResetPart<ListItem>, HistoryUnarchivePart<ListItem> {
-  createdAt: number | null
+  createdAt: number
 }
 
 export interface RemovalFromOperations {

@@ -6,7 +6,7 @@ export default async function postChooseMovie (props: {
   body: ChooseMovieRequest
 }): Promise<Ok> {
   return await post({
-    body: props.body,
+    payload: props.body,
     url: '/api/movie/choose'
   })
 }

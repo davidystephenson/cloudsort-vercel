@@ -6,7 +6,7 @@ export default async function postDeleteList (props: {
   body: ListRequest
 }): Promise<Ok> {
   return await post({
-    body: props.body,
+    payload: props.body,
     url: '/api/list/delete'
   })
 }

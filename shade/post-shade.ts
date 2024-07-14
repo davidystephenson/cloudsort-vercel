@@ -7,7 +7,7 @@ export default async function postShade (props: {
 }): Promise<Ok> {
   const body = { shade: props.shade }
   const ok = await post<PostShadeBody, Ok>({
-    body,
+    payload: body,
     url: '/api/shade'
   })
   document.cookie = 'newShade=none;'

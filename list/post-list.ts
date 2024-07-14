@@ -6,7 +6,7 @@ export default async function postList (props: {
   body: CreateListRequest
 }): Promise<List> {
   return await post({
-    body: props.body,
+    payload: props.body,
     url: '/api/list'
   })
 }

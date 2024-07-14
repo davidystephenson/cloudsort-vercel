@@ -8,11 +8,11 @@ export default function parseCritickerMovies (props: {
     const year = Number(row[' Year'])
     const movie: MovieData = {
       imdbId: row[' IMDB ID'],
-      review: row[' Mini Review'],
-      score,
       name: row[' Film Name'],
       year,
-      url: row[' URL']
+      url: row[' URL'],
+      seeding: true,
+      seed: score
     }
     return movie
   })

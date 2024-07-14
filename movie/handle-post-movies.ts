@@ -1,16 +1,16 @@
 import { EVENT_PARTS_RELATION } from '@/event/event-constants'
-import { eventToHistoryEvent } from '@/list/get-mergechoice-list'
-import { HistoryEvent } from '@/mergeChoice/mergeChoiceTypes'
+import { RelatedEvent } from '@/event/event-types'
 import { PrismaTransaction } from '@/prisma/prisma-types'
 import { Event } from '@prisma/client'
-import { CreateMoviesRequest, ListMovie } from './movie-types'
+import { MovieData } from './movie-types'
 
 export default async function handlePostMovies (props: {
-  body: CreateMoviesRequest
   events: Event[]
+  listId: number
+  movies: MovieData[]
   tx: PrismaTransaction
-}): Promise<HistoryEvent<ListMovie>> {
-  const imdbIds = props.body.movies.map((movie) => movie.imdbId)
+}): Promise<RelatedEvent> {
+  const imdbIds = props.movies.map((movie) => movie.imdbId)
   const existingMovies = await props.tx.movie.findMany({
     where: {
       imdbId: {
@@ -20,7 +20,7 @@ export default async function handlePostMovies (props: {
   })
   const existingImdbIds = existingMovies.map((movie) => movie.imdbId)
   const newImdbIds = imdbIds.filter((imdbId) => !existingImdbIds.includes(imdbId))
-  const newPayloads = props.body.movies.filter((movie) => {
+  const newPayloads = props.movies.filter((movie) => {
     const includes = newImdbIds.includes(movie.imdbId)
     return includes
   })
@@ -48,7 +48,7 @@ export default async function handlePostMovies (props: {
       }
     }
   })
-  const createdEventItems = props.body.movies.map((movie) => {
+  const createdEventItems = props.movies.map((movie) => {
     const item = createdMovies.find((createMovie) => createMovie.imdbId === movie.imdbId)
     if (item == null) {
       throw new Error('Item not found.')
@@ -70,11 +70,10 @@ export default async function handlePostMovies (props: {
           }
         }
       },
-      listId: props.body.listId,
+      listId: props.listId,
       mergeChoiceId: props.events.length
     },
     include: EVENT_PARTS_RELATION
   })
-  const historyEvent = eventToHistoryEvent({ event })
-  return historyEvent
+  return event
 }
