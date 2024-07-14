@@ -1,11 +1,8 @@
 import GuardError from './guard-error'
-import { ArrayMap } from './guard-types'
+import { GuardArray } from './guard-types'
 
 export default function guardUnion<Guards extends unknown[]> (props: {
-  guards: ArrayMap<Guards, {
-    label: string
-    value: unknown
-  }>
+  guards: GuardArray<Guards>
   label: string
   value: unknown
 }): Guards[number] {
