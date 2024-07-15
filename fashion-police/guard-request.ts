@@ -1,4 +1,4 @@
-import { Guard } from './guard-types'
+import { Guard } from './fashionPoliceTypes'
 
 export default async function guardRequest <Body> (props: {
   guard: Guard<Body>

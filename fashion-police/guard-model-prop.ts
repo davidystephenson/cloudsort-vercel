@@ -1,8 +1,8 @@
-import guardModel from './guard-model'
+import fashionPolice from './fashion-police'
 import guardObject from './guard-object'
 import guardProp from './guard-prop'
 import guardPropType from './guard-prop-type'
-import { GuardsValue } from './guard-types'
+import { GuardsValue } from './fashionPoliceTypes'
 import guardUnionProp from './guard-union-prop'
 
 export default function guardModelProp<Guarded, Key extends keyof Guarded> (props: {
@@ -36,8 +36,8 @@ export default function guardModelProp<Guarded, Key extends keyof Guarded> (prop
     label: props.label,
     value: object
   })
-  const guarded = guardModel({
-    guards: props.g,
+  const guarded = fashionPolice({
+    required: props.g,
     label: props.label,
     value: prop
   })

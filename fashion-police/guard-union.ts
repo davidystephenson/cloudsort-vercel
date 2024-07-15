@@ -1,5 +1,5 @@
 import GuardError from './guard-error'
-import { GuardArray } from './guard-types'
+import { GuardArray } from './fashionPoliceTypes'
 
 export default function guardUnion<Guards extends unknown[]> (props: {
   guards: GuardArray<Guards>

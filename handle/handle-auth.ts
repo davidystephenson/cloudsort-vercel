@@ -2,7 +2,7 @@ import guardServerAuth from '@/auth/guard-server-auth'
 import { Session } from 'next-auth'
 import { handleBody } from './handle-body'
 import { PrismaTransaction } from '@/prisma/prisma-types'
-import { Guard } from '@/guard/guard-types'
+import { Guard } from '@/fashion-police/fashionPoliceTypes'
 import { HandledResponse } from './handle-types'
 
 export async function handleAuth<Body, Result> (props: {

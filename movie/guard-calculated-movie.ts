@@ -1,16 +1,16 @@
-import guardNumber from '@/guard/guard-number'
+import guardNumber from '@/fashion-police/guard-number'
 import { CalculatedMovie } from './movie-types'
-import guardString from '@/guard/guard-string'
-import guardNumberUndefined from '@/guard/guard-number-undefined'
-import guardBoolean from '@/guard/guard-boolean'
-import guardModel from '@/guard/guard-model'
+import guardString from '@/fashion-police/guard-string'
+import guardNumberUndefined from '@/fashion-police/guard-number-undefined'
+import guardBoolean from '@/fashion-police/guard-boolean'
+import fashionPolice from '@/fashion-police/fashion-police'
 
 export default function guardCalculatedMovie (props: {
   label: string
   value: unknown
 }): CalculatedMovie {
-  const guarded = guardModel({
-    guards: {
+  const guarded = fashionPolice({
+    required: {
       id: guardNumber,
       imdbId: guardString,
       name: guardString,

@@ -4,7 +4,7 @@ import { useRouter } from 'next/navigation'
 import AuthFormView from '../auth-form/auth-form-view'
 import SubmitRequestView from '../request/submit-request-view'
 import postRegister from './post-register'
-import guardFields from '../guard/guard-fields'
+import guardFields from '../fashion-police/guard-fields'
 
 export default function RegisterView (): JSX.Element {
   const router = useRouter()

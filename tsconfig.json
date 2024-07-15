@@ -24,6 +24,6 @@
       }
     ],
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "request/request-button-consumer-view.tsx0", "list/movies-cells-view", "guard/guard-number-prop.ts"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "request/request-button-consumer-view.tsx0", "list/movies-cells-view", "fashion-police/guard-number-prop.ts"],
   "exclude": ["node_modules"]
 }

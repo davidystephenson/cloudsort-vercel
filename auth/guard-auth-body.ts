@@ -1,6 +1,6 @@
-import guardObject from '@/guard/guard-object'
+import guardObject from '@/fashion-police/guard-object'
 import { AuthBody } from './auth-types'
-import guardStringProp from '@/guard/guard-string-prop'
+import guardStringProp from '@/fashion-police/guard-string-prop'
 
 export default function guardAuthBody (props: {
   label: string

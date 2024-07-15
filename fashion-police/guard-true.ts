@@ -1,4 +1,4 @@
-import GuardError from '@/guard/guard-error'
+import GuardError from '@/fashion-police/guard-error'
 
 export default function guardTrue (props: {
   label: string

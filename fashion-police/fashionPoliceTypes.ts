@@ -1,10 +1,10 @@
 export type ArrayMap <Arrayed extends unknown[], Props> = {
   [Index in keyof Arrayed]: (props: Props) => Arrayed[Index]
 }
-export type Guard<T> = (props: {
+export type Guard<Guarded> = (props: {
   label: string
   value: unknown
-}) => T
+}) => Guarded
 export type GuardArray <Guards extends unknown[]> = ArrayMap<Guards, {
   label: string
   value: unknown

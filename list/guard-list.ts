@@ -1,6 +1,6 @@
-import guardModel from '@/guard/guard-model'
-import guardNumber from '@/guard/guard-number'
-import guardString from '@/guard/guard-string'
+import fashionPolice from '@/fashion-police/fashion-police'
+import guardNumber from '@/fashion-police/guard-number'
+import guardString from '@/fashion-police/guard-string'
 import { List } from '@prisma/client'
 
 export default function guardList (props: {
@@ -13,8 +13,8 @@ export default function guardList (props: {
     userId: guardNumber,
     seed: guardString
   }
-  const guarded = guardModel({
-    guards,
+  const guarded = fashionPolice({
+    required: guards,
     label: props.label,
     value: props.value
   })

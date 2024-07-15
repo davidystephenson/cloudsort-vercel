@@ -1,7 +1,7 @@
-import guardBoolean from '@/guard/guard-boolean'
-import guardModel from '@/guard/guard-model'
-import guardNumber from '@/guard/guard-number'
-import guardStringNumber from '@/guard/guard-string-number'
+import guardBoolean from '@/fashion-police/guard-boolean'
+import fashionPolice from '@/fashion-police/fashion-police'
+import guardNumber from '@/fashion-police/guard-number'
+import guardStringNumber from '@/fashion-police/guard-string-number'
 import { HistoryChoiceData } from '@/mergeChoice/mergeChoiceTypes'
 import guardCalculatedMovie from '@/movie/guard-calculated-movie'
 import { ListMovie } from '@/movie/movie-types'
@@ -20,8 +20,8 @@ export default function guardEventChoiceData (props: {
     random: guardBoolean,
     seeded: guardBoolean
   }
-  const guarded = guardModel({
-    guards,
+  const guarded = fashionPolice({
+    required: guards,
     label: props.label,
     value: props.value
   })

@@ -1,4 +1,4 @@
-import guardPropType from '@/guard/guard-prop-type'
+import guardPropType from '@/fashion-police/guard-prop-type'
 import guardMovieDataArray from './guard-movie-data-array'
 import { MovieData } from './movie-types'
 

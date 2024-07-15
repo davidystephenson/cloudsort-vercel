@@ -3,8 +3,8 @@ import { ApiError } from 'next/dist/server/api-utils'
 import { NextResponse } from 'next/server'
 import prisma from '@/prisma/prisma'
 import { PrismaTransaction } from '@/prisma/prisma-types'
-import guardRequest from '@/guard/guard-request'
-import { Guard } from '@/guard/guard-types'
+import guardRequest from '@/fashion-police/guard-request'
+import { Guard } from '@/fashion-police/fashionPoliceTypes'
 import { HandledResponse } from './handle-types'
 
 export async function handleBody <Body, Result> (props: {

@@ -1,10 +1,10 @@
 import { MovieData } from './movie-types'
-import guardString from '@/guard/guard-string'
-import guardNumber from '@/guard/guard-number'
-import guardModel from '@/guard/guard-model'
-import guardBoolean from '@/guard/guard-boolean'
-import guardNumberUndefined from '@/guard/guard-number-undefined'
-import guardStringUndefined from '@/guard/guard-string-undefined'
+import guardString from '@/fashion-police/guard-string'
+import guardNumber from '@/fashion-police/guard-number'
+import fashionPolice from '@/fashion-police/fashion-police'
+import guardBoolean from '@/fashion-police/guard-boolean'
+import guardNumberUndefined from '@/fashion-police/guard-number-undefined'
+import guardStringUndefined from '@/fashion-police/guard-string-undefined'
 
 export default function guardMovieData (props: {
   label: string
@@ -18,8 +18,8 @@ export default function guardMovieData (props: {
     url: guardStringUndefined,
     year: guardNumber
   }
-  const guarded = guardModel({
-    guards,
+  const guarded = fashionPolice({
+    required: guards,
     label: props.label,
     value: props.value
   })

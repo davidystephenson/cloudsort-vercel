@@ -1,8 +1,8 @@
 import guardModelProp from './guard-model-prop'
 import guardObject from './guard-object'
-import { Guards } from './guard-types'
+import { Guards } from './fashionPoliceTypes'
 
-export default function guardModel<Model> (props: {
+export default function guardRequired<Model> (props: {
   guards: Guards<Model>
   label: string
   value: unknown

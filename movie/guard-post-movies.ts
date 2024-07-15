@@ -1,8 +1,8 @@
 import { CreateMoviesRequest } from './movie-types'
-import guardNumber from '@/guard/guard-number'
+import guardNumber from '@/fashion-police/guard-number'
 import guardMovieDataArray from './guard-movie-data-array'
-import guardModel from '@/guard/guard-model'
-import guardNumberNull from '@/guard/guard-number-null'
+import fashionPolice from '@/fashion-police/fashion-police'
+import guardNumberNull from '@/fashion-police/guard-number-null'
 
 export default function guardPostMovies (props: {
   label: string
@@ -13,8 +13,8 @@ export default function guardPostMovies (props: {
     listId: guardNumber,
     movies: guardMovieDataArray
   }
-  const guarded = guardModel({
-    guards,
+  const guarded = fashionPolice({
+    required: guards,
     label: props.label,
     value: props.value
   })

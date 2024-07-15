@@ -1,4 +1,4 @@
-import guardModel from '@/guard/guard-model'
+import fashionPolice from '@/fashion-police/fashion-police'
 import { HistoryRemoveData } from '@/mergeChoice/mergeChoiceTypes'
 import guardCalculatedMovie from '@/movie/guard-calculated-movie'
 import { ListMovie } from '@/movie/movie-types'
@@ -10,8 +10,8 @@ export default function guardEventRemoveData (props: {
   const guards = {
     item: guardCalculatedMovie
   }
-  const guarded = guardModel({
-    guards,
+  const guarded = fashionPolice({
+    required: guards,
     label: props.label,
     value: props.value
   })

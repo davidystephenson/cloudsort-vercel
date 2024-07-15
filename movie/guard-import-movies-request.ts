@@ -1,8 +1,8 @@
-import guardModel from '@/guard/guard-model'
-import guardNumber from '@/guard/guard-number'
+import fashionPolice from '@/fashion-police/fashion-police'
+import guardNumber from '@/fashion-police/guard-number'
 import { ImportMoviesRequest } from './movie-types'
 import guardCalculatedMovieArray from './guard-calculated-movie-array'
-import guardNumberNull from '@/guard/guard-number-null'
+import guardNumberNull from '@/fashion-police/guard-number-null'
 
 export default function guardImportMoviesRequest (props: {
   label: string
@@ -13,8 +13,8 @@ export default function guardImportMoviesRequest (props: {
     lastMergechoiceId: guardNumberNull,
     listId: guardNumber
   }
-  const guarded = guardModel({
-    guards,
+  const guarded = fashionPolice({
+    required: guards,
     label: props.label,
     value: props.value
   })

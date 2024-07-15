@@ -1,5 +1,5 @@
 import guardProp from './guard-prop'
-import { Guard } from './guard-types'
+import { Guard } from './fashionPoliceTypes'
 
 export default function guardPropType <Type> (props: {
   guard: Guard<Type>

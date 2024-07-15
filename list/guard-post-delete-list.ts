@@ -1,5 +1,5 @@
-import guardObject from '@/guard/guard-object'
-import guardNumberProp from '@/guard/guard-number-prop'
+import guardObject from '@/fashion-police/guard-object'
+import guardNumberProp from '@/fashion-police/guard-number-prop'
 import { ListRequest } from './list-types'
 
 export default function guardPostDeleteList (props: {

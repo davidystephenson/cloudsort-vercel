@@ -1,13 +1,13 @@
-import guardModel from '@/guard/guard-model'
+import fashionPolice from '@/fashion-police/fashion-police'
 import { Ok } from './ok-types'
-import guardTrue from '@/guard/guard-true'
+import guardTrue from '@/fashion-police/guard-true'
 
 export default function guardOk (props: {
   label: string
   value: unknown
 }): Ok {
-  const guarded = guardModel({
-    guards: {
+  const guarded = fashionPolice({
+    required: {
       ok: guardTrue
     },
     label: props.label,

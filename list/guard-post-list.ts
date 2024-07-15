@@ -1,6 +1,6 @@
-import guardObject from '@/guard/guard-object'
+import guardObject from '@/fashion-police/guard-object'
 import { CreateListRequest } from './list-types'
-import guardStringProp from '@/guard/guard-string-prop'
+import guardStringProp from '@/fashion-police/guard-string-prop'
 
 export default function guardPostList (props: {
   label: string

@@ -1,7 +1,7 @@
-import guardBooleanProp from '@/guard/guard-boolean-prop'
-import guardNumberArrayProp from '@/guard/guard-number-array-prop'
-import guardNumberNullProp from '@/guard/guard-number-null-prop'
-import guardNumberProp from '@/guard/guard-number-prop'
+import guardBooleanProp from '@/fashion-police/guard-boolean-prop'
+import guardNumberArrayProp from '@/fashion-police/guard-number-array-prop'
+import guardNumberNullProp from '@/fashion-police/guard-number-null-prop'
+import guardNumberProp from '@/fashion-police/guard-number-prop'
 import { Choice } from '@/mergeChoice/mergeChoiceTypes'
 
 export default function guardChoice (props: {

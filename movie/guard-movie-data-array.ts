@@ -1,4 +1,4 @@
-import guardObjectArrayType from '@/guard/guard-object-array-type'
+import guardObjectArrayType from '@/fashion-police/guard-object-array-type'
 import guardMovieData from './guard-movie-data'
 import { MovieData } from './movie-types'
 

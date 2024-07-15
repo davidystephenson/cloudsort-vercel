@@ -4,7 +4,7 @@ import RequestFormView from '../request/request-form-view'
 import { useLists } from './lists-context'
 import { useHeading } from '../heading/heading-context'
 import CreateListNameView from './create-list-name-view'
-import guardString from '@/guard/guard-string'
+import guardString from '@/fashion-police/guard-string'
 
 export default function CreateListFormView (): JSX.Element {
   const heading = useHeading()

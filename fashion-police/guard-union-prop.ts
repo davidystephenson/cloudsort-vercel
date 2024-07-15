@@ -1,5 +1,5 @@
 import GuardError from './guard-error'
-import { ArrayMap } from './guard-types'
+import { ArrayMap } from './fashionPoliceTypes'
 
 export default function guardUnionProp <Guards extends unknown[]> (props: {
   guards: ArrayMap<Guards, {

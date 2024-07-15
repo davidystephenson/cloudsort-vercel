@@ -1,6 +1,6 @@
 import { ListWhere } from '../list/list-types'
 import { Event } from '@prisma/client'
-import { Guard } from '@/guard/guard-types'
+import { Guard } from '@/fashion-police/fashionPoliceTypes'
 import { ApiError } from 'next/dist/server/api-utils'
 import { PrismaTransaction } from '@/prisma/prisma-types'
 import { handleAuth } from '@/handle/handle-auth'
