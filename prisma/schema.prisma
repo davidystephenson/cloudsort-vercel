@@ -13,9 +13,9 @@ datasource db {
 }
 
 model Archive {
-  event       Event     @relation(fields: [eventId], references: [id])
+  event       Event     @relation(fields: [eventId], references: [id], onDelete: Cascade)
   eventId     Int       @unique
-  eventItem   EventItem @relation(fields: [eventItemId], references: [id])
+  eventItem   EventItem @relation(fields: [eventItemId], references: [id], onDelete: Cascade)
   eventItemId Int       @unique
   id          Int       @id @default(autoincrement())
 }
@@ -23,11 +23,11 @@ model Archive {
 model Choice {
   aBetter      Boolean
   aEventItemId Int       @unique
-  aEventItem   EventItem @relation("aItem", fields: [aEventItemId], references: [id])
+  aEventItem   EventItem @relation("aItem", fields: [aEventItemId], references: [id], onDelete: Cascade)
   betterIndex  Int
   bEventItemId Int       @unique
-  bEventItem   EventItem @relation("bItem", fields: [bEventItemId], references: [id])
-  event        Event     @relation(fields: [eventId], references: [id])
+  bEventItem   EventItem @relation("bItem", fields: [bEventItemId], references: [id], onDelete: Cascade)
+  event        Event     @relation(fields: [eventId], references: [id], onDelete: Cascade)
   eventId      Int       @unique
   id           Int       @id @default(autoincrement())
   random       Boolean
@@ -57,7 +57,7 @@ model EventItem {
   id           Int         @id @default(autoincrement())
   item         Item        @relation(fields: [itemId], references: [id])
   itemId       Int
-  import       Import?     @relation(fields: [importId], references: [id])
+  import       Import?     @relation(fields: [importId], references: [id], onDelete: Cascade)
   importId     Int?
   points       Int
   removal      Remove?
@@ -69,7 +69,7 @@ model EventItem {
 }
 
 model Import {
-  event      Event       @relation(fields: [eventId], references: [id])
+  event      Event       @relation(fields: [eventId], references: [id], onDelete: Cascade)
   eventId    Int         @unique
   eventItems EventItem[]
   id         Int         @id @default(autoincrement())
@@ -101,36 +101,36 @@ model Movie {
 }
 
 model Random {
-  event             Event     @relation(fields: [eventId], references: [id])
+  event             Event     @relation(fields: [eventId], references: [id], onDelete: Cascade)
   eventId           Int       @unique
-  firstEventItem    EventItem @relation("firstRandom", fields: [firstEventItemId], references: [id])
+  firstEventItem    EventItem @relation("firstRandom", fields: [firstEventItemId], references: [id], onDelete: Cascade)
   firstEventItemId  Int       @unique
   id                Int       @id @default(autoincrement())
-  secondEventItem   EventItem @relation("secondRandom", fields: [secondEventItemId], references: [id])
+  secondEventItem   EventItem @relation("secondRandom", fields: [secondEventItemId], references: [id], onDelete: Cascade)
   secondEventItemId Int       @unique
 }
 
 model Remove {
-  event       Event     @relation(fields: [eventId], references: [id])
+  event       Event     @relation(fields: [eventId], references: [id], onDelete: Cascade)
   eventId     Int       @unique
   id          Int       @id @default(autoincrement())
   eventItemId Int       @unique
-  eventItem   EventItem @relation(fields: [eventItemId], references: [id])
+  eventItem   EventItem @relation(fields: [eventItemId], references: [id], onDelete: Cascade)
 }
 
 model Reset {
-  event       Event     @relation(fields: [eventId], references: [id])
+  event       Event     @relation(fields: [eventId], references: [id], onDelete: Cascade)
   eventId     Int       @unique
   id          Int       @id @default(autoincrement())
-  eventItem   EventItem @relation(fields: [eventItemId], references: [id])
+  eventItem   EventItem @relation(fields: [eventItemId], references: [id], onDelete: Cascade)
   eventItemId Int       @unique
 }
 
 model Unarchive {
-  event       Event     @relation(fields: [eventId], references: [id])
+  event       Event     @relation(fields: [eventId], references: [id], onDelete: Cascade)
   eventId     Int       @unique
   id          Int       @id @default(autoincrement())
-  eventItem   EventItem @relation(fields: [eventItemId], references: [id])
+  eventItem   EventItem @relation(fields: [eventItemId], references: [id], onDelete: Cascade)
   eventItemId Int
 }
 

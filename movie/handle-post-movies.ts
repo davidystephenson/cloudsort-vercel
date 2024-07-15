@@ -10,7 +10,9 @@ export default async function handlePostMovies (props: {
   movies: MovieData[]
   tx: PrismaTransaction
 }): Promise<RelatedEvent> {
+  console.log('props.movies', props.movies)
   const imdbIds = props.movies.map((movie) => movie.imdbId)
+  console.log('imdbIds', imdbIds)
   const existingMovies = await props.tx.movie.findMany({
     where: {
       imdbId: {
@@ -19,7 +21,9 @@ export default async function handlePostMovies (props: {
     }
   })
   const existingImdbIds = existingMovies.map((movie) => movie.imdbId)
+  console.log('existingImdbIds', existingImdbIds)
   const newImdbIds = imdbIds.filter((imdbId) => !existingImdbIds.includes(imdbId))
+  console.log('newImdbIds', newImdbIds)
   const newPayloads = props.movies.filter((movie) => {
     const includes = newImdbIds.includes(movie.imdbId)
     return includes
@@ -43,6 +47,7 @@ export default async function handlePostMovies (props: {
   })
   const createdItems = await Promise.all(createItemPromises)
   const createdItemIds = createdItems.map((item) => item.id)
+  console.log('createdItemIds', createdItemIds)
   const createdMovies = await props.tx.movie.findMany({
     where: {
       itemId: {

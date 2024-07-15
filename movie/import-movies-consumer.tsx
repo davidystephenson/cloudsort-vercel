@@ -8,7 +8,6 @@ import parseCritickerMovies from '../movies/parse-criticker-movies'
 import { CritickerRow } from './movie-types'
 import { useAction } from '../action/action-context'
 import ButtonView from '../button/button-view'
-import { AxiosError } from 'axios'
 
 export default function ImportMoviesConsumer (): JSX.Element {
   const action = useAction()
@@ -25,13 +24,12 @@ export default function ImportMoviesConsumer (): JSX.Element {
       await list.importMovies({ movies, slice: 5 })
       action.succeed()
     } catch (error) {
-      if (error instanceof AxiosError) {
-        action.fail({ error, message: error.response?.data?.error })
+      if (error instanceof Error) {
+        action.fail({ error, message: error.message })
       }
       throw error
     }
   }
-
   function handleFileChange (e: ChangeEvent<HTMLInputElement>): void {
     const file = e.target.files?.[0]
     if (file == null) {

@@ -139,6 +139,7 @@ export const {
         listId: props.row.id,
         movies: sliced
       }
+      console.log('state.history', state.history)
       const lastHistoryEvent = state.history[0]
       if (lastHistoryEvent != null) {
         body.lastMergechoiceId = lastHistoryEvent.mergeChoiceId

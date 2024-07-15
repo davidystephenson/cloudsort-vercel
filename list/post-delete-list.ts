@@ -1,15 +1,15 @@
 import post from '@/post/post'
 import { ListRequest } from './list-types'
-import { Ok } from '@/ok/ok-types'
-import guardOk from '@/ok/guard-ok'
+import { OkTrue } from '@/ok/ok-types'
+import guardOkTrue from '@/ok/guard-ok-true'
 
 export default async function postDeleteList (props: {
   body: ListRequest
   label: string
-}): Promise<Ok> {
+}): Promise<OkTrue> {
   return await post({
     body: props.body,
-    guard: guardOk,
+    guard: guardOkTrue,
     label: props.label,
     url: '/api/list/delete'
   })

@@ -20,7 +20,7 @@ export default function LoginForm (): JSX.Element {
       password: values.password
     })
     router.refresh()
-    router.push('/protected')
+    router.push('/lists')
   }
   return (
     <AuthFormView

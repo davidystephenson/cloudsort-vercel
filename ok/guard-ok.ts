@@ -1,6 +1,7 @@
 import fashionPolice from '@/fashion-police/fashion-police'
+import guardBoolean from '@/fashion-police/guard-boolean'
 import { Ok } from './ok-types'
-import guardTrue from '@/fashion-police/guard-true'
+import guardString from '@/fashion-police/guard-string'
 
 export default function guardOk (props: {
   label: string
@@ -8,7 +9,10 @@ export default function guardOk (props: {
 }): Ok {
   const guarded = fashionPolice({
     required: {
-      ok: guardTrue
+      ok: guardBoolean
+    },
+    optional: {
+      errorMessage: guardString
     },
     label: props.label,
     value: props.value

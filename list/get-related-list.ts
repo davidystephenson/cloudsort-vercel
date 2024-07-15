@@ -10,7 +10,12 @@ export default async function getRelatedList (props: {
       id: props.listId
     },
     include: {
-      events: EVENT_RELATION
+      events: {
+        ...EVENT_RELATION,
+        orderBy: {
+          createdAt: 'desc'
+        }
+      }
     }
   })
   return list
