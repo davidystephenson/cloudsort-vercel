@@ -38,14 +38,9 @@ export default async function handleEvent<Body extends ListWhere> (props: {
         if (a.createdAt > b.createdAt) return 1
         return 0
       })
-      console.log('sortedEvents', sortedEvents)
       const lastEvent = sortedEvents[sortedEvents.length - 1]
-      console.log('lastEvent', lastEvent)
       if (lastEvent != null) {
-        console.log('lastEvent.mergeChoiceId', lastEvent.mergeChoiceId)
-        console.log('authProps.body.lastMergechoiceId', authProps.body.lastMergechoiceId)
         const eventWrong = lastEvent.mergeChoiceId !== authProps.body.lastMergechoiceId
-        console.log('eventWrong', eventWrong)
         if (eventWrong) {
           throw new ApiError(400, 'That is not the last event.')
         }

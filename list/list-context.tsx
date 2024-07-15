@@ -18,6 +18,7 @@ import getSortedMovies from '../movies/getSortedMovies'
 import { RelatedList } from './list-types'
 import { useOptionalLists } from './lists-context'
 import importItems from '@/mergeChoice/importItems'
+import { AlwaysNever } from '@/shuffleSlice/shuffleSliceTypes'
 
 export const {
   useContext: useList,
@@ -129,7 +130,7 @@ export const {
     async function importMovies (createMoviesProps: {
       movies: MovieData[]
       slice?: number
-    }): Promise<void> {
+    } & AlwaysNever): Promise<void> {
       const sliced = shuffleSlice({
         items: createMoviesProps.movies,
         slice: createMoviesProps.slice

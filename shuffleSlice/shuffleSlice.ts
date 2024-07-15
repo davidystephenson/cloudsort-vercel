@@ -1,16 +1,15 @@
 import getShuffled from './getShuffled'
+import { AlwaysNever } from './shuffleSliceTypes'
 
 export default function shuffleSlice <Item> (props: {
-  always?: boolean
   items: Item[]
   slice?: number
-}): Item[] {
-  if (props.always === true || props.slice != null) {
-    const shuffled = getShuffled(props.items)
-    const items = props.slice == null
-      ? shuffled
-      : shuffled.slice(0, props.slice)
-    return items
+} & AlwaysNever): Item[] {
+  const shuffled = getShuffled(props)
+  const slicing = props.slice != null
+  if (slicing) {
+    const sliced = shuffled.slice(0, props.slice)
+    return sliced
   }
-  return props.items
+  return shuffled
 }

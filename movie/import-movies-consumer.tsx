@@ -21,7 +21,9 @@ export default function ImportMoviesConsumer (): JSX.Element {
   }): Promise<void> {
     try {
       const movies = parseCritickerMovies({ rows: props.data })
-      await list.importMovies({ movies, slice: 5 })
+      await list.importMovies({
+        movies
+      })
       action.succeed()
     } catch (error) {
       if (error instanceof Error) {

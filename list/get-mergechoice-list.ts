@@ -123,7 +123,7 @@ export default async function getMergechoiceList (props: {
     const historyEvent = eventToHistoryEvent({ event })
     return historyEvent
   })
-  console.log('history', history)
+  // console.log('history', history)
   const state = deduceState({ history, seed: props.list.seed })
   const mergechoiceList = {
     list: props.list,
