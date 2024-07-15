@@ -10,22 +10,20 @@ import { Box, HStack } from '@chakra-ui/react'
 export default function ProfileView (): JSX.Element {
   const auth = useAuth()
 
-  if (auth.session == null) {
-    return (
+  return (
+    <>
       <HStack>
         <ThemeLinkView href='/login'>Login</ThemeLinkView>
         <ThemeLinkView href='/register'>Register</ThemeLinkView>
       </HStack>
-    )
-  }
-  return (
-    <Box zIndex={4}>
-      <RequestProvider
-        send={signOut}
-        endless
-      >
-        <ProfileConsumer />
-      </RequestProvider>
-    </Box>
+      <Box zIndex={4}>
+        <RequestProvider
+          send={signOut}
+          endless
+        >
+          <ProfileConsumer />
+        </RequestProvider>
+      </Box>
+    </>
   )
 }

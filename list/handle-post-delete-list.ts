@@ -18,6 +18,7 @@ export default async function handlePostDeleteList (props: {
   if (list == null) {
     throw new ApiError(404, 'This list does not exist')
   }
+  console.log('list', list)
   await props.tx.list.delete({
     where: {
       id: props.body.listId

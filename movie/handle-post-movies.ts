@@ -37,9 +37,11 @@ export default async function handlePostMovies (props: {
     }
     return data
   })
-  const createdItems = await props.tx.item.createManyAndReturn({
-    data: newItemData
+  const createItemPromises = newItemData.map(async (data) => {
+    const createdItem = await props.tx.item.create({ data })
+    return createdItem
   })
+  const createdItems = await Promise.all(createItemPromises)
   const createdItemIds = createdItems.map((item) => item.id)
   const createdMovies = await props.tx.movie.findMany({
     where: {

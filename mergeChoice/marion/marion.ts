@@ -22,7 +22,7 @@ export const marion = <Complement, Output, P extends UnknownParts,>(props: {
   part: P
 }): Output => {
   let key: keyof P
-  for (key in props.part) {
+  for (key in props.actors) {
     try {
       const result = audition({
         actors: props.actors,
