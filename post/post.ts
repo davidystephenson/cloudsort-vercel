@@ -1,4 +1,4 @@
-import { Guard } from '@/fashion-police/guard-types'
+import { Guard } from '@/fashion-police/fashionPoliceTypes'
 
 export default async function post <Request, Response> (props: {
   guard: Guard<Response>

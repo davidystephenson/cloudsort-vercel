@@ -12,7 +12,9 @@ export default function getMovieFromEventItem (props: {
     imdbId: props.eventItem.item.movie.imdbId,
     name: props.eventItem.item.name,
     points: props.eventItem.points,
+    seed: props.eventItem.seed ?? undefined,
     seeding: props.eventItem.seeding,
+    url: props.eventItem.item.movie.url ?? undefined,
     year: props.eventItem.item.movie.year
   }
   return movie

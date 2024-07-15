@@ -1,4 +1,3 @@
-import shiftEvent from '@/event/shift-event'
 import getCalculatedItem from '@/mergeChoice/getCalculatedItem'
 import getDefaultOptionIndex from '@/mergeChoice/getDefaultOptionIndex'
 import postRemoveMovie from '@/movie/post-remove-movie'
@@ -18,6 +17,7 @@ import postMovies from '../movie/post-movies'
 import getSortedMovies from '../movies/getSortedMovies'
 import { RelatedList } from './list-types'
 import { useOptionalLists } from './lists-context'
+import importItems from '@/mergeChoice/importItems'
 
 export const {
   useContext: useList,
@@ -143,14 +143,17 @@ export const {
       if (lastHistoryEvent != null) {
         body.lastMergechoiceId = lastHistoryEvent.mergeChoiceId
       }
-      const historyEvent = await postMovies({ body, label: 'importMovies' })
-      if (historyEvent.import == null) {
+      const historyEventResponse = await postMovies({ body, label: 'importMovies' })
+      if (historyEventResponse.import == null) {
         throw new Error('There is no import')
       }
-      const label = `Import ${historyEvent.import.items.length} movies`
+      const label = `Import ${historyEventResponse.import.items.length} movies`
       function local (updateProps: { state: State<ListMovie> }): State<ListMovie> {
-        const newState = shiftEvent({
-          historyEvent,
+        if (historyEventResponse.import == null) {
+          throw new Error('There is no import')
+        }
+        const newState = importItems({
+          items: historyEventResponse.import.items,
           state: updateProps.state
         })
         return newState
