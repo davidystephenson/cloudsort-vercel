@@ -6,12 +6,12 @@ import { ListMovie } from '@/movie/movie-types'
 export default function HistoryImportView (props: {
   input: HistoryImportData<ListMovie>
 }): JSX.Element {
-  const historyEvent = historyContext.useContext()
+  const history = historyContext.useContext()
   return (
     <Card size='sm' mb='10px'>
       <CardHeader>
         <Heading size='sm'>
-          Import ({historyEvent.event.createdAt})
+          Import ({history.episode.createdAt})
         </Heading>
       </CardHeader>
       <CardBody>

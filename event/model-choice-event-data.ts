@@ -1,25 +1,25 @@
 import { HistoryChoiceData } from '@/mergeChoice/mergeChoiceTypes'
-import { RelatedEvent } from './event-types'
+import { RelatedEpisode } from './event-types'
 import { ListMovie } from '@/movie/movie-types'
-import modelEventMovie from './model-event-movie'
+import modelEpisodeMovie from './model-event-movie'
 
-export default function modelChoiceEventData (props: {
-  event: RelatedEvent
+export default function modelChoiceEpisodeData (props: {
+  episode: RelatedEpisode
 }): HistoryChoiceData<ListMovie> {
-  if (props.event.choice == null) {
+  if (props.episode.choice == null) {
     throw new Error('There is no archive')
   }
-  const movieA = modelEventMovie({ eventItem: props.event.choice.aEventItem })
-  const movieB = modelEventMovie({ eventItem: props.event.choice.bEventItem })
+  const movieA = modelEpisodeMovie({ episodeItem: props.episode.choice.aEpisodeItem })
+  const movieB = modelEpisodeMovie({ episodeItem: props.episode.choice.bEpisodeItem })
   const data = {
-    aBetter: props.event.choice.aBetter,
+    aBetter: props.episode.choice.aBetter,
     aId: movieA.id,
     aItem: movieA,
-    betterIndex: props.event.choice.betterIndex,
+    betterIndex: props.episode.choice.betterIndex,
     bId: movieB.id,
     bItem: movieB,
-    random: props.event.choice.random,
-    seeded: props.event.choice.seeded
+    random: props.episode.choice.random,
+    seeded: props.episode.choice.seeded
   }
   return data
 }

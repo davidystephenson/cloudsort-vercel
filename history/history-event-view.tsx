@@ -22,8 +22,8 @@ export function marionHistoryElement<
   return mapped
 }
 
-export default function HistoryEventView (): JSX.Element {
-  const historyEvent = historyContext.useContext()
+export default function HistoryEpisodeView (): JSX.Element {
+  const historyEpisode = historyContext.useContext()
   const views = {
     archive: HistoryArchiveView,
     choice: HistoryChoiceView,
@@ -36,7 +36,7 @@ export default function HistoryEventView (): JSX.Element {
   const element = marionHistoryElement({
     actors: views,
     complement: {},
-    part: historyEvent.event
+    part: historyEpisode.episode
   })
   const view = <>{element}</>
   return view

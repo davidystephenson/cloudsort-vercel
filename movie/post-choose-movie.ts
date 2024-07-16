@@ -1,15 +1,15 @@
-import { MovieHistoryEvent } from '@/event/event-types'
-import postHistoryEvent from '@/event/post-history-event'
+import { MovieEpisode } from '@/event/event-types'
+import postHistoryEpisode from '@/event/post-history-event'
 import { ChooseMovieRequest } from './movie-types'
 
 export default async function postChooseMovie (props: {
   body: ChooseMovieRequest
   label: string
-}): Promise<MovieHistoryEvent> {
-  const event = await postHistoryEvent({
+}): Promise<MovieEpisode> {
+  const episode = await postHistoryEpisode({
     body: props.body,
     label: props.label,
     url: '/api/movie/choose'
   })
-  return event
+  return episode
 }

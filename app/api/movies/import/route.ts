@@ -1,20 +1,20 @@
 import guardImportMoviesRequest from '@/movie/guard-import-movies-request'
-import handleEvent from '@/event/handle-event'
-import { EventResponse } from '@/event/event-types'
-import createImportEvent from '@/event/create-import-event'
+import handleEpisode from '@/event/handle-event'
+import { EpisodeResponse } from '@/event/event-types'
+import createImportEpisode from '@/event/create-import-event'
 
-export async function POST (request: Request): EventResponse {
-  const response = await handleEvent({
+export async function POST (request: Request): EpisodeResponse {
+  const response = await handleEpisode({
     guard: guardImportMoviesRequest,
     label: '/movie/import',
-    createEvent: async (props) => {
-      const event = await createImportEvent({
-        events: props.events,
+    createEpisode: async (props) => {
+      const episode = await createImportEpisode({
+        episodes: props.episodes,
         listId: props.body.listId,
         movies: props.body.movies,
         tx: props.tx
       })
-      return event
+      return episode
     },
     request
   })

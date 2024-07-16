@@ -1,22 +1,22 @@
 import { ListWhere } from '../list/list-types'
-import { Event } from '@prisma/client'
+import { Episode } from '@prisma/client'
 import { Guard } from '@/fashion-police/fashionPoliceTypes'
 import { ApiError } from 'next/dist/server/api-utils'
 import { PrismaTransaction } from '@/prisma/prisma-types'
 import { handleAuth } from '@/handle/handle-auth'
-import { eventToHistoryEvent } from '@/list/get-mergechoice-list'
-import { EventResponse, RelatedEvent } from './event-types'
+import { episodeToHistoryEpisode } from '@/list/get-mergechoice-list'
+import { EpisodeResponse, RelatedEpisode } from './event-types'
 
-export default async function handleEvent<Body extends ListWhere> (props: {
+export default async function handleEpisode<Body extends ListWhere> (props: {
   guard: Guard<Body>
   label: string
-  createEvent: (props: {
+  createEpisode: (props: {
     body: Body
-    events: Event[]
+    episodes: Episode[]
     tx: PrismaTransaction
-  }) => Promise<RelatedEvent>
+  }) => Promise<RelatedEpisode>
   request: Request
-}): EventResponse {
+}): EpisodeResponse {
   const response = await handleAuth({
     guard: props.guard,
     label: props.label,
@@ -30,28 +30,28 @@ export default async function handleEvent<Body extends ListWhere> (props: {
       if (authProps.authSession.user.id !== list.userId) {
         throw new ApiError(403, 'Not authorized.')
       }
-      const events = await authProps.tx.event.findMany({
+      const episodes = await authProps.tx.episode.findMany({
         where: { listId: authProps.body.listId }
       })
-      const sortedEvents = events.sort((a, b) => {
+      const sortedEpisodes = episodes.sort((a, b) => {
         if (a.createdAt < b.createdAt) return -1
         if (a.createdAt > b.createdAt) return 1
         return 0
       })
-      const lastEvent = sortedEvents[sortedEvents.length - 1]
-      if (lastEvent != null) {
-        const eventWrong = lastEvent.mergeChoiceId !== authProps.body.lastMergechoiceId
-        if (eventWrong) {
-          throw new ApiError(400, 'That is not the last event.')
+      const lastEpisode = sortedEpisodes[sortedEpisodes.length - 1]
+      if (lastEpisode != null) {
+        const episodeWrong = lastEpisode.mergeChoiceId !== authProps.body.lastMergechoiceId
+        if (episodeWrong) {
+          throw new ApiError(400, 'That is not the last episode.')
         }
       }
-      const event = await props.createEvent({
+      const episode = await props.createEpisode({
         body: authProps.body,
-        events,
+        episodes,
         tx: authProps.tx
       })
-      const historyEvent = eventToHistoryEvent({ event })
-      return { ok: true, event: historyEvent }
+      const historyEpisode = episodeToHistoryEpisode({ episode })
+      return { ok: true, episode: historyEpisode }
     },
     request: props.request
   })

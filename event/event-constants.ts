@@ -1,4 +1,4 @@
-export const EVENT_ITEM_RELATION = {
+export const EPISODE_ITEM_RELATION = {
   include: {
     item: {
       include: {
@@ -8,52 +8,52 @@ export const EVENT_ITEM_RELATION = {
   }
 } as const
 
-export const EVENT_ITEM_DATA_RELATION = {
+export const EPISODE_ITEM_DATA_RELATION = {
   include: {
-    eventItem: EVENT_ITEM_RELATION
+    episodeItem: EPISODE_ITEM_RELATION
   }
 } as const
 
 export const REMOVE_RELATION = {
-  remove: EVENT_ITEM_DATA_RELATION
+  remove: EPISODE_ITEM_DATA_RELATION
 } as const
 
 export const IMPORT_RELATION = {
   include: {
-    eventItems: EVENT_ITEM_RELATION
+    episodeItems: EPISODE_ITEM_RELATION
   }
 } as const
 
 export const CHOICE_RELATION = {
   include: {
-    aEventItem: EVENT_ITEM_RELATION,
-    bEventItem: EVENT_ITEM_RELATION
+    aEpisodeItem: EPISODE_ITEM_RELATION,
+    bEpisodeItem: EPISODE_ITEM_RELATION
   }
 } as const
 
 export const RANDOM_RELATION = {
   include: {
-    firstEventItem: EVENT_ITEM_RELATION,
-    secondEventItem: EVENT_ITEM_RELATION
+    firstEpisodeItem: EPISODE_ITEM_RELATION,
+    secondEpisodeItem: EPISODE_ITEM_RELATION
   }
 } as const
 
-export const EVENT_PARTS_RELATION = {
-  archive: EVENT_ITEM_DATA_RELATION,
+export const EPISODE_PARTS_RELATION = {
+  archive: EPISODE_ITEM_DATA_RELATION,
   choice: CHOICE_RELATION,
   import: IMPORT_RELATION,
   random: RANDOM_RELATION,
-  remove: EVENT_ITEM_DATA_RELATION,
-  reset: EVENT_ITEM_DATA_RELATION,
-  unarchive: EVENT_ITEM_DATA_RELATION
+  remove: EPISODE_ITEM_DATA_RELATION,
+  reset: EPISODE_ITEM_DATA_RELATION,
+  unarchive: EPISODE_ITEM_DATA_RELATION
 } as const
 
-export const EVENT_RELATION = {
-  include: EVENT_PARTS_RELATION
+export const EPISODE_RELATION = {
+  include: EPISODE_PARTS_RELATION
 } as const
 
-export const EVENTS_RELATION = {
+export const EPISODES_RELATION = {
   include: {
-    events: EVENT_RELATION
+    episodes: EPISODE_RELATION
   }
 } as const

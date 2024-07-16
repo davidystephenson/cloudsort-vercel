@@ -14,7 +14,7 @@ export const {
     const inputRef = useRef<HTMLInputElement>(null)
     const [autoFocus, setAutoFocus] = useState(true)
     const [query, setQuery] = useState('')
-    useHotkeys('ctrl+f', () => {
+    useHotkeys('ctrl+f', (event) => {
       event?.preventDefault()
       inputRef.current?.focus()
     })

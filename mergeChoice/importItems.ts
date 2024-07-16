@@ -2,7 +2,7 @@ import populate from './populate'
 import { Item, State } from './mergeChoiceTypes'
 import setupChoice from './setupChoice'
 import seedChoice from './seedChoice'
-import addEvent from './addEvent'
+import addEpisode from './addEvent'
 
 export default function importItems <ListItem extends Item> (props: {
   items: ListItem[]
@@ -42,7 +42,7 @@ export default function importItems <ListItem extends Item> (props: {
         items: calculated
       }
     }
-    addEvent({
+    addEpisode({
       data,
       state: setupState
     })

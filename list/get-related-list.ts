@@ -1,5 +1,5 @@
 import { RelatedList } from './list-types'
-import { EVENT_RELATION } from '@/event/event-constants'
+import { EPISODE_RELATION } from '@/event/event-constants'
 import { PrismaTransaction } from '@/prisma/prisma-types'
 import { PrismaClient } from '@prisma/client'
 
@@ -12,8 +12,8 @@ export default async function getRelatedList (props: {
       id: props.listId
     },
     include: {
-      events: {
-        ...EVENT_RELATION,
+      episodes: {
+        ...EPISODE_RELATION,
         orderBy: {
           createdAt: 'desc'
         }

@@ -3,7 +3,7 @@ import { HistoryRemoveData } from '@/mergeChoice/mergeChoiceTypes'
 import guardCalculatedMovie from '@/movie/guard-calculated-movie'
 import { ListMovie } from '@/movie/movie-types'
 
-export default function guardEventRemoveData (props: {
+export default function guardEpisodeRemoveData (props: {
   label: string
   value: unknown
 }): HistoryRemoveData<ListMovie> {

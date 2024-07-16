@@ -1,16 +1,16 @@
 import guardTrue from '@/fashion-police/guard-true'
 import fashionPolice from '@/fashion-police/fashion-police'
-import guardHistoryEvent from './guard-history-event'
-import { HistoryEventResponse } from './event-types'
+import guardHistoryEpisode from './guard-history-event'
+import { HistoryEpisodeResponse } from './event-types'
 
-export default function guardHistoryEventResponse (props: {
+export default function guardHistoryEpisodeResponse (props: {
   label: string
   value: unknown
-}): HistoryEventResponse {
+}): HistoryEpisodeResponse {
   const guarded = fashionPolice({
     required: {
       ok: guardTrue,
-      event: guardHistoryEvent
+      episode: guardHistoryEpisode
     },
     label: props.label,
     value: props.value

@@ -1,14 +1,14 @@
-import { HistoryEvent } from '@/mergeChoice/mergeChoiceTypes'
+import { Episode } from '@/mergeChoice/mergeChoiceTypes'
 import { ListMovie } from '@/movie/movie-types'
 import contextCreator from 'context-creator'
 
 const historyContext = contextCreator({
-  name: 'event',
+  name: 'episode',
   useValue: (props: {
-    event: HistoryEvent<ListMovie>
+    episode: Episode<ListMovie>
   }) => {
     const value = {
-      event: props.event
+      episode: props.episode
     }
     return value
   }

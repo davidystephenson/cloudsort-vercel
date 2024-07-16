@@ -1,7 +1,7 @@
 import { Prisma } from '@prisma/client'
 import { State } from '../mergeChoice/mergeChoiceTypes'
 import { ListMovie } from '@/movie/movie-types'
-import { EventsRelation } from '@/event/event-types'
+import { EpisodesRelation } from '@/event/event-types'
 
 export interface ListWhere {
   listId: number
@@ -13,7 +13,7 @@ export interface CreateListRequest {
 export interface ListRequest {
   listId: number
 }
-export type RelatedList = Prisma.ListGetPayload<EventsRelation>
+export type RelatedList = Prisma.ListGetPayload<EpisodesRelation>
 export interface MergechoiceList {
   list: RelatedList
   state: State<ListMovie>

@@ -1,16 +1,16 @@
-import { EVENT_PARTS_RELATION } from '@/event/event-constants'
-import { RelatedEvent } from '@/event/event-types'
+import { EPISODE_PARTS_RELATION } from '@/event/event-constants'
+import { RelatedEpisode } from '@/event/event-types'
 import { PrismaTransaction } from '@/prisma/prisma-types'
-import { Event } from '@prisma/client'
+import { Episode } from '@prisma/client'
 import { MovieData } from './movie-types'
 import guardMergechoiceList from '@/list/guard-mergechoice-list'
 
 export default async function handlePostMovies (props: {
-  events: Event[]
+  episodes: Episode[]
   listId: number
   movies: MovieData[]
   tx: PrismaTransaction
-}): Promise<RelatedEvent> {
+}): Promise<RelatedEpisode> {
   console.log('\n\n*****HANDLE POST START*****')
   console.log('props.movies.length', props.movies.length)
   const imdbIds = props.movies.map((movie) => movie.imdbId)
@@ -73,35 +73,35 @@ export default async function handlePostMovies (props: {
     return !exists
   })
   console.log('importingMovies.length', importingMovies.length)
-  const createdEventItems = importingMovies.map((movie) => {
+  const createdEpisodeItems = importingMovies.map((movie) => {
     const item = postedMovies.find((createMovie) => createMovie.imdbId === movie.imdbId)
     if (item == null) {
       throw new Error('Item not found.')
     }
-    const eventItem = {
+    const episodeItem = {
       itemId: item.itemId,
       points: 0,
       seed: movie.seed,
       seeding: movie.seeding
     }
-    return eventItem
+    return episodeItem
   })
-  console.log('createdEventItems.length', createdEventItems.length)
+  console.log('createdEpisodeItems.length', createdEpisodeItems.length)
 
-  const event = await props.tx.event.create({
+  const episode = await props.tx.episode.create({
     data: {
       import: {
         create: {
-          eventItems: {
-            create: createdEventItems
+          episodeItems: {
+            create: createdEpisodeItems
           }
         }
       },
       listId: props.listId,
-      mergeChoiceId: props.events.length
+      mergeChoiceId: props.episodes.length
     },
-    include: EVENT_PARTS_RELATION
+    include: EPISODE_PARTS_RELATION
   })
   console.log('*****HANDLE POST END*****\n\n')
-  return event
+  return episode
 }

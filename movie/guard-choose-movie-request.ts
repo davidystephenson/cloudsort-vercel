@@ -1,7 +1,7 @@
 import fashionPolice from '@/fashion-police/fashion-police'
 import guardNumber from '@/fashion-police/guard-number'
 import { ChooseMovieRequest } from './movie-types'
-import guardEventChoiceData from '@/event/guard-event-choice-data'
+import guardEpisodeChoiceData from '@/event/guard-event-choice-data'
 
 export default function guardChooseMovieRequest (props: {
   label: string
@@ -10,7 +10,7 @@ export default function guardChooseMovieRequest (props: {
   const guards = {
     listId: guardNumber,
     lastMergechoiceId: guardNumber,
-    choice: guardEventChoiceData
+    choice: guardEpisodeChoiceData
   }
   const guarded = fashionPolice({
     required: guards,

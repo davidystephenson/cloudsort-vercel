@@ -1,37 +1,37 @@
 import { CalculatedMovie } from '@/movie/movie-types'
 import { PrismaTransaction } from '@/prisma/prisma-types'
-import { RelatedEvent } from './event-types'
-import { EVENT_PARTS_RELATION } from './event-constants'
-import { Event } from '@prisma/client'
+import { RelatedEpisode } from './event-types'
+import { EPISODE_PARTS_RELATION } from './event-constants'
+import { Episode } from '@prisma/client'
 
-export default async function createImportEvent (props: {
-  events: Event[]
+export default async function createImportEpisode (props: {
+  episodes: Episode[]
   listId: number
   movies: CalculatedMovie[]
   tx: PrismaTransaction
-}): Promise<RelatedEvent> {
-  const createdEventItems = props.movies.map((movie) => {
-    const eventItem = {
+}): Promise<RelatedEpisode> {
+  const episodeItems = props.movies.map((movie) => {
+    const episodeItem = {
       itemId: movie.id,
       points: movie.points,
       seed: movie.seed,
       seeding: movie.seeding
     }
-    return eventItem
+    return episodeItem
   })
-  const event = await props.tx.event.create({
+  const episode = await props.tx.episode.create({
     data: {
       import: {
         create: {
-          eventItems: {
-            create: createdEventItems
+          episodeItems: {
+            create: episodeItems
           }
         }
       },
       listId: props.listId,
-      mergeChoiceId: props.events.length
+      mergeChoiceId: props.episodes.length
     },
-    include: EVENT_PARTS_RELATION
+    include: EPISODE_PARTS_RELATION
   })
-  return event
+  return episode
 }

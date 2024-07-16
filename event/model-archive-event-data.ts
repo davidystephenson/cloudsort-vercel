@@ -1,18 +1,18 @@
 import { HistoryArchiveData } from '@/mergeChoice/mergeChoiceTypes'
-import { RelatedEvent } from './event-types'
+import { RelatedEpisode } from './event-types'
 import { ListMovie } from '@/movie/movie-types'
-import modelEventMovie from './model-event-movie'
+import modelEpisodeMovie from './model-event-movie'
 
-export default function modelArchiveEventData (props: {
-  event: RelatedEvent
+export default function modelArchiveEpisodeData (props: {
+  episode: RelatedEpisode
 }): HistoryArchiveData<ListMovie> {
-  if (props.event.archive == null) {
+  if (props.episode.archive == null) {
     throw new Error('There is no archive')
   }
-  if (props.event.archive.eventItem.item.movie == null) {
+  if (props.episode.archive.episodeItem.item.movie == null) {
     throw new Error('There is no movie')
   }
-  const movie = modelEventMovie({ eventItem: props.event.archive.eventItem })
+  const movie = modelEpisodeMovie({ episodeItem: props.episode.archive.episodeItem })
   const data = {
     item: movie
   }

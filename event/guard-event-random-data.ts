@@ -3,7 +3,7 @@ import { HistoryRandomData } from '@/mergeChoice/mergeChoiceTypes'
 import guardCalculatedMovie from '@/movie/guard-calculated-movie'
 import { ListMovie } from '@/movie/movie-types'
 
-export default function guardEventRandomData (props: {
+export default function guardEpisodeRandomData (props: {
   label: string
   value: unknown
 }): HistoryRandomData<ListMovie> {

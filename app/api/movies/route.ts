@@ -1,19 +1,19 @@
 import guardPostMovies from '@/movie/guard-post-movies'
 import handlePostMovies from '@/movie/handle-post-movies'
-import handleEvent from '@/event/handle-event'
+import handleEpisode from '@/event/handle-event'
 
 export async function POST (request: Request): Promise<Response> {
-  const response = await handleEvent({
+  const response = await handleEpisode({
     guard: guardPostMovies,
     label: '/movies',
-    createEvent: async (props) => {
-      const event = await handlePostMovies({
-        events: props.events,
+    createEpisode: async (props) => {
+      const episode = await handlePostMovies({
+        episodes: props.episodes,
         listId: props.body.listId,
         movies: props.body.movies,
         tx: props.tx
       })
-      return event
+      return episode
     },
     request
   })

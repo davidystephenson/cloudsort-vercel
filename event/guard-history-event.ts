@@ -1,28 +1,28 @@
 import guardNumber from '@/fashion-police/guard-number'
-import { HistoryEvent } from '@/mergeChoice/mergeChoiceTypes'
+import { Episode } from '@/mergeChoice/mergeChoiceTypes'
 import { ListMovie } from '@/movie/movie-types'
-import guardEventItemData from './guard-event-item-data'
-import guardEventChoiceData from './guard-event-choice-data'
+import guardEpisodeItemData from './guard-event-item-data'
+import guardEpisodeChoiceData from './guard-event-choice-data'
 import fashionPolice from '@/fashion-police/fashion-police'
-import guardEventImportData from './guard-event-import-data'
-import guardEventRandomData from './guard-event-random-data'
+import guardEpisodeImportData from './guard-event-import-data'
+import guardEpisodeRandomData from './guard-event-random-data'
 
-export default function guardHistoryEvent (props: {
+export default function guardHistoryEpisode (props: {
   label: string
   value: unknown
-}): HistoryEvent<ListMovie> {
+}): Episode<ListMovie> {
   const guards = {
     createdAt: guardNumber,
     mergeChoiceId: guardNumber
   }
   const optional = {
-    archive: guardEventItemData,
-    choice: guardEventChoiceData,
-    import: guardEventImportData,
-    random: guardEventRandomData,
-    remove: guardEventItemData,
-    reset: guardEventItemData,
-    unarchive: guardEventItemData
+    archive: guardEpisodeItemData,
+    choice: guardEpisodeChoiceData,
+    import: guardEpisodeImportData,
+    random: guardEpisodeRandomData,
+    remove: guardEpisodeItemData,
+    reset: guardEpisodeItemData,
+    unarchive: guardEpisodeItemData
   }
   const guarded = fashionPolice({
     required: guards,

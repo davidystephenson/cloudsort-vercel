@@ -1,8 +1,8 @@
-import { EventPart, RelatedArchive, RelatedChoice, RelatedEvent, RelatedImport, RelatedRandom, RelatedRemove, RelatedReset, RelatedUnarchive } from '@/event/event-types'
+import { EpisodePart, RelatedArchive, RelatedChoice, RelatedEpisode, RelatedImport, RelatedRandom, RelatedRemove, RelatedReset, RelatedUnarchive } from '@/event/event-types'
 import deduceState from '@/mergeChoice/deduceState'
-import getMovieFromEventItem from '@/movie/getMovieFromEventItem'
+import getMovieFromEpisodeItem from '@/movie/getMovieFromEventItem'
 import { ListMovie } from '@/movie/movie-types'
-import { HistoryArchivePart, HistoryChoiceData, HistoryChoicePart, HistoryDataPart, HistoryEvent, HistoryImportData, HistoryImportPart, HistoryRandomData, HistoryRandomPart, HistoryRemoveData, HistoryRemovePart, HistoryResetPart } from '../mergeChoice/mergeChoiceTypes'
+import { HistoryArchivePart, HistoryChoiceData, HistoryChoicePart, HistoryDataPart, Episode, HistoryImportData, HistoryImportPart, HistoryRandomData, HistoryRandomPart, HistoryRemoveData, HistoryRemovePart, HistoryResetPart } from '../mergeChoice/mergeChoiceTypes'
 import { MergechoiceList, RelatedList } from './list-types'
 import { marion } from '@/mergeChoice/marion/marion'
 import { Actors } from '@/mergeChoice/marion/marionTypes'
@@ -10,7 +10,7 @@ import { Actors } from '@/mergeChoice/marion/marionTypes'
 function archiveToHistoryArchive (props: {
   input: RelatedArchive
 }): HistoryArchivePart<ListMovie> {
-  const movie = getMovieFromEventItem({ eventItem: props.input.eventItem })
+  const movie = getMovieFromEpisodeItem({ episodeItem: props.input.episodeItem })
   const data = { item: movie }
   const part = { archive: data }
   return part
@@ -18,8 +18,8 @@ function archiveToHistoryArchive (props: {
 function choiceToHistoryArchive (props: {
   input: RelatedChoice
 }): HistoryChoicePart<ListMovie> {
-  const aMovie = getMovieFromEventItem({ eventItem: props.input.aEventItem })
-  const bMovie = getMovieFromEventItem({ eventItem: props.input.bEventItem })
+  const aMovie = getMovieFromEpisodeItem({ episodeItem: props.input.aEpisodeItem })
+  const bMovie = getMovieFromEpisodeItem({ episodeItem: props.input.bEpisodeItem })
   const data: HistoryChoiceData<ListMovie> = {
     aBetter: props.input.aBetter,
     aId: aMovie.id,
@@ -36,8 +36,8 @@ function choiceToHistoryArchive (props: {
 function importToHistoryImport (props: {
   input: RelatedImport
 }): HistoryImportPart<ListMovie> {
-  const movies = props.input.eventItems.map((eventItem) => {
-    const movie = getMovieFromEventItem({ eventItem })
+  const movies = props.input.episodeItems.map((episodeItem) => {
+    const movie = getMovieFromEpisodeItem({ episodeItem })
     return movie
   })
   const data: HistoryImportData<ListMovie> = { items: movies }
@@ -47,8 +47,8 @@ function importToHistoryImport (props: {
 function randomToHistoryRandom (props: {
   input: RelatedRandom
 }): HistoryRandomPart<ListMovie> {
-  const firstMovie = getMovieFromEventItem({ eventItem: props.input.firstEventItem })
-  const secondMovie = getMovieFromEventItem({ eventItem: props.input.secondEventItem })
+  const firstMovie = getMovieFromEpisodeItem({ episodeItem: props.input.firstEpisodeItem })
+  const secondMovie = getMovieFromEpisodeItem({ episodeItem: props.input.secondEpisodeItem })
   const data: HistoryRandomData<ListMovie> = {
     first: firstMovie,
     second: secondMovie
@@ -59,7 +59,7 @@ function randomToHistoryRandom (props: {
 function removeToHistoryRemove (props: {
   input: RelatedRemove
 }): HistoryRemovePart<ListMovie> {
-  const movie = getMovieFromEventItem({ eventItem: props.input.eventItem })
+  const movie = getMovieFromEpisodeItem({ episodeItem: props.input.episodeItem })
   const data: HistoryRemoveData<ListMovie> = { item: movie }
   const part = { remove: data }
   return part
@@ -67,7 +67,7 @@ function removeToHistoryRemove (props: {
 function resetToHistoryReset (props: {
   input: RelatedReset
 }): HistoryResetPart<ListMovie> {
-  const movie = getMovieFromEventItem({ eventItem: props.input.eventItem })
+  const movie = getMovieFromEpisodeItem({ episodeItem: props.input.episodeItem })
   const data: HistoryRemoveData<ListMovie> = { item: movie }
   const part = { reset: data }
   return part
@@ -75,15 +75,15 @@ function resetToHistoryReset (props: {
 function unarchiveToHistoryUnarchive (props: {
   input: RelatedUnarchive
 }): HistoryDataPart<ListMovie> {
-  const movie = getMovieFromEventItem({ eventItem: props.input.eventItem })
+  const movie = getMovieFromEpisodeItem({ episodeItem: props.input.episodeItem })
   const data = { unarchive: { item: movie } }
   return data
 }
 
-export function marionEventPart<Complement> (props: {
-  actors: Actors<Complement, HistoryDataPart<ListMovie>, EventPart>
+export function marionEpisodePart<Complement> (props: {
+  actors: Actors<Complement, HistoryDataPart<ListMovie>, EpisodePart>
   complement: Complement
-  part: EventPart
+  part: EpisodePart
 }): HistoryDataPart<ListMovie> {
   const marioned = marion({
     actors: props.actors,
@@ -93,10 +93,10 @@ export function marionEventPart<Complement> (props: {
   return marioned
 }
 
-export function eventToHistoryEvent (props: {
-  event: RelatedEvent
-}): HistoryEvent<ListMovie> {
-  const data = marionEventPart({
+export function episodeToHistoryEpisode (props: {
+  episode: RelatedEpisode
+}): Episode<ListMovie> {
+  const data = marionEpisodePart({
     actors: {
       archive: archiveToHistoryArchive,
       choice: choiceToHistoryArchive,
@@ -107,19 +107,19 @@ export function eventToHistoryEvent (props: {
       unarchive: unarchiveToHistoryUnarchive
     },
     complement: {},
-    part: props.event
+    part: props.episode
   })
-  const createdAt = props.event.createdAt.getTime()
-  const historyEvent: HistoryEvent<ListMovie> = { createdAt, mergeChoiceId: props.event.mergeChoiceId, ...data }
-  return historyEvent
+  const createdAt = props.episode.createdAt.getTime()
+  const historyEpisode: Episode<ListMovie> = { createdAt, mergeChoiceId: props.episode.mergeChoiceId, ...data }
+  return historyEpisode
 }
 
 export default async function getMergechoiceList (props: {
   list: RelatedList
 }): Promise<MergechoiceList> {
-  const history: Array<HistoryEvent<ListMovie>> = props.list.events.map((event) => {
-    const historyEvent = eventToHistoryEvent({ event })
-    return historyEvent
+  const history: Array<Episode<ListMovie>> = props.list.episodes.map((episode) => {
+    const historyEpisode = episodeToHistoryEpisode({ episode })
+    return historyEpisode
   })
   // console.log('history', history)
   const state = deduceState({ history, seed: props.list.seed })

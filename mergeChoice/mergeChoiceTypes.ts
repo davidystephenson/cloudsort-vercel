@@ -35,7 +35,7 @@ export interface State<ListItem extends Item> {
   choice?: Choice
   choiceCount: number
   complete: boolean
-  history: Array<HistoryEvent<ListItem>>
+  history: Array<Episode<ListItem>>
   items: ItemDictionary<ListItem>
   operationCount: number
   reserveIds: ItemId[]
@@ -43,7 +43,7 @@ export interface State<ListItem extends Item> {
   worseIds: ItemId[]
   worseOperations: OperationDictionary
 }
-export type HistoryDataPart<ListItem extends Item> = Part<HistoryEvent<ListItem>>
+export type HistoryDataPart<ListItem extends Item> = Part<Episode<ListItem>>
 export type HistoryDataPartListItem<P extends HistoryDataPart<any>> = P extends HistoryDataPart<infer T> ? T : unknown
 export interface HistoryItemData<ListItem extends Item> {
   item: Calculated<ListItem>
@@ -90,7 +90,7 @@ export interface HistoryResetPart<ListItem extends Item> {
 export interface HistoryUnarchivePart<ListItem extends Item> {
   unarchive?: HistoryUnarchiveData<ListItem>
 }
-export interface HistoryEvent<ListItem extends Item> extends Identity, HistoryArchivePart<ListItem>, HistoryChoicePart<ListItem>, HistoryImportPart<ListItem>, HistoryRandomPart<ListItem>, HistoryRemovePart<ListItem>, HistoryResetPart<ListItem>, HistoryUnarchivePart<ListItem> {
+export interface Episode<ListItem extends Item> extends Identity, HistoryArchivePart<ListItem>, HistoryChoicePart<ListItem>, HistoryImportPart<ListItem>, HistoryRandomPart<ListItem>, HistoryRemovePart<ListItem>, HistoryResetPart<ListItem>, HistoryUnarchivePart<ListItem> {
   createdAt: number
 }
 

@@ -9,46 +9,46 @@ export default function MoviesQueueView (): JSX.Element {
   if (list.queue.log.length === 0) {
     return <></>
   }
-  const rows = list.queue.log.map((event, index) => {
-    if (event.status === 'add') {
+  const rows = list.queue.log.map((logItem, index) => {
+    if (logItem.status === 'add') {
       return (
         <Tr key={index}>
           <Td>
             <Badge>Added</Badge>
             {' '}
-            {event.label}
+            {logItem.label}
           </Td>
         </Tr>
       )
     }
-    if (event.status === 'start') {
+    if (logItem.status === 'start') {
       return (
         <Tr key={index}>
           <Td>
             <Badge colorScheme='blue'>Started</Badge>
             {' '}
-            {event.label}
+            {logItem.label}
           </Td>
         </Tr>
       )
     }
-    if (event.status === 'complete') {
+    if (logItem.status === 'complete') {
       return (
         <Tr key={index}>
           <Td>
             <Badge colorScheme='green'>Complete</Badge>
             {' '}
-            {event.label}
+            {logItem.label}
           </Td>
         </Tr>
       )
     }
-    if (event.status === 'error') {
+    if (logItem.status === 'error') {
       return (
         <Tr key={index}>
           <Td>
             <Badge colorScheme='red'>Error</Badge>
-            {event.label}
+            {logItem.label}
           </Td>
         </Tr>
       )

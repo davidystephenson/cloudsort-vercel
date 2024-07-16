@@ -1,13 +1,13 @@
 'use client'
 import { useList } from '@/list/list-context'
 import { Virtuoso } from 'react-virtuoso'
-import HistoryEventView from './history-event-view'
+import HistoryEpisodeView from './history-event-view'
 import historyContext from './history-context'
 import useMounted from '@/mounted/use-mounted'
 import { useState } from 'react'
 import ThemeButtonView from '@/theme/theme-button-view'
 
-export default function HistoryEventsView (): JSX.Element {
+export default function HistoryEpisodesView (): JSX.Element {
   const list = useList()
   const mounted = useMounted()
   const [opened, setOpened] = useState(false)
@@ -22,8 +22,8 @@ export default function HistoryEventsView (): JSX.Element {
     const view = (
       <>
         <ThemeButtonView onClick={open}>Open</ThemeButtonView>
-        <historyContext.Provider event={first}>
-          <HistoryEventView />
+        <historyContext.Provider episode={first}>
+          <HistoryEpisodeView />
         </historyContext.Provider>
       </>
     )
@@ -38,11 +38,11 @@ export default function HistoryEventsView (): JSX.Element {
       <Virtuoso
         style={{ height: 200 }}
         data={list.state.history}
-        itemContent={(_, event) => {
-          console.log('event', event)
+        itemContent={(_, episode) => {
+          console.log('episode', episode)
           return (
-            <historyContext.Provider event={event}>
-              <HistoryEventView />
+            <historyContext.Provider episode={episode}>
+              <HistoryEpisodeView />
             </historyContext.Provider>
           )
         }}

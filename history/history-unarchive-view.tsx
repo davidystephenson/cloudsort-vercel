@@ -2,16 +2,16 @@ import { Card, CardBody, CardHeader, Heading } from '@chakra-ui/react'
 import historyContext from './history-context'
 
 export default function HistoryUnarchiveView (): JSX.Element {
-  const historyEvent = historyContext.useContext()
+  const history = historyContext.useContext()
   return (
     <Card size='sm' mb='10px'>
       <CardHeader>
         <Heading size='sm'>
-          Unarchive ({historyEvent.event.createdAt})
+          Unarchive ({history.episode.createdAt})
         </Heading>
       </CardHeader>
       <CardBody>
-        {historyEvent.event.mergeChoiceId}
+        {history.episode.mergeChoiceId}
       </CardBody>
     </Card>
   )

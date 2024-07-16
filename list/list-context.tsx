@@ -137,21 +137,21 @@ const listContext = contextCreator({
         movies: sliced
       }
       console.log('state.history', state.history)
-      const lastHistoryEvent = state.history[0]
-      if (lastHistoryEvent != null) {
-        body.lastMergechoiceId = lastHistoryEvent.mergeChoiceId
+      const lastHistoryEpisode = state.history[0]
+      if (lastHistoryEpisode != null) {
+        body.lastMergechoiceId = lastHistoryEpisode.mergeChoiceId
       }
-      const historyEventResponse = await postMovies({ body, label: 'importMovies' })
-      if (historyEventResponse.import == null) {
+      const historyEpisodeResponse = await postMovies({ body, label: 'importMovies' })
+      if (historyEpisodeResponse.import == null) {
         throw new Error('There is no import')
       }
-      const label = `Import ${historyEventResponse.import.items.length} movies`
+      const label = `Import ${historyEpisodeResponse.import.items.length} movies`
       function local (updateProps: { state: State<ListMovie> }): State<ListMovie> {
-        if (historyEventResponse.import == null) {
+        if (historyEpisodeResponse.import == null) {
           throw new Error('There is no import')
         }
         const newState = importItems({
-          items: historyEventResponse.import.items,
+          items: historyEpisodeResponse.import.items,
           state: updateProps.state
         })
         return newState

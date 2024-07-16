@@ -22,8 +22,8 @@ export function marionHistoryState<
   return mapped
 }
 
-export default function restoreEventState<ListItem extends Item> (props: {
-  event: HistoryDataPart<ListItem>
+export default function restoreEpisodeState<ListItem extends Item> (props: {
+  episode: HistoryDataPart<ListItem>
   state: State<ListItem>
 }): State<ListItem> {
   // const actors: Actors<{ state: State<ListItem> }, State<ListItem>, HistoryDataPart<ListItem>> = {
@@ -48,7 +48,7 @@ export default function restoreEventState<ListItem extends Item> (props: {
       unarchive: restoreUnarchive
     },
     complement: { state: props.state },
-    part: props.event
+    part: props.episode
   })
   return restoredState
 }

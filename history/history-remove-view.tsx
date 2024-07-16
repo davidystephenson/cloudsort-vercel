@@ -2,16 +2,16 @@ import { Card, CardBody, CardHeader, Heading } from '@chakra-ui/react'
 import historyContext from './history-context'
 
 export default function HistoryRemoveView (): JSX.Element {
-  const historyEvent = historyContext.useContext()
+  const history = historyContext.useContext()
   return (
     <Card size='sm' mb='10px'>
       <CardHeader>
         <Heading size='sm'>
-          Remove ({historyEvent.event.createdAt})
+          Remove ({history.episode.createdAt})
         </Heading>
       </CardHeader>
       <CardBody>
-        {historyEvent.event.mergeChoiceId}
+        {history.episode.mergeChoiceId}
       </CardBody>
     </Card>
   )

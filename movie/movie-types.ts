@@ -1,6 +1,6 @@
 import { Movie } from '@prisma/client'
 import { Calculated, HistoryChoiceData, HistoryRemoveData, Item } from '../mergeChoice/mergeChoiceTypes'
-import { EventRequest } from '@/event/event-types'
+import { EpisodeRequest } from '@/event/event-types'
 import { ListRequest } from '@/list/list-types'
 
 export interface ListMovie extends Item {
@@ -23,13 +23,13 @@ export interface ImportMoviesRequest extends ImportRequest {
 export type CreatedMovie = Omit<Movie, 'updatedAt'> & {
   updatedAt: string
 }
-export interface PostMoviesResponse extends EventRequest {
+export interface PostMoviesResponse extends EpisodeRequest {
   movies: CreatedMovie[]
 }
-export interface RemoveMovieRequest extends EventRequest {
+export interface RemoveMovieRequest extends EpisodeRequest {
   remove: HistoryRemoveData<ListMovie>
 }
-export interface ChooseMovieRequest extends EventRequest {
+export interface ChooseMovieRequest extends EpisodeRequest {
   choice: HistoryChoiceData<ListMovie>
 }
 export interface CritickerRow {

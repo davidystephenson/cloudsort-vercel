@@ -1,11 +1,11 @@
-import { HistoryEvent, State } from '@/mergeChoice/mergeChoiceTypes'
+import { Episode, State } from '@/mergeChoice/mergeChoiceTypes'
 import { ListMovie } from '@/movie/movie-types'
 
-export default function shiftEvent (props: {
-  historyEvent: HistoryEvent<ListMovie>
+export default function shiftEpisode (props: {
+  historyEpisode: Episode<ListMovie>
   state: State<ListMovie>
 }): State<ListMovie> {
-  const newHistory = [props.historyEvent, ...props.state.history]
+  const newHistory = [props.historyEpisode, ...props.state.history]
   const newState = { ...props.state, history: newHistory }
   return newState
 }

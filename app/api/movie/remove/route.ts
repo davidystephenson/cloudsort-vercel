@@ -1,18 +1,18 @@
-import { EVENT_PARTS_RELATION } from '@/event/event-constants'
-import { EventResponse } from '@/event/event-types'
-import handleEvent from '@/event/handle-event'
+import { EPISODE_PARTS_RELATION } from '@/event/event-constants'
+import { EpisodeResponse } from '@/event/event-types'
+import handleEpisode from '@/event/handle-event'
 import guardRemoveMovieRequest from '@/movie/guard-remove-movie-request'
 
-export async function POST (request: Request): EventResponse {
-  const response = await handleEvent({
+export async function POST (request: Request): EpisodeResponse {
+  const response = await handleEpisode({
     guard: guardRemoveMovieRequest,
     label: '/movie/remove',
-    createEvent: async (props) => {
-      const event = await props.tx.event.create({
+    createEpisode: async (props) => {
+      const episode = await props.tx.episode.create({
         data: {
           remove: {
             create: {
-              eventItem: {
+              episodeItem: {
                 create: {
                   itemId: props.body.remove.item.id,
                   points: props.body.remove.item.points,
@@ -23,11 +23,11 @@ export async function POST (request: Request): EventResponse {
             }
           },
           listId: props.body.listId,
-          mergeChoiceId: props.events.length
+          mergeChoiceId: props.episodes.length
         },
-        include: EVENT_PARTS_RELATION
+        include: EPISODE_PARTS_RELATION
       })
-      return event
+      return episode
     },
     request
   })

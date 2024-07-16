@@ -6,7 +6,7 @@ import { HistoryChoiceData } from '@/mergeChoice/mergeChoiceTypes'
 import guardCalculatedMovie from '@/movie/guard-calculated-movie'
 import { ListMovie } from '@/movie/movie-types'
 
-export default function guardEventChoiceData (props: {
+export default function guardEpisodeChoiceData (props: {
   label: string
   value: unknown
 }): HistoryChoiceData<ListMovie> {
