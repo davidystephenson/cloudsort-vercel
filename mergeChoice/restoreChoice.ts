@@ -8,8 +8,6 @@ export default function restoreChoice<ListItem extends Item> (props: {
   if (props.input.seeded) {
     return props.state
   }
-  console.log('props.state', props.state)
-  console.log('props.input.betterIndex', props.input.betterIndex)
   const chosenState = chooseOption({
     state: props.state,
     betterIndex: props.input.betterIndex

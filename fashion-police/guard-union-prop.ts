@@ -13,8 +13,6 @@ export default function guardUnionProp <Guards extends unknown[]> (props: {
 }): Guards[number] {
   const labels: string[] = []
   const guard = props.guards.find(guard => {
-    console.log('guard', guard)
-    console.log('props', props)
     try {
       guard({
         key: props.key,

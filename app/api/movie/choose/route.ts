@@ -15,7 +15,6 @@ export async function POST (request: Request): EventResponse {
       if (typeof props.body.choice.bId !== 'number') {
         throw new ApiError(400, 'bId must be a number.')
       }
-      console.log('props.body.choice', props.body.choice)
       const event = await props.tx.event.create({
         data: {
           choice: {

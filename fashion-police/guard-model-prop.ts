@@ -22,7 +22,6 @@ export default function guardModelProp<Guarded, Key extends keyof Guarded> (prop
     return guarded
   }
   if (props.g instanceof Array) {
-    console.log('props.g instanceof Array', props.g)
     const guarded = guardUnionProp({
       guards: props.g,
       key: props.key,
@@ -41,6 +40,5 @@ export default function guardModelProp<Guarded, Key extends keyof Guarded> (prop
     label: props.label,
     value: prop
   })
-  console.log(guarded)
   return guarded
 }
