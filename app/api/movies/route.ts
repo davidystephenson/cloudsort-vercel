@@ -7,13 +7,13 @@ export async function POST (request: Request): Promise<Response> {
     guard: guardPostMovies,
     label: '/movies',
     createEvent: async (props) => {
-      const event = handlePostMovies({
+      const event = await handlePostMovies({
         events: props.events,
         listId: props.body.listId,
         movies: props.body.movies,
         tx: props.tx
       })
-      return await event
+      return event
     },
     request
   })
