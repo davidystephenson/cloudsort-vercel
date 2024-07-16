@@ -20,10 +20,7 @@ import { useOptionalLists } from './lists-context'
 import importItems from '@/mergeChoice/importItems'
 import { AlwaysNever } from '@/shuffleSlice/shuffleSliceTypes'
 
-export const {
-  useContext: useList,
-  Provider: ListProvider
-} = contextCreator({
+const listContext = contextCreator({
   name: 'list',
   useValue: (props: {
     row: RelatedList
@@ -43,7 +40,6 @@ export const {
       const state = getDefaultState()
       setState(state)
     }, [getDefaultState])
-
     const { filter, filtered } = useFilter({
       rows: movies,
       filter: filterMovie
@@ -204,3 +200,8 @@ export const {
     return value
   }
 })
+export const {
+  useContext: useList,
+  Provider: ListProvider
+} = listContext
+export default listContext

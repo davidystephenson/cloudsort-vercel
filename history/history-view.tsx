@@ -1,11 +1,12 @@
-import { Heading } from '@chakra-ui/react'
 import HistoryEventsView from './history-events-view'
+import HistoryHeadingView from './history-heading-view'
 
 export default function HistoryView (): JSX.Element {
-  return (
+  const view = (
     <>
-      <Heading size='md'>History</Heading>
+      <HistoryHeadingView />
       <HistoryEventsView />
     </>
   )
+  return view
 }

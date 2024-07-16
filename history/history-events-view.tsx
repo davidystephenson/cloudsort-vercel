@@ -19,7 +19,7 @@ export default function HistoryEventsView (): JSX.Element {
     function open (): void {
       setOpened(true)
     }
-    return (
+    const view = (
       <>
         <ThemeButtonView onClick={open}>Open</ThemeButtonView>
         <historyContext.Provider event={first}>
@@ -27,11 +27,12 @@ export default function HistoryEventsView (): JSX.Element {
         </historyContext.Provider>
       </>
     )
+    return view
   }
   function close (): void {
     setOpened(false)
   }
-  return (
+  const view = (
     <>
       <ThemeButtonView onClick={close}>Close</ThemeButtonView>
       <Virtuoso
@@ -48,4 +49,5 @@ export default function HistoryEventsView (): JSX.Element {
       />
     </>
   )
+  return view
 }
