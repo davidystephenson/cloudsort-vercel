@@ -1,13 +1,13 @@
 import { Card, CardBody, CardHeader, Heading } from '@chakra-ui/react'
-import historyEventContext from './history-event-context'
+import historyContext from './history-context'
 
-export default function ResetEventView (): JSX.Element {
-  const historyEvent = historyEventContext.useContext()
+export default function HistoryRemoveView (): JSX.Element {
+  const historyEvent = historyContext.useContext()
   return (
     <Card size='sm' mb='10px'>
       <CardHeader>
         <Heading size='sm'>
-          Reset ({historyEvent.event.createdAt})
+          Remove ({historyEvent.event.createdAt})
         </Heading>
       </CardHeader>
       <CardBody>

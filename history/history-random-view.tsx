@@ -1,13 +1,13 @@
 import { Card, CardBody, CardHeader, Heading } from '@chakra-ui/react'
-import historyEventContext from './history-event-context'
+import historyContext from './history-context'
 
-export default function ChoiceEventView (): JSX.Element {
-  const historyEvent = historyEventContext.useContext()
+export default function HistoryRandomView (): JSX.Element {
+  const historyEvent = historyContext.useContext()
   return (
     <Card size='sm' mb='10px'>
       <CardHeader>
         <Heading size='sm'>
-          Choice ({historyEvent.event.createdAt})
+          Random ({historyEvent.event.createdAt})
         </Heading>
       </CardHeader>
       <CardBody>

@@ -2,7 +2,7 @@
 import { useList } from '@/list/list-context'
 import { Virtuoso } from 'react-virtuoso'
 import HistoryEventView from './history-event-view'
-import historyEventContext from './history-event-context'
+import historyContext from './history-context'
 import useMounted from '@/mounted/use-mounted'
 import { useState } from 'react'
 import ThemeButtonView from '@/theme/theme-button-view'
@@ -22,9 +22,9 @@ export default function HistoryEventsView (): JSX.Element {
     return (
       <>
         <ThemeButtonView onClick={open}>Open</ThemeButtonView>
-        <historyEventContext.Provider event={first}>
+        <historyContext.Provider event={first}>
           <HistoryEventView />
-        </historyEventContext.Provider>
+        </historyContext.Provider>
       </>
     )
   }
@@ -40,9 +40,9 @@ export default function HistoryEventsView (): JSX.Element {
         itemContent={(_, event) => {
           console.log('event', event)
           return (
-            <historyEventContext.Provider event={event}>
+            <historyContext.Provider event={event}>
               <HistoryEventView />
-            </historyEventContext.Provider>
+            </historyContext.Provider>
           )
         }}
       />

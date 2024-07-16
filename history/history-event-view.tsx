@@ -1,14 +1,14 @@
 import { marion } from '@/mergeChoice/marion/marion'
 import { Actors } from '@/mergeChoice/marion/marionTypes'
 import { HistoryDataPart, Item } from '@/mergeChoice/mergeChoiceTypes'
-import ArchiveEventView from './archive-event-view'
-import ChoiceEventView from './choice-event-view'
-import historyEventContext from './history-event-context'
-import ImportEventView from './import-event-view'
-import RandomEventView from './random-event-view'
-import RemoveEventView from './remove-event-view'
-import ResetEventView from './reset-event-view'
-import UnarchiveEventView from './unarchive-event-view'
+import historyContext from './history-context'
+import HistoryArchiveView from './history-archive-view'
+import HistoryChoiceView from './history-choice-view'
+import HistoryImportView from './history-import-view'
+import HistoryRandomView from './history-random-view'
+import HistoryRemoveView from './history-remove-view'
+import HistoryResetView from './history-reset-view'
+import HistoryUnarchiveView from './history-unarchive-view'
 
 export function marionHistoryElement<
   ListItem extends Item,
@@ -23,15 +23,15 @@ export function marionHistoryElement<
 }
 
 export default function HistoryEventView (): JSX.Element {
-  const historyEvent = historyEventContext.useContext()
+  const historyEvent = historyContext.useContext()
   const views = {
-    archive: ArchiveEventView,
-    choice: ChoiceEventView,
-    import: ImportEventView,
-    random: RandomEventView,
-    remove: RemoveEventView,
-    reset: ResetEventView,
-    unarchive: UnarchiveEventView
+    archive: HistoryArchiveView,
+    choice: HistoryChoiceView,
+    import: HistoryImportView,
+    random: HistoryRandomView,
+    remove: HistoryRemoveView,
+    reset: HistoryResetView,
+    unarchive: HistoryUnarchiveView
   }
   const element = marionHistoryElement({
     actors: views,

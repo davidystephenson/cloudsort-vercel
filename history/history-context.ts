@@ -2,7 +2,7 @@ import { HistoryEvent } from '@/mergeChoice/mergeChoiceTypes'
 import { ListMovie } from '@/movie/movie-types'
 import contextCreator from 'context-creator'
 
-const historyEventContext = contextCreator({
+const historyContext = contextCreator({
   name: 'event',
   useValue: (props: {
     event: HistoryEvent<ListMovie>
@@ -13,4 +13,4 @@ const historyEventContext = contextCreator({
     return value
   }
 })
-export default historyEventContext
+export default historyContext
