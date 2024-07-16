@@ -1,15 +1,15 @@
-import { EpisodePart, RelatedArchive, RelatedChoice, RelatedEpisode, RelatedImport, RelatedRandom, RelatedRemove, RelatedReset, RelatedUnarchive } from '@/event/event-types'
-import deduceState from '@/mergeChoice/deduceState'
+import { EpisodePart, RelatedArchive, RelatedChoice, RelatedEpisode, RelatedImport, RelatedRandom, RelatedRemove, RelatedReset, RelatedUnarchive } from '@/episode/episode-types'
+import deduceState from '@/mergechoice/deduceState'
 import getMovieFromEpisodeItem from '@/movie/getMovieFromEventItem'
 import { ListMovie } from '@/movie/movie-types'
-import { HistoryArchivePart, HistoryChoiceData, HistoryChoicePart, HistoryDataPart, Episode, HistoryImportData, HistoryImportPart, HistoryRandomData, HistoryRandomPart, HistoryRemoveData, HistoryRemovePart, HistoryResetPart } from '../mergeChoice/mergeChoiceTypes'
+import { EpisodeArchivePart, EpisodeChoice, EpisodeChoicePart, EpisodePart, Episode, EpisodeImport, EpisodeImportPart, EpisodeRandom, EpisodeRandomPart, EpisodeRemove, EpisodeRemovePart, EpisodeResetPart } from '../mergechoice/mergeChoiceTypes'
 import { MergechoiceList, RelatedList } from './list-types'
-import { marion } from '@/mergeChoice/marion/marion'
-import { Actors } from '@/mergeChoice/marion/marionTypes'
+import { marion } from '@/mergechoice/marion/marion'
+import { Actors } from '@/mergechoice/marion/marionTypes'
 
 function archiveToHistoryArchive (props: {
   input: RelatedArchive
-}): HistoryArchivePart<ListMovie> {
+}): EpisodeArchivePart<ListMovie> {
   const movie = getMovieFromEpisodeItem({ episodeItem: props.input.episodeItem })
   const data = { item: movie }
   const part = { archive: data }
@@ -17,10 +17,10 @@ function archiveToHistoryArchive (props: {
 }
 function choiceToHistoryArchive (props: {
   input: RelatedChoice
-}): HistoryChoicePart<ListMovie> {
+}): EpisodeChoicePart<ListMovie> {
   const aMovie = getMovieFromEpisodeItem({ episodeItem: props.input.aEpisodeItem })
   const bMovie = getMovieFromEpisodeItem({ episodeItem: props.input.bEpisodeItem })
-  const data: HistoryChoiceData<ListMovie> = {
+  const data: EpisodeChoice<ListMovie> = {
     aBetter: props.input.aBetter,
     aId: aMovie.id,
     aItem: aMovie,
@@ -35,21 +35,21 @@ function choiceToHistoryArchive (props: {
 }
 function importToHistoryImport (props: {
   input: RelatedImport
-}): HistoryImportPart<ListMovie> {
+}): EpisodeImportPart<ListMovie> {
   const movies = props.input.episodeItems.map((episodeItem) => {
     const movie = getMovieFromEpisodeItem({ episodeItem })
     return movie
   })
-  const data: HistoryImportData<ListMovie> = { items: movies }
+  const data: EpisodeImport<ListMovie> = { items: movies }
   const part = { import: data }
   return part
 }
 function randomToHistoryRandom (props: {
   input: RelatedRandom
-}): HistoryRandomPart<ListMovie> {
+}): EpisodeRandomPart<ListMovie> {
   const firstMovie = getMovieFromEpisodeItem({ episodeItem: props.input.firstEpisodeItem })
   const secondMovie = getMovieFromEpisodeItem({ episodeItem: props.input.secondEpisodeItem })
-  const data: HistoryRandomData<ListMovie> = {
+  const data: EpisodeRandom<ListMovie> = {
     first: firstMovie,
     second: secondMovie
   }
@@ -58,33 +58,33 @@ function randomToHistoryRandom (props: {
 }
 function removeToHistoryRemove (props: {
   input: RelatedRemove
-}): HistoryRemovePart<ListMovie> {
+}): EpisodeRemovePart<ListMovie> {
   const movie = getMovieFromEpisodeItem({ episodeItem: props.input.episodeItem })
-  const data: HistoryRemoveData<ListMovie> = { item: movie }
+  const data: EpisodeRemove<ListMovie> = { item: movie }
   const part = { remove: data }
   return part
 }
 function resetToHistoryReset (props: {
   input: RelatedReset
-}): HistoryResetPart<ListMovie> {
+}): EpisodeResetPart<ListMovie> {
   const movie = getMovieFromEpisodeItem({ episodeItem: props.input.episodeItem })
-  const data: HistoryRemoveData<ListMovie> = { item: movie }
+  const data: EpisodeRemove<ListMovie> = { item: movie }
   const part = { reset: data }
   return part
 }
 function unarchiveToHistoryUnarchive (props: {
   input: RelatedUnarchive
-}): HistoryDataPart<ListMovie> {
+}): EpisodePart<ListMovie> {
   const movie = getMovieFromEpisodeItem({ episodeItem: props.input.episodeItem })
   const data = { unarchive: { item: movie } }
   return data
 }
 
 export function marionEpisodePart<Complement> (props: {
-  actors: Actors<Complement, HistoryDataPart<ListMovie>, EpisodePart>
+  actors: Actors<Complement, EpisodePart<ListMovie>, EpisodePart>
   complement: Complement
   part: EpisodePart
-}): HistoryDataPart<ListMovie> {
+}): EpisodePart<ListMovie> {
   const marioned = marion({
     actors: props.actors,
     complement: props.complement,

@@ -1,5 +1,5 @@
 import { Movie } from '@prisma/client'
-import { Choice } from '../mergeChoice/mergeChoiceTypes'
+import { Choice } from '../mergechoice/mergeChoiceTypes'
 
 export default function findByOption ({
   choice,

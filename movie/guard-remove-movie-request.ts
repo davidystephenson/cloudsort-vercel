@@ -1,7 +1,7 @@
 import fashionPolice from '@/fashion-police/fashion-police'
 import guardNumber from '@/fashion-police/guard-number'
 import { RemoveMovieRequest } from './movie-types'
-import guardEpisodeRemoveData from '@/event/guard-event-remove-data'
+import guardEpisodeRemove from '@/episode/guard-event-remove-data'
 
 export default function guardRemoveMovieRequest (props: {
   label: string
@@ -10,7 +10,7 @@ export default function guardRemoveMovieRequest (props: {
   const guards = {
     listId: guardNumber,
     lastMergechoiceId: guardNumber,
-    remove: guardEpisodeRemoveData
+    remove: guardEpisodeRemove
   }
   const guarded = fashionPolice({
     required: guards,

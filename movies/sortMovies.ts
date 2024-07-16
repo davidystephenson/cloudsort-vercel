@@ -1,6 +1,6 @@
-import getItem from '../mergeChoice/getItem'
-import getPoints from '../mergeChoice/getPoints'
-import { ItemId, State } from '../mergeChoice/mergeChoiceTypes'
+import getItem from '../mergechoice/getItem'
+import getPoints from '../mergechoice/getPoints'
+import { ItemId, State } from '../mergechoice/mergeChoiceTypes'
 import { CalculatedMovie, ListMovie } from '../movie/movie-types'
 import compareMovies from './compareMovies'
 

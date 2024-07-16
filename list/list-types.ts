@@ -1,7 +1,7 @@
 import { Prisma } from '@prisma/client'
-import { State } from '../mergeChoice/mergeChoiceTypes'
+import { State } from '../mergechoice/mergeChoiceTypes'
 import { ListMovie } from '@/movie/movie-types'
-import { EpisodesRelation } from '@/event/event-types'
+import { EpisodesRelation } from '@/episode/episode-types'
 
 export interface ListWhere {
   listId: number

@@ -1,4 +1,4 @@
-import { Choice } from '@/mergeChoice/mergeChoiceTypes'
+import { Choice } from '@/mergechoice/mergeChoiceTypes'
 import guardChoiceUndefined from './guard-choice-undefined'
 import guardPropType from '@/fashion-police/guard-prop-type'
 

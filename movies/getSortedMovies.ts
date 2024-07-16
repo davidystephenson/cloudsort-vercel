@@ -1,4 +1,4 @@
-import { State } from '@/mergeChoice/mergeChoiceTypes'
+import { State } from '@/mergechoice/mergeChoiceTypes'
 import sortMovies from './sortMovies'
 import { CalculatedMovie, ListMovie } from '../movie/movie-types'
 

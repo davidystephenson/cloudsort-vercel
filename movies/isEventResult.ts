@@ -1,5 +1,5 @@
 import isResult from './isResult'
-import { Episode } from '@/mergeChoice/mergeChoiceTypes'
+import { Episode } from '@/mergechoice/mergeChoiceTypes'
 import { ListMovie } from '@/movie/movie-types'
 
 export default function isEpisodeResult (props: {

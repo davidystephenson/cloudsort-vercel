@@ -1,7 +1,7 @@
 import guardImportMoviesRequest from '@/movie/guard-import-movies-request'
-import handleEpisode from '@/event/handle-event'
-import { EpisodeResponse } from '@/event/event-types'
-import createImportEpisode from '@/event/create-import-event'
+import { EpisodeResponse } from '@/episode/episode-types'
+import createImportEpisode from '@/episode/create-import-episode'
+import handleEpisode from '@/episode/handle-episode'
 
 export async function POST (request: Request): EpisodeResponse {
   const response = await handleEpisode({

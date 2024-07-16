@@ -2,7 +2,7 @@ import guardBooleanProp from '@/fashion-police/guard-boolean-prop'
 import guardNumberArrayProp from '@/fashion-police/guard-number-array-prop'
 import guardNumberNullProp from '@/fashion-police/guard-number-null-prop'
 import guardNumberProp from '@/fashion-police/guard-number-prop'
-import { Choice } from '@/mergeChoice/mergeChoiceTypes'
+import { Choice } from '@/mergechoice/mergeChoiceTypes'
 
 export default function guardChoice (props: {
   label: string

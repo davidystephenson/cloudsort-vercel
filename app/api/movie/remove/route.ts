@@ -1,6 +1,6 @@
-import { EPISODE_PARTS_RELATION } from '@/event/event-constants'
-import { EpisodeResponse } from '@/event/event-types'
-import handleEpisode from '@/event/handle-event'
+import { EPISODE_PARTS_RELATION } from '@/episode/episode-constants'
+import { EpisodeResponse } from '@/episode/episode-types'
+import handleEpisode from '@/episode/handle-episode'
 import guardRemoveMovieRequest from '@/movie/guard-remove-movie-request'
 
 export async function POST (request: Request): EpisodeResponse {

@@ -1,13 +1,14 @@
-import { CalculatedMovie } from './movie-types'
-import { RelatedEpisodeItem } from '@/episode/episode-types'
+import { ListMovie } from '@/movie/movie-types'
+import { RelatedEpisodeItem } from './episode-types'
+import { Calculated } from '@/mergechoice/mergeChoiceTypes'
 
-export default function getMovieFromEpisodeItem (props: {
+export default function modelEpisodeMovie (props: {
   episodeItem: RelatedEpisodeItem
-}): CalculatedMovie {
+}): Calculated<ListMovie> {
   if (props.episodeItem.item.movie == null) {
     throw new Error('There is no movie')
   }
-  const movie: CalculatedMovie = {
+  const movie = {
     id: props.episodeItem.item.id,
     imdbId: props.episodeItem.item.movie.imdbId,
     name: props.episodeItem.item.name,

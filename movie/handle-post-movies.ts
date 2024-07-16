@@ -1,5 +1,5 @@
-import { EPISODE_PARTS_RELATION } from '@/event/event-constants'
-import { RelatedEpisode } from '@/event/event-types'
+import { EPISODE_PARTS_RELATION } from '@/episode/episode-constants'
+import { RelatedEpisode } from '@/episode/episode-types'
 import { PrismaTransaction } from '@/prisma/prisma-types'
 import { Episode } from '@prisma/client'
 import { MovieData } from './movie-types'

@@ -1,6 +1,6 @@
 import { Movie } from '@prisma/client'
-import { Calculated, HistoryChoiceData, HistoryRemoveData, Item } from '../mergeChoice/mergeChoiceTypes'
-import { EpisodeRequest } from '@/event/event-types'
+import { Calculated, EpisodeChoice, EpisodeRemove, Item } from '../mergechoice/mergeChoiceTypes'
+import { EpisodeRequest } from '@/episode/episode-types'
 import { ListRequest } from '@/list/list-types'
 
 export interface ListMovie extends Item {
@@ -27,10 +27,10 @@ export interface PostMoviesResponse extends EpisodeRequest {
   movies: CreatedMovie[]
 }
 export interface RemoveMovieRequest extends EpisodeRequest {
-  remove: HistoryRemoveData<ListMovie>
+  remove: EpisodeRemove<ListMovie>
 }
 export interface ChooseMovieRequest extends EpisodeRequest {
-  choice: HistoryChoiceData<ListMovie>
+  choice: EpisodeChoice<ListMovie>
 }
 export interface CritickerRow {
   ' Date Rated': string

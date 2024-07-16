@@ -1,4 +1,4 @@
-import { Choice } from '@/mergeChoice/mergeChoiceTypes'
+import { Choice } from '@/mergechoice/mergeChoiceTypes'
 import guardChoice from './guard-choice'
 import { ApiError } from 'next/dist/server/api-utils'
 

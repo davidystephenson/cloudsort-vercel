@@ -1,5 +1,5 @@
 import { RelatedList } from './list-types'
-import { EPISODE_RELATION } from '@/event/event-constants'
+import { EPISODE_RELATION } from '@/episode/episode-constants'
 import { PrismaTransaction } from '@/prisma/prisma-types'
 import { PrismaClient } from '@prisma/client'
 
