@@ -69,28 +69,28 @@ export interface EpisodeRandom<ListItem extends Item> {
   first: Calculated<ListItem>
   second: Calculated<ListItem>
 }
-export interface EpisodeArchivePart <ListItem extends Item> {
+export interface ArchivePart <ListItem extends Item> {
   archive?: EpisodeArchive<ListItem>
 }
-export interface EpisodeChoicePart<ListItem extends Item> {
+export interface ChoicePart<ListItem extends Item> {
   choice?: EpisodeChoice<ListItem>
 }
-export interface EpisodeImportPart<ListItem extends Item> {
+export interface ImportPart<ListItem extends Item> {
   import?: EpisodeImport<ListItem>
 }
-export interface EpisodeRandomPart<ListItem extends Item> {
+export interface RandomPart<ListItem extends Item> {
   random?: EpisodeRandom<ListItem>
 }
-export interface EpisodeRemovePart<ListItem extends Item> {
+export interface RemovePart<ListItem extends Item> {
   remove?: EpisodeRemove<ListItem>
 }
-export interface EpisodeResetPart<ListItem extends Item> {
+export interface ResetPart<ListItem extends Item> {
   reset?: EpisodeReset<ListItem>
 }
-export interface EpisodeUnarchivePart<ListItem extends Item> {
+export interface UnarchivePart<ListItem extends Item> {
   unarchive?: EpisodeUnarchive<ListItem>
 }
-export interface Episode<ListItem extends Item> extends Identity, EpisodeArchivePart<ListItem>, EpisodeChoicePart<ListItem>, EpisodeImportPart<ListItem>, EpisodeRandomPart<ListItem>, EpisodeRemovePart<ListItem>, EpisodeResetPart<ListItem>, EpisodeUnarchivePart<ListItem> {
+export interface Episode<ListItem extends Item> extends Identity, ArchivePart<ListItem>, ChoicePart<ListItem>, ImportPart<ListItem>, RandomPart<ListItem>, RemovePart<ListItem>, ResetPart<ListItem>, UnarchivePart<ListItem> {
   createdAt: number
 }
 

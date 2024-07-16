@@ -2,14 +2,14 @@ import { RelatedEpisodePart, RelatedArchive, RelatedChoice, RelatedEpisode, Rela
 import deduceState from '@/mergechoice/deduceState'
 import getMovieFromEpisodeItem from '@/movie/getMovieFromEpisodeItem'
 import { ListMovie } from '@/movie/movie-types'
-import { EpisodeArchivePart, EpisodeChoice, EpisodeChoicePart, Episode, EpisodeImport, EpisodeImportPart, EpisodeRandom, EpisodeRandomPart, EpisodeRemove, EpisodeRemovePart, EpisodeResetPart, EpisodePart } from '../mergechoice/mergeChoiceTypes'
+import { ArchivePart, EpisodeChoice, ChoicePart, Episode, EpisodeImport, ImportPart, EpisodeRandom, RandomPart, EpisodeRemove, RemovePart, ResetPart, EpisodePart } from '../mergechoice/mergeChoiceTypes'
 import { MergechoiceList, RelatedList } from './list-types'
 import { marion } from '@/mergechoice/marion/marion'
 import { Actors } from '@/mergechoice/marion/marionTypes'
 
 function archiveToHistoryArchive (props: {
   input: RelatedArchive
-}): EpisodeArchivePart<ListMovie> {
+}): ArchivePart<ListMovie> {
   const movie = getMovieFromEpisodeItem({ episodeItem: props.input.episodeItem })
   const data = { item: movie }
   const part = { archive: data }
@@ -17,7 +17,7 @@ function archiveToHistoryArchive (props: {
 }
 function choiceToHistoryArchive (props: {
   input: RelatedChoice
-}): EpisodeChoicePart<ListMovie> {
+}): ChoicePart<ListMovie> {
   const aMovie = getMovieFromEpisodeItem({ episodeItem: props.input.aEpisodeItem })
   const bMovie = getMovieFromEpisodeItem({ episodeItem: props.input.bEpisodeItem })
   const data: EpisodeChoice<ListMovie> = {
@@ -35,7 +35,7 @@ function choiceToHistoryArchive (props: {
 }
 function importToHistoryImport (props: {
   input: RelatedImport
-}): EpisodeImportPart<ListMovie> {
+}): ImportPart<ListMovie> {
   const movies = props.input.episodeItems.map((episodeItem) => {
     const movie = getMovieFromEpisodeItem({ episodeItem })
     return movie
@@ -46,7 +46,7 @@ function importToHistoryImport (props: {
 }
 function randomToHistoryRandom (props: {
   input: RelatedRandom
-}): EpisodeRandomPart<ListMovie> {
+}): RandomPart<ListMovie> {
   const firstMovie = getMovieFromEpisodeItem({ episodeItem: props.input.firstEpisodeItem })
   const secondMovie = getMovieFromEpisodeItem({ episodeItem: props.input.secondEpisodeItem })
   const data: EpisodeRandom<ListMovie> = {
@@ -58,7 +58,7 @@ function randomToHistoryRandom (props: {
 }
 function removeToHistoryRemove (props: {
   input: RelatedRemove
-}): EpisodeRemovePart<ListMovie> {
+}): RemovePart<ListMovie> {
   const movie = getMovieFromEpisodeItem({ episodeItem: props.input.episodeItem })
   const data: EpisodeRemove<ListMovie> = { item: movie }
   const part = { remove: data }
@@ -66,7 +66,7 @@ function removeToHistoryRemove (props: {
 }
 function resetToHistoryReset (props: {
   input: RelatedReset
-}): EpisodeResetPart<ListMovie> {
+}): ResetPart<ListMovie> {
   const movie = getMovieFromEpisodeItem({ episodeItem: props.input.episodeItem })
   const data: EpisodeRemove<ListMovie> = { item: movie }
   const part = { reset: data }
