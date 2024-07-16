@@ -1,7 +1,7 @@
 import fashionPolice from '@/fashion-police/fashion-police'
 import guardNumber from '@/fashion-police/guard-number'
 import { RemoveMovieRequest } from './movie-types'
-import guardEpisodeRemove from '@/episode/guard-event-remove-data'
+import guardEpisodeRemove from '@/episode/guard-episode-remove'
 
 export default function guardRemoveMovieRequest (props: {
   label: string

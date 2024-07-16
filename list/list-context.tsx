@@ -136,7 +136,6 @@ const listContext = contextCreator({
         listId: props.row.id,
         movies: sliced
       }
-      console.log('state.history', state.history)
       const lastHistoryEpisode = state.history[0]
       if (lastHistoryEpisode != null) {
         body.lastMergechoiceId = lastHistoryEpisode.mergeChoiceId
@@ -161,8 +160,8 @@ const listContext = contextCreator({
     function removeMovie (deleteMovieProps: {
       movieId: number
     }): void {
-      const item = state.items[deleteMovieProps.movieId]
-      const label = `Delete ${item.name}`
+      const item = getCalculatedItem({ itemId: deleteMovieProps.movieId, state })
+      const label = `Remove ${item.name}`
       function local (updateProps: { state: State<ListMovie> }): State<ListMovie> {
         const newState = removeItem({
           itemId: deleteMovieProps.movieId,
@@ -170,15 +169,14 @@ const listContext = contextCreator({
         })
         return newState
       }
-      async function remote (): Promise<void> {
-        const calculated = getCalculatedItem({ itemId: deleteMovieProps.movieId, state })
-        const body = {
-          lastMergechoiceId: state.history[0].mergeChoiceId,
-          listId: props.row.id,
-          remove: {
-            item: calculated
-          }
+      const body = {
+        lastMergechoiceId: state.history[0].mergeChoiceId,
+        listId: props.row.id,
+        remove: {
+          item
         }
+      }
+      async function remote (): Promise<void> {
         await postRemoveMovie({ body, label: 'removeMovie' })
       }
       queueState({ label, local, remote })

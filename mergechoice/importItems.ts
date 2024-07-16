@@ -2,7 +2,7 @@ import populate from './populate'
 import { Item, State } from './mergeChoiceTypes'
 import setupChoice from './setupChoice'
 import seedChoice from './seedChoice'
-import addEpisode from './addEvent'
+import addEpisode from './addEpisode'
 
 export default function importItems <ListItem extends Item> (props: {
   items: ListItem[]
@@ -12,10 +12,6 @@ export default function importItems <ListItem extends Item> (props: {
   if (props.state.choice?.random === true) {
     throw new Error('You cannot import during a random choice')
   }
-  // const sortedItems = sortImportItems({ items: props.items })
-  // console.log('sortedItems', sortedItems)
-  // const sortedSeeds = sortedItems.map(item => item.seed)
-  // console.log('sortedSeeds', sortedSeeds)
   const clones = structuredClone(props.items)
   const population = populate({
     items: props.items,

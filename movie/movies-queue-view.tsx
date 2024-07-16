@@ -53,7 +53,7 @@ export default function MoviesQueueView (): JSX.Element {
         </Tr>
       )
     }
-    throw new Error('Unknown event')
+    throw new Error('Unknown logItem')
   })
   const table = (
     <ThemeTableView size='xs'>

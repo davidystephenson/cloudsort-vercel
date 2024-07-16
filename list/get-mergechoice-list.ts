@@ -1,8 +1,8 @@
-import { EpisodePart, RelatedArchive, RelatedChoice, RelatedEpisode, RelatedImport, RelatedRandom, RelatedRemove, RelatedReset, RelatedUnarchive } from '@/episode/episode-types'
+import { RelatedEpisodePart, RelatedArchive, RelatedChoice, RelatedEpisode, RelatedImport, RelatedRandom, RelatedRemove, RelatedReset, RelatedUnarchive } from '@/episode/episode-types'
 import deduceState from '@/mergechoice/deduceState'
-import getMovieFromEpisodeItem from '@/movie/getMovieFromEventItem'
+import getMovieFromEpisodeItem from '@/movie/getMovieFromEpisodeItem'
 import { ListMovie } from '@/movie/movie-types'
-import { EpisodeArchivePart, EpisodeChoice, EpisodeChoicePart, EpisodePart, Episode, EpisodeImport, EpisodeImportPart, EpisodeRandom, EpisodeRandomPart, EpisodeRemove, EpisodeRemovePart, EpisodeResetPart } from '../mergechoice/mergeChoiceTypes'
+import { EpisodeArchivePart, EpisodeChoice, EpisodeChoicePart, Episode, EpisodeImport, EpisodeImportPart, EpisodeRandom, EpisodeRandomPart, EpisodeRemove, EpisodeRemovePart, EpisodeResetPart, EpisodePart } from '../mergechoice/mergeChoiceTypes'
 import { MergechoiceList, RelatedList } from './list-types'
 import { marion } from '@/mergechoice/marion/marion'
 import { Actors } from '@/mergechoice/marion/marionTypes'
@@ -81,9 +81,9 @@ function unarchiveToHistoryUnarchive (props: {
 }
 
 export function marionEpisodePart<Complement> (props: {
-  actors: Actors<Complement, EpisodePart<ListMovie>, EpisodePart>
+  actors: Actors<Complement, EpisodePart<ListMovie>, RelatedEpisodePart>
   complement: Complement
-  part: EpisodePart
+  part: RelatedEpisodePart
 }): EpisodePart<ListMovie> {
   const marioned = marion({
     actors: props.actors,
@@ -121,7 +121,6 @@ export default async function getMergechoiceList (props: {
     const historyEpisode = episodeToHistoryEpisode({ episode })
     return historyEpisode
   })
-  // console.log('history', history)
   const state = deduceState({ history, seed: props.list.seed })
   const mergechoiceList = {
     list: props.list,

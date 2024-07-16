@@ -39,7 +39,6 @@ export default function EpisodesView (): JSX.Element {
         style={{ height: 200 }}
         data={list.state.history}
         itemContent={(_, episode) => {
-          console.log('episode', episode)
           return (
             <episodeContext.Provider episode={episode}>
               <EpisodeConsumer />

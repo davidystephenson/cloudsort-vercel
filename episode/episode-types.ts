@@ -12,7 +12,7 @@ export type EpisodesRelation = typeof EPISODES_RELATION
 export interface EpisodeRequest extends ListRequest { lastMergechoiceId: number }
 export type EpisodeItemRelation = typeof EPISODE_ITEM_RELATION
 export type EpisodeItemDataRelation = typeof EPISODE_ITEM_DATA_RELATION
-export type EpisodePart = Part<RelatedEpisode>
+export type RelatedEpisodePart = Part<RelatedEpisode>
 export type EpisodeResponse = HandledResponse<{ episode: Episode<ListMovie> }>
 export type EpisodePayload = SuccessPayload<{ episode: Episode<ListMovie> }>
 export type ImportRelation = typeof IMPORT_RELATION

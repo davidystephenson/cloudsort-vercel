@@ -27,6 +27,6 @@ export default function isEpisodeResult (props: {
     return isResult({ movie: props.episode.remove.item, query: props.query })
   }
   const json = JSON.stringify(props.episode)
-  const message = `Unexpected event: ${json}`
+  const message = `Unexpected episode: ${json}`
   throw new Error(message)
 }

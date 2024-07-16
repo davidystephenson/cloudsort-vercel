@@ -5,7 +5,7 @@ import { OptionallyLabeledIconButtonProps } from '@/theme/theme-types'
 export default function DeleteMovieButtonView (props: OptionallyLabeledIconButtonProps): JSX.Element {
   const movie = useMovie()
   async function send (): Promise<void> {
-    await movie.delete()
+    await movie.remove()
   }
   return (
     <DeleteIconButtonView

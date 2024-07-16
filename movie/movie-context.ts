@@ -11,7 +11,7 @@ export const {
     calculated: CalculatedMovie
   }) => {
     const list = useList()
-    async function _delete (): Promise<void> {
+    async function remove (): Promise<void> {
       list.removeMovie({ movieId: props.calculated.id })
     }
     const imdbUrl = `https://www.imdb.com/title/${props.calculated.imdbId}`
@@ -20,7 +20,7 @@ export const {
     }
     const value = {
       calculated: props.calculated,
-      delete: _delete,
+      remove,
       imdbUrl,
       open
     }
