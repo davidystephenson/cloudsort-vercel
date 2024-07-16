@@ -1,7 +1,7 @@
 import { Card, CardBody, CardHeader, Heading } from '@chakra-ui/react'
 import historyEventContext from './history-event-context'
 
-export default function ChoiceEventView (): JSX.Element {
+export default function ImportEventView (): JSX.Element {
   const historyEvent = historyEventContext.useContext()
   return (
     <Card size='sm' mb='10px'>

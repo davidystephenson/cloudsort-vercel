@@ -1,11 +1,11 @@
-import { RelatedArchive, RelatedChoice, RelatedEvent, RelatedImport, RelatedRandom, RelatedRemove, RelatedReset, RelatedUnarchive } from '@/event/event-types'
+import { EventPart, RelatedArchive, RelatedChoice, RelatedEvent, RelatedImport, RelatedRandom, RelatedRemove, RelatedReset, RelatedUnarchive } from '@/event/event-types'
 import deduceState from '@/mergeChoice/deduceState'
 import getMovieFromEventItem from '@/movie/getMovieFromEventItem'
 import { ListMovie } from '@/movie/movie-types'
 import { HistoryArchivePart, HistoryChoiceData, HistoryChoicePart, HistoryDataPart, HistoryEvent, HistoryImportData, HistoryImportPart, HistoryRandomData, HistoryRandomPart, HistoryRemoveData, HistoryRemovePart, HistoryResetPart } from '../mergeChoice/mergeChoiceTypes'
 import { MergechoiceList, RelatedList } from './list-types'
 import { marion } from '@/mergeChoice/marion/marion'
-import { Actors, Part } from '@/mergeChoice/marion/marionTypes'
+import { Actors } from '@/mergeChoice/marion/marionTypes'
 
 function archiveToHistoryArchive (props: {
   input: RelatedArchive
@@ -85,15 +85,13 @@ export function marionEventPart<Complement> (props: {
   complement: Complement
   part: EventPart
 }): HistoryDataPart<ListMovie> {
-  const mapped = marion({
+  const marioned = marion({
     actors: props.actors,
     complement: props.complement,
     part: props.part
   })
-  return mapped
+  return marioned
 }
-
-type EventPart = Part<RelatedEvent>
 
 export function eventToHistoryEvent (props: {
   event: RelatedEvent

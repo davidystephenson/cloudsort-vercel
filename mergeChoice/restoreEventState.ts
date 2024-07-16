@@ -9,11 +9,15 @@ import restoreRemove from './restoreRemove'
 import restoreReset from './restoreReset'
 import restoreUnarchive from './restoreUnarchive'
 
-export function marionEventState<ListItem extends Item, Complement, P extends HistoryDataPart<ListItem>> (props: {
-  actors: Actors<Complement, State<HistoryDataPartListItem<P>>, P>
+export function marionHistoryState<
+  ListItem extends Item,
+  Complement,
+  Part extends HistoryDataPart<ListItem>
+> (props: {
+  actors: Actors<Complement, State<HistoryDataPartListItem<Part>>, Part>
   complement: Complement
-  part: P
-}): State<HistoryDataPartListItem<P>> {
+  part: Part
+}): State<HistoryDataPartListItem<Part>> {
   const mapped = marion(props)
   return mapped
 }
@@ -32,7 +36,7 @@ export default function restoreEventState<ListItem extends Item> (props: {
   //   unarchive: restoreUnarchive
   // }
   // void actors
-  const restoredState = marionEventState({
+  const restoredState = marionHistoryState({
     // actors,
     actors: {
       archive: restoreArchive,
