@@ -16,15 +16,22 @@ export default function importItems <ListItem extends Item> (props: {
   // console.log('sortedItems', sortedItems)
   // const sortedSeeds = sortedItems.map(item => item.seed)
   // console.log('sortedSeeds', sortedSeeds)
+  const clones = structuredClone(props.items)
   const population = populate({
     items: props.items,
     state: props.state
   })
   const calculated = population.items.map(item => {
-    return {
-      ...item,
-      points: 0
+    const clone = clones.find(clone => clone.id === item.id)
+    if (clone == null) {
+      throw new Error('Could not find clone')
     }
+    const calculated = {
+      ...item,
+      points: 0,
+      seeding: clone.seeding
+    }
+    return calculated
   })
   const setupState = setupChoice({
     state: population.state
