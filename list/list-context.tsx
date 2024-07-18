@@ -44,7 +44,16 @@ const listContext = contextCreator({
       const state = getDefaultState()
       setState(state)
     }, [getDefaultState])
-    const { filter, filtered } = useFilter({
+    const archives = Object.values(state.archive)
+    const archiveFilter = useFilter({
+      rows: archives,
+      filter: filterMovie
+    })
+    const filteredArchive = archiveFilter.filtered.map((movie) => {
+      const calculated = { ...movie, points: 0 }
+      return calculated
+    })
+    const movieFilter = useFilter({
       rows: movies,
       filter: filterMovie
     })
@@ -245,8 +254,10 @@ const listContext = contextCreator({
       defer,
       delete: _delete,
       removeMovie,
-      filter,
-      filtered,
+      filterArchive: archiveFilter.sift,
+      filteredArchive,
+      filterMovies: movieFilter.sift,
+      filteredMovies: movieFilter.filtered,
       movies,
       queue,
       rewind,

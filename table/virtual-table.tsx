@@ -7,7 +7,7 @@ import { forwardRef } from 'react'
 import ThemeTheadView from '../theme/theme-thead-view'
 import ThemeTableView from '../theme/theme-table-view'
 
-export default function TableConsumer<Row extends Identity> (props: {
+export default function VirtualTable<Row extends Identity> (props: {
   CellsView: (props: { row: Row }) => JSX.Element
   rows: Row[]
 }): JSX.Element {

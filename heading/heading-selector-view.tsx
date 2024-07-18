@@ -30,7 +30,7 @@ export default function HeadingSelectorView (props: {
     )
   }
   function handleSelect (): void {
-    heading.select({ selection: 'create' })
+    heading.select({ selection: props.selection })
   }
   return (
     <ThemeButtonView onClick={handleSelect}>

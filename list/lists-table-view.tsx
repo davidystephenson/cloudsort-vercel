@@ -1,18 +1,18 @@
 'use client'
 
-import { TableProvider } from '../table/table-context'
+import TableView from '@/table/table-view'
 import { useLists } from './lists-context'
-import ListsTableConsumer from './lists-table-consumer'
+import ListCellsView from './list-cells-view'
 
 export default function ListsTableView (): JSX.Element {
   const lists = useLists()
   const columns = ['Name', '']
   return (
-    <TableProvider
+    <TableView
       columns={columns}
-      filterRows={lists.filter}
-    >
-      <ListsTableConsumer />
-    </TableProvider>
+      filter={lists.filter}
+      CellsView={ListCellsView}
+      rows={lists.filtered}
+    />
   )
 }

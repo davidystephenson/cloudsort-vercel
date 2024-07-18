@@ -1,11 +1,13 @@
 import { useMovie } from './movie-context'
 import ThemeLinkableView from '../theme/theme-linkable-view'
 import ThemeTdView from '../theme/theme-td-view'
-import { HStack, Text } from '@chakra-ui/react'
+import { Button, HStack, Text } from '@chakra-ui/react'
 import MovieLabelView from './movie-label-view'
-import DeleteMovieButtonView from './delete-movie-button-view'
+import MovieMenu from './movie-menu'
 
-export default function MovieCellsConsumer (): JSX.Element {
+export default function MovieCellsConsumer (props: {
+  mounted?: boolean
+}): JSX.Element {
   const movie = useMovie()
   return (
     <>
@@ -20,7 +22,8 @@ export default function MovieCellsConsumer (): JSX.Element {
       <ThemeTdView>
         <HStack>
           <Text>{movie.calculated.points}</Text>
-          <DeleteMovieButtonView />
+          <MovieMenu mounted={props.mounted} />
+          <Button>Test</Button>
         </HStack>
       </ThemeTdView>
     </>

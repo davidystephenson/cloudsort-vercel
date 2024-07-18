@@ -8,10 +8,12 @@ import parseCritickerMovies from '../movies/parse-criticker-movies'
 import { CritickerRow } from './movie-types'
 import { useAction } from '../action/action-context'
 import ButtonView from '../button/button-view'
+import useMounted from '@/mounted/use-mounted'
 
 export default function ImportMoviesConsumer (): JSX.Element {
   const action = useAction()
   const list = useList()
+  const mounted = useMounted()
   const inputRef = useRef<HTMLInputElement>(null)
   useHotkeys('i', () => {
     inputRef.current?.click()
@@ -55,11 +57,12 @@ export default function ImportMoviesConsumer (): JSX.Element {
     inputRef.current?.click()
   }
   console.log('list.synced', list.synced)
+  const disabled = !list.synced || !mounted
   return (
     <>
       <ButtonView
         loading={action.loading}
-        isDisabled={!list.synced}
+        isDisabled={disabled}
         errorMessage={action.errorMessage}
         onClick={handleClick}
         fontSize='sm'

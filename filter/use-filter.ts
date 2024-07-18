@@ -18,14 +18,14 @@ export default function useFilter <Row> (props: {
     })
     setFiltered(filteredRows)
   }, [props.rows, query])
-  function filter (props: {
+  function sift (props: {
     query: string | undefined
   }): void {
     setQuery(props.query)
   }
-
-  return {
-    filter,
+  const filter = {
+    sift,
     filtered
   }
+  return filter
 }

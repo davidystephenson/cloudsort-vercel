@@ -9,7 +9,7 @@ export default async function postArchive (props: {
   const episode = await postEpisode({
     body: props.body,
     label: props.label,
-    url: '/api/movie/choose'
+    url: '/api/movie/archive'
   })
   return episode
 }

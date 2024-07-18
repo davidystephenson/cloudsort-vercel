@@ -1,18 +1,18 @@
 'use client'
 
+import TableView from '@/table/table-view'
 import { useList } from '../list/list-context'
-import { TableProvider } from '../table/table-context'
-import MoviesTableConsumer from './movies-table-consumer'
+import MovieCellsView from './movie-cells-view'
 
 export default function MoviesTableView (): JSX.Element {
   const list = useList()
   const columns = ['Name', 'Seed', 'Points']
   return (
-    <TableProvider
+    <TableView
+      CellsView={MovieCellsView}
       columns={columns}
-      filterRows={list.filter}
-    >
-      <MoviesTableConsumer />
-    </TableProvider>
+      filter={list.filterMovies}
+      rows={list.filteredMovies}
+    />
   )
 }

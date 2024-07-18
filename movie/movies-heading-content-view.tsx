@@ -1,3 +1,4 @@
+import ArchiveTableView from '@/archive/archive-table-view'
 import HeadingContentView from '../heading/heading-content-view'
 import { useHeading } from '../heading/heading-context'
 import CreateMovieFormView from './create-movie-form-view'
@@ -12,6 +13,14 @@ export default function MoviesHeadingContentView (): JSX.Element {
     return (
       <HeadingContentView>
         <CreateMovieFormView />
+      </HeadingContentView>
+    )
+  }
+  const archiving = heading.selection === 'archive'
+  if (archiving) {
+    return (
+      <HeadingContentView>
+        <ArchiveTableView />
       </HeadingContentView>
     )
   }

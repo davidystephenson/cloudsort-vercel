@@ -9,7 +9,7 @@ export const {
   name: 'table',
   useValue: (props: {
     columns: string[]
-    filterRows: (props: { query: string | undefined }) => void
+    filter: (props: { query: string | undefined }) => void
   }) => {
     const inputRef = useRef<HTMLInputElement>(null)
     const [autoFocus, setAutoFocus] = useState(true)
@@ -24,7 +24,7 @@ export const {
     }, [])
     function clearQuery (): void {
       setQuery('')
-      props.filterRows({ query: undefined })
+      props.filter({ query: undefined })
     }
     function handleKeyDown (event: React.KeyboardEvent<HTMLInputElement>): void {
       if (event.key === 'Escape') {
@@ -35,14 +35,14 @@ export const {
     function handleQueryChange (event: ChangeEvent<HTMLInputElement>): void {
       const lower = event.target.value.toLowerCase()
       setQuery(lower)
-      props.filterRows({ query: event.target.value })
+      props.filter({ query: event.target.value })
       setAutoFocus(true)
     }
     const value = {
       autoFocus,
       columns: props.columns,
       inputRef,
-      filterRows: props.filterRows,
+      filterRows: props.filter,
       clearQuery,
       handleKeyDown,
       handleQueryChange,

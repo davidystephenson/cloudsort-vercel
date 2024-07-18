@@ -5,6 +5,7 @@ import MoviesHeadingContentView from './movies-heading-content-view'
 import MoviesHeadingCreateView from './movies-heading-create-view'
 import MoviesQueueView from './movies-queue-view'
 import { useList } from '@/list/list-context'
+import ArchiveSelectorView from '@/archive/archive-selector-view'
 
 export default function MoviesHeadingView (): JSX.Element {
   const list = useList()
@@ -14,6 +15,7 @@ export default function MoviesHeadingView (): JSX.Element {
       <MoviesQueueView />
       <ImportMoviesView />
       <MoviesHeadingCreateView />
+      <ArchiveSelectorView />
     </HeadingView>
   )
 }
