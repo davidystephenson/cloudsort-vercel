@@ -1,7 +1,14 @@
+import postArchive from '@/archive/post-archive'
+import postChoice from '@/choice/post-choice'
+import archiveItem from '@/mergechoice/archiveItem'
 import getCalculatedItem from '@/mergechoice/getCalculatedItem'
 import getDefaultOptionIndex from '@/mergechoice/getDefaultOptionIndex'
+import importItems from '@/mergechoice/importItems'
+import rewindState from '@/mergechoice/rewindState'
 import postRemoveMovie from '@/movie/post-remove-movie'
+import postRewind from '@/rewind/post-rewind'
 import shuffleSlice from '@/shuffleSlice/shuffleSlice'
+import { AlwaysNever } from '@/shuffleSlice/shuffleSliceTypes'
 import useQueue from '@/useQueue/useQueue'
 import contextCreator from 'context-creator'
 import { useCallback, useEffect, useState } from 'react'
@@ -12,15 +19,10 @@ import { State } from '../mergechoice/mergeChoiceTypes'
 import removeItem from '../mergechoice/removeItem'
 import filterMovie from '../movie/filterMovie'
 import { ChooseMovieRequest, CreateMoviesRequest, ListMovie, MovieData } from '../movie/movie-types'
-import postChooseMovie from '../movie/post-choose-movie'
 import postMovies from '../movie/post-movies'
 import getSortedMovies from '../movies/getSortedMovies'
 import { RelatedList } from './list-types'
 import { useOptionalLists } from './lists-context'
-import importItems from '@/mergechoice/importItems'
-import { AlwaysNever } from '@/shuffleSlice/shuffleSliceTypes'
-import rewindState from '@/mergechoice/rewindState'
-import postRewind from '@/rewind/post-rewind'
 
 const listContext = contextCreator({
   name: 'list',
@@ -73,6 +75,30 @@ const listContext = contextCreator({
       void queue.add({ task })
       updateState({ update: props.local })
     }
+    function archive (archiveProps: {
+      movieId: number
+    }): void {
+      const item = getCalculatedItem({ itemId: archiveProps.movieId, state })
+      const label = `Archive ${item.name}`
+      function local (updateProps: { state: State<ListMovie> }): State<ListMovie> {
+        const newState = archiveItem({
+          itemId: archiveProps.movieId,
+          state: updateProps.state
+        })
+        return newState
+      }
+      const body = {
+        lastMergechoiceId: state.history[0].mergeChoiceId,
+        listId: props.row.id,
+        archive: {
+          item
+        }
+      }
+      async function remote (): Promise<void> {
+        await postArchive({ body, label: 'archive' })
+      }
+      queueState({ label, local, remote })
+    }
     function choose (chooseProps: {
       betterIndex: number
     }): void {
@@ -115,7 +141,7 @@ const listContext = contextCreator({
         listId: props.row.id
       }
       async function remote (): Promise<void> {
-        await postChooseMovie({ body, label: 'choose' })
+        await postChoice({ body, label: 'choose' })
       }
       queueState({ label, local, remote })
     }
@@ -212,6 +238,7 @@ const listContext = contextCreator({
     const synced = queue.taskQueue.currentTask == null
 
     const value = {
+      archive,
       choose,
       importMovies,
       defaultOptionIndex,

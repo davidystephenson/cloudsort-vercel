@@ -7,12 +7,12 @@ export async function POST (request: Request): EpisodeResponse {
   const response = await handleEpisode({
     guard: guardImportMoviesRequest,
     label: '/movie/import',
-    createEpisode: async (props) => {
+    create: async (props) => {
       const episode = await createImportEpisode({
         episodes: props.episodes,
         listId: props.body.listId,
         movies: props.body.movies,
-        tx: props.tx
+        tx: props.db
       })
       return episode
     },

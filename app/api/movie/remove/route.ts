@@ -7,8 +7,8 @@ export async function POST (request: Request): EpisodeResponse {
   const response = await handleEpisode({
     guard: guardRemoveMovieRequest,
     label: '/movie/remove',
-    createEpisode: async (props) => {
-      const episode = await props.tx.episode.create({
+    create: async (props) => {
+      const episode = await props.db.episode.create({
         data: {
           remove: {
             create: {

@@ -1,14 +1,14 @@
 import { OkTrue } from '@/ok/ok-types'
 import { PostShadeBody } from './shade-types'
-import { PrismaTransaction } from '@/prisma/prisma-types'
 import { Session } from 'next-auth'
+import { Db } from '@/prisma/prisma-types'
 
 export default async function handlePostShade (props: {
   authSession: Session
   body: PostShadeBody
-  tx: PrismaTransaction
+  db: Db
 }): Promise<OkTrue> {
-  await props.tx.user.update({
+  await props.db.user.update({
     where: {
       id: props.authSession.user.id
     },

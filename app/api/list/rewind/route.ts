@@ -10,7 +10,7 @@ export async function POST (request: Request): HandledResponse<Ok> {
     label: '/list/rewind',
     handle: async (authProps) => {
       await handleRewind({
-        db: authProps.tx,
+        db: authProps.db,
         episodeMergechoiceId: authProps.body.episodeMergechoiceId,
         lastMergechoiceId: authProps.body.lastMergechoiceId,
         listId: authProps.body.listId,

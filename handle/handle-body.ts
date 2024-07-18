@@ -6,13 +6,14 @@ import { PrismaTransaction } from '@/prisma/prisma-types'
 import guardRequest from '@/fashion-police/guard-request'
 import { Guard } from '@/fashion-police/fashionPoliceTypes'
 import { HandledResponse } from './handle-types'
+import { PrismaClient } from '@prisma/client'
 
 export async function handleBody <Body, Result> (props: {
   guard: Guard<Body>
   label: string
   handle: (props: {
     body: Body
-    transaction: PrismaTransaction
+    db: PrismaClient | PrismaTransaction
   }) => Promise<Result>
   request: Request
 }): HandledResponse<Result> {
@@ -23,7 +24,7 @@ export async function handleBody <Body, Result> (props: {
       request: props.request
     })
     const result = await prisma.$transaction(async (transaction) => {
-      const result = await props.handle({ body, transaction })
+      const result = await props.handle({ body, db: transaction })
       return result
     }, {
       isolationLevel: 'Serializable',

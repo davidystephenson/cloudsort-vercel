@@ -1,16 +1,16 @@
 import fashionPolice from '@/fashion-police/fashion-police'
 import guardNumber from '@/fashion-police/guard-number'
-import { RemoveMovieRequest } from './movie-types'
-import guardEpisodeRemove from '@/remove/guard-episode-remove'
+import { ArchiveRequest } from './archive-types'
+import guardEpisodeArchive from './guard-episode-archive'
 
-export default function guardRemoveMovieRequest (props: {
+export default function guardArchiveRequest (props: {
   label: string
   value: unknown
-}): RemoveMovieRequest {
+}): ArchiveRequest {
   const guards = {
     listId: guardNumber,
     lastMergechoiceId: guardNumber,
-    remove: guardEpisodeRemove
+    archive: guardEpisodeArchive
   }
   const guarded = fashionPolice({
     required: guards,

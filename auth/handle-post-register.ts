@@ -2,13 +2,13 @@ import { AuthBody } from './auth-types'
 import { ApiError } from 'next/dist/server/api-utils'
 import { hash } from 'bcrypt'
 import { User } from '@prisma/client'
-import { PrismaTransaction } from '@/prisma/prisma-types'
+import { Db } from '@/prisma/prisma-types'
 
 export default async function handlePostRegister (props: {
   body: AuthBody
-  transaction: PrismaTransaction
+  db: Db
 }): Promise<User> {
-  const existing = await props.transaction.user.findUnique({
+  const existing = await props.db.user.findUnique({
     where: {
       email: props.body.email
     }
@@ -16,7 +16,7 @@ export default async function handlePostRegister (props: {
   if (existing != null) {
     throw new ApiError(400, 'User already exists')
   }
-  const user = await props.transaction.user.create({
+  const user = await props.db.user.create({
     data: {
       email: props.body.email,
       password: await hash(props.body.password, 10)

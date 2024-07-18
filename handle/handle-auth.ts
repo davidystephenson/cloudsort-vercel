@@ -4,6 +4,7 @@ import { handleBody } from './handle-body'
 import { PrismaTransaction } from '@/prisma/prisma-types'
 import { Guard } from '@/fashion-police/fashionPoliceTypes'
 import { HandledResponse } from './handle-types'
+import { PrismaClient } from '@prisma/client'
 
 export async function handleAuth<Body, Result> (props: {
   guard: Guard<Body>
@@ -11,7 +12,7 @@ export async function handleAuth<Body, Result> (props: {
   handle: (props: {
     authSession: Session
     body: Body
-    tx: PrismaTransaction
+    db: PrismaTransaction | PrismaClient
   }) => Promise<Result>
   request: Request
 }): HandledResponse<Result> {
@@ -23,7 +24,7 @@ export async function handleAuth<Body, Result> (props: {
       return await props.handle({
         authSession,
         body: handleProps.body,
-        tx: handleProps.transaction
+        db: handleProps.db
       })
     },
     request: props.request
