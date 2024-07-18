@@ -54,10 +54,12 @@ export default function ImportMoviesConsumer (): JSX.Element {
   function handleClick (): void {
     inputRef.current?.click()
   }
+  console.log('list.synced', list.synced)
   return (
     <>
       <ButtonView
         loading={action.loading}
+        isDisabled={!list.synced}
         errorMessage={action.errorMessage}
         onClick={handleClick}
         fontSize='sm'

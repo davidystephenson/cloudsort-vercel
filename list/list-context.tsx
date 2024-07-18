@@ -209,6 +209,7 @@ const listContext = contextCreator({
       }
       queueState({ label, local, remote })
     }
+    const synced = queue.taskQueue.currentTask == null
 
     const value = {
       choose,
@@ -223,7 +224,8 @@ const listContext = contextCreator({
       queue,
       rewind,
       row: props.row,
-      state
+      state,
+      synced
     }
     return value
   }

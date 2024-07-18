@@ -79,7 +79,7 @@ export default function MoviesQueueView (): JSX.Element {
       </Popover>
     )
   }
-  if (list.queue.taskQueue.currentTask == null) {
+  if (list.synced) {
     return (
       <Popover>
         <PopoverTrigger>

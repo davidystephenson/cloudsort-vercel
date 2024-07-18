@@ -19,7 +19,7 @@ import ResetHeaderView from '@/reset/reset-header-view'
 import UnarchiveHeaderView from '@/unarchive/unarchive-header-view'
 import RewindButton from '@/rewind/rewind-button'
 
-export function marionHistoryElement<
+export function marionEpisodeElement<
   ListItem extends Item,
   Complement,
 > (props: {
@@ -42,7 +42,7 @@ export default function EpisodeConsumer (): JSX.Element {
     reset: ResetHeaderView,
     unarchive: UnarchiveHeaderView
   }
-  const header = marionHistoryElement({
+  const header = marionEpisodeElement({
     actors: headers,
     complement: {},
     part: episode.element
@@ -56,7 +56,7 @@ export default function EpisodeConsumer (): JSX.Element {
     reset: ResetBodyView,
     unarchive: UnarchiveBodyView
   }
-  const body = marionHistoryElement({
+  const body = marionEpisodeElement({
     actors: bodies,
     complement: {},
     part: episode.element

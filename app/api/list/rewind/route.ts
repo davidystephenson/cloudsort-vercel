@@ -1,34 +1,20 @@
-import guardListEpisodes from '@/episode/guard-list-episodes'
 import { handleAuth } from '@/handle/handle-auth'
 import { HandledResponse } from '@/handle/handle-types'
 import { Ok } from '@/ok/ok-types'
 import guardRewindRequest from '@/rewind/guard-rewind-request'
-import { ApiError } from 'next/dist/server/api-utils'
+import handleRewind from '@/rewind/handle-rewind'
 
 export async function POST (request: Request): HandledResponse<Ok> {
   const response = await handleAuth({
     guard: guardRewindRequest,
     label: '/list/rewind',
     handle: async (authProps) => {
-      const episodes = await guardListEpisodes({
+      await handleRewind({
         db: authProps.tx,
+        episodeMergechoiceId: authProps.body.episodeMergechoiceId,
         lastMergechoiceId: authProps.body.lastMergechoiceId,
         listId: authProps.body.listId,
         userId: authProps.authSession.user.id
-      })
-      const episode = episodes.find((episode) => {
-        return episode.mergeChoiceId === authProps.body.episodeMergechoiceId
-      })
-      if (episode == null) {
-        throw new ApiError(404, 'This episode does not exist')
-      }
-      await authProps.tx.episode.deleteMany({
-        where: {
-          listId: authProps.body.listId,
-          createdAt: {
-            gte: episode.createdAt
-          }
-        }
       })
       return { ok: true }
     },
