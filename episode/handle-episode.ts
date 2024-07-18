@@ -1,13 +1,13 @@
-import { ListWhere } from '../list/list-types'
-import { Episode } from '@prisma/client'
 import { Guard } from '@/fashion-police/fashionPoliceTypes'
-import { ApiError } from 'next/dist/server/api-utils'
-import { PrismaTransaction } from '@/prisma/prisma-types'
 import { handleAuth } from '@/handle/handle-auth'
 import { episodeToHistoryEpisode } from '@/list/get-mergechoice-list'
+import { PrismaTransaction } from '@/prisma/prisma-types'
+import { Episode } from '@prisma/client'
+import { LastWhere } from '../list/list-types'
 import { EpisodeResponse, RelatedEpisode } from './episode-types'
+import guardListEpisodes from './guard-list-episodes'
 
-export default async function handleEpisode<Body extends ListWhere> (props: {
+export default async function handleEpisode<Body extends LastWhere> (props: {
   guard: Guard<Body>
   label: string
   createEpisode: (props: {
@@ -21,30 +21,12 @@ export default async function handleEpisode<Body extends ListWhere> (props: {
     guard: props.guard,
     label: props.label,
     handle: async (authProps) => {
-      const list = await authProps.tx.list.findUnique({
-        where: { id: authProps.body.listId }
+      const episodes = await guardListEpisodes({
+        db: authProps.tx,
+        lastMergechoiceId: authProps.body.lastMergechoiceId,
+        listId: authProps.body.listId,
+        userId: authProps.authSession.user.id
       })
-      if (list == null) {
-        throw new ApiError(404, 'List not found.')
-      }
-      if (authProps.authSession.user.id !== list.userId) {
-        throw new ApiError(403, 'Not authorized.')
-      }
-      const episodes = await authProps.tx.episode.findMany({
-        where: { listId: authProps.body.listId }
-      })
-      const sortedEpisodes = episodes.sort((a, b) => {
-        if (a.createdAt < b.createdAt) return -1
-        if (a.createdAt > b.createdAt) return 1
-        return 0
-      })
-      const lastEpisode = sortedEpisodes[sortedEpisodes.length - 1]
-      if (lastEpisode != null) {
-        const episodeWrong = lastEpisode.mergeChoiceId !== authProps.body.lastMergechoiceId
-        if (episodeWrong) {
-          throw new ApiError(400, 'That is not the last episode.')
-        }
-      }
       const episode = await props.createEpisode({
         body: authProps.body,
         episodes,

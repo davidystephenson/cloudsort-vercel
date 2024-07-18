@@ -19,6 +19,8 @@ import { RelatedList } from './list-types'
 import { useOptionalLists } from './lists-context'
 import importItems from '@/mergechoice/importItems'
 import { AlwaysNever } from '@/shuffleSlice/shuffleSliceTypes'
+import rewindState from '@/mergechoice/rewindState'
+import postRewind from '@/rewind/post-rewind'
 
 const listContext = contextCreator({
   name: 'list',
@@ -136,21 +138,21 @@ const listContext = contextCreator({
         listId: props.row.id,
         movies: sliced
       }
-      const lastHistoryEpisode = state.history[0]
-      if (lastHistoryEpisode != null) {
-        body.lastMergechoiceId = lastHistoryEpisode.mergeChoiceId
+      const lastEpisode = state.history[0]
+      if (lastEpisode != null) {
+        body.lastMergechoiceId = lastEpisode.mergeChoiceId
       }
-      const historyEpisodeResponse = await postMovies({ body, label: 'importMovies' })
-      if (historyEpisodeResponse.import == null) {
+      const response = await postMovies({ body, label: 'importMovies' })
+      if (response.import == null) {
         throw new Error('There is no import')
       }
-      const label = `Import ${historyEpisodeResponse.import.items.length} movies`
+      const label = `Import ${response.import.items.length} movies`
       function local (updateProps: { state: State<ListMovie> }): State<ListMovie> {
-        if (historyEpisodeResponse.import == null) {
+        if (response.import == null) {
           throw new Error('There is no import')
         }
         const newState = importItems({
-          items: historyEpisodeResponse.import.items,
+          items: response.import.items,
           state: updateProps.state
         })
         return newState
@@ -181,6 +183,33 @@ const listContext = contextCreator({
       }
       queueState({ label, local, remote })
     }
+    function rewind (rewindProps: {
+      episodeMergechoiceId: number
+    }): void {
+      const lastEpisode = state.history[0]
+      if (lastEpisode == null) {
+        throw new Error('There is no lastEpisode')
+      }
+      function local (updateProps: { state: State<ListMovie> }): State<ListMovie> {
+        const newState = rewindState({
+          episodeId: rewindProps.episodeMergechoiceId,
+          state: updateProps.state
+        })
+        return newState
+      }
+      const localeString = new Date().toLocaleString()
+      const label = `Rewind before ${localeString}`
+      async function remote (): Promise<void> {
+        await postRewind({
+          episodeMergechoiceId: rewindProps.episodeMergechoiceId,
+          label,
+          lastMergechoiceId: lastEpisode.mergeChoiceId,
+          listId: props.row.id
+        })
+      }
+      queueState({ label, local, remote })
+    }
+
     const value = {
       choose,
       importMovies,
@@ -192,6 +221,7 @@ const listContext = contextCreator({
       filtered,
       movies,
       queue,
+      rewind,
       row: props.row,
       state
     }

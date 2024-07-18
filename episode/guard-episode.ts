@@ -2,10 +2,10 @@ import guardNumber from '@/fashion-police/guard-number'
 import { Episode } from '@/mergechoice/mergeChoiceTypes'
 import { ListMovie } from '@/movie/movie-types'
 import guardEpisodeItem from './guard-episode-item'
-import guardEpisodeChoice from './guard-episode-choice'
+import guardEpisodeChoice from '../choice/guard-episode-choice'
 import fashionPolice from '@/fashion-police/fashion-police'
-import guardEpisodeImport from './guard-episode-import'
-import guardEpisodeRandom from './guard-episode-random'
+import guardEpisodeImport from '../import/guard-episode-import'
+import guardEpisodeRandom from '../random/guard-episode-random'
 
 export default function guardEpisode (props: {
   label: string

@@ -1,7 +1,7 @@
 import fashionPolice from '@/fashion-police/fashion-police'
 import guardNumber from '@/fashion-police/guard-number'
 import { ChooseMovieRequest } from './movie-types'
-import guardEpisodeChoice from '@/episode/guard-episode-choice'
+import guardEpisodeChoice from '@/choice/guard-episode-choice'
 
 export default function guardChooseMovieRequest (props: {
   label: string

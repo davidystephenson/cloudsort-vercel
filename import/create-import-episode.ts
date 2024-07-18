@@ -1,7 +1,7 @@
 import { CalculatedMovie } from '@/movie/movie-types'
 import { PrismaTransaction } from '@/prisma/prisma-types'
-import { RelatedEpisode } from './episode-types'
-import { EPISODE_PARTS_RELATION } from './episode-constants'
+import { RelatedEpisode } from '../episode/episode-types'
+import { EPISODE_PARTS_RELATION } from '../episode/episode-constants'
 import { Episode } from '@prisma/client'
 
 export default async function createImportEpisode (props: {

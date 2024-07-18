@@ -1,12 +1,12 @@
 import { ApiError } from 'next/dist/server/api-utils'
-import { ListRequest } from './list-types'
+import { ListWhere } from './list-types'
 import { Session } from 'next-auth'
 import { PrismaTransaction } from '@/prisma/prisma-types'
 import { OkTrue } from '@/ok/ok-types'
 
 export default async function handlePostDeleteList (props: {
   authSession: Session
-  body: ListRequest
+  body: ListWhere
   tx: PrismaTransaction
 }): Promise<OkTrue> {
   const list = await props.tx.list.findFirst({

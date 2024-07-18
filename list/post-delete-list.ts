@@ -1,10 +1,10 @@
 import post from '@/post/post'
-import { ListRequest } from './list-types'
+import { ListWhere } from './list-types'
 import { OkTrue } from '@/ok/ok-types'
 import guardOkTrue from '@/ok/guard-ok-true'
 
 export default async function postDeleteList (props: {
-  body: ListRequest
+  body: ListWhere
   label: string
 }): Promise<OkTrue> {
   return await post({

@@ -1,6 +1,6 @@
 import guardImportMoviesRequest from '@/movie/guard-import-movies-request'
 import { EpisodeResponse } from '@/episode/episode-types'
-import createImportEpisode from '@/episode/create-import-episode'
+import createImportEpisode from '@/import/create-import-episode'
 import handleEpisode from '@/episode/handle-episode'
 
 export async function POST (request: Request): EpisodeResponse {

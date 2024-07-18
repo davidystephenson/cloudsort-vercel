@@ -7,12 +7,12 @@ export default function guardEpisodeRandom (props: {
   label: string
   value: unknown
 }): EpisodeRandom<ListMovie> {
-  const guards = {
+  const required = {
     first: guardCalculatedMovie,
     second: guardCalculatedMovie
   }
   const guarded = fashionPolice({
-    required: guards,
+    required,
     label: props.label,
     value: props.value
   })

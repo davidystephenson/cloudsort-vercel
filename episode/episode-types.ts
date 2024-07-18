@@ -1,5 +1,5 @@
 import { HandledResponse, SuccessPayload } from '@/handle/handle-types'
-import { ListRequest } from '@/list/list-types'
+import { ListWhere } from '@/list/list-types'
 import { Episode } from '@/mergechoice/mergeChoiceTypes'
 import { ListMovie } from '@/movie/movie-types'
 import { Prisma } from '@prisma/client'
@@ -9,7 +9,7 @@ import { Part } from '@/mergechoice/marion/marionTypes'
 export type ChoiceRelation = typeof CHOICE_RELATION
 export type EpisodeRelation = typeof EPISODE_RELATION
 export type EpisodesRelation = typeof EPISODES_RELATION
-export interface EpisodeRequest extends ListRequest { lastMergechoiceId: number }
+export interface EpisodeRequest extends ListWhere { lastMergechoiceId: number }
 export type EpisodeItemRelation = typeof EPISODE_ITEM_RELATION
 export type EpisodeItemDataRelation = typeof EPISODE_ITEM_DATA_RELATION
 export type RelatedEpisodePart = Part<RelatedEpisode>

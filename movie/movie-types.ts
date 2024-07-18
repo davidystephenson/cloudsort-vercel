@@ -1,7 +1,7 @@
 import { Movie } from '@prisma/client'
 import { Calculated, EpisodeChoice, EpisodeRemove, Item } from '../mergechoice/mergeChoiceTypes'
 import { EpisodeRequest } from '@/episode/episode-types'
-import { ListRequest } from '@/list/list-types'
+import { ListWhere } from '@/list/list-types'
 
 export interface ListMovie extends Item {
   id: number
@@ -10,7 +10,7 @@ export interface ListMovie extends Item {
   year: number
 }
 export type MovieData = Omit<ListMovie, 'id'>
-export interface ImportRequest extends ListRequest {
+export interface ImportRequest extends ListWhere {
   lastMergechoiceId: number | null
 }
 export interface CreateMoviesRequest extends ImportRequest {

@@ -5,13 +5,12 @@ import { EpisodesRelation } from '@/episode/episode-types'
 
 export interface ListWhere {
   listId: number
+}
+export interface LastWhere extends ListWhere {
   lastMergechoiceId: number | null
 }
 export interface CreateListRequest {
   name: string
-}
-export interface ListRequest {
-  listId: number
 }
 export type RelatedList = Prisma.ListGetPayload<EpisodesRelation>
 export interface MergechoiceList {

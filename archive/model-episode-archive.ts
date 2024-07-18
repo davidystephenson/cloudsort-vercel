@@ -1,7 +1,7 @@
 import { EpisodeArchive } from '@/mergechoice/mergeChoiceTypes'
-import { RelatedEpisode } from './episode-types'
+import { RelatedEpisode } from '../episode/episode-types'
 import { ListMovie } from '@/movie/movie-types'
-import modelEpisodeMovie from './model-episode-movie'
+import modelEpisodeMovie from '../episode/model-episode-movie'
 
 export default function modelEpisodeArchive (props: {
   episode: RelatedEpisode
