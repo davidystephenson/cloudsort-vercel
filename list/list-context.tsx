@@ -130,7 +130,6 @@ const listContext = contextCreator({
           betterIndex: chooseProps.betterIndex,
           state: props.state
         })
-        console.log('choose newState', newState)
         return newState
       }
       const betterId = state.choice?.options[chooseProps.betterIndex]
@@ -340,6 +339,12 @@ const listContext = contextCreator({
       queueState({ label, local, remote })
     }
     const synced = queue.taskQueue.currentTask == null
+    function sift (props: {
+      query: string | undefined
+    }): void {
+      moviesFilter.sift({ query: props.query })
+      archiveFilter.sift({ query: props.query })
+    }
     const value = {
       archive,
       choose,
@@ -348,6 +353,7 @@ const listContext = contextCreator({
       defer,
       delete: _delete,
       removeMovie,
+      sift,
       filterArchive: archiveFilter.sift,
       filteredArchive: sortedArchive,
       filterMovies: moviesFilter.sift,

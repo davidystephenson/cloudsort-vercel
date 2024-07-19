@@ -1,6 +1,3 @@
-import { marion } from '@/mergechoice/marion/marion'
-import { Actors } from '@/mergechoice/marion/marionTypes'
-import { EpisodePart, Item } from '@/mergechoice/mergeChoiceTypes'
 import episodeContext from './episode-context'
 import ArchiveBodyView from '../archive/archive-body-view'
 import ChoiceBodyView from '../choice/choice-body-view'
@@ -18,18 +15,7 @@ import RemoveHeaderView from '@/remove/remove-header-view'
 import ResetHeaderView from '@/reset/reset-header-view'
 import UnarchiveHeaderView from '@/unarchive/unarchive-header-view'
 import RewindButton from '@/rewind/rewind-button'
-
-export function marionEpisodeElement<
-  ListItem extends Item,
-  Complement,
-> (props: {
-  actors: Actors<Complement, JSX.Element, EpisodePart<ListItem>>
-  complement: Complement
-  part: EpisodePart<ListItem>
-}): JSX.Element {
-  const marioned = marion(props)
-  return marioned
-}
+import marionEpisodeElement from './marion-episode-element'
 
 export default function EpisodeConsumer (): JSX.Element {
   const episode = episodeContext.useContext()

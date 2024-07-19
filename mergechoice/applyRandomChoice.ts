@@ -15,13 +15,10 @@ export default function applyRandomChoice <ListItem extends Item> (props: {
   state: State<ListItem>
 }): State<ListItem> {
   const chosenItem = props.aBetter ? props.aItem : props.bItem
-  console.log('chosenItem', chosenItem)
   const unchosenItem = props.aBetter ? props.bItem : props.aItem
-  console.log('unchosenItem', unchosenItem)
   const chosenPoints = props.aBetter ? props.aPoints : props.bPoints
   const unchosenPoints = props.aBetter ? props.bPoints : props.aPoints
   const consistent = chosenPoints > unchosenPoints
-  console.log('consistent', consistent)
   if (consistent) {
     return completeState({ state: props.state })
   }

@@ -22,8 +22,7 @@ export default function ImportMoviesConsumer (): JSX.Element {
     try {
       const movies = parseCritickerMovies({ rows: props.data })
       await list.importMovies({
-        movies,
-        slice: 3
+        movies
       })
       action.succeed()
     } catch (error) {
@@ -54,7 +53,6 @@ export default function ImportMoviesConsumer (): JSX.Element {
   function handleClick (): void {
     inputRef.current?.click()
   }
-  console.log('list.synced', list.synced)
   return (
     <>
       <ButtonView

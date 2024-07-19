@@ -6,7 +6,7 @@ import MovieLabelView from '@/movie/movie-label-view'
 import ArchiveMenuView from './archive-menu-view'
 import { LuArchive } from 'react-icons/lu'
 
-export default function ArchiveCellsConsumer (): JSX.Element {
+export default function ArchiveMovieCellsConsumer (): JSX.Element {
   const movie = useMovie()
   return (
     <>
