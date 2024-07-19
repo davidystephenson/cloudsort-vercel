@@ -19,7 +19,7 @@ export const {
     useEffect(() => {
       setRows(props.rows)
     }, [props.rows])
-    const { filtered, filter } = useFilter({ rows, filter: filterList })
+    const { filtered, sift: filter } = useFilter({ rows, filter: filterList })
     async function create (props: {
       name: string
     }): Promise<List> {

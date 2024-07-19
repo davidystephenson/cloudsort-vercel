@@ -6,6 +6,9 @@ import TableConsumer from '../table/table-consumer'
 export default function MoviesTableConsumer (): JSX.Element {
   const list = useList()
   return (
-    <TableConsumer CellsView={MovieCellsView} rows={list.filtered} />
+    <TableConsumer
+      CellsView={MovieCellsView}
+      rows={list.filteredMovies}
+    />
   )
 }

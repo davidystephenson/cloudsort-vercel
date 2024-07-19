@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { Filter } from './filter-types'
 
 export default function useFilter <Row> (props: {
@@ -6,18 +6,13 @@ export default function useFilter <Row> (props: {
   rows: Row[]
 }): Filter<Row> {
   const [query, setQuery] = useState<string>()
-  const [filtered, setFiltered] = useState<Row[]>(props.rows)
-  useEffect(() => {
+  const filtered = props.rows.filter((row) => {
     if (query == null) {
-      setFiltered(props.rows)
-      return
+      return true
     }
-    const filteredRows = props.rows.filter((row) => {
-      const includes = props.filter({ row, query })
-      return includes
-    })
-    setFiltered(filteredRows)
-  }, [props.rows, query])
+    const includes = props.filter({ row, query })
+    return includes
+  })
   function filter (props: {
     query: string | undefined
   }): void {
@@ -25,7 +20,7 @@ export default function useFilter <Row> (props: {
   }
 
   return {
-    filter,
+    sift: filter,
     filtered
   }
 }

@@ -15,7 +15,7 @@ export default function TableConsumer<Row extends Identity> (props: {
   const theme = useTheme()
   if (!theme.mounted) {
     const rows = props.rows.map((row) => (
-      <Tr key={row.id}>
+      <Tr key={row.id} pr='0'>
         <props.CellsView row={row} />
       </Tr>
     ))

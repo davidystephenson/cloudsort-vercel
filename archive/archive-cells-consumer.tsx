@@ -1,11 +1,12 @@
-import { useMovie } from './movie-context'
+import { useMovie } from '@/movie/movie-context'
 import ThemeLinkableView from '../theme/theme-linkable-view'
 import ThemeTdView from '../theme/theme-td-view'
-import { HStack, Text } from '@chakra-ui/react'
-import MovieLabelView from './movie-label-view'
-import ListMovieMenuView from '@/list/list-movie-menu-view'
+import { HStack, Icon } from '@chakra-ui/react'
+import MovieLabelView from '@/movie/movie-label-view'
+import ArchiveMenuView from './archive-menu-view'
+import { LuArchive } from 'react-icons/lu'
 
-export default function MovieCellsConsumer (): JSX.Element {
+export default function ArchiveCellsConsumer (): JSX.Element {
   const movie = useMovie()
   return (
     <>
@@ -19,8 +20,8 @@ export default function MovieCellsConsumer (): JSX.Element {
       </ThemeTdView>
       <ThemeTdView pr='0'>
         <HStack>
-          <Text>{movie.calculated.points}</Text>
-          <ListMovieMenuView />
+          <Icon as={LuArchive} />
+          <ArchiveMenuView />
         </HStack>
       </ThemeTdView>
     </>

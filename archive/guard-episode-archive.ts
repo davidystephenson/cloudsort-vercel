@@ -1,5 +1,4 @@
 import fashionPolice from '@/fashion-police/fashion-police'
-import guardNumber from '@/fashion-police/guard-number'
 import { EpisodeArchive } from '@/mergechoice/mergeChoiceTypes'
 import guardCalculatedMovie from '@/movie/guard-calculated-movie'
 import { ListMovie } from '@/movie/movie-types'
@@ -9,9 +8,7 @@ export default function guardEpisodeArchive (props: {
   value: unknown
 }): EpisodeArchive<ListMovie> {
   const guards = {
-    item: guardCalculatedMovie,
-    listId: guardNumber,
-    lastMergechoiceId: guardNumber
+    item: guardCalculatedMovie
   }
   const guarded = fashionPolice({
     required: guards,
