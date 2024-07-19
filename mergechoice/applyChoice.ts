@@ -16,6 +16,7 @@ export default function applyChoice <ListItem extends Item> (props: {
   }
   const aPoints = getPoints({ itemId: props.aItem.id, state: props.state })
   const bPoints = getPoints({ itemId: props.bItem.id, state: props.state })
+  console.log('props.state.choice.random', props.state.choice.random)
   if (props.state.choice.random) {
     const newState = applyRandomChoice({
       aBetter: props.aBetter,

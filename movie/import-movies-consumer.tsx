@@ -8,12 +8,10 @@ import parseCritickerMovies from '../movies/parse-criticker-movies'
 import { CritickerRow } from './movie-types'
 import { useAction } from '../action/action-context'
 import ButtonView from '../button/button-view'
-import { useTheme } from '@/theme/theme-context'
 
 export default function ImportMoviesConsumer (): JSX.Element {
   const action = useAction()
   const list = useList()
-  const theme = useTheme()
   const inputRef = useRef<HTMLInputElement>(null)
   useHotkeys('i', () => {
     inputRef.current?.click()
@@ -25,7 +23,7 @@ export default function ImportMoviesConsumer (): JSX.Element {
       const movies = parseCritickerMovies({ rows: props.data })
       await list.importMovies({
         movies,
-        slice: 100
+        slice: 3
       })
       action.succeed()
     } catch (error) {
@@ -61,7 +59,7 @@ export default function ImportMoviesConsumer (): JSX.Element {
     <>
       <ButtonView
         loading={action.loading}
-        isDisabled={!list.synced || !theme.mounted}
+        isDisabled={!list.synced || list.queue.taskQueue.queuedTasks.length === 0}
         errorMessage={action.errorMessage}
         onClick={handleClick}
         fontSize='sm'

@@ -5,7 +5,11 @@ import DeferView from '@/defer/defer-view'
 
 export default function OptionsView (): JSX.Element {
   const list = useList()
-  if (list.state.choice == null || list.state.choice.options.length === 0) {
+  if (
+    list.state.complete ||
+    list.state.choice == null ||
+    list.state.choice.options.length === 0
+  ) {
     return <></>
   }
   return (

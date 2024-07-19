@@ -27,6 +27,8 @@ import unarchiveItem from '@/mergechoice/unarchiveItem'
 import postUnarchive from '@/unarchive/post-unarchive'
 import postReset from '@/reset/post-reset'
 import resetItem from '@/mergechoice/resetItem'
+import setupRandomChoice from '@/mergechoice/setupRandomChoice'
+import postRandom from '@/random/post-random'
 
 const listContext = contextCreator({
   name: 'list',
@@ -123,6 +125,14 @@ const listContext = contextCreator({
       if (state.choice == null) {
         throw new Error('There is no choice')
       }
+      function local (props: { state: State<ListMovie> }): State<ListMovie> {
+        const newState = chooseOption({
+          betterIndex: chooseProps.betterIndex,
+          state: props.state
+        })
+        console.log('choose newState', newState)
+        return newState
+      }
       const betterId = state.choice?.options[chooseProps.betterIndex]
       const worseIndex = 1 - chooseProps.betterIndex
       const worseId = state.choice?.options[worseIndex]
@@ -132,13 +142,6 @@ const listContext = contextCreator({
       const betterItem = state.items[betterId]
       const worseItem = state.items[worseId]
       const label = `${betterItem.name} > ${worseItem.name}`
-      function local (props: { state: State<ListMovie> }): State<ListMovie> {
-        const newState = chooseOption({
-          betterIndex: chooseProps.betterIndex,
-          state: props.state
-        })
-        return newState
-      }
       const aId = state.choice.options[state.choice.aIndex]
       const bId = state.choice.options[state.choice.bIndex]
       const aBetter = aId === betterId
@@ -202,6 +205,33 @@ const listContext = contextCreator({
         return newState
       }
       queueState({ label, local })
+    }
+    function random (): void {
+      const lastEpisode = state.history[0]
+      if (lastEpisode == null) {
+        throw new Error('There is no lastEpisode')
+      }
+      updateState({
+        update: (updateProps) => {
+          const newState = setupRandomChoice({ state: updateProps.state })
+          const newEpisode = newState.history[0]
+          async function perform (): Promise<void> {
+            if (newEpisode.random == null) {
+              throw new Error('There is no random')
+            }
+            const body = {
+              lastMergechoiceId: lastEpisode.mergeChoiceId,
+              listId: props.row.id,
+              random: newEpisode.random
+            }
+            await postRandom({ body, label: 'random' })
+          }
+          const label = 'Create random choice'
+          const task = { perform, label }
+          void queue.add({ task })
+          return newState
+        }
+      })
     }
     function removeMovie (deleteMovieProps: {
       movieId: number
@@ -310,7 +340,6 @@ const listContext = contextCreator({
       queueState({ label, local, remote })
     }
     const synced = queue.taskQueue.currentTask == null
-
     const value = {
       archive,
       choose,
@@ -325,6 +354,7 @@ const listContext = contextCreator({
       filteredMovies: moviesFilter.filtered,
       movies,
       queue,
+      random,
       reset,
       rewind,
       row: props.row,
