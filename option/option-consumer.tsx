@@ -1,6 +1,6 @@
 import OptionChooseView from './option-choose-view'
-import DeleteMovieButtonView from '@/movie/delete-movie-button-view'
 import { useOption } from './option-context'
+import ListMovieMenuView from '@/list/list-movie-menu-view'
 
 export default function OptionConsumer (): JSX.Element {
   const option = useOption()
@@ -8,7 +8,7 @@ export default function OptionConsumer (): JSX.Element {
   if (option.index === 0) {
     return (
       <>
-        <DeleteMovieButtonView />
+        <ListMovieMenuView />
         <OptionChooseView />
       </>
     )
@@ -17,7 +17,7 @@ export default function OptionConsumer (): JSX.Element {
   return (
     <>
       <OptionChooseView />
-      <DeleteMovieButtonView />
+      <ListMovieMenuView />
     </>
   )
 }

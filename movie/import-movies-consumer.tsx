@@ -8,10 +8,12 @@ import parseCritickerMovies from '../movies/parse-criticker-movies'
 import { CritickerRow } from './movie-types'
 import { useAction } from '../action/action-context'
 import ButtonView from '../button/button-view'
+import { useTheme } from '@/theme/theme-context'
 
 export default function ImportMoviesConsumer (): JSX.Element {
   const action = useAction()
   const list = useList()
+  const theme = useTheme()
   const inputRef = useRef<HTMLInputElement>(null)
   useHotkeys('i', () => {
     inputRef.current?.click()
@@ -59,7 +61,7 @@ export default function ImportMoviesConsumer (): JSX.Element {
     <>
       <ButtonView
         loading={action.loading}
-        isDisabled={!list.synced}
+        isDisabled={!list.synced || !theme.mounted}
         errorMessage={action.errorMessage}
         onClick={handleClick}
         fontSize='sm'
