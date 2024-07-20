@@ -2,17 +2,19 @@
 
 import TableView from '@/table/table-view'
 import { useList } from '../list/list-context'
-import MovieCellsView from './movie-cells-view'
+import useSifted from '@/sifted/use-sifted'
+import CellsView from '@/cell/cells-view'
 
 export default function MoviesTableView (): JSX.Element {
   const list = useList()
   const columns = ['Movie', 'Seed', 'Points']
+  const sifted = useSifted()
   return (
     <TableView
-      CellsView={MovieCellsView}
-      rows={list.filteredMovies}
+      CellsView={CellsView}
+      rows={sifted}
       columns={columns}
-      filterRows={list.filterMovies}
+      filterRows={list.siftMovies}
     />
   )
 }

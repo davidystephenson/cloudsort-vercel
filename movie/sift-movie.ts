@@ -1,6 +1,6 @@
 import { ListMovie } from './movie-types'
 
-export default function filterMovie (props: {
+export default function siftMovie (props: {
   row: ListMovie
   query: string
 }): boolean {

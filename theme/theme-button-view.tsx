@@ -7,7 +7,7 @@ const ThemeButtonView = forwardRef<HTMLButtonElement, ButtonProps>((
   ref
 ) => {
   const theme = useTheme()
-  const disabled = !theme.mounted || props.isDisabled === false
+  const disabled = !theme.mounted || props.isDisabled === true
   const buttonView = (
     <>
       <Button

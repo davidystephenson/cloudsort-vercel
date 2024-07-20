@@ -17,7 +17,7 @@ import chooseOption from '../mergechoice/chooseOption'
 import createState from '../mergechoice/createState'
 import { State } from '../mergechoice/mergeChoiceTypes'
 import removeItem from '../mergechoice/removeItem'
-import filterMovie from '../movie/filterMovie'
+import siftMovie from '../movie/sift-movie'
 import { ChooseMovieRequest, CreateMoviesRequest, ListMovie, MovieData } from '../movie/movie-types'
 import postMovies from '../movie/post-movies'
 import getSortedMovies from '../movies/getSortedMovies'
@@ -29,6 +29,7 @@ import postReset from '@/reset/post-reset'
 import resetItem from '@/mergechoice/resetItem'
 import setupRandomChoice from '@/mergechoice/setupRandomChoice'
 import postRandom from '@/random/post-random'
+import siftEpisode from '@/episode/sift-episode'
 
 const listContext = contextCreator({
   name: 'list',
@@ -58,7 +59,11 @@ const listContext = contextCreator({
     })
     const archiveFilter = useFilter({
       rows,
-      filter: filterMovie
+      filter: siftMovie
+    })
+    const episodesFilter = useFilter({
+      rows: state.history,
+      filter: siftEpisode
     })
     const archiveCopy = [...archiveFilter.filtered]
     const sortedArchive = archiveCopy.sort((a, b) => {
@@ -66,7 +71,7 @@ const listContext = contextCreator({
     })
     const moviesFilter = useFilter({
       rows: movies,
-      filter: filterMovie
+      filter: siftMovie
     })
     const defaultOptionIndex = getDefaultOptionIndex({
       movies: state.items,
@@ -344,6 +349,7 @@ const listContext = contextCreator({
     }): void {
       moviesFilter.sift({ query: props.query })
       archiveFilter.sift({ query: props.query })
+      episodesFilter.sift({ query: props.query })
     }
     const value = {
       archive,
@@ -354,10 +360,11 @@ const listContext = contextCreator({
       delete: _delete,
       removeMovie,
       sift,
-      filterArchive: archiveFilter.sift,
-      filteredArchive: sortedArchive,
-      filterMovies: moviesFilter.sift,
-      filteredMovies: moviesFilter.filtered,
+      siftArchive: archiveFilter.sift,
+      siftedArchive: sortedArchive,
+      siftedEpisodes: episodesFilter.filtered,
+      siftMovies: moviesFilter.sift,
+      siftedMovies: moviesFilter.filtered,
       movies,
       queue,
       random,

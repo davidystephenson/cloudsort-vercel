@@ -22,7 +22,8 @@ export default function ImportMoviesConsumer (): JSX.Element {
     try {
       const movies = parseCritickerMovies({ rows: props.data })
       await list.importMovies({
-        movies
+        movies,
+        slice: 3
       })
       action.succeed()
     } catch (error) {
@@ -53,11 +54,18 @@ export default function ImportMoviesConsumer (): JSX.Element {
   function handleClick (): void {
     inputRef.current?.click()
   }
+  console.log('list.state.choice', list.state.choice)
+  const disabled = (
+    !list.synced ||
+    list.queue.taskQueue.queuedTasks.length === 0 ||
+    list.state.choice?.random === true
+  )
+  console.log('disabled', disabled)
   return (
     <>
       <ButtonView
         loading={action.loading}
-        isDisabled={!list.synced || list.queue.taskQueue.queuedTasks.length === 0}
+        isDisabled={disabled}
         errorMessage={action.errorMessage}
         onClick={handleClick}
         fontSize='sm'

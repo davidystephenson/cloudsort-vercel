@@ -6,12 +6,14 @@ export default function useEpisode (props: {
   episodeId: number
 }): Episode<ListMovie> {
   const list = useList()
-  const episode = list.state.history.find((episode) => {
+  const episode = list.siftedEpisodes.find((episode) => {
     const match = episode.mergeChoiceId === props.episodeId
     return match
   })
   if (episode == null) {
-    throw new Error('Episode not found')
+    console.log('episodeId', props.episodeId)
+    console.log('use Episode list.siftedEpisodes', list.siftedEpisodes)
+    throw new Error(`Episode ${props.episodeId} not found`)
   }
   return episode
 }

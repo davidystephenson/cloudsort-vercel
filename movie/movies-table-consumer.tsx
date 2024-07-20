@@ -8,7 +8,7 @@ export default function MoviesTableConsumer (): JSX.Element {
   return (
     <TableConsumer
       CellsView={MovieCellsView}
-      rows={list.filteredMovies}
+      rows={list.siftedMovies}
     />
   )
 }

@@ -2,7 +2,7 @@ export interface ArchiveCells {
   type: 'archive'
 }
 export interface ArchiveMovieCells {
-  type: 'archived'
+  type: 'archiveMovie'
   movieId: number
 }
 export interface ColumnsCells {
@@ -42,7 +42,7 @@ export type CellsKey = keyof Cells
 export type CellsType = Cells[CellsKey]
 
 export interface Row <Key extends CellsKey> {
-  type: Key
-  id: string
+  id: number | string
   cells: Cells[Key]
+  type: Key
 }

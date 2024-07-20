@@ -1,20 +1,28 @@
-import EpisodeTimeView from '@/episode/episode-time-view'
-import { EpisodeChoice } from '@/mergechoice/mergeChoiceTypes'
-import { ListMovie } from '@/movie/movie-types'
-import TableSpanView from '@/table/table-span-view'
-import { Heading } from '@chakra-ui/react'
+import { Row } from '@/cell/cell-types'
+import { useList } from '@/list/list-context'
+import getCalculatedItem from '@/mergechoice/getCalculatedItem'
+import { MovieProvider } from '@/movie/movie-context'
+import MovieLabelCellsView from '@/movie/movie-label-cells-view'
+import ThemeTdView from '@/theme/theme-td-view'
+import { Icon } from '@chakra-ui/react'
+import { BsCloudUpload } from 'react-icons/bs'
 
 export default function ChoiceEpisodeMovieCellsView (props: {
-  input: EpisodeChoice<ListMovie>
+  row: Row<'episodeMovie'>
 }): JSX.Element {
-  const symbol = props.input.aBetter ? '>' : '<'
-  const aName = props.input.aBetter ? <b>{props.input.aItem.name}</b> : props.input.aItem.name
-  const bName = props.input.aBetter ? props.input.bItem.name : <b>{props.input.bItem.name}</b>
-  return (
-    <TableSpanView>
-      <Heading size='xs'>
-        {aName} {symbol} {bName} (<EpisodeTimeView />)
-      </Heading>
-    </TableSpanView>
+  const list = useList()
+  const movie = getCalculatedItem({
+    itemId: props.row.cells.movieId,
+    state: list.state
+  })
+  // TODO episode movie cells consumer
+  const view = (
+    <MovieProvider calculated={movie}>
+      <MovieLabelCellsView />
+      <ThemeTdView pr='0'>
+        <Icon as={BsCloudUpload} />
+      </ThemeTdView>
+    </MovieProvider>
   )
+  return view
 }
