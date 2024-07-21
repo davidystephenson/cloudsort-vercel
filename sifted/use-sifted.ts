@@ -2,7 +2,8 @@ import { CellsKey, Row } from '@/cell/cell-types'
 import listContext from '@/list/list-context'
 import { marion } from '@/mergechoice/marion/marion'
 import { Actors } from '@/mergechoice/marion/marionTypes'
-import { EpisodePart, Item, ItemId } from '@/mergechoice/mergeChoiceTypes'
+import { EpisodePart, Item } from '@/mergechoice/mergeChoiceTypes'
+import { CalculatedMovie } from '@/movie/movie-types'
 
 export function marionEpisodeRows<
   ListItem extends Item,
@@ -27,21 +28,18 @@ export default function useSifted (): Array<Row<CellsKey>> {
   const episodeRows = list.siftedEpisodes.flatMap(episode => {
     const id = `episode-${episode.mergeChoiceId}`
     const episodeRow: Row<'episode'> = {
-      cells: { episodeId: episode.mergeChoiceId, type: 'episode' },
+      cells: { episode, type: 'episode' },
       id,
       type: 'episode'
     }
     function produceMovie (props: {
-      movieId: ItemId
+      movie: CalculatedMovie
     }): Row<'episodeMovie'> {
-      if (typeof props.movieId !== 'number') {
-        throw new Error('movieId must be a number')
-      }
-      const id = `episode-${episode.mergeChoiceId}-movie-${props.movieId}`
+      const id = `episode-${episode.mergeChoiceId}-movie-${props.movie.id}`
       const row: Row<'episodeMovie'> = {
         cells: {
-          episodeId: episode.mergeChoiceId,
-          movieId: props.movieId,
+          episode,
+          movie: props.movie,
           type: 'episodeMovie'
         },
         id,
@@ -52,39 +50,39 @@ export default function useSifted (): Array<Row<CellsKey>> {
     const episodeRows = marionEpisodeRows({
       actors: {
         archive: props => {
-          const row = produceMovie({ movieId: props.input.item.id })
+          const row = produceMovie({ movie: props.input.item })
           return [row]
         },
         choice: props => {
-          const aRow = produceMovie({ movieId: props.input.aItem.id })
-          const bRow = produceMovie({ movieId: props.input.bItem.id })
+          const aRow = produceMovie({ movie: props.input.aItem })
+          const bRow = produceMovie({ movie: props.input.bItem })
           return [aRow, bRow]
         },
         import: props => {
           const rows = props.input.items.map(item => {
-            const row = produceMovie({ movieId: item.id })
+            const row = produceMovie({ movie: item })
             return row
           })
           return rows
         },
         random: props => {
-          const first = produceMovie({ movieId: props.input.first.id })
-          const second = produceMovie({ movieId: props.input.second.id })
+          const first = produceMovie({ movie: props.input.first })
+          const second = produceMovie({ movie: props.input.second })
           const rows = [first, second]
           return rows
         },
         remove: props => {
-          const row = produceMovie({ movieId: props.input.item.id })
+          const row = produceMovie({ movie: props.input.item })
           const rows = [row]
           return rows
         },
         reset: props => {
-          const row = produceMovie({ movieId: props.input.item.id })
+          const row = produceMovie({ movie: props.input.item })
           const rows = [row]
           return rows
         },
         unarchive: props => {
-          const row = produceMovie({ movieId: props.input.item.id })
+          const row = produceMovie({ movie: props.input.item })
           const rows = [row]
           return rows
         }
@@ -102,7 +100,7 @@ export default function useSifted (): Array<Row<CellsKey>> {
   }
   const archiveMovieRows = list.siftedArchive.map(movie => {
     const archiveMovieRow: Row<'archiveMovie'> = {
-      cells: { movieId: movie.id, type: 'archiveMovie' },
+      cells: { movie, type: 'archiveMovie' },
       id: `archive-movie-${movie.id}`,
       type: 'archiveMovie'
     }
@@ -115,7 +113,7 @@ export default function useSifted (): Array<Row<CellsKey>> {
   }
   const listMovieRows = list.siftedMovies.map(movie => {
     const listMovieRow: Row<'listMovie'> = {
-      cells: { movieId: movie.id, type: 'listMovie' },
+      cells: { movie, type: 'listMovie' },
       id: `list-movie-${movie.id}`,
       type: 'listMovie'
     }

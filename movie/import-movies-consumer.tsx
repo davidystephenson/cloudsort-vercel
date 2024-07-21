@@ -55,10 +55,10 @@ export default function ImportMoviesConsumer (): JSX.Element {
     inputRef.current?.click()
   }
   console.log('list.state.choice', list.state.choice)
+  const randoming = list.state.choice?.random === true && !list.state.complete
   const disabled = (
-    !list.synced ||
-    list.queue.taskQueue.queuedTasks.length === 0 ||
-    list.state.choice?.random === true
+    randoming ||
+    !list.synced
   )
   console.log('disabled', disabled)
   return (

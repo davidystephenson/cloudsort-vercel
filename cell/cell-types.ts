@@ -1,28 +1,31 @@
+import { Episode } from '@/mergechoice/mergeChoiceTypes'
+import { CalculatedMovie, ListMovie } from '@/movie/movie-types'
+
 export interface ArchiveCells {
   type: 'archive'
 }
 export interface ArchiveMovieCells {
   type: 'archiveMovie'
-  movieId: number
+  movie: CalculatedMovie
 }
 export interface ColumnsCells {
   type: 'columns'
 }
 export interface EpisodeCells {
   type: 'episode'
-  episodeId: number
+  episode: Episode<ListMovie>
 }
 export interface EpisodeMovieCells {
   type: 'episodeMovie'
-  episodeId: number
-  movieId: number
+  episode: Episode<ListMovie>
+  movie: CalculatedMovie
 }
 export interface HistoryCells {
   type: 'history'
 }
 export interface ListMovieCells {
   type: 'listMovie'
-  movieId: number
+  movie: CalculatedMovie
 }
 export interface ListMoviesCells {
   type: 'listMovies'
