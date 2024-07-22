@@ -84,6 +84,7 @@ model Item {
 
 model List {
   episodes Episode[]
+  hidden   Boolean   @default(false)
   id       Int       @id @default(autoincrement())
   name     String
   user     User      @relation(fields: [userId], references: [id], onDelete: Cascade)

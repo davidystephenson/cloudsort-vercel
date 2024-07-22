@@ -13,7 +13,13 @@ export default function ListView (props: {
   row: RelatedList
 }): JSX.Element {
   return (
-    <ListProvider state={props.state} row={props.row}>
+    <ListProvider
+      id={props.row.id}
+      name={props.row.name}
+      seed={props.row.seed}
+      state={props.state}
+      userId={props.row.userId}
+    >
       <MoviesHeadingView />
       <OptionsView />
       <MoviesTableView />
