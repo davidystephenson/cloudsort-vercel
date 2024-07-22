@@ -1,8 +1,7 @@
 import { Row } from '@/cell/cell-types'
 import LabeledMovieCellsView from '@/movie/labeled-movie-cells-view'
 import ThemeTdView from '@/theme/theme-td-view'
-import { Icon } from '@chakra-ui/react'
-import { LuArchive } from 'react-icons/lu'
+import ArchiveIconView from './archive-icon-view'
 
 export default function ArchiveEpisodeMovieCellsView (props: {
   row: Row<'episodeMovie'>
@@ -10,7 +9,7 @@ export default function ArchiveEpisodeMovieCellsView (props: {
   const view = (
     <LabeledMovieCellsView movie={props.row.cells.movie}>
       <ThemeTdView>
-        <Icon as={LuArchive} />
+        <ArchiveIconView />
       </ThemeTdView>
     </LabeledMovieCellsView>
   )

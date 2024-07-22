@@ -30,7 +30,7 @@ export default function useSifted (): Array<Row<CellsKey>> {
   }
   const episodeRows = list.siftedEpisodes.flatMap((episode, index) => {
     const first = index === 0
-    if (!list.historyOpened && !first) {
+    if (!list.historyFlag.flag && !first) {
       return []
     }
     const rows: Array<Row<keyof Cells>> = []
@@ -115,7 +115,7 @@ export default function useSifted (): Array<Row<CellsKey>> {
     }
     sifted.push(archiveRow)
   }
-  if (list.archiveOpened) {
+  if (list.archiveFlag.flag) {
     const archiveMovieRows = list.siftedArchive.map(movie => {
       const archiveMovieRow: Row<'archiveMovie'> = {
         cells: { movie, type: 'archiveMovie' },
@@ -132,14 +132,16 @@ export default function useSifted (): Array<Row<CellsKey>> {
     type: 'listMovies'
   }
   sifted.push(listMoviesRow)
-  const listMovieRows = list.siftedMovies.map(movie => {
-    const listMovieRow: Row<'listMovie'> = {
-      cells: { movie, type: 'listMovie' },
-      id: `list-movie-${movie.id}`,
-      type: 'listMovie'
-    }
-    return listMovieRow
-  })
-  sifted.push(...listMovieRows)
+  if (list.moviesFlag.flag) {
+    const listMovieRows = list.siftedMovies.map(movie => {
+      const listMovieRow: Row<'listMovie'> = {
+        cells: { movie, type: 'listMovie' },
+        id: `list-movie-${movie.id}`,
+        type: 'listMovie'
+      }
+      return listMovieRow
+    })
+    sifted.push(...listMovieRows)
+  }
   return sifted
 }

@@ -26,10 +26,12 @@ export default function ImportMoviesConsumer (): JSX.Element {
         slice: 3
       })
       action.succeed()
+      list.importingFlag.lower()
     } catch (error) {
       if (error instanceof Error) {
         action.fail({ error, message: error.message })
       }
+      list.importingFlag.lower()
       throw error
     }
   }
@@ -39,6 +41,7 @@ export default function ImportMoviesConsumer (): JSX.Element {
       throw new Error('There is no file.')
     }
     action.start()
+    list.importingFlag.raise()
     Papa.parse<CritickerRow>(file, {
       header: true,
       skipEmptyLines: true,

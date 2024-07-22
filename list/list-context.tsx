@@ -30,6 +30,8 @@ import resetItem from '@/mergechoice/resetItem'
 import setupRandomChoice from '@/mergechoice/setupRandomChoice'
 import postRandom from '@/random/post-random'
 import siftEpisode from '@/episode/sift-episode'
+import { useAuth } from '@/auth/auth-context'
+import useFlagbearer from '@/flagbearer/use-flagbearer'
 
 const listContext = contextCreator({
   name: 'list',
@@ -37,6 +39,7 @@ const listContext = contextCreator({
     row: RelatedList
     state?: State<ListMovie>
   }) => {
+    const auth = useAuth()
     const lists = useOptionalLists()
     const queue = useQueue()
     const getDefaultState = useCallback(() => {
@@ -47,44 +50,29 @@ const listContext = contextCreator({
       const sortedMovies = getSortedMovies({ state })
       return sortedMovies
     })
-    const [historyOpened, setHistoryOpened] = useState(false)
-    function openHistory (): void {
-      setHistoryOpened(true)
-      const first = state.history[0]
-      if (first != null) {
-        openEpisode({ episodeId: first.mergeChoiceId })
+    const archiveFlag = useFlagbearer()
+    const historyFlag = useFlagbearer({
+      onLower: () => {
+        setOpenedEpisodes([])
+      },
+      onRaise: () => {
+        const first = state.history[0]
+        if (first != null) {
+          openEpisode({ episodeId: first.mergeChoiceId })
+        }
       }
-    }
-    function closeHistory (): void {
-      setHistoryOpened(false)
-      setOpenedEpisodes([])
-    }
-    function toggleHistory (): void {
-      if (historyOpened) {
-        closeHistory()
-      } else {
-        openHistory()
-      }
-    }
-    const [archiveOpened, setArchiveOpened] = useState(false)
-    function openArchive (): void {
-      setArchiveOpened(true)
-    }
-    function closeArchive (): void {
-      setArchiveOpened(false)
-    }
-    function toggleArchive (): void {
-      if (archiveOpened) {
-        closeArchive()
-      } else {
-        openArchive()
-      }
-    }
+    })
+    const importingFlag = useFlagbearer()
+    const moviesFlag = useFlagbearer({ initial: true })
+    const [openedEpisodes, setOpenedEpisodes] = useState<number[]>([])
     useEffect(() => {
       const state = getDefaultState()
       setState(state)
     }, [getDefaultState])
-
+    const moviesFilter = useFilter({
+      rows: movies,
+      filter: siftMovie
+    })
     const values = Object.values(state.archive)
     const rows = values.map(value => {
       const row = { ...value, points: 0 }
@@ -98,7 +86,7 @@ const listContext = contextCreator({
       rows: state.history,
       filter: siftEpisode
     })
-    const [openedEpisodes, setOpenedEpisodes] = useState<number[]>([])
+    const authed = auth.session?.user.id === props.row.userId
     function openEpisode (props: { episodeId: number }): void {
       setOpenedEpisodes([...openedEpisodes, props.episodeId])
     }
@@ -117,10 +105,6 @@ const listContext = contextCreator({
     const archiveCopy = [...archiveFilter.filtered]
     const sortedArchive = archiveCopy.sort((a, b) => {
       return a.name.localeCompare(b.name)
-    })
-    const moviesFilter = useFilter({
-      rows: movies,
-      filter: siftMovie
     })
     const defaultOptionIndex = getDefaultOptionIndex({
       movies: state.items,
@@ -184,7 +168,7 @@ const listContext = contextCreator({
           betterIndex: chooseProps.betterIndex,
           state: props.state
         })
-        if (historyOpened) {
+        if (historyFlag.flag) {
           openEpisode({ episodeId: newState.history[0].mergeChoiceId })
         } else {
           setOpenedEpisodes([newState.history[0].mergeChoiceId])
@@ -407,13 +391,15 @@ const listContext = contextCreator({
     }
     const value = {
       archive,
-      archiveOpened,
+      archiveFlag,
+      authed,
       choose,
       importMovies,
       defaultOptionIndex,
       defer,
       delete: _delete,
-      historyOpened,
+      historyFlag,
+      importingFlag,
       removeMovie,
       sift,
       siftArchive: archiveFilter.sift,
@@ -422,6 +408,7 @@ const listContext = contextCreator({
       siftMovies: moviesFilter.sift,
       siftedMovies: moviesFilter.filtered,
       movies,
+      moviesFlag,
       openedEpisodes,
       queue,
       random,
@@ -430,9 +417,7 @@ const listContext = contextCreator({
       row: props.row,
       state,
       synced,
-      toggleArchive,
       toggleEpisode,
-      toggleHistory,
       unarchive
     }
     return value

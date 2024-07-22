@@ -1,15 +1,20 @@
 import { useList } from '@/list/list-context'
 import { Heading } from '@chakra-ui/react'
 import TableSpanView from '@/table/table-span-view'
+import ThemeLinkableView from '@/theme/theme-linkable-view'
 
 export default function ArchiveCellsView (): JSX.Element {
   const list = useList()
-  const archive = Object.values(list.state.archive)
+  function handleClick (): void {
+    list.archiveFlag.toggle()
+  }
   return (
     <TableSpanView>
-      <Heading size='xs'>
-        Archive ({archive.length})
-      </Heading>
+      <ThemeLinkableView href='#' onClick={handleClick}>
+        <Heading size='sm' onClick={handleClick}>
+          Archive ({list.siftedArchive.length})
+        </Heading>
+      </ThemeLinkableView>
     </TableSpanView>
   )
 }

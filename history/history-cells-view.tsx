@@ -8,12 +8,11 @@ export default function HistoryCellsView (): JSX.Element {
   const list = listContext.useContext()
   function handleClick (event: MouseEvent): void {
     event.preventDefault()
-    list.toggleHistory()
+    list.historyFlag.toggle()
   }
-  const href = list.siftedEpisodes.length === 1 ? undefined : '#'
   return (
     <TableSpanView>
-      <ThemeLinkableView href={href} onClick={handleClick}>
+      <ThemeLinkableView href='#' onClick={handleClick}>
         <Heading size='sm'>
           History ({list.siftedEpisodes.length})
         </Heading>

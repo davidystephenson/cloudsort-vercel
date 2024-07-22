@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import contextCreator from 'context-creator'
 
 export const {
@@ -7,8 +7,13 @@ export const {
   Provider: ActionProvider
 } = contextCreator({
   name: 'action',
-  useValue: () => {
-    const [loading, setLoading] = useState(false)
+  useValue: (props: {
+    loading?: boolean
+  }) => {
+    const [loading, setLoading] = useState(props.loading ?? false)
+    useEffect(() => {
+      setLoading(props.loading ?? false)
+    }, [props.loading])
     const [error, setError] = useState<Error>()
     const [errorMessage, setErrorMessage] = useState<string>()
     function start (): void {
