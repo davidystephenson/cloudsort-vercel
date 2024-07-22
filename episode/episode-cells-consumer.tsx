@@ -47,7 +47,7 @@ export default function EpisodeCellsConsumer (props: {
             <Heading size='xs'>
               {cells}
             </Heading>
-            <Text>(<EpisodeTimeView />)</Text>
+            <Text whiteSpace='nowrap'>(<EpisodeTimeView />)</Text>
           </HStack>
         </ThemeLinkableView>
         <EpisodeMenu />

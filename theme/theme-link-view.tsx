@@ -10,9 +10,10 @@ export default function ThemeLinkView (props: LinkProps): JSX.Element {
   const color = active ? theme.colorScheme : 'inherit'
   const iconView = props.isExternal === true && <ExternalLinkIcon mx='2px' />
   return (
-    <>
-      <Link {...props} color={color} />
+    <Link {...props} color={color}>
+      {props.children}
+      {' '}
       {iconView}
-    </>
+    </Link>
   )
 }

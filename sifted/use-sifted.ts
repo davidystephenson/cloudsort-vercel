@@ -8,7 +8,7 @@ import { CalculatedMovie } from '@/movie/movie-types'
 export function marionEpisodeRows<
   ListItem extends Item,
   Complement,
->(props: {
+> (props: {
   actors: Actors<Complement, Array<Row<CellsKey>>, EpisodePart<ListItem>>
   complement: Complement
   part: EpisodePart<ListItem>
@@ -17,7 +17,7 @@ export function marionEpisodeRows<
   return marioned
 }
 
-export default function useSifted(): Array<Row<CellsKey>> {
+export default function useSifted (): Array<Row<CellsKey>> {
   const list = listContext.useContext()
   const sifted: Array<Row<keyof Cells>> = []
   if (list.siftedEpisodes.length !== 0) {
@@ -41,7 +41,7 @@ export default function useSifted(): Array<Row<CellsKey>> {
       type: 'episode'
     }
     rows.push(episodeRow)
-    function produceMovie(props: {
+    function produceMovie (props: {
       movie: CalculatedMovie
     }): Row<'episodeMovie'> {
       const id = `episode-${episode.mergeChoiceId}-movie-${props.movie.id}`
@@ -132,7 +132,6 @@ export default function useSifted(): Array<Row<CellsKey>> {
     type: 'listMovies'
   }
   sifted.push(listMoviesRow)
-  console.log('list', list)
   const listMovieRows = list.siftedMovies.map(movie => {
     const listMovieRow: Row<'listMovie'> = {
       cells: { movie, type: 'listMovie' },
