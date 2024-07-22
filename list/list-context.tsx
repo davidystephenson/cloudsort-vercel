@@ -98,13 +98,7 @@ const listContext = contextCreator({
       rows: state.history,
       filter: siftEpisode
     })
-    const [openedEpisodes, setOpenedEpisodes] = useState<number[]>(() => {
-      if (episodesFilter.filtered.length > 0) {
-        const first = episodesFilter.filtered[0]
-        return [first.mergeChoiceId]
-      }
-      return []
-    })
+    const [openedEpisodes, setOpenedEpisodes] = useState<number[]>([])
     function openEpisode (props: { episodeId: number }): void {
       setOpenedEpisodes([...openedEpisodes, props.episodeId])
     }
