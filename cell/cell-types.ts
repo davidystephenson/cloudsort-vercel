@@ -12,8 +12,8 @@ export interface ColumnsCells {
   type: 'columns'
 }
 export interface EpisodeCells {
-  type: 'episode'
   episode: Episode<ListMovie>
+  type: 'episode'
 }
 export interface EpisodeMovieCells {
   type: 'episodeMovie'

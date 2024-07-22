@@ -14,7 +14,7 @@ export default function MoviesTableView (): JSX.Element {
       CellsView={CellsView}
       rows={sifted}
       columns={columns}
-      filterRows={list.siftMovies}
+      filterRows={list.sift}
     />
   )
 }

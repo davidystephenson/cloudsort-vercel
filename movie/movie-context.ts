@@ -2,10 +2,7 @@ import { CalculatedMovie } from './movie-types'
 import { useList } from '../list/list-context'
 import contextCreator from 'context-creator'
 
-export const {
-  useContext: useMovie,
-  Provider: MovieProvider
-} = contextCreator({
+const movieContext = contextCreator({
   name: 'movie',
   useValue: (props: {
     calculated: CalculatedMovie
@@ -39,3 +36,8 @@ export const {
     return value
   }
 })
+export default movieContext
+export const {
+  useContext: useMovie,
+  Provider: MovieProvider
+} = movieContext

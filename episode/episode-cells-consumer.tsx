@@ -8,6 +8,13 @@ import ResetEpisodeCellsView from '@/reset/reset-episode-cells-view'
 import UnarchiveEpisodeCellsView from '@/unarchive/unarchive-episode-cells-view'
 import episodeContext from './episode-context'
 import marionEpisodeElement from './marion-episode-element'
+import TableSpanView from '@/table/table-span-view'
+import listContext from '@/list/list-context'
+import { Heading, HStack, Text } from '@chakra-ui/react'
+import EpisodeTimeView from './episode-time-view'
+import { MouseEvent } from 'react'
+import ThemeLinkableView from '@/theme/theme-linkable-view'
+import EpisodeMenu from './episode-menu'
 
 export default function EpisodeCellsConsumer (props: {
   row: Row<'episode'>
@@ -22,11 +29,30 @@ export default function EpisodeCellsConsumer (props: {
     reset: ResetEpisodeCellsView,
     unarchive: UnarchiveEpisodeCellsView
   }
+  const list = listContext.useContext()
   const cells = marionEpisodeElement({
     actors,
     complement: { row: props.row },
     part: episode.element
   })
-  const consumer = <>{cells}</>
+  function handleClick (event: MouseEvent): void {
+    event.preventDefault()
+    list.toggleEpisode({ episodeId: props.row.cells.episode.mergeChoiceId })
+  }
+  const consumer = (
+    <TableSpanView>
+      <HStack>
+        <ThemeLinkableView href='#' onClick={handleClick}>
+          <HStack>
+            <Heading size='xs'>
+              {cells}
+            </Heading>
+            <Text>(<EpisodeTimeView />)</Text>
+          </HStack>
+        </ThemeLinkableView>
+        <EpisodeMenu />
+      </HStack>
+    </TableSpanView>
+  )
   return consumer
 }

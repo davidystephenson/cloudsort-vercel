@@ -1,19 +1,18 @@
 import ThemeTdView from '@/theme/theme-td-view'
+import { LinkProps, Text, TextProps } from '@chakra-ui/react'
 import { useMovie } from './movie-context'
-import ThemeLinkableView from '@/theme/theme-linkable-view'
-import MovieLabelView from './movie-label-view'
+import MovieLabelCellView from './movie-label-cell-view'
 
-export default function MovieLabelCellsView (): JSX.Element {
+export default function MovieLabelCellsView (props: {
+  linkProps?: LinkProps
+  seedProps?: TextProps
+}): JSX.Element {
   const movie = useMovie()
   const views = (
     <>
-      <ThemeTdView w='100%'>
-        <ThemeLinkableView href={movie.imdbUrl} isExternal>
-          <MovieLabelView />
-        </ThemeLinkableView>
-      </ThemeTdView>
+      <MovieLabelCellView linkProps={props.linkProps} />
       <ThemeTdView>
-        {movie.calculated.seed}
+        <Text {...props.seedProps}>{movie.calculated.seed}</Text>
       </ThemeTdView>
     </>
   )

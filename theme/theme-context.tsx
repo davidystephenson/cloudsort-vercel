@@ -9,10 +9,7 @@ import contextCreator from 'context-creator'
 import { useRouter } from 'next/navigation'
 import postShade from '@/shade/post-shade'
 
-export const {
-  useContext: useTheme,
-  Provider: ThemeProvider
-} = contextCreator({
+const themeContext = contextCreator({
   name: 'theme',
   useValue: (props: {
     debug?: boolean
@@ -133,3 +130,8 @@ export const {
     return value
   }
 })
+export default themeContext
+export const {
+  useContext: useTheme,
+  Provider: ThemeProvider
+} = themeContext

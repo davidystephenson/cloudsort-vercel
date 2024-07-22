@@ -11,7 +11,7 @@ export default function ThemeLinkView (props: LinkProps): JSX.Element {
   const iconView = props.isExternal === true && <ExternalLinkIcon mx='2px' />
   return (
     <>
-      <Link fontWeight={700} {...props} color={color} />
+      <Link {...props} color={color} />
       {iconView}
     </>
   )

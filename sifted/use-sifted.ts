@@ -1,4 +1,4 @@
-import { CellsKey, Row } from '@/cell/cell-types'
+import { Cells, CellsKey, Row } from '@/cell/cell-types'
 import listContext from '@/list/list-context'
 import { marion } from '@/mergechoice/marion/marion'
 import { Actors } from '@/mergechoice/marion/marionTypes'
@@ -8,7 +8,7 @@ import { CalculatedMovie } from '@/movie/movie-types'
 export function marionEpisodeRows<
   ListItem extends Item,
   Complement,
-> (props: {
+>(props: {
   actors: Actors<Complement, Array<Row<CellsKey>>, EpisodePart<ListItem>>
   complement: Complement
   part: EpisodePart<ListItem>
@@ -17,22 +17,31 @@ export function marionEpisodeRows<
   return marioned
 }
 
-export default function useSifted (): Array<Row<CellsKey>> {
+export default function useSifted(): Array<Row<CellsKey>> {
   const list = listContext.useContext()
-  const historyRow: Row<'history'> = {
-    cells: { type: 'history' },
-    id: 'history',
-    type: 'history'
+  const sifted: Array<Row<keyof Cells>> = []
+  if (list.siftedEpisodes.length !== 0) {
+    const historyRow: Row<'history'> = {
+      cells: { type: 'history' },
+      id: 'history',
+      type: 'history'
+    }
+    sifted.push(historyRow)
   }
-  console.log('list.siftedEpisodes', list.siftedEpisodes)
-  const episodeRows = list.siftedEpisodes.flatMap(episode => {
+  const episodeRows = list.siftedEpisodes.flatMap((episode, index) => {
+    const first = index === 0
+    if (!list.historyOpened && !first) {
+      return []
+    }
+    const rows: Array<Row<keyof Cells>> = []
     const id = `episode-${episode.mergeChoiceId}`
     const episodeRow: Row<'episode'> = {
       cells: { episode, type: 'episode' },
       id,
       type: 'episode'
     }
-    function produceMovie (props: {
+    rows.push(episodeRow)
+    function produceMovie(props: {
       movie: CalculatedMovie
     }): Row<'episodeMovie'> {
       const id = `episode-${episode.mergeChoiceId}-movie-${props.movie.id}`
@@ -46,6 +55,10 @@ export default function useSifted (): Array<Row<CellsKey>> {
         type: 'episodeMovie'
       }
       return row
+    }
+    const closed = list.openedEpisodes.every(opened => opened !== episode.mergeChoiceId)
+    if (closed) {
+      return rows
     }
     const episodeRows = marionEpisodeRows({
       actors: {
@@ -90,27 +103,36 @@ export default function useSifted (): Array<Row<CellsKey>> {
       complement: {},
       part: episode
     })
-    const rows = [episodeRow, ...episodeRows]
+    rows.push(...episodeRows)
     return rows
   })
-  const archiveRow: Row<'archive'> = {
-    cells: { type: 'archive' },
-    id: 'archive',
-    type: 'archive'
-  }
-  const archiveMovieRows = list.siftedArchive.map(movie => {
-    const archiveMovieRow: Row<'archiveMovie'> = {
-      cells: { movie, type: 'archiveMovie' },
-      id: `archive-movie-${movie.id}`,
-      type: 'archiveMovie'
+  sifted.push(...episodeRows)
+  if (list.siftedArchive.length !== 0) {
+    const archiveRow: Row<'archive'> = {
+      cells: { type: 'archive' },
+      id: 'archive',
+      type: 'archive'
     }
-    return archiveMovieRow
-  })
+    sifted.push(archiveRow)
+  }
+  if (list.archiveOpened) {
+    const archiveMovieRows = list.siftedArchive.map(movie => {
+      const archiveMovieRow: Row<'archiveMovie'> = {
+        cells: { movie, type: 'archiveMovie' },
+        id: `archive-movie-${movie.id}`,
+        type: 'archiveMovie'
+      }
+      return archiveMovieRow
+    })
+    sifted.push(...archiveMovieRows)
+  }
   const listMoviesRow: Row<'listMovies'> = {
     cells: { type: 'listMovies' },
     id: 'listMovies',
     type: 'listMovies'
   }
+  sifted.push(listMoviesRow)
+  console.log('list', list)
   const listMovieRows = list.siftedMovies.map(movie => {
     const listMovieRow: Row<'listMovie'> = {
       cells: { movie, type: 'listMovie' },
@@ -119,13 +141,6 @@ export default function useSifted (): Array<Row<CellsKey>> {
     }
     return listMovieRow
   })
-  const sifted = [
-    historyRow,
-    ...episodeRows,
-    archiveRow,
-    ...archiveMovieRows,
-    listMoviesRow,
-    ...listMovieRows
-  ]
+  sifted.push(...listMovieRows)
   return sifted
 }

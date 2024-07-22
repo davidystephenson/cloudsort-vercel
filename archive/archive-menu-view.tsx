@@ -1,8 +1,9 @@
+import MenuIconButton from '@/menu/menu-icon-button'
 import { useMovie } from '@/movie/movie-context'
 import { useTheme } from '@/theme/theme-context'
 import { DeleteIcon } from '@chakra-ui/icons'
-import { Menu, MenuButton, MenuList, MenuItem, IconButton, Icon } from '@chakra-ui/react'
-import { LuArchiveRestore, LuMoreVertical } from 'react-icons/lu'
+import { Icon, Menu, MenuItem, MenuList } from '@chakra-ui/react'
+import { LuArchiveRestore } from 'react-icons/lu'
 
 export default function ArchiveMenuView (): JSX.Element {
   const movie = useMovie()
@@ -16,13 +17,7 @@ export default function ArchiveMenuView (): JSX.Element {
   }
   return (
     <Menu>
-      <MenuButton
-        as={IconButton}
-        aria-label='Options'
-        icon={<Icon as={LuMoreVertical} />}
-        size='xs'
-        variant='ghost'
-      />
+      <MenuIconButton />
       <MenuList>
         <MenuItem
           icon={<Icon as={LuArchiveRestore} />}

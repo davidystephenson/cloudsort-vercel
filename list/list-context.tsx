@@ -47,6 +47,39 @@ const listContext = contextCreator({
       const sortedMovies = getSortedMovies({ state })
       return sortedMovies
     })
+    const [historyOpened, setHistoryOpened] = useState(false)
+    function openHistory (): void {
+      setHistoryOpened(true)
+      const first = state.history[0]
+      if (first != null) {
+        openEpisode({ episodeId: first.mergeChoiceId })
+      }
+    }
+    function closeHistory (): void {
+      setHistoryOpened(false)
+      setOpenedEpisodes([])
+    }
+    function toggleHistory (): void {
+      if (historyOpened) {
+        closeHistory()
+      } else {
+        openHistory()
+      }
+    }
+    const [archiveOpened, setArchiveOpened] = useState(false)
+    function openArchive (): void {
+      setArchiveOpened(true)
+    }
+    function closeArchive (): void {
+      setArchiveOpened(false)
+    }
+    function toggleArchive (): void {
+      if (archiveOpened) {
+        closeArchive()
+      } else {
+        openArchive()
+      }
+    }
     useEffect(() => {
       const state = getDefaultState()
       setState(state)
@@ -65,6 +98,28 @@ const listContext = contextCreator({
       rows: state.history,
       filter: siftEpisode
     })
+    const [openedEpisodes, setOpenedEpisodes] = useState<number[]>(() => {
+      if (episodesFilter.filtered.length > 0) {
+        const first = episodesFilter.filtered[0]
+        return [first.mergeChoiceId]
+      }
+      return []
+    })
+    function openEpisode (props: { episodeId: number }): void {
+      setOpenedEpisodes([...openedEpisodes, props.episodeId])
+    }
+    function closeEpisode (props: { episodeId: number }): void {
+      const filtered = openedEpisodes.filter(id => id !== props.episodeId)
+      setOpenedEpisodes(filtered)
+    }
+    function toggleEpisode (props: { episodeId: number }): void {
+      const opened = openedEpisodes.includes(props.episodeId)
+      if (opened) {
+        closeEpisode(props)
+      } else {
+        openEpisode(props)
+      }
+    }
     const archiveCopy = [...archiveFilter.filtered]
     const sortedArchive = archiveCopy.sort((a, b) => {
       return a.name.localeCompare(b.name)
@@ -135,6 +190,11 @@ const listContext = contextCreator({
           betterIndex: chooseProps.betterIndex,
           state: props.state
         })
+        if (historyOpened) {
+          openEpisode({ episodeId: newState.history[0].mergeChoiceId })
+        } else {
+          setOpenedEpisodes([newState.history[0].mergeChoiceId])
+        }
         return newState
       }
       const betterId = state.choice?.options[chooseProps.betterIndex]
@@ -353,11 +413,13 @@ const listContext = contextCreator({
     }
     const value = {
       archive,
+      archiveOpened,
       choose,
       importMovies,
       defaultOptionIndex,
       defer,
       delete: _delete,
+      historyOpened,
       removeMovie,
       sift,
       siftArchive: archiveFilter.sift,
@@ -366,6 +428,7 @@ const listContext = contextCreator({
       siftMovies: moviesFilter.sift,
       siftedMovies: moviesFilter.filtered,
       movies,
+      openedEpisodes,
       queue,
       random,
       reset,
@@ -373,6 +436,9 @@ const listContext = contextCreator({
       row: props.row,
       state,
       synced,
+      toggleArchive,
+      toggleEpisode,
+      toggleHistory,
       unarchive
     }
     return value

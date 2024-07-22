@@ -30,6 +30,14 @@ export default function siftEpisode (props: {
       return resulting
     })
   }
+  if (props.row.random != null) {
+    const firstResult = siftMovie({ row: props.row.random.first, query: props.query })
+    if (firstResult) {
+      return true
+    }
+    const secondResult = siftMovie({ row: props.row.random.second, query: props.query })
+    return secondResult
+  }
   if (props.row.remove != null) {
     return isResult({ movie: props.row.remove.item, query: props.query })
   }

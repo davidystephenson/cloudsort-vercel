@@ -7,11 +7,10 @@ export default function ListMoviesCellsView (props: {
   row: Row<'listMovies'>
 }): JSX.Element {
   const list = listContext.useContext()
-  const movies = Object.values(list.state.items)
   return (
     <TableSpanView>
       <Heading size='sm'>
-        Movies ({movies.length})
+        Movies ({list.siftedEpisodes.length})
       </Heading>
     </TableSpanView>
   )

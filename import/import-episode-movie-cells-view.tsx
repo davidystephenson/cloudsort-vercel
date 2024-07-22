@@ -1,8 +1,7 @@
 import { Row } from '@/cell/cell-types'
 import LabeledMovieCellsView from '@/movie/labeled-movie-cells-view'
 import ThemeTdView from '@/theme/theme-td-view'
-import { Icon } from '@chakra-ui/react'
-import { BsCloudUpload } from 'react-icons/bs'
+import ImportIconView from './import-icon-view'
 
 export default function ImportEpisodeMovieCellsView (props: {
   row: Row<'episodeMovie'>
@@ -10,7 +9,7 @@ export default function ImportEpisodeMovieCellsView (props: {
   const view = (
     <LabeledMovieCellsView movie={props.row.cells.movie}>
       <ThemeTdView>
-        <Icon as={BsCloudUpload} />
+        <ImportIconView />
       </ThemeTdView>
     </LabeledMovieCellsView>
   )

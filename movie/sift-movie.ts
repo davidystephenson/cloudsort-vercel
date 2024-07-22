@@ -1,22 +1,40 @@
 import { ListMovie } from './movie-types'
 
+function lowerIncludes (props: {
+  query: string
+  value?: string
+}): boolean {
+  if (props.value == null) {
+    return false
+  }
+  const lower = props.value.toLowerCase()
+  const includes = lower.includes(props.query)
+  return includes
+}
+
 export default function siftMovie (props: {
   row: ListMovie
   query: string
 }): boolean {
-  if (props.row.name.includes(props.query)) {
+  const query = props.query.toLowerCase()
+  const named = lowerIncludes({ query, value: props.row.name })
+  if (named) {
     return true
   }
-  if (props.row.imdbId.includes(props.query)) {
+  const ided = lowerIncludes({ query, value: props.row.imdbId })
+  if (ided) {
     return true
   }
-  if (String(props.row.seed).includes(props.query)) {
+  const seeded = lowerIncludes({ query, value: String(props.row.seed) })
+  if (seeded) {
     return true
   }
-  if (String(props.row.year).includes(props.query)) {
+  const yearly = lowerIncludes({ query, value: String(props.row.year) })
+  if (yearly) {
     return true
   }
-  if (props.row.url?.includes(props.query) === true) {
+  const linked = lowerIncludes({ query, value: props.row.url })
+  if (linked) {
     return true
   }
   return false
