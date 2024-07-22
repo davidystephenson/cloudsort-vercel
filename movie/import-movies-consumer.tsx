@@ -16,6 +16,9 @@ export default function ImportMoviesConsumer (): JSX.Element {
   useHotkeys('i', () => {
     inputRef.current?.click()
   })
+  if (!list.authed) {
+    return <></>
+  }
   async function parseCriticker (props: {
     data: CritickerRow[]
   }): Promise<void> {

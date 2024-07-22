@@ -4,10 +4,15 @@ import { ArrowLeftIcon } from '@chakra-ui/icons'
 import themeContext from '@/theme/theme-context'
 import episodeContext from './episode-context'
 import { MouseEvent } from 'react'
+import listContext from '@/list/list-context'
 
 export default function EpisodeMenu (): JSX.Element {
+  const list = listContext.useContext()
   const episode = episodeContext.useContext()
   const theme = themeContext.useContext()
+  if (!list.authed) {
+    return <></>
+  }
   const color = theme.darkened ? 'pink' : 'red'
   function handleRewind (event: MouseEvent): void {
     episode.rewind()

@@ -18,7 +18,8 @@ export default function CreateMovieFormView (): JSX.Element {
     const fieldData = {
       ...props.values,
       seed: Number(props.values.seed),
-      year: Number(props.values.year)
+      year: Number(props.values.year),
+      seeding: true
     }
     const movieData = guardMovieData({ label: 'Create movie form data', value: fieldData })
     const movies = [movieData]
