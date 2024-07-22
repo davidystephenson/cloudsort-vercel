@@ -1,8 +1,7 @@
 import { Row } from '@/cell/cell-types'
 import LabeledMovieCellsView from '@/movie/labeled-movie-cells-view'
 import ThemeTdView from '@/theme/theme-td-view'
-import { Icon } from '@chakra-ui/icons'
-import { TbRefreshAlert } from 'react-icons/tb'
+import ResetIconView from './reset-icon-view'
 
 export default function ResetEpisodeMovieCellsView (props: {
   row: Row<'episodeMovie'>
@@ -10,7 +9,7 @@ export default function ResetEpisodeMovieCellsView (props: {
   const view = (
     <LabeledMovieCellsView movie={props.row.cells.movie}>
       <ThemeTdView pr='0'>
-        <Icon as={TbRefreshAlert} />
+        <ResetIconView />
       </ThemeTdView>
     </LabeledMovieCellsView>
   )

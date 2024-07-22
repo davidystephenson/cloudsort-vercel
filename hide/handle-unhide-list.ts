@@ -1,10 +1,11 @@
 import { OkTrue } from '@/ok/ok-types'
 import { Db } from '@/prisma/prisma-types'
 import { Session } from 'next-auth'
-import { ListWhere } from './list-types'
-import handleList from './handle-list'
+import unhideList from './unhide-list'
+import { ListWhere } from '@/list/list-types'
+import handleList from '@/list/handle-list'
 
-export default async function handlePostDeleteList (props: {
+export default async function handleUnhideList (props: {
   authSession: Session
   body: ListWhere
   db: Db
@@ -13,14 +14,7 @@ export default async function handlePostDeleteList (props: {
     authSession: props.authSession,
     body: props.body,
     db: props.db,
-    handle: async (props) => {
-      await props.db.list.delete({
-        where: {
-          id: props.body.listId
-        }
-      })
-      return { ok: true }
-    }
+    handle: unhideList
   })
   return response
 }

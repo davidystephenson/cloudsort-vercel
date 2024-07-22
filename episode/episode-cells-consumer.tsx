@@ -14,7 +14,7 @@ import { Heading, HStack, Text } from '@chakra-ui/react'
 import EpisodeTimeView from './episode-time-view'
 import { MouseEvent } from 'react'
 import ThemeLinkableView from '@/theme/theme-linkable-view'
-import EpisodeMenu from './episode-menu'
+import EpisodeMenu from './episode-menu-view'
 
 export default function EpisodeCellsConsumer (props: {
   row: Row<'episode'>

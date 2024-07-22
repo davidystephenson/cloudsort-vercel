@@ -2,7 +2,7 @@ import guardObject from '@/fashion-police/guard-object'
 import guardNumberProp from '@/fashion-police/guard-number-prop'
 import { ListWhere } from './list-types'
 
-export default function guardPostDeleteList (props: {
+export default function guardListWhere (props: {
   label: string
   value: unknown
 }): ListWhere {
