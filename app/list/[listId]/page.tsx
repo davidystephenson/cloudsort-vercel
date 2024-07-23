@@ -1,5 +1,6 @@
 'use server'
 
+import serverAuth from '@/auth/server-auth'
 import guardMergechoiceList from '@/list/guard-mergechoice-list'
 import ListView from '@/list/list-view'
 import prisma from '@/prisma/prisma'
@@ -13,6 +14,24 @@ export default async function Lists (props: {
 }): Promise<JSX.Element> {
   const listId = Number(props.params.listId)
   try {
+    // const list = await prisma.list.findUnique({ where: { id: listId } })
+    // if (list == null) {
+    //   throw new ApiError(404, 'List not found')
+    // }
+    // const authSession = await serverAuth()
+    // console.log('authSession?.user.id', authSession?.user.id)
+    // const currentUserOwns = authSession?.user.id === list.userId
+    // console.log('currentUserOwns', currentUserOwns)
+    // if (!currentUserOwns) {
+    //   const alert = (
+    //     <Alert status='error'>
+    //       <AlertIcon />
+    //       List not found
+    //     </Alert>
+    //   )
+    //   return alert
+    //   // throw new ApiError(404, 'List not found')
+    // }
     const mergeChoiceList = await guardMergechoiceList({ db: prisma, listId })
     const view = (
       <ListView

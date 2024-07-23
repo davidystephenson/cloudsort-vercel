@@ -15,7 +15,7 @@ export default function ListMoviesCellsView (props: {
     <TableSpanView>
       <ThemeLinkableView href='#' onClick={handleClick}>
         <Heading size='sm'>
-          Movies ({list.siftedEpisodes.length})
+          Movies ({list.siftedMovies.length})
         </Heading>
       </ThemeLinkableView>
     </TableSpanView>

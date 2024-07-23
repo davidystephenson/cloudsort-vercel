@@ -8,7 +8,7 @@ export default function OptionChooseView (): JSX.Element {
     option.choose()
   }
   return (
-    <ButtonView onClick={handleClick}>
+    <ButtonView onClick={handleClick} fontSize='md'>
       [{option.chooseLetter}]
       {' '}
       <MovieLabelView />

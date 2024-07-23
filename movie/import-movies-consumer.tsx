@@ -25,7 +25,7 @@ export default function ImportMoviesConsumer (): JSX.Element {
     try {
       const movies = parseCritickerMovies({ rows: props.data })
       await list.importMovies({
-        movies,
+        movies
       })
       action.succeed()
       list.importingFlag.lower()

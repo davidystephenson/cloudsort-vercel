@@ -12,7 +12,7 @@ export default function MoviesHeadingView (): JSX.Element {
   const list = useList()
   return (
     <HeadingView content={<MoviesHeadingContentView />}>
-      <Heading size='lg'>{list.name} ({list.movies.length})</Heading>
+      <Heading size='lg'>{list.name}</Heading>
       <MoviesQueueView />
       <ImportMoviesView />
       <MoviesHeadingCreateView />
