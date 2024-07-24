@@ -19,7 +19,7 @@ export default async function guardMergechoiceList (props: {
   if (list.hidden && list.userId !== props.currentUserId) {
     throw new ApiError(404, 'There is no list')
   }
-  const mergechoiceList = await getMergechoiceList({
+  const mergechoiceList = getMergechoiceList({
     list
   })
   return mergechoiceList

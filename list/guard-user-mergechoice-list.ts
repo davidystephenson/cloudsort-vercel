@@ -17,7 +17,7 @@ export default async function guardUserMergechoiceList (props: {
   if (list.userId !== props.userId) {
     throw new ApiError(403, 'This is not your list')
   }
-  const mergechoiceList = await getMergechoiceList({
+  const mergechoiceList = getMergechoiceList({
     list
   })
   return mergechoiceList
