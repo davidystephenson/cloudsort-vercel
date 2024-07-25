@@ -21,7 +21,7 @@ function Consumer (
     <ButtonView
       errorMessage={request.errorMessage}
       handleClick={handleClick}
-      loading={request.loading}
+      loading={request.acting}
       ref={ref}
       {...props}
     />

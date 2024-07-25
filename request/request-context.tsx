@@ -1,5 +1,5 @@
 import contextCreator from 'context-creator'
-import { ActionProvider, useAction } from '../action/action-context'
+import { ActionProvider, useActionContext } from '../action/action-context'
 
 export const {
   useContext: useRequest,
@@ -10,7 +10,7 @@ export const {
     send: () => Promise<void>
     endless?: boolean
   }) => {
-    const action = useAction()
+    const action = useActionContext()
     async function sendRequest (): Promise<void> {
       action.start()
       try {
@@ -28,6 +28,7 @@ export const {
     }
     const value = {
       ...action,
+      acting: action.acting,
       send: sendRequest
     }
     return value

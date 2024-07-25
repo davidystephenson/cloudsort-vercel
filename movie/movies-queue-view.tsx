@@ -1,4 +1,5 @@
 import ButtonView from '@/button/button-view'
+import IconButtonView from '@/button/icon-button-view'
 import privateListContext from '@/list/private-list-context'
 import ThemeTableView from '@/theme/theme-table-view'
 import { CheckIcon, WarningIcon } from '@chakra-ui/icons'
@@ -66,7 +67,7 @@ export default function MoviesQueueView (): JSX.Element {
     return (
       <Popover>
         <PopoverTrigger>
-          <ButtonView colorScheme='red'>
+          <ButtonView colorScheme='red' size='xs'>
             <WarningIcon />
           </ButtonView>
         </PopoverTrigger>
@@ -83,9 +84,13 @@ export default function MoviesQueueView (): JSX.Element {
     return (
       <Popover>
         <PopoverTrigger>
-          <ButtonView colorScheme='green'>
-            <CheckIcon />
-          </ButtonView>
+          <IconButtonView
+            aria-label='Saved'
+            icon={<CheckIcon />}
+            colorScheme='green'
+            size='xs'
+            variant='solid'
+          />
         </PopoverTrigger>
         <PopoverContent>
           <PopoverArrow />
@@ -99,7 +104,7 @@ export default function MoviesQueueView (): JSX.Element {
   return (
     <Popover>
       <PopoverTrigger>
-        <ButtonView colorScheme='blue'>
+        <ButtonView colorScheme='blue' size='xs'>
           <Spinner />
         </ButtonView>
       </PopoverTrigger>

@@ -1,21 +1,14 @@
-import { ChangeEvent, useRef } from 'react'
-import { HStack, Icon, Text } from '@chakra-ui/react'
-import { useHotkeys } from 'react-hotkeys-hook'
-import { BsCloudUpload } from 'react-icons/bs'
-import privateListContext from '../list/private-list-context'
+import privateListContext from '@/list/private-list-context'
+import { CritickerRow } from '@/movie/movie-types'
+import parseCritickerMovies from '@/movies/parse-criticker-movies'
+import { Icon, MenuItem, Spinner } from '@chakra-ui/react'
 import Papa from 'papaparse'
-import parseCritickerMovies from '../movies/parse-criticker-movies'
-import { CritickerRow } from './movie-types'
-import { useAction } from '../action/action-context'
-import ButtonView from '../button/button-view'
+import { ChangeEvent, useRef } from 'react'
+import { BsCloudUpload } from 'react-icons/bs'
 
-export default function ImportMoviesConsumer (): JSX.Element {
-  const action = useAction()
+export default function ImportMenuItemView (): JSX.Element {
   const privateList = privateListContext.useContext()
   const inputRef = useRef<HTMLInputElement>(null)
-  useHotkeys('i', () => {
-    inputRef.current?.click()
-  })
   async function parseCriticker (props: {
     data: CritickerRow[]
   }): Promise<void> {
@@ -24,14 +17,12 @@ export default function ImportMoviesConsumer (): JSX.Element {
       await privateList.importMovies({
         movies
       })
-      action.succeed()
-      privateList.importingFlag.lower()
+      privateList.importAction.succeed()
     } catch (error) {
-      if (error instanceof Error) {
-        action.fail({ error, message: error.message })
+      if (!(error instanceof Error)) {
+        throw error
       }
-      privateList.importingFlag.lower()
-      throw error
+      privateList.importAction.fail({ error, message: error.message })
     }
   }
   function handleFileChange (e: ChangeEvent<HTMLInputElement>): void {
@@ -39,8 +30,7 @@ export default function ImportMoviesConsumer (): JSX.Element {
     if (file == null) {
       throw new Error('There is no file.')
     }
-    action.start()
-    privateList.importingFlag.raise()
+    privateList.importAction.start()
     Papa.parse<CritickerRow>(file, {
       header: true,
       skipEmptyLines: true,
@@ -57,25 +47,19 @@ export default function ImportMoviesConsumer (): JSX.Element {
     inputRef.current?.click()
   }
   const randoming = privateList.state.choice?.random === true && !privateList.state.complete
-  const disabled = (
-    randoming ||
-    !privateList.synced
-  )
+  const disabled = randoming || !privateList.synced
+  const icon = privateList.importAction.acting
+    ? <Icon as={Spinner} />
+    : <BsCloudUpload />
   return (
     <>
-      <ButtonView
-        loading={action.loading}
+      <MenuItem
+        icon={icon}
         isDisabled={disabled}
-        errorMessage={action.errorMessage}
         onClick={handleClick}
-        fontSize='sm'
-        variant='solid'
       >
-        <HStack>
-          <Text>[i]mport</Text>
-          <Icon as={BsCloudUpload} />
-        </HStack>
-      </ButtonView>
+        Import
+      </MenuItem>
       <input
         hidden
         type='file'

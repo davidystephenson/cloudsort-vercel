@@ -6,7 +6,7 @@ import DeferView from '@/defer/defer-view'
 export default function OptionsView (): JSX.Element {
   const list = privateListContext.useContext()
   if (
-    list.importingFlag.flag ||
+    list.importAction.acting ||
     list.state.complete ||
     list.state.choice == null ||
     list.state.choice.options.length === 0

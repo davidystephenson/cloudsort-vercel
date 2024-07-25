@@ -17,7 +17,7 @@ export default function RequestIconButtonConsumer (props: {
   return (
     <IconButtonView
       handleClick={handleClick}
-      loading={request.loading}
+      loading={request.acting}
       errorMessage={request.errorMessage}
       {...props}
     />

@@ -33,7 +33,7 @@ export default function HeadingSelectorView (props: {
     heading.select({ selection: props.selection })
   }
   return (
-    <ThemeButtonView onClick={handleSelect}>
+    <ThemeButtonView onClick={handleSelect} size='xs'>
       {props.children}
     </ThemeButtonView>
   )

@@ -26,7 +26,7 @@ export default function ProfileConsumer (): JSX.Element {
     <Menu>
       <MenuButton
         as={ThemeButtonView}
-        isLoading={request.loading}
+        isLoading={request.acting}
       >
         <ProfileLabel />
       </MenuButton>

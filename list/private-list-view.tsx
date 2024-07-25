@@ -7,9 +7,9 @@ import { State } from '../mergechoice/mergeChoiceTypes'
 import MoviesHeadingView from '../movie/movies-heading-view'
 import MoviesTableView from '../movie/movies-table-view'
 import OptionsView from '../option/options-view'
+import { useListContext } from './list-context'
 import ListLoadingView from './list-loading-view'
 import privateListContext from './private-list-context'
-import { useListContext } from './list-context'
 
 export default function PrivateListView (): JSX.Element {
   const list = useListContext()
@@ -42,7 +42,9 @@ export default function PrivateListView (): JSX.Element {
     }
   }, [])
   if (state == null) {
-    return <ListLoadingView />
+    return (
+      <ListLoadingView />
+    )
   }
   return (
     <privateListContext.Provider

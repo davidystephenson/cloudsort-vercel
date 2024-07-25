@@ -30,6 +30,8 @@ import siftMovie from '../movie/sift-movie'
 import getSortedMovies from '../movies/getSortedMovies'
 import { useOptionalLists } from './lists-context'
 import { useListContext } from './list-context'
+import useAction from '@/action/use-action'
+import { useRouter } from 'next/navigation'
 
 const privateListContext = contextCreator({
   name: 'privateList',
@@ -39,6 +41,7 @@ const privateListContext = contextCreator({
     const list = useListContext()
     const lists = useOptionalLists()
     const queue = useQueue()
+    const router = useRouter()
     const [state, setState] = useState(props.state)
     useEffect(() => {
       setState(props.state)
@@ -59,7 +62,8 @@ const privateListContext = contextCreator({
         }
       }
     })
-    const importingFlag = useFlagbearer()
+    const importAction = useAction()
+    // const importingFlag = useFlagbearer()
     const moviesFlag = useFlagbearer({ initial: true })
     const [openedEpisodes, setOpenedEpisodes] = useState<number[]>([])
     const moviesFilter = useFilter({
@@ -104,6 +108,7 @@ const privateListContext = contextCreator({
     })
     async function _delete (): Promise<void> {
       await lists?.delete({ id: list.id })
+      router.push('/lists')
     }
     function updateState (props: {
       update: (props: { state: State<ListMovie> }) => State<ListMovie>
@@ -390,7 +395,7 @@ const privateListContext = contextCreator({
       defer,
       delete: _delete,
       historyFlag,
-      importingFlag,
+      importAction,
       removeMovie,
       sift,
       siftArchive: archiveFilter.sift,

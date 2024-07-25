@@ -1,3 +1,5 @@
+'use client'
+
 import { List } from '@prisma/client'
 import { useEffect, useState } from 'react'
 import postList from './post-list'

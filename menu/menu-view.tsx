@@ -1,14 +1,14 @@
-import { Menu, MenuList } from '@chakra-ui/react'
+import { Menu, MenuList, MenuProps } from '@chakra-ui/react'
 import { ReactNode } from 'react'
 import MenuIconButton from './menu-icon-button'
 
 export default function MenuView (props: {
   children: ReactNode
-}): JSX.Element {
+} & MenuProps): JSX.Element {
   return (
-    <Menu>
+    <Menu {...props}>
       <MenuIconButton />
-      <MenuList>
+      <MenuList zIndex={3}>
         {props.children}
       </MenuList>
     </Menu>
