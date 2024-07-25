@@ -1,22 +1,25 @@
-'use client'
+'use server'
 
+import { List } from '@prisma/client'
 import ListConsumer from './list-consumer'
 import { ListContextProvider } from './list-context'
 
-export default function ListView (props: {
-  id: number
-  name: string
-  seed: string
-  userId: number
-}): JSX.Element {
-  return (
+export default async function ListView (props: {
+  currentUserId?: number
+  list: List
+}): Promise<JSX.Element> {
+  const view = (
     <ListContextProvider
-      id={props.id}
-      name={props.name}
-      seed={props.seed}
-      userId={props.userId}
+      id={props.list.id}
+      name={props.list.name}
+      seed={props.list.seed}
+      userId={props.list.userId}
     >
-      <ListConsumer />
+      <ListConsumer
+        currentUserId={props.currentUserId}
+        list={props.list}
+      />
     </ListContextProvider>
   )
+  return view
 }

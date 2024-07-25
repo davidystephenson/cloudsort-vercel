@@ -14,7 +14,6 @@ const authContext = contextCreator({
     return value
   }
 })
-console.log('a', authContext)
 export const {
   useContext: useAuthContext,
   Provider: AuthContextProvider

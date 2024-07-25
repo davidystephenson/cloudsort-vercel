@@ -5,7 +5,7 @@ import handlePostList from '@/list/handle-post-list'
 export async function POST (request: Request): Promise<Response> {
   return await handleAuth({
     guard: guardPostList,
-    label: '/list body',
+    label: '/list',
     handle: handlePostList,
     request
   })

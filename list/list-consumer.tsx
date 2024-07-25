@@ -1,17 +1,31 @@
-'use client'
+'use server'
 
-import { useListContext } from './list-context'
+import { List } from '@prisma/client'
 import PrivateListView from './private-list-view'
 import PublicListView from './public-list-view'
+import guardListing from '@/listing/guard-listing'
+import prisma from '@/prisma/prisma'
 
-export default function ListConsumer (): JSX.Element {
-  const list = useListContext()
-  if (list.private) {
-    return (
+export default async function ListConsumer (props: {
+  currentUserId?: number
+  list: List
+}): Promise<JSX.Element> {
+  const _private = props.currentUserId === props.list.userId
+  if (_private) {
+    const view = (
       <PrivateListView />
     )
+    return view
   }
-  return (
-    <PublicListView />
+  const listing = await guardListing({
+    db: prisma,
+    listId: props.list.id
+  })
+  const view = (
+    <PublicListView
+      list={props.list}
+      listing={listing}
+    />
   )
+  return view
 }

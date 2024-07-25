@@ -8,7 +8,7 @@ export async function POST (
 ): Promise<Response> {
   return await handleAuth({
     guard: guardPostShade,
-    label: '/shade body',
+    label: '/shade',
     handle: handlePostShade,
     request
   })

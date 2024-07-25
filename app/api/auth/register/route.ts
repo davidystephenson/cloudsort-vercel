@@ -8,7 +8,7 @@ export async function POST (request: Request): Promise<Response> {
   return await handleBody<AuthBody, User>({
     guard: guardAuthBody,
     handle: handlePostRegister,
-    label: '/auth/register body',
+    label: '/auth/register',
     request
   })
 }
