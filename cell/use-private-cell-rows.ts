@@ -5,7 +5,7 @@ import { Actors } from '@/mergechoice/marion/marionTypes'
 import { EpisodePart, Item } from '@/mergechoice/mergeChoiceTypes'
 import { CalculatedMovie } from '@/movie/movie-types'
 
-export function marionEpisodeRows<
+export function marionEpisodeCellRows<
   ListItem extends Item,
   Complement,
 > (props: {
@@ -17,7 +17,7 @@ export function marionEpisodeRows<
   return marioned
 }
 
-export default function useSifted (): Array<Row<CellsKey>> {
+export default function usePrivateCellRows (): Array<Row<CellsKey>> {
   const list = privateListContext.useContext()
   const sifted: Array<Row<keyof Cells>> = []
   if (list.siftedEpisodes.length !== 0) {
@@ -60,7 +60,7 @@ export default function useSifted (): Array<Row<CellsKey>> {
     if (closed) {
       return rows
     }
-    const episodeRows = marionEpisodeRows({
+    const episodeRows = marionEpisodeCellRows({
       actors: {
         archive: props => {
           const row = produceMovie({ movie: props.input.item })

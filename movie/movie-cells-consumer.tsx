@@ -1,4 +1,4 @@
-import MovieCellsMenuView from '@/list/movie-cells-menu-view'
+import MovieCellsMenuView from '@/movie/movie-cells-menu-view'
 import { HStack, Text } from '@chakra-ui/react'
 import ThemeTdView from '../theme/theme-td-view'
 import { useMovie } from './movie-context'

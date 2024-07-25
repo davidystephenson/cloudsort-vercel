@@ -20,7 +20,6 @@ import postUnarchive from '@/unarchive/post-unarchive'
 import useQueue from '@/useQueue/useQueue'
 import contextCreator from 'context-creator'
 import { useEffect, useState } from 'react'
-import useFilter from '../filter/use-filter'
 import chooseOption from '../mergechoice/chooseOption'
 import { State } from '../mergechoice/mergeChoiceTypes'
 import removeItem from '../mergechoice/removeItem'
@@ -32,6 +31,7 @@ import { useOptionalLists } from './lists-context'
 import { useListContext } from './list-context'
 import useAction from '@/action/use-action'
 import { useRouter } from 'next/navigation'
+import useSifter from '@/sifter/use-sifter'
 
 const privateListContext = contextCreator({
   name: 'privateList',
@@ -66,22 +66,22 @@ const privateListContext = contextCreator({
     // const importingFlag = useFlagbearer()
     const moviesFlag = useFlagbearer({ initial: true })
     const [openedEpisodes, setOpenedEpisodes] = useState<number[]>([])
-    const moviesFilter = useFilter({
+    const moviesFilter = useSifter({
       rows: movies,
-      filter: siftMovie
+      sift: siftMovie
     })
     const values = Object.values(state.archive)
     const rows = values.map(value => {
       const row = { ...value, points: 0 }
       return row
     })
-    const archiveFilter = useFilter({
+    const archiveFilter = useSifter({
       rows,
-      filter: siftMovie
+      sift: siftMovie
     })
-    const episodesFilter = useFilter({
+    const episodesFilter = useSifter({
       rows: state.history,
-      filter: siftEpisode
+      sift: siftEpisode
     })
     function openEpisode (props: { episodeId: number }): void {
       setOpenedEpisodes([...openedEpisodes, props.episodeId])
@@ -98,7 +98,7 @@ const privateListContext = contextCreator({
         openEpisode(props)
       }
     }
-    const archiveCopy = [...archiveFilter.filtered]
+    const archiveCopy = [...archiveFilter.sifted]
     const sortedArchive = archiveCopy.sort((a, b) => {
       return a.name.localeCompare(b.name)
     })
@@ -400,9 +400,9 @@ const privateListContext = contextCreator({
       sift,
       siftArchive: archiveFilter.sift,
       siftedArchive: sortedArchive,
-      siftedEpisodes: episodesFilter.filtered,
+      siftedEpisodes: episodesFilter.sifted,
       siftMovies: moviesFilter.sift,
-      siftedMovies: moviesFilter.filtered,
+      siftedMovies: moviesFilter.sifted,
       movies,
       moviesFlag,
       openedEpisodes,

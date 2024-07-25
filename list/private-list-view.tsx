@@ -5,7 +5,7 @@ import { ListMovie } from '@/movie/movie-types'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { State } from '../mergechoice/mergeChoiceTypes'
 import MoviesHeadingView from '../movie/movies-heading-view'
-import MoviesTableView from '../movie/movies-table-view'
+import PrivateMoviesTableView from '../movie/private-movies-table-view'
 import OptionsView from '../option/options-view'
 import { useListContext } from './list-context'
 import ListLoadingView from './list-loading-view'
@@ -52,7 +52,7 @@ export default function PrivateListView (): JSX.Element {
     >
       <MoviesHeadingView />
       <OptionsView />
-      <MoviesTableView />
+      <PrivateMoviesTableView />
     </privateListContext.Provider>
   )
 }

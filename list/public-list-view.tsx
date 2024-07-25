@@ -3,17 +3,19 @@
 import publicListContext from './public-list-context'
 import { List } from '@prisma/client'
 import { Listing } from '@/listing/listing-types'
+import PublicListConsumer from './public-list-consumer'
 
-export default async function PublicListView (props: {
+export default function PublicListView (props: {
   list: List
   listing: Listing
-}): Promise<JSX.Element> {
-  return (
+}): JSX.Element {
+  const view = (
     <publicListContext.Provider
       list={props.list}
       listing={props.listing}
     >
-      <>Public List {props.list.name}</>
+      <PublicListConsumer />
     </publicListContext.Provider>
   )
+  return view
 }

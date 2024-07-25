@@ -1,4 +1,4 @@
-export interface Filter <Item> {
+export interface Sifter <Item> {
   sift: (props: { query: string | undefined }) => void
-  filtered: Item[]
+  sifted: Item[]
 }

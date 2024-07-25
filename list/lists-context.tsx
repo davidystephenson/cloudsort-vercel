@@ -4,9 +4,9 @@ import { List } from '@prisma/client'
 import { useEffect, useState } from 'react'
 import postList from './post-list'
 import filterList from './filter-list'
-import useFilter from '../filter/use-filter'
 import contextCreator from 'context-creator'
 import postDeleteList from './post-delete-list'
+import useSifter from '@/sifter/use-sifter'
 
 export const {
   useContext: useLists,
@@ -21,9 +21,9 @@ export const {
     useEffect(() => {
       setRows(props.rows)
     }, [props.rows])
-    const { filtered, sift: filter } = useFilter({
+    const { sifted: filtered, sift: filter } = useSifter({
       rows,
-      filter: filterList
+      sift: filterList
     })
     async function create (props: {
       name: string
