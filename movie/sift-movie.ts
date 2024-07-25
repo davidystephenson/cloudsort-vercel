@@ -33,9 +33,5 @@ export default function siftMovie (props: {
   if (yearly) {
     return true
   }
-  const linked = lowerIncludes({ query, value: props.row.url })
-  if (linked) {
-    return true
-  }
   return false
 }

@@ -14,7 +14,7 @@ export default function HistoryCellsView (): JSX.Element {
     <TableSpanView>
       <ThemeLinkableView href='#' onClick={handleClick}>
         <Heading size='sm'>
-          History ({list.siftedEpisodes.length})
+          History ({list.historySifter.sifted.length})
         </Heading>
       </ThemeLinkableView>
     </TableSpanView>

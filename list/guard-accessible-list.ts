@@ -9,7 +9,6 @@ export default async function guardAccessibleList (props: {
   db: PrismaClient | PrismaTransaction
   listId: number
 }): Promise<List> {
-  console.log('props.listId', props.listId)
   const list = await props.db.list.findUnique({
     where: { id: props.listId }
   })
@@ -17,7 +16,6 @@ export default async function guardAccessibleList (props: {
     throw new ApiError(404, 'List not found')
   }
   const authSession = await serverAuth()
-  console.log('authSession?.user.id', authSession?.user.id)
   const accessible = hasListAccess({ currentUserId: authSession?.user.id, list })
   if (!accessible) {
     throw new ApiError(404, 'There is no list')

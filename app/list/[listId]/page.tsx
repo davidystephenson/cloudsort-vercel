@@ -13,11 +13,9 @@ export default async function ListIdPage (props: {
     listId: string
   }
 }): Promise<JSX.Element> {
-  console.log('props.params.listId', props.params.listId)
   const listId = Number(props.params.listId)
   try {
     const authSession = await serverAuth()
-    console.log('authSession?.user.id', authSession?.user.id)
     const list = await guardAccessibleList({
       currentUserId: authSession?.user.id,
       db: prisma,

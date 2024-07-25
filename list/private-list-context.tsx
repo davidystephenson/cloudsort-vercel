@@ -63,23 +63,22 @@ const privateListContext = contextCreator({
       }
     })
     const importAction = useAction()
-    // const importingFlag = useFlagbearer()
-    const moviesFlag = useFlagbearer({ initial: true })
     const [openedEpisodes, setOpenedEpisodes] = useState<number[]>([])
-    const moviesFilter = useSifter({
-      rows: movies,
-      sift: siftMovie
+    const archivedMovies = Object.values(state.archive)
+    const copiedArchivedMovies = [...archivedMovies]
+    const sortedArchivedMovies = copiedArchivedMovies.sort((a, b) => {
+      return a.name.localeCompare(b.name)
     })
-    const values = Object.values(state.archive)
-    const rows = values.map(value => {
+    const calculatedArchivedMovies = sortedArchivedMovies.map(value => {
       const row = { ...value, points: 0 }
       return row
     })
-    const archiveFilter = useSifter({
-      rows,
+
+    const archiveSifter = useSifter({
+      rows: calculatedArchivedMovies,
       sift: siftMovie
     })
-    const episodesFilter = useSifter({
+    const historySifter = useSifter({
       rows: state.history,
       sift: siftEpisode
     })
@@ -98,10 +97,6 @@ const privateListContext = contextCreator({
         openEpisode(props)
       }
     }
-    const archiveCopy = [...archiveFilter.sifted]
-    const sortedArchive = archiveCopy.sort((a, b) => {
-      return a.name.localeCompare(b.name)
-    })
     const defaultOptionIndex = getDefaultOptionIndex({
       movies: state.items,
       choice: state.choice
@@ -379,32 +374,20 @@ const privateListContext = contextCreator({
       queueState({ label, local, remote })
     }
     const synced = queue.taskQueue.currentTask == null
-    function sift (props: {
-      query: string | undefined
-    }): void {
-      moviesFilter.sift({ query: props.query })
-      archiveFilter.sift({ query: props.query })
-      episodesFilter.sift({ query: props.query })
-    }
     const value = {
       archive,
       archiveFlag,
+      archiveSifter,
       choose,
       importMovies,
       defaultOptionIndex,
       defer,
       delete: _delete,
       historyFlag,
+      historySifter,
       importAction,
       removeMovie,
-      sift,
-      siftArchive: archiveFilter.sift,
-      siftedArchive: sortedArchive,
-      siftedEpisodes: episodesFilter.sifted,
-      siftMovies: moviesFilter.sift,
-      siftedMovies: moviesFilter.sifted,
       movies,
-      moviesFlag,
       openedEpisodes,
       queue,
       random,

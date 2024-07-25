@@ -1,8 +1,8 @@
 import { Cells, CellsKey, Row } from '@/cell/cell-types'
-import publicListContext from '@/list/public-list-context'
 import { marion } from '@/mergechoice/marion/marion'
 import { Actors } from '@/mergechoice/marion/marionTypes'
 import { EpisodePart, Item } from '@/mergechoice/mergeChoiceTypes'
+import moviesContext from '@/movie/movies-context'
 
 export function marionEpisodeCellRows<
   ListItem extends Item,
@@ -17,7 +17,7 @@ export function marionEpisodeCellRows<
 }
 
 export default function usePublicCellRows (): Array<Row<CellsKey>> {
-  const list = publicListContext.useContext()
+  const movies = moviesContext.useContext()
   const sifted: Array<Row<keyof Cells>> = []
   const listMoviesRow: Row<'listMovies'> = {
     cells: { type: 'listMovies' },
@@ -25,8 +25,8 @@ export default function usePublicCellRows (): Array<Row<CellsKey>> {
     type: 'listMovies'
   }
   sifted.push(listMoviesRow)
-  if (list.moviesFlag.flag) {
-    const listMovieRows = list.movieSifter.sifted.map(movie => {
+  if (movies.flag.flag) {
+    const listMovieRows = movies.sifter.sifted.map(movie => {
       const listMovieRow: Row<'listMovie'> = {
         cells: { movie, type: 'listMovie' },
         id: `list-movie-${movie.id}`,

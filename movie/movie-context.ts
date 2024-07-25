@@ -7,17 +7,29 @@ const movieContext = contextCreator({
   useValue: (props: {
     calculated: CalculatedMovie
   }) => {
-    const privateList = privateListContext.useContext()
+    const privateList = privateListContext.useOptionalContext()
     function archive (): void {
+      if (privateList == null) {
+        throw new Error('There is no privacy')
+      }
       privateList.archive({ movieId: props.calculated.id })
     }
     function remove (): void {
+      if (privateList == null) {
+        throw new Error('There is no privacy')
+      }
       privateList.removeMovie({ movieId: props.calculated.id })
     }
     function reset (): void {
+      if (privateList == null) {
+        throw new Error('There is no privacy')
+      }
       privateList.reset({ movieId: props.calculated.id })
     }
     function unarchive (): void {
+      if (privateList == null) {
+        throw new Error('There is no privacy')
+      }
       privateList.unarchive({ movieId: props.calculated.id })
     }
     const imdbUrl = `https://www.imdb.com/title/${props.calculated.imdbId}`

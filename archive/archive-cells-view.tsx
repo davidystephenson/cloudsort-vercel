@@ -12,7 +12,7 @@ export default function ArchiveCellsView (): JSX.Element {
     <TableSpanView>
       <ThemeLinkableView href='#' onClick={handleClick}>
         <Heading size='sm' onClick={handleClick}>
-          Archive ({list.siftedArchive.length})
+          Archive ({list.archiveSifter.sifted.length})
         </Heading>
       </ThemeLinkableView>
     </TableSpanView>

@@ -4,6 +4,7 @@ import { marion } from '@/mergechoice/marion/marion'
 import { Actors } from '@/mergechoice/marion/marionTypes'
 import { EpisodePart, Item } from '@/mergechoice/mergeChoiceTypes'
 import { CalculatedMovie } from '@/movie/movie-types'
+import moviesContext from '@/movie/movies-context'
 
 export function marionEpisodeCellRows<
   ListItem extends Item,
@@ -19,8 +20,9 @@ export function marionEpisodeCellRows<
 
 export default function usePrivateCellRows (): Array<Row<CellsKey>> {
   const list = privateListContext.useContext()
+  const movies = moviesContext.useContext()
   const sifted: Array<Row<keyof Cells>> = []
-  if (list.siftedEpisodes.length !== 0) {
+  if (list.historySifter.sifted.length !== 0) {
     const historyRow: Row<'history'> = {
       cells: { type: 'history' },
       id: 'history',
@@ -28,7 +30,7 @@ export default function usePrivateCellRows (): Array<Row<CellsKey>> {
     }
     sifted.push(historyRow)
   }
-  const episodeRows = list.siftedEpisodes.flatMap((episode, index) => {
+  const episodeRows = list.historySifter.sifted.flatMap((episode, index) => {
     const first = index === 0
     if (!list.historyFlag.flag && !first) {
       return []
@@ -107,7 +109,7 @@ export default function usePrivateCellRows (): Array<Row<CellsKey>> {
     return rows
   })
   sifted.push(...episodeRows)
-  if (list.siftedArchive.length !== 0) {
+  if (list.archiveSifter.sifted.length !== 0) {
     const archiveRow: Row<'archive'> = {
       cells: { type: 'archive' },
       id: 'archive',
@@ -116,7 +118,7 @@ export default function usePrivateCellRows (): Array<Row<CellsKey>> {
     sifted.push(archiveRow)
   }
   if (list.archiveFlag.flag) {
-    const archiveMovieRows = list.siftedArchive.map(movie => {
+    const archiveMovieRows = list.archiveSifter.sifted.map(movie => {
       const archiveMovieRow: Row<'archiveMovie'> = {
         cells: { movie, type: 'archiveMovie' },
         id: `archive-movie-${movie.id}`,
@@ -132,8 +134,8 @@ export default function usePrivateCellRows (): Array<Row<CellsKey>> {
     type: 'listMovies'
   }
   sifted.push(listMoviesRow)
-  if (list.moviesFlag.flag) {
-    const listMovieRows = list.siftedMovies.map(movie => {
+  if (movies.flag.flag) {
+    const listMovieRows = movies.sifter.sifted.map(movie => {
       const listMovieRow: Row<'listMovie'> = {
         cells: { movie, type: 'listMovie' },
         id: `list-movie-${movie.id}`,
