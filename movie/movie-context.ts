@@ -1,5 +1,5 @@
+import privateListContext from '@/list/private-list-context'
 import { CalculatedMovie } from './movie-types'
-import { useList } from '../list/list-context'
 import contextCreator from 'context-creator'
 
 const movieContext = contextCreator({
@@ -7,18 +7,18 @@ const movieContext = contextCreator({
   useValue: (props: {
     calculated: CalculatedMovie
   }) => {
-    const list = useList()
+    const privateList = privateListContext.useContext()
     function archive (): void {
-      list.archive({ movieId: props.calculated.id })
+      privateList.archive({ movieId: props.calculated.id })
     }
     function remove (): void {
-      list.removeMovie({ movieId: props.calculated.id })
+      privateList.removeMovie({ movieId: props.calculated.id })
     }
     function reset (): void {
-      list.reset({ movieId: props.calculated.id })
+      privateList.reset({ movieId: props.calculated.id })
     }
     function unarchive (): void {
-      list.unarchive({ movieId: props.calculated.id })
+      privateList.unarchive({ movieId: props.calculated.id })
     }
     const imdbUrl = `https://www.imdb.com/title/${props.calculated.imdbId}`
     function open (): void {

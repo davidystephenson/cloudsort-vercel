@@ -1,5 +1,5 @@
 import { Cells, CellsKey, Row } from '@/cell/cell-types'
-import listContext from '@/list/list-context'
+import privateListContext from '@/list/private-list-context'
 import { marion } from '@/mergechoice/marion/marion'
 import { Actors } from '@/mergechoice/marion/marionTypes'
 import { EpisodePart, Item } from '@/mergechoice/mergeChoiceTypes'
@@ -18,7 +18,7 @@ export function marionEpisodeRows<
 }
 
 export default function useSifted (): Array<Row<CellsKey>> {
-  const list = listContext.useContext()
+  const list = privateListContext.useContext()
   const sifted: Array<Row<keyof Cells>> = []
   if (list.siftedEpisodes.length !== 0) {
     const historyRow: Row<'history'> = {

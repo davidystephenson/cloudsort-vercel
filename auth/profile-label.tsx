@@ -1,7 +1,7 @@
-import { useAuth } from './auth-context'
+import { useAuthContext } from './auth-context'
 
 export default function ProfileLabel (): JSX.Element {
-  const auth = useAuth()
+  const auth = useAuthContext()
   if (auth.session == null) {
     return <></>
   }

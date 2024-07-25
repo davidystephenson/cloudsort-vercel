@@ -2,7 +2,7 @@ import { ChangeEvent, useRef } from 'react'
 import { HStack, Icon, Text } from '@chakra-ui/react'
 import { useHotkeys } from 'react-hotkeys-hook'
 import { BsCloudUpload } from 'react-icons/bs'
-import { useList } from '../list/list-context'
+import privateListContext from '../list/private-list-context'
 import Papa from 'papaparse'
 import parseCritickerMovies from '../movies/parse-criticker-movies'
 import { CritickerRow } from './movie-types'
@@ -11,29 +11,26 @@ import ButtonView from '../button/button-view'
 
 export default function ImportMoviesConsumer (): JSX.Element {
   const action = useAction()
-  const list = useList()
+  const privateList = privateListContext.useContext()
   const inputRef = useRef<HTMLInputElement>(null)
   useHotkeys('i', () => {
     inputRef.current?.click()
   })
-  if (!list.authed) {
-    return <></>
-  }
   async function parseCriticker (props: {
     data: CritickerRow[]
   }): Promise<void> {
     try {
       const movies = parseCritickerMovies({ rows: props.data })
-      await list.importMovies({
+      await privateList.importMovies({
         movies
       })
       action.succeed()
-      list.importingFlag.lower()
+      privateList.importingFlag.lower()
     } catch (error) {
       if (error instanceof Error) {
         action.fail({ error, message: error.message })
       }
-      list.importingFlag.lower()
+      privateList.importingFlag.lower()
       throw error
     }
   }
@@ -43,7 +40,7 @@ export default function ImportMoviesConsumer (): JSX.Element {
       throw new Error('There is no file.')
     }
     action.start()
-    list.importingFlag.raise()
+    privateList.importingFlag.raise()
     Papa.parse<CritickerRow>(file, {
       header: true,
       skipEmptyLines: true,
@@ -59,10 +56,10 @@ export default function ImportMoviesConsumer (): JSX.Element {
   function handleClick (): void {
     inputRef.current?.click()
   }
-  const randoming = list.state.choice?.random === true && !list.state.complete
+  const randoming = privateList.state.choice?.random === true && !privateList.state.complete
   const disabled = (
     randoming ||
-    !list.synced
+    !privateList.synced
   )
   return (
     <>

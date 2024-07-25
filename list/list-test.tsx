@@ -1,16 +1,16 @@
 'use client'
 
 import { Heading, HStack } from '@chakra-ui/react'
-import { useList } from './list-context'
+import privateListContext from './private-list-context'
 
 export default function ListTest (props: {
 }): JSX.Element {
-  const list = useList()
+  const privateList = privateListContext.useContext()
   if (
-    list.importingFlag.flag ||
-    list.state.complete ||
-    list.state.choice == null ||
-    list.state.choice.options.length === 0
+    privateList.importingFlag.flag ||
+    privateList.state.complete ||
+    privateList.state.choice == null ||
+    privateList.state.choice.options.length === 0
   ) {
     return <></>
   }

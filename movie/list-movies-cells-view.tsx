@@ -1,5 +1,5 @@
 import { Row } from '@/cell/cell-types'
-import listContext from '@/list/list-context'
+import privateListContext from '@/list/private-list-context'
 import TableSpanView from '@/table/table-span-view'
 import ThemeLinkableView from '@/theme/theme-linkable-view'
 import { Heading } from '@chakra-ui/react'
@@ -7,7 +7,7 @@ import { Heading } from '@chakra-ui/react'
 export default function ListMoviesCellsView (props: {
   row: Row<'listMovies'>
 }): JSX.Element {
-  const list = listContext.useContext()
+  const list = privateListContext.useContext()
   function handleClick (): void {
     list.moviesFlag.toggle()
   }

@@ -1,8 +1,8 @@
 import ButtonView from '@/button/button-view'
-import { useList } from '@/list/list-context'
+import privateListContext from '@/list/private-list-context'
 
 export default function RandomView (): JSX.Element {
-  const list = useList()
+  const list = privateListContext.useContext()
   if (!list.state.complete) {
     return <></>
   }

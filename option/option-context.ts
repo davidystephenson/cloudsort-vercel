@@ -1,4 +1,4 @@
-import { useList } from '@/list/list-context'
+import privateListContext from '@/list/private-list-context'
 import { useMovie } from '@/movie/movie-context'
 import contextCreator from 'context-creator'
 import { useHotkeys } from 'react-hotkeys-hook'
@@ -14,7 +14,7 @@ export const {
     openLetter: string
   }) => {
     const movie = useMovie()
-    const list = useList()
+    const list = privateListContext.useContext()
     function choose (): void {
       list.choose({ betterIndex: props.index })
     }

@@ -1,14 +1,12 @@
 import { Session } from 'next-auth'
 import { ReactNode } from 'react'
-import { AuthProvider } from './auth-context'
+import { AuthContextProvider } from './auth-context'
 
-export default async function AuthView (props: {
+export default function AuthView (props: {
   children: ReactNode
   session: Session | null
-}): Promise<JSX.Element> {
+}): JSX.Element {
   return (
-    <AuthProvider session={props.session}>
-      {props.children}
-    </AuthProvider>
+    <AuthContextProvider session={props.session}>{props.children}</AuthContextProvider>
   )
 }

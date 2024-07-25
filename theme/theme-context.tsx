@@ -1,6 +1,5 @@
 'use client'
 
-import { useAuth } from '../auth/auth-context'
 import useMounted from '../mounted/use-mounted'
 import useSystemDark from '../use-system-dark/useSystemDark'
 import { useCallback, useEffect, useMemo, useState } from 'react'
@@ -8,6 +7,7 @@ import { useColorMode } from '@chakra-ui/react'
 import contextCreator from 'context-creator'
 import { useRouter } from 'next/navigation'
 import postShade from '@/shade/post-shade'
+import { useAuthContext } from '@/auth/auth-context'
 
 const themeContext = contextCreator({
   name: 'theme',
@@ -18,7 +18,7 @@ const themeContext = contextCreator({
   }) => {
     const router = useRouter()
     const debug = props.debug ?? false
-    const auth = useAuth()
+    const auth = useAuthContext()
     const mounted = useMounted()
     const [toggling, setToggling] = useState(false)
     const unshadedUser = useMemo(() => {
@@ -120,11 +120,13 @@ const themeContext = contextCreator({
     const colorScheme = darkened
       ? 'var(--chakra-colors-purple-200)'
       : 'var(--chakra-colors-purple-600)'
+    const red = darkened ? 'pink' : 'red'
     const value = {
       colorScheme,
       borderColor,
       darkened,
       mounted,
+      red,
       toggleShade
     }
     return value

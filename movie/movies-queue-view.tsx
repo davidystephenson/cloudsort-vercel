@@ -1,11 +1,11 @@
 import ButtonView from '@/button/button-view'
-import { useList } from '@/list/list-context'
+import privateListContext from '@/list/private-list-context'
 import ThemeTableView from '@/theme/theme-table-view'
 import { CheckIcon, WarningIcon } from '@chakra-ui/icons'
 import { Badge, Popover, PopoverArrow, PopoverBody, PopoverCloseButton, PopoverContent, PopoverHeader, PopoverTrigger, Spinner, Tbody, Td, Tr } from '@chakra-ui/react'
 
 export default function MoviesQueueView (): JSX.Element {
-  const list = useList()
+  const list = privateListContext.useContext()
   if (list.queue.log.length === 0) {
     return <></>
   }

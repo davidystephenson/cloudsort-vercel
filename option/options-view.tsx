@@ -1,13 +1,12 @@
 import { Center, HStack } from '@chakra-ui/react'
-import { useList } from '../list/list-context'
+import privateListContext from '../list/private-list-context'
 import OptionView from './option-view'
 import DeferView from '@/defer/defer-view'
 
 export default function OptionsView (): JSX.Element {
-  const list = useList()
+  const list = privateListContext.useContext()
   if (
     list.importingFlag.flag ||
-    !list.authed ||
     list.state.complete ||
     list.state.choice == null ||
     list.state.choice.options.length === 0

@@ -3,10 +3,7 @@
 import { Session } from 'next-auth'
 import contextCreator from 'context-creator'
 
-export const {
-  useContext: useAuth,
-  Provider: AuthProvider
-} = contextCreator({
+const authContext = contextCreator({
   name: 'auth',
   useValue: (props: {
     session: Session | null
@@ -14,7 +11,11 @@ export const {
     const value = {
       session: props.session
     }
-
     return value
   }
 })
+console.log('a', authContext)
+export const {
+  useContext: useAuthContext,
+  Provider: AuthContextProvider
+} = authContext

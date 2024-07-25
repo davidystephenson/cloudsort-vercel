@@ -2,15 +2,15 @@
 
 import { HStack } from '@chakra-ui/react'
 import FormFieldView from '../form/form-field-view'
-import { useList } from '../list/list-context'
 import RequestFormView from '../request/request-form-view'
 import SubmitRequestView from '../request/submit-request-view'
 import { useHeading } from '../heading/heading-context'
 import guardMovieData from './guard-movie-data'
+import privateListContext from '@/list/private-list-context'
 
 export default function CreateMovieFormView (): JSX.Element {
   const heading = useHeading()
-  const list = useList()
+  const privateList = privateListContext.useContext()
   if (heading.selection !== 'create') {
     return <></>
   }
@@ -23,7 +23,7 @@ export default function CreateMovieFormView (): JSX.Element {
     }
     const movieData = guardMovieData({ label: 'Create movie form data', value: fieldData })
     const movies = [movieData]
-    await list.importMovies({ movies })
+    await privateList.importMovies({ movies })
   }
   return (
     <RequestFormView send={send}>

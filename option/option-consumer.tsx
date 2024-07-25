@@ -1,6 +1,6 @@
+import PrivateListMovieMenuView from '@/list/private-list-movie-menu-view'
 import OptionChooseView from './option-choose-view'
 import { useOption } from './option-context'
-import ListMovieMenuView from '@/list/list-movie-menu-view'
 
 export default function OptionConsumer (): JSX.Element {
   const option = useOption()
@@ -8,7 +8,7 @@ export default function OptionConsumer (): JSX.Element {
   if (option.index === 0) {
     return (
       <>
-        <ListMovieMenuView />
+        <PrivateListMovieMenuView />
         <OptionChooseView />
       </>
     )
@@ -17,7 +17,7 @@ export default function OptionConsumer (): JSX.Element {
   return (
     <>
       <OptionChooseView />
-      <ListMovieMenuView />
+      <PrivateListMovieMenuView />
     </>
   )
 }

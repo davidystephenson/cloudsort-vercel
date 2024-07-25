@@ -1,7 +1,7 @@
-import { useMovie } from './movie-context'
-import ThemeTdView from '../theme/theme-td-view'
+import MovieCellsMenuView from '@/list/movie-cells-menu-view'
 import { HStack, Text } from '@chakra-ui/react'
-import ListMovieMenuView from '@/list/list-movie-menu-view'
+import ThemeTdView from '../theme/theme-td-view'
+import { useMovie } from './movie-context'
 import MovieLabelCellsView from './movie-label-cells-view'
 
 export default function MovieCellsConsumer (): JSX.Element {
@@ -12,7 +12,7 @@ export default function MovieCellsConsumer (): JSX.Element {
       <ThemeTdView pr='0'>
         <HStack>
           <Text>{movie.calculated.points}</Text>
-          <ListMovieMenuView />
+          <MovieCellsMenuView />
         </HStack>
       </ThemeTdView>
     </>

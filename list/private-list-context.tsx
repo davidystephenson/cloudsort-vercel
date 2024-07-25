@@ -1,53 +1,48 @@
 import postArchive from '@/archive/post-archive'
 import postChoice from '@/choice/post-choice'
+import siftEpisode from '@/episode/sift-episode'
+import useFlagbearer from '@/flagbearer/use-flagbearer'
 import archiveItem from '@/mergechoice/archiveItem'
 import getCalculatedItem from '@/mergechoice/getCalculatedItem'
 import getDefaultOptionIndex from '@/mergechoice/getDefaultOptionIndex'
 import importItems from '@/mergechoice/importItems'
+import resetItem from '@/mergechoice/resetItem'
 import rewindState from '@/mergechoice/rewindState'
+import setupRandomChoice from '@/mergechoice/setupRandomChoice'
+import unarchiveItem from '@/mergechoice/unarchiveItem'
 import postRemoveMovie from '@/movie/post-remove-movie'
+import postRandom from '@/random/post-random'
+import postReset from '@/reset/post-reset'
 import postRewind from '@/rewind/post-rewind'
 import shuffleSlice from '@/shuffleSlice/shuffleSlice'
 import { AlwaysNever } from '@/shuffleSlice/shuffleSliceTypes'
+import postUnarchive from '@/unarchive/post-unarchive'
 import useQueue from '@/useQueue/useQueue'
 import contextCreator from 'context-creator'
-import { useCallback, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import useFilter from '../filter/use-filter'
 import chooseOption from '../mergechoice/chooseOption'
-import createState from '../mergechoice/createState'
 import { State } from '../mergechoice/mergeChoiceTypes'
 import removeItem from '../mergechoice/removeItem'
-import siftMovie from '../movie/sift-movie'
 import { ChooseMovieRequest, CreateMoviesRequest, ListMovie, MovieData } from '../movie/movie-types'
 import postMovies from '../movie/post-movies'
+import siftMovie from '../movie/sift-movie'
 import getSortedMovies from '../movies/getSortedMovies'
 import { useOptionalLists } from './lists-context'
-import unarchiveItem from '@/mergechoice/unarchiveItem'
-import postUnarchive from '@/unarchive/post-unarchive'
-import postReset from '@/reset/post-reset'
-import resetItem from '@/mergechoice/resetItem'
-import setupRandomChoice from '@/mergechoice/setupRandomChoice'
-import postRandom from '@/random/post-random'
-import siftEpisode from '@/episode/sift-episode'
-import { useAuth } from '@/auth/auth-context'
-import useFlagbearer from '@/flagbearer/use-flagbearer'
+import { useListContext } from './list-context'
 
-const listContext = contextCreator({
-  name: 'list',
+const privateListContext = contextCreator({
+  name: 'privateList',
   useValue: (props: {
-    id: number
-    name: string
-    seed: string
-    state?: State<ListMovie>
-    userId: number
+    state: State<ListMovie>
   }) => {
-    const auth = useAuth()
+    const list = useListContext()
     const lists = useOptionalLists()
     const queue = useQueue()
-    const getDefaultState = useCallback(() => {
-      return props.state ?? createState<ListMovie>({ seed: props.seed })
+    const [state, setState] = useState(props.state)
+    useEffect(() => {
+      setState(props.state)
     }, [props.state])
-    const [state, setState] = useState(getDefaultState)
     const [movies, setMovies] = useState(() => {
       const sortedMovies = getSortedMovies({ state })
       return sortedMovies
@@ -67,10 +62,6 @@ const listContext = contextCreator({
     const importingFlag = useFlagbearer()
     const moviesFlag = useFlagbearer({ initial: true })
     const [openedEpisodes, setOpenedEpisodes] = useState<number[]>([])
-    useEffect(() => {
-      const state = getDefaultState()
-      setState(state)
-    }, [getDefaultState])
     const moviesFilter = useFilter({
       rows: movies,
       filter: siftMovie
@@ -88,7 +79,6 @@ const listContext = contextCreator({
       rows: state.history,
       filter: siftEpisode
     })
-    const authed = auth.session?.user.id === props.userId
     function openEpisode (props: { episodeId: number }): void {
       setOpenedEpisodes([...openedEpisodes, props.episodeId])
     }
@@ -113,7 +103,7 @@ const listContext = contextCreator({
       choice: state.choice
     })
     async function _delete (): Promise<void> {
-      await lists?.delete({ id: props.id })
+      await lists?.delete({ id: list.id })
     }
     function updateState (props: {
       update: (props: { state: State<ListMovie> }) => State<ListMovie>
@@ -149,7 +139,7 @@ const listContext = contextCreator({
       }
       const body = {
         lastMergechoiceId: state.history[0].mergeChoiceId,
-        listId: props.id,
+        listId: list.id,
         archive: {
           item
         }
@@ -203,7 +193,7 @@ const listContext = contextCreator({
           seeded: false
         },
         lastMergechoiceId: state.history[0].mergeChoiceId,
-        listId: props.id
+        listId: list.id
       }
       async function remote (): Promise<void> {
         await postChoice({ body, label: 'choose' })
@@ -226,7 +216,7 @@ const listContext = contextCreator({
       })
       const body: CreateMoviesRequest = {
         lastMergechoiceId: state.history[0]?.mergeChoiceId ?? null,
-        listId: props.id,
+        listId: list.id,
         movies: sliced
       }
       const lastEpisode = state.history[0]
@@ -265,7 +255,7 @@ const listContext = contextCreator({
             }
             const body = {
               lastMergechoiceId: lastEpisode.mergeChoiceId,
-              listId: props.id,
+              listId: list.id,
               random: newEpisode.random
             }
             await postRandom({ body, label: 'random' })
@@ -291,7 +281,7 @@ const listContext = contextCreator({
       }
       const body = {
         lastMergechoiceId: state.history[0].mergeChoiceId,
-        listId: props.id,
+        listId: list.id,
         remove: {
           item
         }
@@ -317,7 +307,7 @@ const listContext = contextCreator({
       }
       const body = {
         lastMergechoiceId: state.history[0].mergeChoiceId,
-        listId: props.id,
+        listId: list.id,
         reset: {
           item
         }
@@ -348,7 +338,7 @@ const listContext = contextCreator({
           episodeMergechoiceId: rewindProps.episodeMergechoiceId,
           label,
           lastMergechoiceId: lastEpisode.mergeChoiceId,
-          listId: props.id
+          listId: list.id
         })
       }
       queueState({ label, local, remote })
@@ -370,7 +360,7 @@ const listContext = contextCreator({
       }
       const body = {
         lastMergechoiceId: state.history[0].mergeChoiceId,
-        listId: props.id,
+        listId: list.id,
         unarchive: {
           item: {
             ...item,
@@ -394,7 +384,6 @@ const listContext = contextCreator({
     const value = {
       archive,
       archiveFlag,
-      authed,
       choose,
       importMovies,
       defaultOptionIndex,
@@ -411,7 +400,6 @@ const listContext = contextCreator({
       siftedMovies: moviesFilter.filtered,
       movies,
       moviesFlag,
-      name: props.name,
       openedEpisodes,
       queue,
       random,
@@ -425,8 +413,4 @@ const listContext = contextCreator({
     return value
   }
 })
-export const {
-  useContext: useList,
-  Provider: ListProvider
-} = listContext
-export default listContext
+export default privateListContext

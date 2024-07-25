@@ -1,18 +1,18 @@
 'use client'
-import { useList } from '@/list/list-context'
 import { Virtuoso } from 'react-virtuoso'
 import EpisodeConsumer from './episode-consumer'
 import episodeContext from './episode-context'
 import useMounted from '@/mounted/use-mounted'
 import { useState } from 'react'
 import ThemeButtonView from '@/theme/theme-button-view'
+import privateListContext from '@/list/private-list-context'
 
 export default function EpisodesView (): JSX.Element {
-  const list = useList()
+  const privateList = privateListContext.useContext()
   const mounted = useMounted()
   const [opened, setOpened] = useState(false)
   if (!mounted || !opened) {
-    const first = list.state.history[0]
+    const first = privateList.state.history[0]
     if (first == null) {
       return <></>
     }
@@ -37,7 +37,7 @@ export default function EpisodesView (): JSX.Element {
       <ThemeButtonView onClick={close}>Close</ThemeButtonView>
       <Virtuoso
         style={{ height: 200 }}
-        data={list.state.history}
+        data={privateList.state.history}
         itemContent={(_, episode) => {
           return (
             <episodeContext.Provider episode={episode}>

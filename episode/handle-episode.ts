@@ -1,11 +1,11 @@
 import { Guard } from '@/fashion-police/fashionPoliceTypes'
 import { handleAuth } from '@/handle/handle-auth'
-import { episodeToHistoryEpisode } from '@/list/get-mergechoice-list'
 import { PrismaTransaction } from '@/prisma/prisma-types'
 import { Episode, PrismaClient } from '@prisma/client'
 import { LastWhere } from '../list/list-types'
 import { EpisodeResponse, RelatedEpisode } from './episode-types'
 import guardListEpisodes from './guard-list-episodes'
+import { episodeToHistoryEpisode } from './episode-to-history-episode'
 
 export default async function handleEpisode<Body extends LastWhere> (props: {
   guard: Guard<Body>
