@@ -77,9 +77,18 @@ model Import {
 
 model Item {
   episodeItems EpisodeItem[]
+  hideItems        ItemHide[]
   id           Int           @id @default(autoincrement())
   name         String
   movie        Movie?
+}
+
+model ItemHide {
+  id    Int  @id @default(autoincrement())
+  item  Item @relation(fields: [itemId], references: [id], onDelete: Cascade)
+  itemId Int
+  user  User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId Int
 }
 
 model List {
@@ -136,9 +145,10 @@ model Unarchive {
 }
 
 model User {
-  id       Int     @id @default(autoincrement())
+  hideItems ItemHide[]
   email    String  @unique
+  id       Int     @id @default(autoincrement())
+  lists    List[]
   password String
   shade    String?
-  lists    List[]
 }

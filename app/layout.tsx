@@ -7,6 +7,7 @@ import serverAuth from '@/auth/server-auth'
 import LayoutView from '@/layout/layout-view'
 import AuthView from '@/auth/auth-view'
 import { cookies } from 'next/headers'
+import prisma from '@/prisma/prisma'
 
 const title = 'CloudSort'
 const description = 'Sort your lists.'
@@ -41,6 +42,13 @@ export default async function RootLayout (props: {
     : undefined
   isShady(newShade)
   const shade = newShade ?? authSession?.user.shade ?? shadeCookie?.value
+  const itemHides = authSession?.user == null
+    ? undefined
+    : await prisma.itemHide.findMany({
+      where: {
+        userId: authSession.user.id
+      }
+    })
   return (
     <html
       lang='en'
@@ -48,7 +56,10 @@ export default async function RootLayout (props: {
     >
       <body suppressHydrationWarning>
         <Suspense fallback='Loading...'>
-          <AuthView session={authSession}>
+          <AuthView
+            session={authSession}
+            itemHides={itemHides}
+          >
             <ThemeView shade={shade}>
               <LayoutView>
                 {props.children}

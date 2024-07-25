@@ -10,6 +10,9 @@ export interface ListMovie extends Item {
   year: number
 }
 export type MovieData = Omit<ListMovie, 'id'>
+export interface MovieWhere {
+  itemId: number
+}
 export interface ImportRequest extends ListWhere {
   lastMergechoiceId: number | null
 }
