@@ -1,7 +1,7 @@
 import { Row } from '@/cell/cell-types'
 import MovieLabelCellView from '@/movie/movie-label-cell-view'
 import ThemeTdView from '@/theme/theme-td-view'
-import RandomIcon from './random-icon'
+import RandomIconView from './random-icon-view'
 
 export default function RandomEpisodeMovieCellsView(props: {
   row: Row<'episodeMovie'>
@@ -10,10 +10,10 @@ export default function RandomEpisodeMovieCellsView(props: {
     <>
       <MovieLabelCellView />
       <ThemeTdView>
-        <RandomIcon />
+        <RandomIconView />
       </ThemeTdView>
       <ThemeTdView>
-        <RandomIcon />
+        <RandomIconView />
       </ThemeTdView>
     </>
   )

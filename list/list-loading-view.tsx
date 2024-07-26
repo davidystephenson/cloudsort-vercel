@@ -15,7 +15,7 @@ export default function ListLoadingView (): JSX.Element {
     <div style={loadingStyle}>
       <HStack>
         <Heading size='lg'>{list.name}</Heading>
-        <Spinner />
+        <Spinner size='sm' />
       </HStack>
     </div>
   )

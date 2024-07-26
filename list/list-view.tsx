@@ -1,11 +1,12 @@
 'use server'
 
-import { List } from '@prisma/client'
+import { ItemHide, List } from '@prisma/client'
 import ListConsumer from './list-consumer'
 import { ListContextProvider } from './list-context'
 
 export default async function ListView (props: {
   currentUserId?: number
+  itemHides?: ItemHide[]
   list: List
 }): Promise<JSX.Element> {
   const view = (

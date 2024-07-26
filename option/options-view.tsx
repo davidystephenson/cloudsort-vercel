@@ -15,7 +15,7 @@ export default function OptionsView (): JSX.Element {
   }
   return (
     <>
-      <HStack flexWrap='wrap' justifyContent='center'>
+      <HStack flexWrap='wrap' justifyContent='center' marginTop='10px'>
         <OptionView
           chooseLetter='a'
           index={0}

@@ -105,7 +105,7 @@ export default function MoviesQueueView (): JSX.Element {
     <Popover>
       <PopoverTrigger>
         <ButtonView colorScheme='blue' size='xs'>
-          <Spinner />
+          <Spinner size='xs' />
         </ButtonView>
       </PopoverTrigger>
       <PopoverContent>

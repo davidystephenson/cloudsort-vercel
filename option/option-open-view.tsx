@@ -9,7 +9,10 @@ export default function OptionOpenView (): JSX.Element {
 
   return (
     <HStack>
-      <ThemeLinkableView href={movie.calculated.url ?? undefined} isExternal>
+      <ThemeLinkableView
+        href={movie.imdbUrl ?? undefined}
+        isExternal
+      >
         [{option.openLetter}] imdb
       </ThemeLinkableView>
     </HStack>

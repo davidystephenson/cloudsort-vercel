@@ -32,6 +32,7 @@ import { useListContext } from './list-context'
 import useAction from '@/action/use-action'
 import { useRouter } from 'next/navigation'
 import useSifter from '@/sifter/use-sifter'
+import getChoiceCountRange from '@/mergechoice/getChoiceCountRange'
 
 const privateListContext = contextCreator({
   name: 'privateList',
@@ -64,6 +65,7 @@ const privateListContext = contextCreator({
     })
     const importAction = useAction()
     const [openedEpisodes, setOpenedEpisodes] = useState<number[]>([])
+    const randoming = state.choice?.random === true
     const archivedMovies = Object.values(state.archive)
     const copiedArchivedMovies = [...archivedMovies]
     const sortedArchivedMovies = copiedArchivedMovies.sort((a, b) => {
@@ -73,7 +75,7 @@ const privateListContext = contextCreator({
       const row = { ...value, points: 0 }
       return row
     })
-
+    const range = getChoiceCountRange({ state })
     const archiveSifter = useSifter({
       rows: calculatedArchivedMovies,
       sift: siftMovie
@@ -391,6 +393,8 @@ const privateListContext = contextCreator({
       openedEpisodes,
       queue,
       random,
+      randoming,
+      range,
       reset,
       rewind,
       state,

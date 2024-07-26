@@ -23,7 +23,8 @@ export default function PrivateListView (): JSX.Element {
     workerRef.current?.postMessage(history)
   }, [])
   useEffect(() => {
-    workerRef.current = new Worker(new URL('../workers/worker.ts', import.meta.url))
+    const url = new URL('../workers/worker.ts', import.meta.url)
+    workerRef.current = new Worker(url)
     workerRef.current.onmessage = (event: {
       data: string
     }) => {

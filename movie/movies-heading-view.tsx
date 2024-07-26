@@ -7,6 +7,7 @@ import MoviesQueueView from './movies-queue-view'
 import RandomView from '@/random/random-view'
 import MoviesMenuView from './movies-menu-view'
 import { useListContext } from '@/list/list-context'
+import ChoiceCounterView from '@/choice-counter/ChoiceCounter'
 
 export default function MoviesHeadingView (): JSX.Element {
   const list = useListContext()
@@ -14,6 +15,7 @@ export default function MoviesHeadingView (): JSX.Element {
     <HeadingView content={<MoviesHeadingContentView />}>
       <Heading size='lg'>{list.name}</Heading>
       <MoviesQueueView />
+      <ChoiceCounterView />
       <ImportDisplayView />
       <MoviesHeadingCreateView />
       <RandomView />
