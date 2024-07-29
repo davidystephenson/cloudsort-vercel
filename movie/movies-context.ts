@@ -9,6 +9,12 @@ const moviesContext = contextCreator({
   useValue: (props: {
     movies: CalculatedMovie[]
   }) => {
+    const seedless = props.movies.every((movie) => {
+      const nullish = movie.seed == null
+      const zeroed = movie.seed === 0
+      const seedless = nullish || zeroed
+      return seedless
+    })
     const flag = useFlagbearer({ initial: true })
     const sifter = useSifter({
       rows: props.movies,
@@ -17,6 +23,7 @@ const moviesContext = contextCreator({
     const value = {
       flag,
       movies: props.movies,
+      seedless,
       sifter
     }
     return value

@@ -5,6 +5,8 @@ import PrivateListView from './private-list-view'
 import PublicListView from './public-list-view'
 import guardListing from '@/listing/guard-listing'
 import prisma from '@/prisma/prisma'
+import guardRelatedList from './guard-related-list'
+import listToHistory from './list-to-history'
 
 export default async function ListConsumer (props: {
   currentUserId?: number
@@ -12,8 +14,18 @@ export default async function ListConsumer (props: {
 }): Promise<JSX.Element> {
   const _private = props.currentUserId === props.list.userId
   if (_private) {
+    const list = await guardRelatedList({
+      db: prisma,
+      listId: props.list.id
+    })
+    const history = listToHistory({
+      list
+    })
     const view = (
-      <PrivateListView />
+      <PrivateListView
+        history={history}
+        seed={list.seed}
+      />
     )
     return view
   }

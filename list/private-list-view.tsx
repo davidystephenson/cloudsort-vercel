@@ -1,41 +1,20 @@
 'use client'
 
-import postHistory from '@/history/post-history'
-import { ListMovie } from '@/movie/movie-types'
-import { useCallback, useEffect, useRef, useState } from 'react'
-import { State } from '../mergechoice/mergeChoiceTypes'
-import { useListContext } from './list-context'
+import deduceState from '@/mergechoice/deduceState'
+import { Episode } from '../mergechoice/mergeChoiceTypes'
 import ListLoadingView from './list-loading-view'
-import privateListContext from './private-list-context'
 import PrivateListConsumer from './private-list-consumer'
+import privateListContext from './private-list-context'
+import { ListMovie } from '@/movie/movie-types'
 
-export default function PrivateListView (): JSX.Element {
-  const list = useListContext()
-  const workerRef = useRef<Worker>()
-  const [state, setState] = useState<State<ListMovie>>()
-  const handleWork = useCallback(async () => {
-    const history = await postHistory({
-      body: {
-        listId: list.id
-      },
-      label: 'create'
-    })
-    workerRef.current?.postMessage(history)
-  }, [])
-  useEffect(() => {
-    const url = new URL('../workers/worker.ts', import.meta.url)
-    workerRef.current = new Worker(url)
-    workerRef.current.onmessage = (event: {
-      data: string
-    }) => {
-      const state = JSON.parse(event.data)
-      setState(state)
-    }
-    void handleWork()
-    return () => {
-      workerRef.current?.terminate()
-    }
-  }, [])
+export default function PrivateListView (props: {
+  history: Array<Episode<ListMovie>>
+  seed: string
+}): JSX.Element {
+  const state = deduceState({
+    history: props.history,
+    seed: props.seed
+  })
   if (state == null) {
     return (
       <ListLoadingView />

@@ -6,24 +6,24 @@ export default function useFlagbearer (props?: {
   onLower?: () => void
   onRaise?: () => void
 }): Flagbearer {
-  const [flag, setFlag] = useState(props?.initial ?? false)
+  const [raised, setRaised] = useState(props?.initial ?? false)
   const raise = useCallback(() => {
-    setFlag(true)
+    setRaised(true)
     props?.onRaise?.()
   }, [])
   const lower = useCallback(() => {
-    setFlag(false)
+    setRaised(false)
     props?.onLower?.()
   }, [])
   const toggle = useCallback(() => {
-    if (flag) {
+    if (raised) {
       lower()
     } else {
       raise()
     }
-  }, [flag, lower, raise])
+  }, [raised, lower, raise])
   const flagbearer = {
-    flag,
+    flag: raised,
     lower,
     raise,
     toggle
