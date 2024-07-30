@@ -2,7 +2,7 @@
 
 import themeContext from '@/theme/theme-context'
 import { useListContext } from './list-context'
-import { Spinner } from '@chakra-ui/react'
+import LoaderView from '@/loader/loader-view'
 
 export default function ListLoadingView (): JSX.Element {
   const list = useListContext()
@@ -22,7 +22,7 @@ export default function ListLoadingView (): JSX.Element {
   return (
     <div style={loadingStyle}>
       <h2 style={headingStyle}>{list.name}</h2>
-      <Spinner />
+      <LoaderView />
     </div>
   )
 }
