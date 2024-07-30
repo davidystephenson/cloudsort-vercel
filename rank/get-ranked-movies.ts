@@ -5,6 +5,10 @@ export default function getRankedMovies (props: {
 }): RankedMovie[] {
   const pointValues: number[] = []
   props.sortedMovies.forEach(movie => {
+    const included = pointValues.includes(movie.points)
+    if (included) {
+      return
+    }
     pointValues.push(movie.points)
   })
   const rankedMovies = props.sortedMovies.map((movie) => {

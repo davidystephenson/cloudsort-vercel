@@ -4,14 +4,8 @@ import { Badge } from '@chakra-ui/react'
 
 export default function RankView (): JSX.Element {
   const movie = movieContext.useContext()
-  const movies = moviesContext.useOptionalContext()
-  if (movies == null) {
-    return <></>
-  }
-  const rank = movies?.getRank({ movieId: movie.item.id })
-  return (
-    <>
-      <Badge size='xs'>{rank}</Badge>
-    </>
-  )
+  const movies = moviesContext.useContext()
+  const rank = movies.getRank({ movieId: movie.item.id })
+  const view = <Badge size='xs'>{rank}</Badge>
+  return view
 }

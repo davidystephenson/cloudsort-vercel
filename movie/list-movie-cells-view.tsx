@@ -5,9 +5,10 @@ import { MovieProvider } from './movie-context'
 export default function ListMovieCellsView (props: {
   row: Row<'listMovie'>
 }): JSX.Element {
-  return (
+  const view = (
     <MovieProvider movie={props.row.cells.movie}>
       <MovieCellsConsumer />
     </MovieProvider>
   )
+  return view
 }
