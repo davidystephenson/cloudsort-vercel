@@ -1,18 +1,15 @@
 'use client'
 
+import { Box } from '@chakra-ui/react'
 import { signOut } from 'next-auth/react'
-import ProfileConsumer from './profile-consumer'
 import { RequestProvider } from '../request/request-context'
-import ThemeLinkView from '../theme/theme-link-view'
-import { Box, HStack } from '@chakra-ui/react'
+import AuthLinksView from './auth-links-view'
+import ProfileConsumer from './profile-consumer'
 
 export default function ProfileView (): JSX.Element {
   return (
     <>
-      <HStack>
-        <ThemeLinkView href='/login'>Login</ThemeLinkView>
-        <ThemeLinkView href='/register'>Register</ThemeLinkView>
-      </HStack>
+      <AuthLinksView />
       <Box zIndex={4}>
         <RequestProvider
           send={signOut}

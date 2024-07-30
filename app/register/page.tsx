@@ -1,6 +1,6 @@
 import RegisterView from '@/auth/register-view'
 
-export default function Login (): JSX.Element {
+export default function RegisterPage (): JSX.Element {
   return (
     <>
       <RegisterView />

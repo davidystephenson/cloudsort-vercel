@@ -1,6 +1,6 @@
 import LoginForm from '@/auth/login-view'
 
-export default function Login (): JSX.Element {
+export default function LoginPage (): JSX.Element {
   return (
     <>
       <LoginForm />

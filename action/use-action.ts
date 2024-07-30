@@ -3,12 +3,12 @@ import { Action } from './action-types'
 
 export default function useAction (props?: {
   action?: () => Promise<void>
-  acting?: boolean
+  active?: boolean
 }): Action {
-  const [active, setActive] = useState(props?.acting ?? false)
+  const [active, setActive] = useState(props?.active ?? false)
   useEffect(() => {
-    setActive(props?.acting ?? false)
-  }, [props?.acting])
+    setActive(props?.active ?? false)
+  }, [props?.active])
   const [error, setError] = useState<Error>()
   const [errorMessage, setErrorMessage] = useState<string>()
   async function act (): Promise<void> {
