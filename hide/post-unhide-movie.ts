@@ -1,7 +1,7 @@
 import guardOkTrue from '@/ok/guard-ok-true'
 import post from '@/post/post'
 
-export default async function postItemHide (props: {
+export default async function postUnhideMovie (props: {
   label: string
   itemId: number
 }): Promise<void> {
@@ -12,6 +12,6 @@ export default async function postItemHide (props: {
     body,
     guard: guardOkTrue,
     label: props.label,
-    url: '/api/movie/hide'
+    url: '/api/movie/unhide'
   })
 }

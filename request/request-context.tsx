@@ -28,7 +28,7 @@ export const {
     }
     const value = {
       ...action,
-      acting: action.acting,
+      acting: action.active,
       send: sendRequest
     }
     return value

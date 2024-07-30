@@ -48,7 +48,7 @@ export default function ImportMenuItemView (): JSX.Element {
   }
   const randoming = privateList.state.choice?.random === true && !privateList.state.complete
   const disabled = randoming || !privateList.synced
-  const icon = privateList.importAction.acting
+  const icon = privateList.importAction.active
     ? <Icon as={Spinner} />
     : <BsCloudUpload />
   return (

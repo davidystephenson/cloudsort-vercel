@@ -6,7 +6,7 @@ export default function ArchiveMovieCellsView (props: {
   row: Row<'archiveMovie'>
 }): JSX.Element {
   return (
-    <MovieProvider movie={props.row.cells.movie}>
+    <MovieProvider item={props.row.cells.movie}>
       <ArchiveMovieCellsConsumer />
     </MovieProvider>
   )

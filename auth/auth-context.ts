@@ -11,32 +11,35 @@ const authContext = contextCreator({
     itemHides?: ItemHide[]
     session: Session | null
   }) => {
-    const [itemHides, setItemHides] = useState(props.itemHides)
+    const [itemHides, setItemHides] = useState(props.itemHides ?? [])
     function hideItem (hideItemProps: {
       itemId: number
     }): void {
-      if (itemHides == null) {
-        throw new Error('There is no item hides')
-      }
       if (props.session == null) {
         throw new Error('There is no session')
       }
-      setItemHides([
-        ...itemHides,
-        {
-          id: Math.random(),
-          itemId: hideItemProps.itemId,
-          userId: props.session.user.id
-        }
-      ])
+      const newHide = {
+        id: Math.random(),
+        itemId: hideItemProps.itemId,
+        userId: props.session.user.id
+      }
+      const newHides = [...itemHides, newHide]
+      setItemHides(newHides)
+    }
+    function unhideItem (unhideItemProps: {
+      itemId: number
+    }): void {
+      const newHides = itemHides.filter((hide) => hide.itemId !== unhideItemProps.itemId)
+      setItemHides(newHides)
     }
     useEffect(() => {
-      setItemHides(props.itemHides)
+      setItemHides(props.itemHides ?? [])
     }, [props.itemHides])
     const value = {
       hideItem,
       itemHides,
-      session: props.session
+      session: props.session,
+      unhideItem
     }
     return value
   }

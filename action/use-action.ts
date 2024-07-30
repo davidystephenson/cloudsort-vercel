@@ -2,21 +2,34 @@ import { useState, useEffect } from 'react'
 import { Action } from './action-types'
 
 export default function useAction (props?: {
+  action: () => Promise<void>
   acting?: boolean
 }): Action {
-  const [acting, setActing] = useState(props?.acting ?? false)
+  const [active, setActive] = useState(props?.acting ?? false)
   useEffect(() => {
-    setActing(props?.acting ?? false)
+    setActive(props?.acting ?? false)
   }, [props?.acting])
   const [error, setError] = useState<Error>()
   const [errorMessage, setErrorMessage] = useState<string>()
+  async function act (): Promise<void> {
+    start()
+    try {
+      await props?.action()
+      succeed()
+    } catch (error) {
+      if (!(error instanceof Error)) {
+        throw error
+      }
+      fail({ error })
+    }
+  }
   function start (): void {
-    setActing(true)
+    setActive(true)
     setError(undefined)
     setErrorMessage(undefined)
   }
   function succeed (): void {
-    setActing(false)
+    setActive(false)
   }
   function fail (props: {
     error: Error
@@ -25,13 +38,14 @@ export default function useAction (props?: {
     setError(props.error)
     const message = props.message ?? props.error.message
     setErrorMessage(message)
-    setActing(false)
+    setActive(false)
   }
   const value = {
+    act,
     error,
     errorMessage,
     fail,
-    acting,
+    active,
     start,
     succeed
   }

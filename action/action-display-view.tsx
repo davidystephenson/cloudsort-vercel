@@ -6,7 +6,7 @@ import { Action } from './action-types'
 export default function ActionDisplayView (props: {
   action: Action
 }): JSX.Element {
-  const waiting = !props.action.acting && props.action.errorMessage == null
+  const waiting = !props.action.active && props.action.errorMessage == null
   if (waiting) {
     return <></>
   }
@@ -15,7 +15,7 @@ export default function ActionDisplayView (props: {
       <ButtonView
         isDisabled
         errorMessage={props.action.errorMessage}
-        loading={props.action.acting}
+        loading={props.action.active}
         loadingText='Importing...'
         fontSize='sm'
         size='xs'
