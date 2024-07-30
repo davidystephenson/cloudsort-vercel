@@ -1,0 +1,29 @@
+.cloudsort-multi-loader {
+  width: 23px;
+  height: 23px;
+  border-radius: 50%;
+  border: 3px solid rgba(255, 255, 255, 0.33);
+  border-right-color: transparent;
+  /* border: 3px solid #0000;
+  border-top-color: #FFFFFF50;
+  border-left-color: #FFFFFF50;
+  border-bottom-color: #FFFFFF50; */
+  position: relative;
+  animation: cloudsort-multi-rotation 1s infinite linear;
+}
+.cloudsort-multi-loader:before,
+.cloudsort-multi-loader:after {
+  content: "";
+  position: absolute;
+  inset:-3px;
+  border-radius: 50%;
+  border:inherit;
+  animation:inherit;
+  animation-duration: 2s;
+}
+.cloudsort-multi-loader:after {
+  animation-duration: 4s;
+}
+@keyframes cloudsort-multi-rotation {
+  100% {transform: rotate(1turn)}
+}

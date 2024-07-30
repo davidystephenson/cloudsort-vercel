@@ -20,14 +20,17 @@ export default function PrivateListView (props: {
     })
     setState(state)
   }, [props.history, props.seed])
-  if (state == null) {
-    return <ListLoadingView />
-  }
   return (
-    <privateListContext.Provider
-      state={state}
-    >
-      <PrivateListConsumer />
-    </privateListContext.Provider>
+    <ListLoadingView
+      data={state}
+      View={(props) => {
+        const view = (
+          <privateListContext.Provider state={props.data}>
+            <PrivateListConsumer />
+          </privateListContext.Provider>
+        )
+        return view
+      }}
+    />
   )
 }

@@ -1,13 +1,12 @@
 .cloudsort-loader {
   height: 22px;
   width: 22px;
-  border: 3px solid #FFF;
-  border-bottom-color: transparent;
-  border-left-color: transparent;
+  border: 3px solid rgba(255, 255, 255, 0.75);
+  border-right-color: transparent;
   border-radius: 50%;
   display: inline-block;
   box-sizing: border-box;
-  animation: cloudsort-rotation 0.5s linear infinite;
+  animation: cloudsort-rotation 1s linear infinite;
 }
 @keyframes cloudsort-rotation {
   0% {

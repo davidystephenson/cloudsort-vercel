@@ -1,17 +1,17 @@
-import { Listing } from './listing-types'
+import { ListingPayload } from './listing-types'
 import post from '@/post/post'
-import policeRankedMovieArray from '@/movie/police-ranked-movie-array'
+import policeListingPayload from './police-listing-payload'
 
 export default async function postListing (props: {
   label: string
   listId: number
-}): Promise<Listing> {
+}): Promise<ListingPayload> {
   const body = { listId: props.listId }
   const response = await post({
     body,
-    guard: policeRankedMovieArray,
+    guard: policeListingPayload,
     label: props.label,
-    url: '/list/listing'
+    url: '/api/list/listing'
   })
   return response
 }

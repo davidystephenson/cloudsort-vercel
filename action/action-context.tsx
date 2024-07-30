@@ -7,7 +7,8 @@ export const {
   Provider: ActionProvider
 } = contextCreator({
   name: 'action',
-  useValue: (props: {
+  useValue: (props?: {
+    action?: () => Promise<void>
     acting?: boolean
   }) => {
     const action = useAction(props)

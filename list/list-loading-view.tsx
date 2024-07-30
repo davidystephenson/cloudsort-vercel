@@ -1,28 +1,29 @@
-'use client'
-
-import themeContext from '@/theme/theme-context'
-import { useListContext } from './list-context'
 import LoaderView from '@/loader/loader-view'
+import MultiLoaderView from '@/loader/multi-loader-view'
+import { useTheme } from '@/theme/theme-context'
+import ListLoaderView from './list-loader-view'
 
-export default function ListLoadingView (): JSX.Element {
-  const list = useListContext()
-  const theme = themeContext.useContext()
-  const loadingStyle = {
-    borderBottom: `1px solid ${theme.borderColor}`,
-    display: 'flex',
-    alignItems: 'center',
-    padding: '0.5rem 1rem',
-    gap: '0.5rem'
+export default function ListLoadingView <Data> (props: {
+  data: Data
+  View: (props: { data: NonNullable<Data> }) => JSX.Element
+}): JSX.Element {
+  const theme = useTheme()
+  if (!theme.mounted) {
+    const view = (
+      <ListLoaderView>
+        <MultiLoaderView />
+      </ListLoaderView>
+    )
+    return view
   }
-  const headingStyle = {
-    fontSize: '1.875rem',
-    fontWeight: '700',
-    lineHeight: '1.2'
+  if (props.data == null) {
+    const view = (
+      <ListLoaderView>
+        <LoaderView />
+      </ListLoaderView>
+    )
+    return view
   }
-  return (
-    <div style={loadingStyle}>
-      <h2 style={headingStyle}>{list.name}</h2>
-      <LoaderView />
-    </div>
-  )
+  const view = <props.View data={props.data} />
+  return view
 }

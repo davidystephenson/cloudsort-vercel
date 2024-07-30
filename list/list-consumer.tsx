@@ -29,14 +29,8 @@ export default async function ListConsumer (props: {
     )
     return view
   }
-  const itemHides = await prisma.itemHide.findMany({
-    where: {
-      userId: props.list.userId
-    }
-  })
   const listing = await guardListing({
     db: prisma,
-    itemHides,
     listId: props.list.id
   })
   const view = (

@@ -13,7 +13,9 @@ export default async function ListIdPage (props: {
     listId: string
   }
 }): Promise<JSX.Element> {
+  console.log('params', props.params)
   const listId = Number(props.params.listId)
+  console.log('ListIdPage listId', listId)
   try {
     const authSession = await serverAuth()
     const list = await guardAccessibleList({

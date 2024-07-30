@@ -3,24 +3,29 @@ import { Listing } from './listing-types'
 import { RelatedList } from '@/list/list-types'
 import listToHistory from '@/list/list-to-history'
 import deduceState from '@/mergechoice/deduceState'
-import { ItemHide } from '@prisma/client'
 import getRankedMovies from '@/rank/get-ranked-movies'
+import { Db } from '@/prisma/prisma-types'
 
-export default function getListing (props: {
-  itemHides?: ItemHide[]
+export default async function getListing (props: {
+  db: Db
   relatedList: RelatedList
-}): Listing {
+}): Promise<Listing> {
+  const itemHides = await props.db.itemHide.findMany({
+    where: {
+      userId: props.relatedList.userId
+    }
+  })
   const history = listToHistory({
     list: props.relatedList
   })
   const state = deduceState({ history, seed: props.relatedList.seed })
   const sorted = getSortedMovies({ state })
   const filtered = sorted.filter((movie) => {
-    const hidden = props.itemHides?.some((itemHide) => {
+    const hidden = itemHides.some((itemHide) => {
       const hidden = itemHide.itemId === movie.id
       return hidden
     })
-    return hidden !== true
+    return !hidden
   })
   const ranked = getRankedMovies({ sortedMovies: filtered })
   const cleaned = ranked.map((movie) => {

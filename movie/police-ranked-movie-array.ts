@@ -6,6 +6,7 @@ export default function policeRankedMovieArray (props: {
   label: string
   value: unknown
 }): RankedMovie[] {
+  console.log('policeRankedMovieArray value', props.value)
   const policed = guardArrayType({
     guard: policeRankedMovie,
     label: props.label,

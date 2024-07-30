@@ -9,6 +9,7 @@ export default async function guardAccessibleList (props: {
   db: PrismaClient | PrismaTransaction
   listId: number
 }): Promise<List> {
+  console.log('guardAccessibleList listId', props.listId)
   const list = await props.db.list.findUnique({
     where: { id: props.listId }
   })

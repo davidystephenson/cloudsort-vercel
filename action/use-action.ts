@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { Action } from './action-types'
 
 export default function useAction (props?: {
-  action: () => Promise<void>
+  action?: () => Promise<void>
   acting?: boolean
 }): Action {
   const [active, setActive] = useState(props?.acting ?? false)
@@ -14,7 +14,7 @@ export default function useAction (props?: {
   async function act (): Promise<void> {
     start()
     try {
-      await props?.action()
+      await props?.action?.()
       succeed()
     } catch (error) {
       if (!(error instanceof Error)) {

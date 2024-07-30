@@ -4,9 +4,9 @@ import { HandledResponse } from '@/handle/handle-types'
 import guardAccessibleList from '@/list/guard-accessible-list'
 import guardListWhere from '@/list/guard-list-where'
 import guardListing from '@/listing/guard-listing'
-import { Listing } from '@/listing/listing-types'
+import { ListingPayload } from '@/listing/listing-types'
 
-export async function POST (request: Request): HandledResponse<Listing> {
+export async function POST (request: Request): HandledResponse<ListingPayload> {
   const response = await handleBody({
     guard: guardListWhere,
     label: '/list/delete',
@@ -21,7 +21,8 @@ export async function POST (request: Request): HandledResponse<Listing> {
         db: props.db,
         listId: props.body.listId
       })
-      return listing
+      console.log('route listing', listing)
+      return { listing }
     },
     request
   })
