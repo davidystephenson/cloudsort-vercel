@@ -1,6 +1,6 @@
 import { Listing } from './listing-types'
 import post from '@/post/post'
-import guardCalculatedMovieArray from '@/movie/guard-calculated-movie-array'
+import policeRankedMovieArray from '@/movie/police-ranked-movie-array'
 
 export default async function postListing (props: {
   label: string
@@ -9,7 +9,7 @@ export default async function postListing (props: {
   const body = { listId: props.listId }
   const response = await post({
     body,
-    guard: guardCalculatedMovieArray,
+    guard: policeRankedMovieArray,
     label: props.label,
     url: '/list/listing'
   })

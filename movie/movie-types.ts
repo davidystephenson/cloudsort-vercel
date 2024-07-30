@@ -20,6 +20,9 @@ export interface CreateMoviesRequest extends ImportRequest {
   movies: MovieData[]
 }
 export type CalculatedMovie = Calculated<ListMovie>
+export type RankedMovie = CalculatedMovie & {
+  rank: number
+}
 export interface ImportMoviesRequest extends ImportRequest {
   movies: CalculatedMovie[]
 }

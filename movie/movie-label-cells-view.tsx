@@ -12,7 +12,7 @@ export default function MovieLabelCellsView (props: {
     <>
       <MovieLabelCellView linkProps={props.linkProps} />
       <ThemeTdView>
-        <Text {...props.seedProps}>{movie.calculated.seed}</Text>
+        <Text {...props.seedProps}>{movie.item.seed}</Text>
       </ThemeTdView>
     </>
   )

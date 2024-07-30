@@ -1,3 +1,3 @@
-import { CalculatedMovie } from '@/movie/movie-types'
+import { RankedMovie } from '@/movie/movie-types'
 
-export type Listing = CalculatedMovie[]
+export type Listing = RankedMovie[]

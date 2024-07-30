@@ -1,22 +1,28 @@
 'use client'
 
 import themeContext from '@/theme/theme-context'
-import { Heading, HStack, Spinner } from '@chakra-ui/react'
 import { useListContext } from './list-context'
+import { Spinner } from '@chakra-ui/react'
 
 export default function ListLoadingView (): JSX.Element {
   const list = useListContext()
   const theme = themeContext.useContext()
   const loadingStyle = {
     borderBottom: `1px solid ${theme.borderColor}`,
-    padding: '10px'
+    display: 'flex',
+    alignItems: 'center',
+    padding: '0.5rem 1rem',
+    gap: '0.5rem'
+  }
+  const headingStyle = {
+    fontSize: '1.875rem',
+    fontWeight: '700',
+    lineHeight: '1.2'
   }
   return (
     <div style={loadingStyle}>
-      <HStack>
-        <Heading size='lg'>{list.name}</Heading>
-        <Spinner size='sm' />
-      </HStack>
+      <h2 style={headingStyle}>{list.name}</h2>
+      <Spinner />
     </div>
   )
 }

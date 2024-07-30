@@ -25,7 +25,7 @@ export default function PrivateListMovieMenuView (): JSX.Element {
   function handleReset (): void {
     movie.reset()
   }
-  const hidden = auth.itemHides?.some((itemHide) => itemHide.itemId === movie.calculated.id)
+  const hidden = auth.itemHides?.some((itemHide) => itemHide.itemId === movie.item.id)
   const hideIconView = hidden === true && <HideIconView />
   return (
     <HStack>

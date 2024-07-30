@@ -11,7 +11,7 @@ export default function LabeledMovieCellsView (props: {
   movie: CalculatedMovie
 }): JSX.Element {
   const view = (
-    <MovieProvider calculated={props.movie}>
+    <MovieProvider movie={props.movie}>
       <MovieLabelCellsView linkProps={props.linkProps} seedProps={props.seedProps} />
       {props.children}
     </MovieProvider>

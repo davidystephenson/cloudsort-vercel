@@ -18,7 +18,7 @@ export default function OptionView (props: {
     throw new Error('There is no movie.')
   }
   return (
-    <MovieProvider calculated={movie}>
+    <MovieProvider movie={movie}>
       <OptionProvider
         chooseLetter={props.chooseLetter}
         index={props.index}

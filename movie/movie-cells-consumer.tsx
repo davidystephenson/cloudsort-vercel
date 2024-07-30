@@ -11,7 +11,7 @@ export default function MovieCellsConsumer (): JSX.Element {
       <MovieLabelCellsView />
       <ThemeTdView pr='0'>
         <HStack>
-          <Text>{movie.calculated.points}</Text>
+          <Text>{movie.item.points}</Text>
           <MovieCellsMenuView />
         </HStack>
       </ThemeTdView>

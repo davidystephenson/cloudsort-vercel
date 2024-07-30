@@ -21,7 +21,10 @@ export const metadata: Metadata = {
     description
   },
   metadataBase: new URL('https://cloudsort.io'),
-  themeColor: '#FFF'
+  themeColor: '#FFF',
+  icons: {
+    icon: '/favicon.ico'
+  }
 }
 
 function isShady (value: unknown): asserts value is 'light' | 'dark' | undefined {

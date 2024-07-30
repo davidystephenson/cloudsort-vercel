@@ -8,7 +8,7 @@ export default function EpisodeMovieCellsView (props: {
 }): JSX.Element {
   const view = (
     <episodeContext.Provider episode={props.row.cells.episode}>
-      <movieContext.Provider calculated={props.row.cells.movie}>
+      <movieContext.Provider movie={props.row.cells.movie}>
         <EpisodeMovieCellsConsumer row={props.row} />
       </movieContext.Provider>
     </episodeContext.Provider>

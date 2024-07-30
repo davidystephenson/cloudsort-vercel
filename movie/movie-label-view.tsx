@@ -6,9 +6,9 @@ export default function MovieLabelView (): JSX.Element {
   const movie = useMovie()
   return (
     <>
-      {movie.calculated.name}
+      {movie.item.name}
       {' '}
-      ({movie.calculated.year})
+      ({movie.item.year})
     </>
   )
 }

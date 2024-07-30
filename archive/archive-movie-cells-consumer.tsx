@@ -16,7 +16,7 @@ export default function ArchiveMovieCellsConsumer (): JSX.Element {
         </ThemeLinkableView>
       </ThemeTdView>
       <ThemeTdView>
-        {movie.calculated.seed}
+        {movie.item.seed}
       </ThemeTdView>
       <ThemeTdView pr='0'>
         <HStack>

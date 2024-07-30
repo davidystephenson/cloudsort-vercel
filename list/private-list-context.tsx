@@ -33,6 +33,7 @@ import useAction from '@/action/use-action'
 import { useRouter } from 'next/navigation'
 import useSifter from '@/sifter/use-sifter'
 import getChoiceCountRange from '@/mergechoice/getChoiceCountRange'
+import getRankedMovies from '@/rank/get-ranked-movies'
 
 const privateListContext = contextCreator({
   name: 'privateList',
@@ -47,10 +48,11 @@ const privateListContext = contextCreator({
     useEffect(() => {
       setState(props.state)
     }, [props.state])
-    const [movies, setMovies] = useState(() => {
+    const [sortedMovies, setSortedMovies] = useState(() => {
       const sortedMovies = getSortedMovies({ state })
       return sortedMovies
     })
+    const rankedMovies = getRankedMovies({ sortedMovies })
     const archiveFlag = useFlagbearer()
     const historyFlag = useFlagbearer({
       onLower: () => {
@@ -112,7 +114,7 @@ const privateListContext = contextCreator({
     }): void {
       const newState = props.update({ state })
       const sortedMovies = getSortedMovies({ state: newState })
-      setMovies(sortedMovies)
+      setSortedMovies(sortedMovies)
       setState(newState)
     }
     function queueState (props: {
@@ -389,7 +391,7 @@ const privateListContext = contextCreator({
       historySifter,
       importAction,
       removeMovie,
-      movies,
+      movies: rankedMovies,
       openedEpisodes,
       queue,
       random,
