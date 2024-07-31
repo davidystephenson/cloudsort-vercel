@@ -11,7 +11,7 @@ export default function MovieLabelView (): JSX.Element {
   return (
     <>
       {movie.item.name}
-      {' '}
+      &thinsp;
       <span style={spanStyle}>
         ({movie.item.year})
         {' '}
