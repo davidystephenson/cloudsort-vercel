@@ -1,9 +1,9 @@
 import MenuView from '@/menu/menu-view'
 import { useMovie } from '@/movie/movie-context'
 import { useTheme } from '@/theme/theme-context'
+import UnarchiveIconView from '@/unarchive/unarchive-icon-view'
 import { DeleteIcon } from '@chakra-ui/icons'
-import { Icon, MenuItem } from '@chakra-ui/react'
-import { LuArchiveRestore } from 'react-icons/lu'
+import { MenuItem } from '@chakra-ui/react'
 
 export default function ArchiveMenuView (): JSX.Element {
   const movie = useMovie()
@@ -18,7 +18,7 @@ export default function ArchiveMenuView (): JSX.Element {
   return (
     <MenuView>
       <MenuItem
-        icon={<Icon as={LuArchiveRestore} />}
+        icon={<UnarchiveIconView />}
         onClick={handleUnarchive}
       >
         Unarchive

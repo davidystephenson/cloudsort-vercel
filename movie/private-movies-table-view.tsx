@@ -11,7 +11,7 @@ import MoviesHeadingView from './movies-heading-view'
 export default function PrivateMoviesTableView (): JSX.Element {
   const movies = moviesContext.useContext()
   const privateList = privateListContext.useContext()
-  const columns = ['Movie', 'Seed', 'Points', '']
+  const columns = ['Movie', 'Seed', 'Points']
   const rows = usePrivateCellRows()
   function filterRows (props: {
     query: string | undefined

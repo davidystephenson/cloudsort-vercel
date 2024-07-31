@@ -1,4 +1,3 @@
-import HideDisplayView from '@/hide/hide-display-view'
 import HideMenuItemView from '@/hide/hide-menu-item-view'
 import UnhideMenuItemView from '@/hide/unhide-menu-item-view'
 import MenuView from '@/menu/menu-view'
@@ -24,7 +23,6 @@ export default function PrivateListMovieMenuView (): JSX.Element {
   }
   return (
     <HStack gap='0'>
-      <HideDisplayView />
       <MenuView>
         <HideMenuItemView />
         <UnhideMenuItemView />
