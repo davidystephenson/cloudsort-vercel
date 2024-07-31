@@ -2,10 +2,13 @@ import { Center, HStack } from '@chakra-ui/react'
 import privateListContext from '../list/private-list-context'
 import OptionView from './option-view'
 import DeferView from '@/defer/defer-view'
+import { useTable } from '@/table/table-context'
 
 export default function OptionsView (): JSX.Element {
   const list = privateListContext.useContext()
+  const table = useTable()
   if (
+    table.queried ||
     list.importAction.active ||
     list.state.complete ||
     list.state.choice == null ||

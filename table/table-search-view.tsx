@@ -4,18 +4,17 @@ import TableSearchRightView from './table-search-right-view'
 
 export default function TableSearchView (): JSX.Element {
   const table = useTable()
-
-  return (
-    <>
-      <ThemeInputView
-        autoFocus={table.autoFocus}
-        ref={table.inputRef}
-        rightElement={<TableSearchRightView />}
-        placeholder='Search'
-        onChange={table.handleQueryChange}
-        onKeyDown={table.handleKeyDown}
-        value={table.query}
-      />
-    </>
+  const view = (
+    <ThemeInputView
+      autoFocus={table.autoFocus}
+      onChange={table.handleQueryChange}
+      onKeyDown={table.handleKeyDown}
+      placeholder='Search'
+      ref={table.inputRef}
+      rightElement={<TableSearchRightView />}
+      size='sm'
+      value={table.query}
+    />
   )
+  return view
 }

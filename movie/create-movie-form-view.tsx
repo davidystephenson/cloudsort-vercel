@@ -7,6 +7,8 @@ import SubmitRequestView from '../request/submit-request-view'
 import { useHeading } from '../heading/heading-context'
 import guardMovieData from './guard-movie-data'
 import privateListContext from '@/list/private-list-context'
+import ThemeIconButtonView from '@/theme/theme-icon-button-view'
+import { MdClose } from 'react-icons/md'
 
 export default function CreateMovieFormView (): JSX.Element {
   const heading = useHeading()
@@ -24,6 +26,9 @@ export default function CreateMovieFormView (): JSX.Element {
     const movieData = guardMovieData({ label: 'Create movie form data', value: fieldData })
     const movies = [movieData]
     await privateList.importMovies({ movies })
+  }
+  function handleClose (): void {
+    heading.deselect()
   }
   return (
     <RequestFormView send={send}>
@@ -58,7 +63,18 @@ export default function CreateMovieFormView (): JSX.Element {
         type='number'
       />
       <HStack justifyContent='end' mt='2px'>
-        <SubmitRequestView>
+
+        <SubmitRequestView
+          leftButton={
+            <ThemeIconButtonView
+              aria-label='Close'
+              colorScheme='red'
+              icon={<MdClose />}
+              onClick={handleClose}
+              variant='solid'
+            />
+          }
+        >
           Create Movie
         </SubmitRequestView>
       </HStack>

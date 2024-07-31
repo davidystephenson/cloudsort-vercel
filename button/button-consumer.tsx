@@ -16,23 +16,39 @@ import {
 } from '@chakra-ui/react'
 import ThemeIconButtonView from '../theme/theme-icon-button-view'
 
-function Consumer (props: ButtonProps, ref: ForwardedRef<HTMLButtonElement>): JSX.Element {
+function Consumer (
+  props: {
+    leftButton?: JSX.Element
+  } & ButtonProps,
+  ref: ForwardedRef<HTMLButtonElement>
+): JSX.Element {
   const button = useButtonContext()
+  const { leftButton, ...restProps } = props
   if (button.errorMessage == null) {
-    return (
+    const mainView = (
       <ThemeButtonView
         isLoading={button.loading}
         onClick={button.handleClick}
         type={button.type}
         ref={ref}
-        {...props}
+        {...restProps}
       />
+    )
+    if (leftButton == null) {
+      return mainView
+    }
+    return (
+      <ButtonGroup isAttached orientation={button.orientation}>
+        {leftButton}
+        {mainView}
+      </ButtonGroup>
     )
   }
   const icon = <MdError />
   const sizeProps = props.size == null ? {} : { size: props.size }
   return (
     <ButtonGroup isAttached orientation={button.orientation}>
+      {leftButton}
       <ThemeButtonView
         onClick={button.handleClick}
         isLoading={button.loading}

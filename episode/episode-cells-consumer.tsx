@@ -41,7 +41,7 @@ export default function EpisodeCellsConsumer (props: {
   }
   const consumer = (
     <TableSpanView>
-      <HStack>
+      <HStack w='100%' justifyContent='space-between'>
         <ThemeLinkableView href='#' onClick={handleClick}>
           <HStack>
             <Heading size='xs'>

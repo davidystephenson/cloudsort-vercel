@@ -13,8 +13,8 @@ export default function HeadingConsumer (props: {
     <ThemeTableView {...restProps}>
       <Tbody>
         <HeadingContentView>
-          <HStack justifyContent='space-between'>
-            <HStack>{children}</HStack>
+          <HStack w='100%'>
+            {children}
           </HStack>
         </HeadingContentView>
         {heading.content}

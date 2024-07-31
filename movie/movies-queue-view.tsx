@@ -1,6 +1,7 @@
 import ButtonView from '@/button/button-view'
 import IconButtonView from '@/button/icon-button-view'
 import privateListContext from '@/list/private-list-context'
+import ThemeButtonView from '@/theme/theme-button-view'
 import ThemeTableView from '@/theme/theme-table-view'
 import { CheckIcon, WarningIcon } from '@chakra-ui/icons'
 import { Badge, Popover, PopoverArrow, PopoverBody, PopoverCloseButton, PopoverContent, PopoverHeader, PopoverTrigger, Spinner, Tbody, Td, Tr } from '@chakra-ui/react'
@@ -104,9 +105,9 @@ export default function MoviesQueueView (): JSX.Element {
   return (
     <Popover>
       <PopoverTrigger>
-        <ButtonView colorScheme='blue' size='xs'>
+        <ThemeButtonView colorScheme='blue' size='xs'>
           <Spinner size='xs' />
-        </ButtonView>
+        </ThemeButtonView>
       </PopoverTrigger>
       <PopoverContent>
         <PopoverArrow />

@@ -15,7 +15,8 @@ export default function ImportMenuItemView (): JSX.Element {
     try {
       const movies = parseCritickerMovies({ rows: props.data })
       await privateList.importMovies({
-        movies
+        movies,
+        slice: 5
       })
       privateList.importAction.succeed()
     } catch (error) {

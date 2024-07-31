@@ -7,7 +7,9 @@ import { ButtonContextValue } from './button-types'
 import { ButtonProps } from '@chakra-ui/react'
 
 function View (
-  props: ButtonContextValue & ButtonProps,
+  props: {
+    leftButton?: JSX.Element
+  } & ButtonContextValue & ButtonProps,
   ref: ForwardedRef<HTMLButtonElement>
 ): JSX.Element {
   const { errorMessage, handleClick, loading, type, ...restProps } = props

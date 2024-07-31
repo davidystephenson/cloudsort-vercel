@@ -6,6 +6,7 @@ import ButtonView from '../button/button-view'
 import { useForm } from '../form/form-context'
 
 export default function SubmitRequestView (props: {
+  leftButton?: JSX.Element
   children: ReactNode
 }): JSX.Element {
   const form = useForm()
@@ -13,16 +14,16 @@ export default function SubmitRequestView (props: {
   function onClick (): void {
     form.handleSubmit()
   }
-  return (
-    <>
-      <ButtonView
-        loading={request.acting}
-        errorMessage={request.errorMessage}
-        type='submit'
-        handleClick={onClick}
-      >
-        {props.children}
-      </ButtonView>
-    </>
+  const view = (
+    <ButtonView
+      leftButton={props.leftButton}
+      loading={request.acting}
+      errorMessage={request.errorMessage}
+      type='submit'
+      handleClick={onClick}
+    >
+      {props.children}
+    </ButtonView>
   )
+  return view
 }

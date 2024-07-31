@@ -1,10 +1,11 @@
 import { ReactNode, forwardRef } from 'react'
 import { useTheme } from './theme-context'
-import { FormControl, FormErrorMessage, FormLabel, Input, InputGroup, InputProps, InputRightElement } from '@chakra-ui/react'
+import { FormControl, FormControlProps, FormErrorMessage, FormLabel, Input, InputGroup, InputProps, InputRightElement } from '@chakra-ui/react'
 
 const ThemeInputView = forwardRef<
 HTMLInputElement,
 InputProps & {
+  controlProps?: FormControlProps
   debug?: boolean
   errorMessage?: string
   label?: string
@@ -29,9 +30,10 @@ InputProps & {
   const rightView = rightElement != null && (
     <InputRightElement w='fit-content'>{rightElement}</InputRightElement>
   )
+  const labelView = label != null && <FormLabel>{label}</FormLabel>
   return (
-    <FormControl isInvalid={invalid}>
-      <FormLabel>{label}</FormLabel>
+    <FormControl isInvalid={invalid} {...props.controlProps}>
+      {labelView}
       <InputGroup>
         <Input
           variant='flushed'

@@ -22,6 +22,7 @@ export const {
       inputRef.current?.blur()
       setAutoFocus(false)
     }, [])
+    const queried = query.length > 0
     function clearQuery (): void {
       setQuery('')
       props.filterRows({ query: undefined })
@@ -46,6 +47,7 @@ export const {
       clearQuery,
       handleKeyDown,
       handleQueryChange,
+      queried,
       query
     }
     return value

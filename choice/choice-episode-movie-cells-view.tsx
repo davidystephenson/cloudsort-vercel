@@ -4,7 +4,7 @@ import MovieLabelCellsView from '@/movie/movie-label-cells-view'
 import { ListMovie } from '@/movie/movie-types'
 import ThemeTdView from '@/theme/theme-td-view'
 import { CheckIcon, SmallCloseIcon } from '@chakra-ui/icons'
-import { HStack, Text } from '@chakra-ui/react'
+import { Text } from '@chakra-ui/react'
 
 export default function ChoiceEpisodeMovieCellsView (props: {
   input: EpisodeChoice<ListMovie>
@@ -12,7 +12,7 @@ export default function ChoiceEpisodeMovieCellsView (props: {
 }): JSX.Element {
   const a = props.input.aId === props.row.cells.movie.id
   const better = a ? props.input.aBetter : !props.input.aBetter
-  const betterIcon = better ? <CheckIcon /> : <SmallCloseIcon />
+  const icon = better ? <CheckIcon /> : <SmallCloseIcon />
   const betterProps = better ? { fontWeight: 'bold' } : {}
   const aSeedBetter = (
     props.input.aItem.seed !== undefined &&
@@ -28,10 +28,10 @@ export default function ChoiceEpisodeMovieCellsView (props: {
         seedProps={upsetStyles}
       />
       <ThemeTdView>
-        <HStack>
-          <Text {...betterProps}>{props.row.cells.movie.points}</Text>
-          {betterIcon}
-        </HStack>
+        <Text {...betterProps}>{props.row.cells.movie.points}</Text>
+      </ThemeTdView>
+      <ThemeTdView>
+        {icon}
       </ThemeTdView>
     </>
   )
