@@ -2,6 +2,7 @@
 
 import { ExternalLinkIcon } from '@chakra-ui/icons'
 import { useMovie } from './movie-context'
+import HideDisplayView from '@/hide/hide-display-view'
 
 export default function MovieLabelView (): JSX.Element {
   const movie = useMovie()
@@ -10,6 +11,8 @@ export default function MovieLabelView (): JSX.Element {
   }
   return (
     <>
+      <HideDisplayView />
+      &thinsp;
       {movie.item.name}
       &thinsp;
       <span style={spanStyle}>
