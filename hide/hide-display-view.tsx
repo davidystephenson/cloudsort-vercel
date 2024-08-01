@@ -5,7 +5,7 @@ import { Spinner } from '@chakra-ui/react'
 export default function HideDisplayView (): JSX.Element {
   const movie = useMovie()
   if (movie.hide.active || movie.unhide.active) {
-    return <Spinner size='xs' />
+    return <Spinner size='xs' marginRight='2px' />
   }
   if (movie.hidden) {
     const view = <HideIconView />

@@ -1,5 +1,4 @@
-import HideMenuItemView from '@/hide/hide-menu-item-view'
-import UnhideMenuItemView from '@/hide/unhide-menu-item-view'
+import HideMenuItemsView from '@/hide/hide-menu-items-view'
 import MenuView from '@/menu/menu-view'
 import { useMovie } from '@/movie/movie-context'
 import { useTheme } from '@/theme/theme-context'
@@ -24,8 +23,7 @@ export default function PrivateListMovieMenuView (): JSX.Element {
   return (
     <HStack gap='0'>
       <MenuView>
-        <HideMenuItemView />
-        <UnhideMenuItemView />
+        <HideMenuItemsView />
         <MenuItem
           color={color}
           icon={<Icon as={LuArchive} color={color} />}

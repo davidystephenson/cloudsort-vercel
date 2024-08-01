@@ -1,3 +1,4 @@
+import HideMenuItemsView from '@/hide/hide-menu-items-view'
 import MenuView from '@/menu/menu-view'
 import { useMovie } from '@/movie/movie-context'
 import { useTheme } from '@/theme/theme-context'
@@ -17,6 +18,7 @@ export default function ArchiveMenuView (): JSX.Element {
   }
   return (
     <MenuView>
+      <HideMenuItemsView />
       <MenuItem
         icon={<UnarchiveIconView />}
         onClick={handleUnarchive}
