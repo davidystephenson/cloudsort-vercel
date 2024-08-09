@@ -7,7 +7,7 @@ export default function ListMovieCellsView (props: {
 }): JSX.Element {
   const view = (
     <MovieProvider item={props.row.cells.movie}>
-      <MovieCellsConsumer />
+      <MovieCellsConsumer rank={props.row.cells.movie.rank} />
     </MovieProvider>
   )
   return view
