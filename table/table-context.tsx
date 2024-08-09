@@ -30,6 +30,7 @@ export const {
     function handleKeyDown (event: React.KeyboardEvent<HTMLInputElement>): void {
       if (event.key === 'Escape') {
         setAutoFocus(false)
+        clearQuery()
         inputRef.current?.blur()
       }
     }
@@ -38,6 +39,9 @@ export const {
       setQuery(lower)
       props.filterRows({ query: event.target.value })
       setAutoFocus(true)
+    }
+    function handleBlur (): void {
+      setAutoFocus(false)
     }
     const value = {
       autoFocus,
@@ -48,7 +52,8 @@ export const {
       handleKeyDown,
       handleQueryChange,
       queried,
-      query
+      query,
+      handleBlur
     }
     return value
   }

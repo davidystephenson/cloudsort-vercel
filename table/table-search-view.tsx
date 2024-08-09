@@ -7,6 +7,7 @@ export default function TableSearchView (): JSX.Element {
   const view = (
     <ThemeInputView
       autoFocus={table.autoFocus}
+      onBlur={table.handleBlur}
       onChange={table.handleQueryChange}
       onKeyDown={table.handleKeyDown}
       placeholder='Search'

@@ -10,18 +10,6 @@ const moviesContext = contextCreator({
     movies: RankedMovie[]
   }) => {
     const flag = useFlagbearer({ initial: true })
-    function getRank (getRanksProps: {
-      movieId: number
-    }): number {
-      const movie = props.movies.find((movie) => {
-        const match = movie.id === getRanksProps.movieId
-        return match
-      })
-      if (movie == null) {
-        throw new Error('Movie not found')
-      }
-      return movie.rank
-    }
     const seedless = props.movies.every((movie) => {
       const nullish = movie.seed == null
       const zeroed = movie.seed === 0
@@ -34,7 +22,6 @@ const moviesContext = contextCreator({
     })
     const value = {
       flag,
-      getRank,
       movies: props.movies,
       seedless,
       sifter
