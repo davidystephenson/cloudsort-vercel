@@ -7,7 +7,6 @@ import getCalculatedItem from '@/mergechoice/getCalculatedItem'
 import getDefaultOptionIndex from '@/mergechoice/getDefaultOptionIndex'
 import importItems from '@/mergechoice/importItems'
 import resetItem from '@/mergechoice/resetItem'
-import rewindState from '@/mergechoice/rewindState'
 import setupRandomChoice from '@/mergechoice/setupRandomChoice'
 import unarchiveItem from '@/mergechoice/unarchiveItem'
 import postRemoveMovie from '@/movie/post-remove-movie'
@@ -19,7 +18,7 @@ import { AlwaysNever } from '@/shuffleSlice/shuffleSliceTypes'
 import postUnarchive from '@/unarchive/post-unarchive'
 import useQueue from '@/useQueue/useQueue'
 import contextCreator from 'context-creator'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import chooseOption from '../mergechoice/chooseOption'
 import { State } from '../mergechoice/mergeChoiceTypes'
 import removeItem from '../mergechoice/removeItem'
@@ -44,6 +43,16 @@ const privateListContext = contextCreator({
     const lists = useOptionalLists()
     const queue = useQueue()
     const router = useRouter()
+    const rewindWorkerRef = useRef<Worker>()
+    useEffect(() => {
+      rewindWorkerRef.current = new Worker(new URL('../rewind/rewind-worker.ts', import.meta.url))
+      rewindWorkerRef.current.onmessage = (event: MessageEvent<State<ListMovie>>) => {
+        console.log('received onMessage event:', event)
+      }
+      return () => {
+        rewindWorkerRef.current?.terminate()
+      }
+    }, [])
     const [state, setState] = useState(props.state)
     useEffect(() => {
       setState(props.state)
@@ -110,12 +119,11 @@ const privateListContext = contextCreator({
       router.push('/lists')
     }
     function updateState (props: {
-      update: (props: { state: State<ListMovie> }) => State<ListMovie>
+      newState: State<ListMovie>
     }): void {
-      const newState = props.update({ state })
-      const sortedMovies = getSortedMovies({ state: newState })
+      const sortedMovies = getSortedMovies({ state: props.newState })
       setSortedMovies(sortedMovies)
-      setState(newState)
+      setState(props.newState)
     }
     function queueState (props: {
       remote?: () => Promise<unknown>
@@ -127,7 +135,8 @@ const privateListContext = contextCreator({
         label: props.label
       }
       void queue.add({ task })
-      updateState({ update: props.local })
+      const newState = props.local({ state })
+      updateState({ newState })
     }
     function archive (archiveProps: {
       movieId: number
@@ -249,27 +258,23 @@ const privateListContext = contextCreator({
       if (lastEpisode == null) {
         throw new Error('There is no lastEpisode')
       }
-      updateState({
-        update: (updateProps) => {
-          const newState = setupRandomChoice({ state: updateProps.state })
-          const newEpisode = newState.history[0]
-          async function perform (): Promise<void> {
-            if (newEpisode.random == null) {
-              throw new Error('There is no random')
-            }
-            const body = {
-              lastMergechoiceId: lastEpisode.mergeChoiceId,
-              listId: list.id,
-              random: newEpisode.random
-            }
-            await postRandom({ body, label: 'random' })
-          }
-          const label = 'Create random choice'
-          const task = { perform, label }
-          void queue.add({ task })
-          return newState
+      const newState = setupRandomChoice({ state })
+      const newEpisode = newState.history[0]
+      async function perform (): Promise<void> {
+        if (newEpisode.random == null) {
+          throw new Error('There is no random')
         }
-      })
+        const body = {
+          lastMergechoiceId: lastEpisode.mergeChoiceId,
+          listId: list.id,
+          random: newEpisode.random
+        }
+        await postRandom({ body, label: 'random' })
+      }
+      const label = 'Create random choice'
+      const task = { perform, label }
+      void queue.add({ task })
+      updateState({ newState })
     }
     function removeMovie (deleteMovieProps: {
       movieId: number
@@ -329,11 +334,17 @@ const privateListContext = contextCreator({
         throw new Error('There is no lastEpisode')
       }
       function local (updateProps: { state: State<ListMovie> }): State<ListMovie> {
-        const newState = rewindState({
+        console.log('rewind local:', rewindWorkerRef)
+        rewindWorkerRef.current?.postMessage({
           episodeId: rewindProps.episodeMergechoiceId,
           state: updateProps.state
         })
-        return newState
+        // const newState = rewindState({
+        //   episodeId: rewindProps.episodeMergechoiceId,
+        //   state: updateProps.state
+        // })
+        // return newState
+        return updateProps.state
       }
       const localeString = new Date().toLocaleString()
       const label = `Rewind before ${localeString}`
