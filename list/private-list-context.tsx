@@ -18,7 +18,7 @@ import { AlwaysNever } from '@/shuffleSlice/shuffleSliceTypes'
 import postUnarchive from '@/unarchive/post-unarchive'
 import useQueue from '@/useQueue/useQueue'
 import contextCreator from 'context-creator'
-import { useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import chooseOption from '../mergechoice/chooseOption'
 import { State } from '../mergechoice/mergeChoiceTypes'
 import removeItem from '../mergechoice/removeItem'
@@ -43,20 +43,29 @@ const privateListContext = contextCreator({
     const lists = useOptionalLists()
     const queue = useQueue()
     const router = useRouter()
+    useEffect(() => {
+      setState(props.state)
+    }, [props.state])
+    const updateState = useCallback((props: {
+      newState: State<ListMovie>
+    }) => {
+      const sortedMovies = getSortedMovies({ state: props.newState })
+      setSortedMovies(sortedMovies)
+      setState(props.newState)
+    }, [])
+    const rewindAction = useAction()
     const rewindWorkerRef = useRef<Worker>()
     useEffect(() => {
       rewindWorkerRef.current = new Worker(new URL('../rewind/rewind-worker.ts', import.meta.url))
       rewindWorkerRef.current.onmessage = (event: MessageEvent<State<ListMovie>>) => {
-        console.log('received onMessage event:', event)
+        updateState({ newState: event.data })
+        rewindAction.succeed()
       }
       return () => {
         rewindWorkerRef.current?.terminate()
       }
-    }, [])
+    }, [updateState, rewindAction.succeed])
     const [state, setState] = useState(props.state)
-    useEffect(() => {
-      setState(props.state)
-    }, [props.state])
     const [sortedMovies, setSortedMovies] = useState(() => {
       const sortedMovies = getSortedMovies({ state })
       return sortedMovies
@@ -117,13 +126,6 @@ const privateListContext = contextCreator({
     async function _delete (): Promise<void> {
       await lists?.delete({ id: list.id })
       router.push('/lists')
-    }
-    function updateState (props: {
-      newState: State<ListMovie>
-    }): void {
-      const sortedMovies = getSortedMovies({ state: props.newState })
-      setSortedMovies(sortedMovies)
-      setState(props.newState)
     }
     function queueState (props: {
       remote?: () => Promise<unknown>
@@ -335,6 +337,7 @@ const privateListContext = contextCreator({
       }
       function local (updateProps: { state: State<ListMovie> }): State<ListMovie> {
         console.log('rewind local:', rewindWorkerRef)
+        rewindAction.start()
         rewindWorkerRef.current?.postMessage({
           episodeId: rewindProps.episodeMergechoiceId,
           state: updateProps.state
@@ -410,6 +413,7 @@ const privateListContext = contextCreator({
       range,
       reset,
       rewind,
+      rewindAction,
       state,
       synced,
       toggleEpisode,

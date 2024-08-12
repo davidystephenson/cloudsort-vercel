@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { Action } from './action-types'
 
 export default function useAction (props?: {
@@ -28,9 +28,9 @@ export default function useAction (props?: {
     setError(undefined)
     setErrorMessage(undefined)
   }
-  function succeed (): void {
+  const succeed = useCallback(() => {
     setActive(false)
-  }
+  }, [])
   function fail (props: {
     error: Error
     message?: string
