@@ -1,15 +1,15 @@
 import { MovieEpisode } from '@/episode/episode-types'
-import { ChooseMovieRequest } from '../movie/movie-types'
+import { MovieChoiceRequest } from '../movie/movie-types'
 import postEpisode from '@/episode/post-episode'
 
 export default async function postChoice (props: {
-  body: ChooseMovieRequest
+  request: MovieChoiceRequest
   label: string
 }): Promise<MovieEpisode> {
   const episode = await postEpisode({
-    body: props.body,
+    body: props.request,
     label: props.label,
-    url: '/api/movie/choose'
+    url: '/api/movie/choice'
   })
   return episode
 }

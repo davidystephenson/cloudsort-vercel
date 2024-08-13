@@ -3,7 +3,7 @@ import { EpisodeResponse } from '@/episode/episode-types'
 
 export async function POST (request: Request): EpisodeResponse {
   const response = await handleChoice({
-    label: '/movie/choose',
+    label: '/movie/choice',
     request
   })
   return response

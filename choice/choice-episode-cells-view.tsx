@@ -7,13 +7,23 @@ import ChoiceNameView from './choice-name-view'
 export default function ChoiceEpisodeCellsView (props: {
   input: EpisodeChoice<ListMovie>
 }): JSX.Element {
-  const aIcon = props.input.aBetter ? <CheckIcon /> : <SmallCloseIcon />
-  const bIcon = props.input.aBetter ? <SmallCloseIcon /> : <CheckIcon />
+  const aIcon = props.input.aBetter
+    ? <CheckIcon mb='2px' />
+    : <SmallCloseIcon mb='2px' />
+  const bIcon = props.input.aBetter
+    ? <SmallCloseIcon mb='2px' />
+    : <CheckIcon mb='2px' />
   return (
     <HStack>
-      <ChoiceNameView icon={aIcon} name={props.input.aItem.name} />
+      <ChoiceNameView
+        icon={aIcon}
+        name={props.input.aItem.name}
+      />
       <Text>{' '}</Text>
-      <ChoiceNameView icon={bIcon} name={props.input.bItem.name} />
+      <ChoiceNameView
+        icon={bIcon}
+        name={props.input.bItem.name}
+      />
     </HStack>
   )
 }

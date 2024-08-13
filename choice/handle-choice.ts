@@ -1,14 +1,14 @@
 import { EpisodeResponse } from '@/episode/episode-types'
 import handleEpisode from '@/episode/handle-episode'
-import guardChooseMovieRequest from '@/movie/guard-choose-movie-request'
 import createChoiceEpisode from './create-choice-episode'
+import guardMovieChoiceRequest from '@/movie/guard-movie-choice-request'
 
 export default async function handleChoice (props: {
   label: string
   request: Request
 }): Promise<EpisodeResponse> {
   const response = await handleEpisode({
-    guard: guardChooseMovieRequest,
+    guard: guardMovieChoiceRequest,
     label: props.label,
     create: async (props) => {
       const episode = await createChoiceEpisode({

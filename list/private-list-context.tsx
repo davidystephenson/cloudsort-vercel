@@ -22,7 +22,7 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import chooseOption from '../mergechoice/chooseOption'
 import { State } from '../mergechoice/mergeChoiceTypes'
 import removeItem from '../mergechoice/removeItem'
-import { ChooseMovieRequest, CreateMoviesRequest, ListMovie, MovieData } from '../movie/movie-types'
+import { CreateMoviesRequest, ListMovie, MovieData } from '../movie/movie-types'
 import postMovies from '../movie/post-movies'
 import siftMovie from '../movie/sift-movie'
 import getSortedMovies from '../movies/getSortedMovies'
@@ -33,6 +33,7 @@ import { useRouter } from 'next/navigation'
 import useSifter from '@/sifter/use-sifter'
 import getChoiceCountRange from '@/mergechoice/getChoiceCountRange'
 import getRankedMovies from '@/rank/get-ranked-movies'
+import createMovieChoiceRequest from '@/movie/create-movie-choice-request'
 
 const privateListContext = contextCreator({
   name: 'privateList',
@@ -167,9 +168,6 @@ const privateListContext = contextCreator({
     function choose (chooseProps: {
       betterIndex: number
     }): void {
-      if (state.choice == null) {
-        throw new Error('There is no choice')
-      }
       function local (props: { state: State<ListMovie> }): State<ListMovie> {
         const newState = chooseOption({
           betterIndex: chooseProps.betterIndex,
@@ -182,38 +180,15 @@ const privateListContext = contextCreator({
         }
         return newState
       }
-      const betterId = state.choice?.options[chooseProps.betterIndex]
-      const worseIndex = 1 - chooseProps.betterIndex
-      const worseId = state.choice?.options[worseIndex]
-      if (worseId == null) {
-        throw new Error('There is no worseId')
-      }
-      const betterItem = state.items[betterId]
-      const worseItem = state.items[worseId]
-      const label = `${betterItem.name} > ${worseItem.name}`
-      const aId = state.choice.options[state.choice.aIndex]
-      const bId = state.choice.options[state.choice.bIndex]
-      const aBetter = aId === betterId
-      const aItem = getCalculatedItem({ itemId: aId, state })
-      const bItem = getCalculatedItem({ itemId: bId, state })
-      const body: ChooseMovieRequest = {
-        choice: {
-          aBetter,
-          aId,
-          aItem,
-          betterIndex: chooseProps.betterIndex,
-          bId,
-          bItem,
-          random: state.choice.random,
-          seeded: false
-        },
-        lastMergechoiceId: state.history[0].mergeChoiceId,
-        listId: list.id
-      }
+      const request = createMovieChoiceRequest({
+        betterIndex: chooseProps.betterIndex,
+        listId: list.id,
+        state
+      })
       async function remote (): Promise<void> {
-        await postChoice({ body, label: 'choose' })
+        await postChoice({ request, label: request.label })
       }
-      queueState({ label, local, remote })
+      queueState({ label: request.label, local, remote })
     }
     function defer (): void {
       if (defaultOptionIndex == null) {

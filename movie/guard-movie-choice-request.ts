@@ -1,16 +1,18 @@
 import fashionPolice from '@/fashion-police/fashion-police'
 import guardNumber from '@/fashion-police/guard-number'
-import { ChooseMovieRequest } from './movie-types'
+import { MovieChoiceRequest } from './movie-types'
 import guardEpisodeChoice from '@/choice/guard-episode-choice'
+import guardString from '@/fashion-police/guard-string'
 
-export default function guardChooseMovieRequest (props: {
+export default function guardMovieChoiceRequest (props: {
   label: string
   value: unknown
-}): ChooseMovieRequest {
+}): MovieChoiceRequest {
   const guards = {
-    listId: guardNumber,
+    choice: guardEpisodeChoice,
+    label: guardString,
     lastMergechoiceId: guardNumber,
-    choice: guardEpisodeChoice
+    listId: guardNumber
   }
   const guarded = fashionPolice({
     required: guards,

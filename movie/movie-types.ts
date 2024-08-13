@@ -35,8 +35,9 @@ export interface PostMoviesResponse extends EpisodeRequest {
 export interface RemoveMovieRequest extends EpisodeRequest {
   remove: EpisodeRemove<ListMovie>
 }
-export interface ChooseMovieRequest extends EpisodeRequest {
+export interface MovieChoiceRequest extends EpisodeRequest {
   choice: EpisodeChoice<ListMovie>
+  label: string
 }
 export interface CritickerRow {
   ' Date Rated': string
