@@ -7,7 +7,7 @@ export default function ChoiceEpisodeCellsView (props: {
   input: EpisodeChoice<ListMovie>
 }): JSX.Element {
   return (
-    <HStack justifyContent='space-between' width='100%'>
+    <HStack width='100%'>
       <ChoiceNameView
         better={props.input.aBetter}
         name={props.input.aItem.name}
