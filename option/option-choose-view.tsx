@@ -9,10 +9,17 @@ export default function OptionChooseView (): JSX.Element {
     option.choose()
   }
   return (
-    <ButtonView onClick={handleClick} fontSize='md' whiteSpace='normal' py='6px' h='auto' w='fit-content'>
+    <ButtonView
+      onClick={handleClick}
+      fontSize='md'
+      whiteSpace='normal'
+      py='6px'
+      h='auto'
+      w='fit-content'
+    >
       <Text w='fit-content'>
         [{option.chooseLetter}]
-      &thinsp;
+        &thinsp;
         <MovieLabelView />
       </Text>
     </ButtonView>

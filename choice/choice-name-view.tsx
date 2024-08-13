@@ -1,23 +1,18 @@
-import LineSpanView from '@/line/line-span-view'
-import { Text } from '@chakra-ui/react'
+import { CheckIcon, SmallCloseIcon } from '@chakra-ui/icons'
+import { HStack } from '@chakra-ui/react'
 
 export default function ChoiceNameView (props: {
-  icon: JSX.Element
+  better: boolean
   name: string
 }): JSX.Element {
-  const words = props.name.split(' ')
-  const [firstWord, ...restWords] = words
-  const rest = restWords.join(' ')
+  const icon = props.better
+    ? <CheckIcon />
+    : <SmallCloseIcon />
   const view = (
-    <Text>
-      <LineSpanView>
-        {props.icon}
-        &thinsp;
-        {firstWord}
-      </LineSpanView>
-      &thinsp;
-      {rest}
-    </Text>
+    <HStack spacing='4px' width='50%'>
+      {icon}
+      <div>{props.name}</div>
+    </HStack>
   )
   return view
 }

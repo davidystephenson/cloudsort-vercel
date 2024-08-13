@@ -42,9 +42,9 @@ export default function EpisodeCellsConsumer (props: {
   const consumer = (
     <TableSpanView>
       <HStack w='100%' justifyContent='space-between'>
-        <ThemeLinkableView href='#' onClick={handleClick}>
-          <HStack>
-            <Heading size='xs'>
+        <ThemeLinkableView href='#' onClick={handleClick} width='100%'>
+          <HStack justifyContent='space-between' width='100%'>
+            <Heading size='xs' width='100%'>
               {cells}
             </Heading>
             <Text whiteSpace='nowrap'>(<EpisodeTimeView />)</Text>
