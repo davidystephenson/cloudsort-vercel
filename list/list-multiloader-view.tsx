@@ -1,11 +1,11 @@
 import MultiLoaderView from '@/loader/multi-loader-view'
-import ListLoaderView from './list-loader-view'
+import ListLoadingView from './list-loading-view'
 
 export default function ListMultiloaderView (): JSX.Element {
   const view = (
-    <ListLoaderView>
+    <ListLoadingView>
       <MultiLoaderView />
-    </ListLoaderView>
+    </ListLoadingView>
   )
   return view
 }

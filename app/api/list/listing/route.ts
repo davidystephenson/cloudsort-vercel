@@ -21,7 +21,6 @@ export async function POST (request: Request): HandledResponse<ListingPayload> {
         db: props.db,
         listId: props.body.listId
       })
-      console.log('route listing', listing)
       return { listing }
     },
     request

@@ -336,17 +336,11 @@ const privateListContext = contextCreator({
         throw new Error('There is no lastEpisode')
       }
       function local (updateProps: { state: State<ListMovie> }): State<ListMovie> {
-        console.log('rewind local:', rewindWorkerRef)
         rewindAction.start()
         rewindWorkerRef.current?.postMessage({
           episodeId: rewindProps.episodeMergechoiceId,
           state: updateProps.state
         })
-        // const newState = rewindState({
-        //   episodeId: rewindProps.episodeMergechoiceId,
-        //   state: updateProps.state
-        // })
-        // return newState
         return updateProps.state
       }
       const localeString = new Date().toLocaleString()
