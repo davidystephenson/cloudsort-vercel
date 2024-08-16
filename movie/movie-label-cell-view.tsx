@@ -4,6 +4,7 @@ import { HStack, LinkProps } from '@chakra-ui/react'
 import { useMovie } from './movie-context'
 import MovieLabelView from './movie-label-view'
 import { ReactNode } from 'react'
+import { ExternalLinkIcon } from '@chakra-ui/icons'
 
 export default function MovieLabelCellView (props: {
   children?: ReactNode
@@ -19,7 +20,9 @@ export default function MovieLabelCellView (props: {
           isExternal
           {...props.linkProps}
         >
-          <MovieLabelView />
+          <MovieLabelView>
+            <ExternalLinkIcon mx='2px' />
+          </MovieLabelView>
         </ThemeLinkableView>
       </HStack>
     </ThemeTdView>

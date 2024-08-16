@@ -1,11 +1,13 @@
 'use client'
 
-import { ExternalLinkIcon } from '@chakra-ui/icons'
 import { useMovie } from './movie-context'
 import HideDisplayView from '@/hide/hide-display-view'
 import LineSpanView from '@/line/line-span-view'
+import { ReactNode } from 'react'
 
-export default function MovieLabelView (): JSX.Element {
+export default function MovieLabelView (props: {
+  children?: ReactNode
+}): JSX.Element {
   const movie = useMovie()
   return (
     <>
@@ -16,7 +18,7 @@ export default function MovieLabelView (): JSX.Element {
       <LineSpanView>
         ({movie.item.year})
         &thinsp;
-        <ExternalLinkIcon mx='2px' />
+        {props.children}
       </LineSpanView>
     </>
   )

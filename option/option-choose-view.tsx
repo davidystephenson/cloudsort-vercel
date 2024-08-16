@@ -19,7 +19,6 @@ export default function OptionChooseView (): JSX.Element {
     >
       <Text w='fit-content'>
         [{option.chooseLetter}]
-        &thinsp;
         <MovieLabelView />
       </Text>
     </ButtonView>
