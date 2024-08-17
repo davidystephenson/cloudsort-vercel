@@ -21,6 +21,7 @@ export default function MovieLabelCellView (props: {
           {...props.linkProps}
         >
           <MovieLabelView>
+            &thinsp;
             <ExternalLinkIcon mx='2px' />
           </MovieLabelView>
         </ThemeLinkableView>

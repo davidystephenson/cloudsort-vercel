@@ -17,7 +17,6 @@ export default function MovieLabelView (props: {
       &thinsp;
       <LineSpanView>
         ({movie.item.year})
-        &thinsp;
         {props.children}
       </LineSpanView>
     </>
