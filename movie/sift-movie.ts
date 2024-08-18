@@ -33,5 +33,20 @@ export default function siftMovie (props: {
   if (yearly) {
     return true
   }
+  const label = `${props.row.name} (${props.row.year})`
+  const labeled = lowerIncludes({ query, value: label })
+  if (labeled) {
+    return true
+  }
+  const words = props.query.split(' ')
+  if (words.length > 1) {
+    const worded = words.every((word) => {
+      const worded = siftMovie({ row: props.row, query: word })
+      return worded
+    })
+    if (worded) {
+      return true
+    }
+  }
   return false
 }

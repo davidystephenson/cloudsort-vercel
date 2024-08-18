@@ -18,9 +18,7 @@ export default function OptionChooseView (): JSX.Element {
       whiteSpace='normal'
     >
       <Text w='fit-content'>
-        [{option.chooseLetter}]
-        &thinsp;
-        <MovieLabelView />
+        [{option.chooseLetter}]&thinsp;<MovieLabelView />
       </Text>
     </ButtonView>
   )
