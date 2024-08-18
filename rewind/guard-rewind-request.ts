@@ -1,5 +1,5 @@
 import guardNumber from '@/fashion-police/guard-number'
-import { RewindRequest } from './rewind-types'
+import { RewindRequest } from '../shade/rewind-types'
 import fashionPolice from '@/fashion-police/fashion-police'
 
 export default function guardRewindRequest (props: {

@@ -9,16 +9,34 @@ export default function MovieLabelView (props: {
   children?: ReactNode
 }): JSX.Element {
   const movie = useMovie()
+  if (props.children != null) {
+    return (
+      <>
+        <HideDisplayView />
+        &thinsp;
+        {movie.item.name}
+        &thinsp;
+        <LineSpanView>
+          ({movie.item.year})
+          {props.children}
+        </LineSpanView>
+      </>
+    )
+  }
+  const words = movie.item.name.split(' ')
+  const last = words.pop()
+  const joined = words.join(' ')
   return (
     <>
       <HideDisplayView />
       &thinsp;
-      {movie.item.name}
+      {joined}
       &thinsp;
-      <LineSpanView>
-        ({movie.item.year})
-        {props.children}
-      </LineSpanView>
+      {/* <LineSpanView> */}
+      {last}
+      &thinsp;
+      ({movie.item.year})
+      {/* </LineSpanView> */}
     </>
   )
 }

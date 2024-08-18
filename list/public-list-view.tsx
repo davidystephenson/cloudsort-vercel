@@ -1,14 +1,15 @@
 'use client'
 
-import publicListContext from './public-list-context'
-import { List } from '@prisma/client'
 import { Listing } from '@/listing/listing-types'
-import PublicListConsumer from './public-list-consumer'
-import { useEffect, useState } from 'react'
 import postListing from '@/listing/postListing'
+import LoaderView from '@/loader/loader-view'
 import { useTheme } from '@/theme/theme-context'
-import ListLoaderView from './list-loader-view'
+import { List } from '@prisma/client'
+import { useEffect, useState } from 'react'
+import ListLoadingView from './list-loading-view'
 import ListMultiloaderView from './list-multiloader-view'
+import PublicListConsumer from './public-list-consumer'
+import publicListContext from './public-list-context'
 
 export default function PublicListView (props: {
   list: List
@@ -30,7 +31,11 @@ export default function PublicListView (props: {
     return <ListMultiloaderView />
   }
   if (listing == null) {
-    return <ListLoaderView />
+    return (
+      <ListLoadingView>
+        <LoaderView />
+      </ListLoadingView>
+    )
   }
   return (
     <publicListContext.Provider

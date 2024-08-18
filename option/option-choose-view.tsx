@@ -10,12 +10,12 @@ export default function OptionChooseView (): JSX.Element {
   }
   return (
     <ButtonView
-      onClick={handleClick}
       fontSize='md'
-      whiteSpace='normal'
-      py='6px'
       h='auto'
+      onClick={handleClick}
+      py='6px'
       w='fit-content'
+      whiteSpace='normal'
     >
       <Text w='fit-content'>
         [{option.chooseLetter}]

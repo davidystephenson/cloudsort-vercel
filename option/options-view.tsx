@@ -8,7 +8,7 @@ export default function OptionsView (): JSX.Element {
   const list = privateListContext.useContext()
   const table = useTable()
   if (
-    table.queried ||
+    table.searching ||
     list.importAction.active ||
     list.state.complete ||
     list.state.choice == null ||

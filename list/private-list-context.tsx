@@ -1,23 +1,31 @@
+import useAction from '@/action/use-action'
 import postArchive from '@/archive/post-archive'
 import postChoice from '@/choice/post-choice'
+import { DeduceHandlers, DeduceMessage } from '@/deduce/deduce-types'
+import handleDeduce from '@/deduce/handle-deduce'
 import siftEpisode from '@/episode/sift-episode'
 import useFlagbearer from '@/flagbearer/use-flagbearer'
 import archiveItem from '@/mergechoice/archiveItem'
 import getCalculatedItem from '@/mergechoice/getCalculatedItem'
+import getChoiceCountRange from '@/mergechoice/getChoiceCountRange'
 import getDefaultOptionIndex from '@/mergechoice/getDefaultOptionIndex'
 import importItems from '@/mergechoice/importItems'
 import resetItem from '@/mergechoice/resetItem'
 import setupRandomChoice from '@/mergechoice/setupRandomChoice'
 import unarchiveItem from '@/mergechoice/unarchiveItem'
+import createMovieChoiceRequest from '@/movie/create-movie-choice-request'
 import postRemoveMovie from '@/movie/post-remove-movie'
 import postRandom from '@/random/post-random'
+import getRankedMovies from '@/rank/get-ranked-movies'
 import postReset from '@/reset/post-reset'
 import postRewind from '@/rewind/post-rewind'
 import shuffleSlice from '@/shuffleSlice/shuffleSlice'
 import { AlwaysNever } from '@/shuffleSlice/shuffleSliceTypes'
+import useSifter from '@/sifter/use-sifter'
 import postUnarchive from '@/unarchive/post-unarchive'
 import useQueue from '@/useQueue/useQueue'
 import contextCreator from 'context-creator'
+import { useRouter } from 'next/navigation'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import chooseOption from '../mergechoice/chooseOption'
 import { State } from '../mergechoice/mergeChoiceTypes'
@@ -26,14 +34,9 @@ import { CreateMoviesRequest, ListMovie, MovieData } from '../movie/movie-types'
 import postMovies from '../movie/post-movies'
 import siftMovie from '../movie/sift-movie'
 import getSortedMovies from '../movies/getSortedMovies'
-import { useOptionalLists } from './lists-context'
 import { useListContext } from './list-context'
-import useAction from '@/action/use-action'
-import { useRouter } from 'next/navigation'
-import useSifter from '@/sifter/use-sifter'
-import getChoiceCountRange from '@/mergechoice/getChoiceCountRange'
-import getRankedMovies from '@/rank/get-ranked-movies'
-import createMovieChoiceRequest from '@/movie/create-movie-choice-request'
+import { useOptionalLists } from './lists-context'
+import getRewindIndex from '@/mergechoice/getRewindIndex'
 
 const privateListContext = contextCreator({
   name: 'privateList',
@@ -54,13 +57,31 @@ const privateListContext = contextCreator({
       setSortedMovies(sortedMovies)
       setState(props.newState)
     }, [])
+    const [rewindIndex, setRewindIndex] = useState(0)
+    const [rewindLength, setRewindLength] = useState<number>()
     const rewindAction = useAction()
     const rewindWorkerRef = useRef<Worker>()
     useEffect(() => {
       rewindWorkerRef.current = new Worker(new URL('../rewind/rewind-worker.ts', import.meta.url))
-      rewindWorkerRef.current.onmessage = (event: MessageEvent<State<ListMovie>>) => {
-        updateState({ newState: event.data })
-        rewindAction.succeed()
+      rewindWorkerRef.current.onmessage = (event: MessageEvent<DeduceMessage>) => {
+        const handlers: DeduceHandlers = {
+          episode: (props) => {
+            if (props.message.index % 100 === 0) {
+              console.log('rewind index', props.message.index)
+            }
+            setRewindIndex(props.message.index)
+          },
+          state: (props) => {
+            console.log('rewind state', props.message.state)
+            updateState({ newState: props.message.state })
+            rewindAction.succeed()
+          }
+        }
+        handleDeduce({
+          key: event.data.type,
+          message: event.data,
+          receivers: handlers
+        })
       }
       return () => {
         rewindWorkerRef.current?.terminate()
@@ -306,11 +327,23 @@ const privateListContext = contextCreator({
     function rewind (rewindProps: {
       episodeMergechoiceId: number
     }): void {
+      console.log('rewindProps', rewindProps)
       const lastEpisode = state.history[0]
       if (lastEpisode == null) {
         throw new Error('There is no lastEpisode')
       }
       function local (updateProps: { state: State<ListMovie> }): State<ListMovie> {
+        console.log('rewind state', updateProps.state)
+        setRewindIndex(0)
+        const rewindIndex = getRewindIndex({
+          episodeId: rewindProps.episodeMergechoiceId,
+          state: updateProps.state
+        })
+        console.log('rewindIndex', rewindIndex)
+        console.log('updateProps.state.history.length', updateProps.state.history.length)
+        const length = updateProps.state.history.length - rewindIndex - 1
+        console.log('length', length)
+        setRewindLength(length)
         rewindAction.start()
         rewindWorkerRef.current?.postMessage({
           episodeId: rewindProps.episodeMergechoiceId,
@@ -383,6 +416,8 @@ const privateListContext = contextCreator({
       reset,
       rewind,
       rewindAction,
+      rewindIndex,
+      rewindLength,
       state,
       synced,
       toggleEpisode,

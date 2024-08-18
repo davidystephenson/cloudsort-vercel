@@ -14,6 +14,7 @@ export const {
     const inputRef = useRef<HTMLInputElement>(null)
     const [autoFocus, setAutoFocus] = useState(true)
     const [query, setQuery] = useState('')
+    const [focused, setFocused] = useState(false)
     useHotkeys('ctrl+f', (event) => {
       event?.preventDefault()
       inputRef.current?.focus()
@@ -42,18 +43,24 @@ export const {
     }
     function handleBlur (): void {
       setAutoFocus(false)
+      setFocused(false)
     }
+    function handleFocus (): void {
+      setFocused(true)
+    }
+    const searching = queried || focused
     const value = {
       autoFocus,
       columns: props.columns,
       inputRef,
       filterRows: props.filterRows,
       clearQuery,
+      handleBlur,
+      handleFocus,
       handleKeyDown,
       handleQueryChange,
-      queried,
-      query,
-      handleBlur
+      searching,
+      query
     }
     return value
   }

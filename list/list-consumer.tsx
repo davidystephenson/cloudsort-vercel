@@ -21,23 +21,21 @@ export default async function ListConsumer (props: {
     const history = listToHistory({
       list
     })
-    const view = (
+    return (
       <PrivateListView
         history={history}
         seed={list.seed}
       />
     )
-    return view
   }
   const listing = await guardListing({
     db: prisma,
     listId: props.list.id
   })
-  const view = (
+  return (
     <PublicListView
       list={props.list}
       listing={listing}
     />
   )
-  return view
 }
