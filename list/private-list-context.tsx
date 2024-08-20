@@ -66,13 +66,9 @@ const privateListContext = contextCreator({
       rewindWorkerRef.current.onmessage = (event: MessageEvent<DeduceMessage>) => {
         const handlers: DeduceHandlers = {
           episode: (props) => {
-            if (props.message.index % 100 === 0) {
-              console.log('rewind index', props.message.index)
-            }
             setRewindIndex(props.message.index)
           },
           state: (props) => {
-            console.log('rewind state', props.message.state)
             updateState({ newState: props.message.state })
             rewindAction.succeed()
           }
@@ -327,22 +323,17 @@ const privateListContext = contextCreator({
     function rewind (rewindProps: {
       episodeMergechoiceId: number
     }): void {
-      console.log('rewindProps', rewindProps)
       const lastEpisode = state.history[0]
       if (lastEpisode == null) {
         throw new Error('There is no lastEpisode')
       }
       function local (updateProps: { state: State<ListMovie> }): State<ListMovie> {
-        console.log('rewind state', updateProps.state)
         setRewindIndex(0)
         const rewindIndex = getRewindIndex({
           episodeId: rewindProps.episodeMergechoiceId,
           state: updateProps.state
         })
-        console.log('rewindIndex', rewindIndex)
-        console.log('updateProps.state.history.length', updateProps.state.history.length)
         const length = updateProps.state.history.length - rewindIndex - 1
-        console.log('length', length)
         setRewindLength(length)
         rewindAction.start()
         rewindWorkerRef.current?.postMessage({
