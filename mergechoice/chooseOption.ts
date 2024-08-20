@@ -29,7 +29,7 @@ export default function chooseOption<ListItem extends Item> (props: {
     bItem,
     state: props.state
   })
-  if (props.seeded !== true) {
+  if (props.seeded === true) {
     const newAPoints = getPoints({ itemId: aItem.id, state: appliedState })
     const calculatedA: Calculated<ListItem> = {
       ...aItem,

@@ -10,7 +10,6 @@ const episodeContext = contextCreator({
   }) => {
     const list = privateListContext.useContext()
     function rewind (): void {
-      console.log('episodeContext.rewind', props.episode.mergeChoiceId)
       list.rewind({ episodeMergechoiceId: props.episode.mergeChoiceId })
     }
     const value = {

@@ -11,8 +11,6 @@ export default async function createMovies (props: {
   movies: MovieData[]
   tx: PrismaTransaction
 }): Promise<RelatedEpisode> {
-  console.log('\n\n*****HANDLE POST START*****')
-  console.log('props.movies.length', props.movies.length)
   const imdbIds = props.movies.map((movie) => movie.imdbId)
   const existingMovies = await props.tx.movie.findMany({
     where: {
@@ -21,15 +19,12 @@ export default async function createMovies (props: {
       }
     }
   })
-  console.log('existingMovies.length', existingMovies.length)
   const existingImdbIds = existingMovies.map((movie) => movie.imdbId)
   const newImdbIds = imdbIds.filter((imdbId) => !existingImdbIds.includes(imdbId))
-  console.log('newImdbIds.length', newImdbIds.length)
   const newPayloads = props.movies.filter((movie) => {
     const includes = newImdbIds.includes(movie.imdbId)
     return includes
   })
-  console.log('newPayloads.length', newPayloads.length)
   const newItemData = newPayloads.map((movie) => {
     const data = {
       name: movie.name,
@@ -48,7 +43,6 @@ export default async function createMovies (props: {
     return createdItem
   })
   const createdItems = await Promise.all(createItemPromises)
-  console.log('createdItems.length', createdItems.length)
   const createdItemIds = createdItems.map((item) => item.id)
   const createdMovies = await props.tx.movie.findMany({
     where: {
@@ -58,13 +52,11 @@ export default async function createMovies (props: {
     }
   })
   const postedMovies = [...existingMovies, ...createdMovies]
-  console.log('postedMovies.length', postedMovies.length)
   const mergechoiceList = await guardMergechoiceList({
     db: props.tx,
     listId: props.listId
   })
   const values = Object.values(mergechoiceList.state.items)
-  console.log('mergechoiceList.state.items.length', values.length)
   const importingMovies = props.movies.filter(movie => {
     const exists = values.some((item) => {
       const match = item.imdbId === movie.imdbId
@@ -72,7 +64,6 @@ export default async function createMovies (props: {
     })
     return !exists
   })
-  console.log('importingMovies.length', importingMovies.length)
   const createdEpisodeItems = importingMovies.map((movie) => {
     const item = postedMovies.find((createMovie) => createMovie.imdbId === movie.imdbId)
     if (item == null) {
@@ -86,8 +77,6 @@ export default async function createMovies (props: {
     }
     return episodeItem
   })
-  console.log('createdEpisodeItems.length', createdEpisodeItems.length)
-
   const episode = await props.tx.episode.create({
     data: {
       import: {
@@ -102,6 +91,5 @@ export default async function createMovies (props: {
     },
     include: EPISODE_PARTS_RELATION
   })
-  console.log('*****HANDLE POST END*****\n\n')
   return episode
 }

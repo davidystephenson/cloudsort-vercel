@@ -1,11 +1,11 @@
 import guardObject from '@/fashion-police/guard-object'
-import { PostShadeBody } from './shade-types'
+import { PostShadeRequest } from './shade-types'
 import guardStringProp from '@/fashion-police/guard-string-prop'
 
 export default function guardPostShade (props: {
   label: string
   value: unknown
-}): PostShadeBody {
+}): PostShadeRequest {
   const object = guardObject({
     label: props.label,
     value: props.value

@@ -3,13 +3,13 @@ import { Db } from '@/prisma/prisma-types'
 import { Session } from 'next-auth'
 
 export default async function handleUnhideMovie (props: {
-  body: MovieWhere
+  request: MovieWhere
   db: Db
   authSession: Session
 }): Promise<void> {
   const itemHide = await props.db.itemHide.findFirst({
     where: {
-      itemId: props.body.itemId,
+      itemId: props.request.itemId,
       userId: props.authSession.user.id
     }
   })

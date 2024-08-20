@@ -6,7 +6,6 @@ addEventListener('message', (event: MessageEvent<{
   episodeId: number
   state: State<ListMovie>
 }>) => {
-  console.log('rewind-worker event.data', event.data)
   function handleEpisode (props: {
     index: number
   }): void {
@@ -22,7 +21,6 @@ addEventListener('message', (event: MessageEvent<{
     state: event.data.state
   })
   void newState
-  console.log('rewind-worker state', newState)
   const message = {
     type: 'state',
     state: newState

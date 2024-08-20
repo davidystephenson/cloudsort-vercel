@@ -7,6 +7,7 @@ import guardListing from '@/listing/guard-listing'
 import prisma from '@/prisma/prisma'
 import guardRelatedList from './guard-related-list'
 import listToHistory from './list-to-history'
+import deduceState from '@/mergechoice/deduceState'
 
 export default async function ListConsumer (props: {
   currentUserId?: number
@@ -20,6 +21,20 @@ export default async function ListConsumer (props: {
     })
     const history = listToHistory({
       list
+    })
+    const state = deduceState({
+      history,
+      seed: list.seed
+    })
+    const { history: deducedHistory, ...listState } = state
+    const snapshot = JSON.stringify(listState)
+    await prisma.list.update({
+      data: {
+        snapshot
+      },
+      where: {
+        id: props.list.id
+      }
     })
     return (
       <PrivateListView

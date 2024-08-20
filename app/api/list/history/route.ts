@@ -11,7 +11,7 @@ export async function POST (request: Request): Promise<HandledHistory> {
     handle: async (props) => {
       const list = await guardRelatedList({
         db: props.db,
-        listId: props.body.listId
+        listId: props.request.listId
       })
       const history = listToHistory({
         list

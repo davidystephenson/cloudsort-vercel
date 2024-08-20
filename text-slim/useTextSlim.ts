@@ -6,7 +6,6 @@ export default function useTextSlim <Element extends HTMLElement> (props?: {
   const ref = useRef<Element>(null)
   useEffect(() => {
     if (ref.current == null) {
-      console.log('no ref')
       return
     }
     const range = document.createRange()
@@ -19,9 +18,9 @@ export default function useTextSlim <Element extends HTMLElement> (props?: {
     const paddingRight = Number(style.paddingRight.replace('px', ''))
     const width = clientRect.width + paddingLeft + paddingRight
     if (props?.debug === true) {
-      console.log('paddingLeft', paddingLeft)
-      console.log('paddingRight', paddingRight)
-      console.log('width', width)
+      console.debug('paddingLeft', paddingLeft)
+      console.debug('paddingRight', paddingRight)
+      console.debug('width', width)
     }
     ref.current.style.width = `${width}px`
   }, [])

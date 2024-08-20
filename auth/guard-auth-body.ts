@@ -1,11 +1,11 @@
 import guardObject from '@/fashion-police/guard-object'
-import { AuthBody } from './auth-types'
+import { AuthRequest } from './auth-types'
 import guardStringProp from '@/fashion-police/guard-string-prop'
 
 export default function guardAuthBody (props: {
   label: string
   value: unknown
-}): AuthBody {
+}): AuthRequest {
   const object = guardObject({
     label: props.label,
     value: props.value

@@ -10,7 +10,8 @@ export default function deduceState<ListItem extends Item> (props: {
   seed: string
 }): State<ListItem> {
   const initial = createState<ListItem>({ seed: props.seed })
-  const reversed = props.history.slice().reverse()
+  const historyClone = structuredClone(props.history)
+  const reversed = historyClone.reverse()
   const deduced = reversed.reduce<State<ListItem>>((state, episode, index) => {
     props.onEpisode?.({ index })
     const restoredState = restoreEpisodeState({ episode, state })

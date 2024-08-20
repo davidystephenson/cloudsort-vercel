@@ -5,12 +5,12 @@ import { Session } from 'next-auth'
 
 export default async function unhideList (props: {
   authSession: Session
-  body: ListWhere
+  request: ListWhere
   db: Db
 }): Promise<OkTrue> {
   await props.db.list.update({
     where: {
-      id: props.body.listId
+      id: props.request.listId
     },
     data: {
       hidden: false

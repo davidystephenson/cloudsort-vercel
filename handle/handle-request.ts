@@ -8,23 +8,23 @@ import { Guard } from '@/fashion-police/fashionPoliceTypes'
 import { HandledResponse } from './handle-types'
 import { PrismaClient } from '@prisma/client'
 
-export async function handleBody <Body, Result> (props: {
-  guard: Guard<Body>
+export async function handleRequest <RequestBody, Result> (props: {
+  guard: Guard<RequestBody>
   label: string
   handle: (props: {
-    body: Body
+    request: RequestBody
     db: PrismaClient | PrismaTransaction
   }) => Promise<Result>
   request: Request
 }): HandledResponse<Result> {
   try {
-    const body = await guardRequest({
+    const request = await guardRequest({
       guard: props.guard,
       label: props.label,
       request: props.request
     })
     const result = await prisma.$transaction(async (transaction) => {
-      const result = await props.handle({ body, db: transaction })
+      const result = await props.handle({ request, db: transaction })
       return result
     }, {
       isolationLevel: 'Serializable',

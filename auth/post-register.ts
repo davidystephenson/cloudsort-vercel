@@ -1,8 +1,8 @@
-import { AuthBody } from './auth-types'
+import { AuthRequest } from './auth-types'
 import post from '@/post/post'
 
 export default async function postRegister (props: {
-  body: AuthBody
+  body: AuthRequest
   label: string
 }): Promise<void> {
   return await post({

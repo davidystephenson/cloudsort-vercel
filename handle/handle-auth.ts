@@ -1,29 +1,29 @@
 import guardServerAuth from '@/auth/guard-server-auth'
 import { Session } from 'next-auth'
-import { handleBody } from './handle-body'
+import { handleRequest } from './handle-request'
 import { PrismaTransaction } from '@/prisma/prisma-types'
 import { Guard } from '@/fashion-police/fashionPoliceTypes'
 import { HandledResponse } from './handle-types'
 import { PrismaClient } from '@prisma/client'
 
-export async function handleAuth<Body, Result> (props: {
-  guard: Guard<Body>
+export async function handleAuth<RequestBody, Result> (props: {
+  guard: Guard<RequestBody>
   label: string
   handle: (props: {
     authSession: Session
-    body: Body
+    request: RequestBody
     db: PrismaTransaction | PrismaClient
   }) => Promise<Result>
   request: Request
 }): HandledResponse<Result> {
-  const response = await handleBody({
+  const response = await handleRequest({
     guard: props.guard,
     label: props.label,
     handle: async (handleProps) => {
       const authSession = await guardServerAuth()
       return await props.handle({
         authSession,
-        body: handleProps.body,
+        request: handleProps.request,
         db: handleProps.db
       })
     },

@@ -99,6 +99,7 @@ model List {
   user     User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId   Int
   seed     String
+  snapshot Json?
 }
 
 model Movie {

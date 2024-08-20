@@ -1,3 +1,3 @@
-export interface PostShadeBody {
+export interface PostShadeRequest {
   shade: string
 }

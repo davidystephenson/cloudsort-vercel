@@ -9,16 +9,16 @@ export default async function handleList (props: {
   authSession: Session
   handle: (props: {
     authSession: Session
-    body: ListWhere
+    request: ListWhere
     db: Db
     list: List
   }) => Promise<OkTrue>
-  body: ListWhere
+  request: ListWhere
   db: Db
 }): Promise<OkTrue> {
   const list = await props.db.list.findFirst({
     where: {
-      id: props.body.listId,
+      id: props.request.listId,
       userId: props.authSession.user.id
     }
   })
@@ -27,7 +27,7 @@ export default async function handleList (props: {
   }
   const response = await props.handle({
     authSession: props.authSession,
-    body: props.body,
+    request: props.request,
     db: props.db,
     list
   })

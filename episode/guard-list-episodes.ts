@@ -1,13 +1,15 @@
 import { PrismaTransaction } from '@/prisma/prisma-types'
-import { Episode, PrismaClient } from '@prisma/client'
+import { PrismaClient } from '@prisma/client'
 import { ApiError } from 'next/dist/server/api-utils'
+import { RelatedEpisode } from './episode-types'
+import { EPISODE_RELATION } from './episode-constants'
 
 export default async function guardListEpisodes (props: {
   db: PrismaTransaction | PrismaClient
   lastMergechoiceId: number | null
   listId: number
   userId: number
-}): Promise<Episode[]> {
+}): Promise<RelatedEpisode[]> {
   const list = await props.db.list.findUnique({
     where: { id: props.listId }
   })
@@ -18,7 +20,8 @@ export default async function guardListEpisodes (props: {
     throw new ApiError(403, 'Not authorized.')
   }
   const episodes = await props.db.episode.findMany({
-    where: { listId: props.listId }
+    where: { listId: props.listId },
+    ...EPISODE_RELATION
   })
   const sortedEpisodes = episodes.sort((a, b) => {
     if (a.createdAt < b.createdAt) return -1

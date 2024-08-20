@@ -2,14 +2,13 @@ import { EpisodeResponse } from '@/episode/episode-types'
 import handleEpisode from '@/episode/handle-episode'
 import guardRandomRequest from './guard-random-request'
 import createRandomEpisode from './create-random-episode'
+import setupRandomChoice from '@/mergechoice/setupRandomChoice'
 
 export default async function handleRandom (props: {
   label: string
   request: Request
 }): Promise<EpisodeResponse> {
   const response = await handleEpisode({
-    guard: guardRandomRequest,
-    label: props.label,
     create: async (props) => {
       const episode = await createRandomEpisode({
         random: props.body.random,
@@ -19,7 +18,13 @@ export default async function handleRandom (props: {
       })
       return episode
     },
-    request: props.request
+    guard: guardRandomRequest,
+    label: props.label,
+    request: props.request,
+    snap: (props) => {
+      const newState = setupRandomChoice({ state: props.state })
+      return newState
+    }
   })
   return response
 }

@@ -1,11 +1,11 @@
-import { AuthBody } from '@/auth/auth-types'
+import { AuthRequest } from '@/auth/auth-types'
 import guardAuthBody from '@/auth/guard-auth-body'
 import { User } from '@prisma/client'
 import handlePostRegister from '@/auth/handle-post-register'
-import { handleBody } from '@/handle/handle-body'
+import { handleRequest } from '@/handle/handle-request'
 
 export async function POST (request: Request): Promise<Response> {
-  return await handleBody<AuthBody, User>({
+  return await handleRequest<AuthRequest, User>({
     guard: guardAuthBody,
     handle: handlePostRegister,
     label: '/auth/register',

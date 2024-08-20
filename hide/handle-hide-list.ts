@@ -6,17 +6,17 @@ import handleList from '../list/handle-list'
 
 export default async function handleHideList (props: {
   authSession: Session
-  body: ListWhere
+  request: ListWhere
   db: Db
 }): Promise<OkTrue> {
   const response = await handleList({
     authSession: props.authSession,
-    body: props.body,
+    request: props.request,
     db: props.db,
     handle: async (props) => {
       await props.db.list.update({
         where: {
-          id: props.body.listId
+          id: props.request.listId
         },
         data: {
           hidden: false
