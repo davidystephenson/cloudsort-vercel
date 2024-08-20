@@ -1,10 +1,10 @@
-import { Item, State } from './mergeChoiceTypes'
+import { Item, History } from './mergeChoiceTypes'
 
 export default function getRewindIndex <ListItem extends Item> (props: {
   episodeId: number
-  state: State<ListItem>
+  history: History<ListItem>
 }): number {
-  const index = props.state.history.findIndex(
+  const index = props.history.findIndex(
     episode => episode.mergeChoiceId === props.episodeId
   )
   if (index === -1) {

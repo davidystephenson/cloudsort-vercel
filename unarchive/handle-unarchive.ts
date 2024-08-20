@@ -2,14 +2,13 @@ import { EpisodeResponse } from '@/episode/episode-types'
 import handleEpisode from '@/episode/handle-episode'
 import guardUnarchiveRequest from './guard-unarchive-request'
 import createUnarchiveEpisode from './create-unarchive-episode'
+import unarchiveItem from '@/mergechoice/unarchiveItem'
 
 export default async function handleUnarchive (props: {
   label: string
   request: Request
 }): Promise<EpisodeResponse> {
   const response = await handleEpisode({
-    guard: guardUnarchiveRequest,
-    label: props.label,
     create: async (props) => {
       const episode = await createUnarchiveEpisode({
         unarchive: props.body.unarchive,
@@ -19,7 +18,16 @@ export default async function handleUnarchive (props: {
       })
       return episode
     },
-    request: props.request
+    guard: guardUnarchiveRequest,
+    label: props.label,
+    request: props.request,
+    snap: (props) => {
+      const newState = unarchiveItem({
+        itemId: props.request.unarchive.item.id,
+        state: props.state
+      })
+      return newState
+    }
   })
   return response
 }

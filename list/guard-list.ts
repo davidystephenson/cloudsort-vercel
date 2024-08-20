@@ -13,7 +13,8 @@ export default function guardList (props: {
     id: guardNumber,
     name: guardString,
     userId: guardNumber,
-    seed: guardString
+    seed: guardString,
+    snapshot: guardString
   }
   const guarded = fashionPolice({
     required: guards,

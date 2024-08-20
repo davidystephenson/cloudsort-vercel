@@ -11,9 +11,9 @@ export async function POST (request: Request): HandledResponse<Ok> {
     handle: async (authProps) => {
       await handleRewind({
         db: authProps.db,
-        episodeMergechoiceId: authProps.body.episodeMergechoiceId,
-        lastMergechoiceId: authProps.body.lastMergechoiceId,
-        listId: authProps.body.listId,
+        episodeMergechoiceId: authProps.request.episodeMergechoiceId,
+        lastMergechoiceId: authProps.request.lastMergechoiceId,
+        listId: authProps.request.listId,
         userId: authProps.authSession.user.id
       })
       return { ok: true }

@@ -66,13 +66,9 @@ const privateListContext = contextCreator({
       rewindWorkerRef.current.onmessage = (event: MessageEvent<DeduceMessage>) => {
         const handlers: DeduceHandlers = {
           episode: (props) => {
-            if (props.message.index % 100 === 0) {
-              console.log('rewind index', props.message.index)
-            }
             setRewindIndex(props.message.index)
           },
           state: (props) => {
-            console.log('rewind state', props.message.state)
             updateState({ newState: props.message.state })
             rewindAction.succeed()
           }
@@ -337,7 +333,7 @@ const privateListContext = contextCreator({
         setRewindIndex(0)
         const rewindIndex = getRewindIndex({
           episodeId: rewindProps.episodeMergechoiceId,
-          state: updateProps.state
+          history: updateProps.state.history
         })
         console.log('rewindIndex', rewindIndex)
         console.log('updateProps.state.history.length', updateProps.state.history.length)

@@ -7,12 +7,12 @@ import handleList from '@/list/handle-list'
 
 export default async function handleUnhideList (props: {
   authSession: Session
-  body: ListWhere
+  request: ListWhere
   db: Db
 }): Promise<OkTrue> {
   const response = await handleList({
     authSession: props.authSession,
-    body: props.body,
+    body: props.request,
     db: props.db,
     handle: unhideList
   })

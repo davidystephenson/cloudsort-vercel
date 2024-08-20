@@ -6,12 +6,12 @@ import handleList from './handle-list'
 
 export default async function handlePostDeleteList (props: {
   authSession: Session
-  body: ListWhere
+  request: ListWhere
   db: Db
 }): Promise<OkTrue> {
   const response = await handleList({
     authSession: props.authSession,
-    body: props.body,
+    body: props.request,
     db: props.db,
     handle: async (props) => {
       await props.db.list.delete({

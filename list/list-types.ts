@@ -3,6 +3,7 @@ import { State } from '../mergechoice/mergeChoiceTypes'
 import { ListMovie } from '@/movie/movie-types'
 import { EpisodesRelation } from '@/episode/episode-types'
 
+export type ListState = Omit<State<ListMovie>, 'history'>
 export interface ListWhere {
   listId: number
 }

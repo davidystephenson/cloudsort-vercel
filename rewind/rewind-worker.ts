@@ -17,9 +17,10 @@ addEventListener('message', (event: MessageEvent<{
     postMessage(message)
   }
   const newState = rewindState({
-    onEpisode: handleEpisode,
     episodeId: event.data.episodeId,
-    state: event.data.state
+    history: event.data.state.history,
+    onEpisode: handleEpisode,
+    seed: event.data.state.seed
   })
   void newState
   console.log('rewind-worker state', newState)

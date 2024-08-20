@@ -1,12 +1,11 @@
 import { EPISODE_PARTS_RELATION } from '@/episode/episode-constants'
 import { EpisodeResponse } from '@/episode/episode-types'
 import handleEpisode from '@/episode/handle-episode'
+import removeItem from '@/mergechoice/removeItem'
 import guardRemoveMovieRequest from '@/movie/guard-remove-movie-request'
 
 export async function POST (request: Request): EpisodeResponse {
   const response = await handleEpisode({
-    guard: guardRemoveMovieRequest,
-    label: '/movie/remove',
     create: async (props) => {
       const episode = await props.db.episode.create({
         data: {
@@ -29,7 +28,16 @@ export async function POST (request: Request): EpisodeResponse {
       })
       return episode
     },
-    request
+    guard: guardRemoveMovieRequest,
+    label: '/movie/remove',
+    request,
+    snap: (props) => {
+      const newState = removeItem({
+        itemId: props.request.remove.item.id,
+        state: props.state
+      })
+      return newState
+    }
   })
   return response
 }

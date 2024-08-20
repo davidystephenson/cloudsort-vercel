@@ -1,4 +1,6 @@
-import guardListEpisodes from '@/episode/guard-list-episodes'
+import { episodeToHistoryEpisode } from '@/episode/episode-to-history-episode'
+import guardRelatedList from '@/list/guard-related-list'
+import rewindState from '@/mergechoice/rewindState'
 import { PrismaTransaction } from '@/prisma/prisma-types'
 import { PrismaClient } from '@prisma/client'
 import { ApiError } from 'next/dist/server/api-utils'
@@ -10,13 +12,14 @@ export default async function handleRewind (props: {
   listId: number
   userId: number
 }): Promise<void> {
-  const episodes = await guardListEpisodes({
+  const list = await guardRelatedList({
     db: props.db,
-    lastMergechoiceId: props.lastMergechoiceId,
-    listId: props.listId,
-    userId: props.userId
+    listId: props.listId
   })
-  const episode = episodes.find((episode) => {
+  if (list == null) {
+    throw new ApiError(404, 'This list does not exist')
+  }
+  const episode = list.episodes.find((episode) => {
     return episode.mergeChoiceId === props.episodeMergechoiceId
   })
   if (episode == null) {
@@ -29,5 +32,23 @@ export default async function handleRewind (props: {
         gte: episode.createdAt
       }
     }
+  })
+  if (typeof list.snapshot !== 'string') {
+    throw new Error('Snapshot is not a string')
+  }
+  const history = list.episodes.map(episode => {
+    const historyEpisode = episodeToHistoryEpisode({ episode })
+    return historyEpisode
+  })
+  const state = rewindState({
+    episodeId: props.episodeMergechoiceId,
+    history,
+    seed: list.seed
+  })
+  const snapshot = { ...state, history: [] }
+  const json = JSON.stringify(snapshot)
+  await props.db.list.update({
+    data: { snapshot: json },
+    where: { id: props.listId }
   })
 }

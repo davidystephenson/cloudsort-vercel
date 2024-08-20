@@ -21,10 +21,39 @@ export default async function ListConsumer (props: {
     const history = listToHistory({
       list
     })
+    if (list.snapshot == null) {
+      throw new Error('list.snapshot is null')
+    }
+    if (typeof list.snapshot !== 'string') {
+      throw new Error('list.snapshot is not a string')
+    }
+    const listState = JSON.parse(list.snapshot)
+    const state = { ...listState, history }
+    // const state = deduceState({
+    //   history,
+    //   onEpisode: (props) => {
+    //     if (props.index % 100 === 0) {
+    //       console.log('onEpisode', props.index)
+    //     }
+    //   },
+    //   seed: list.seed
+    // })
+    // const { history: deducedHistory, ...snapshot } = state
+    // console.log('deducedHistory.length', deducedHistory.length)
+    // const json = JSON.stringify(snapshot)
+    // await prisma.list.update({
+    //   where: {
+    //     id: props.list.id
+    //   },
+    //   data: {
+    //     snapshot: json
+    //   }
+    // })
     return (
       <PrivateListView
-        history={history}
+        // history={history}
         seed={list.seed}
+        state={state}
       />
     )
   }
