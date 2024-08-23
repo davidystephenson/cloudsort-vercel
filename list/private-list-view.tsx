@@ -2,16 +2,20 @@
 
 import { ListMovie } from '@/movie/movie-types'
 import { useTheme } from '@/theme/theme-context'
-import { State } from '../mergechoice/mergeChoiceTypes'
+import { Episode, State } from '../mergechoice/mergeChoiceTypes'
 import ListMultiloaderView from './list-multiloader-view'
 import PrivateListConsumer from './private-list-consumer'
 import privateListContext from './private-list-context'
 
 export default function PrivateListView (props: {
-  // history: Array<Episode<ListMovie>>
+  history: Array<Episode<ListMovie>>
+  listState: State<ListMovie>
   state: State<ListMovie>
   seed: string
 }): JSX.Element {
+  console.log('props.history', props.history)
+  console.log('props.listState', props.listState)
+  console.log('props.state', props.state)
   const theme = useTheme()
   // const [index, setIndex] = useState(0)
   // const [state, setState] = useState<State<ListMovie>>()
