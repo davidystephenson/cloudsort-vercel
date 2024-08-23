@@ -6,7 +6,7 @@ export default async function postRegister (props: {
   label: string
 }): Promise<void> {
   return await post({
-    body: props.body,
+    request: props.body,
     guard: () => {},
     label: props.label,
     url: '/api/auth/register'

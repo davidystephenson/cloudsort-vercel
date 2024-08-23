@@ -8,7 +8,7 @@ export default async function postShade (props: {
 }): Promise<OkTrue> {
   const body = { shade: props.shade }
   const ok = await post({
-    body,
+    request: body,
     label: props.label,
     guard: guardOkTrue,
     url: '/api/shade'

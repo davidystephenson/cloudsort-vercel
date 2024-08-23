@@ -1,6 +1,6 @@
 import { DeduceHandlers, DeduceKey, DeduceMessages } from './deduce-types'
 
-export default function receiveDeduce <Key extends DeduceKey> (props: {
+export default function onDeduce <Key extends DeduceKey> (props: {
   key: Key
   message: DeduceMessages[Key]
   receivers: DeduceHandlers

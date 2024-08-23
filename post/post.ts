@@ -4,10 +4,10 @@ import guardOk from '@/ok/guard-ok'
 export default async function post <Request, Response> (props: {
   guard: Guard<Response>
   label: string
-  body: Request
+  request: Request
   url: string
 }): Promise<Response> {
-  const payload = JSON.stringify(props.body)
+  const payload = JSON.stringify(props.request)
   const options = {
     body: payload,
     method: 'POST'

@@ -1,8 +1,6 @@
 import useAction from '@/action/use-action'
 import postArchive from '@/archive/post-archive'
 import postChoice from '@/choice/post-choice'
-import { DeduceHandlers, DeduceMessage } from '@/deduce/deduce-types'
-import handleDeduce from '@/deduce/handle-deduce'
 import siftEpisode from '@/episode/sift-episode'
 import useFlagbearer from '@/flagbearer/use-flagbearer'
 import archiveItem from '@/mergechoice/archiveItem'
@@ -37,6 +35,8 @@ import getSortedMovies from '../movies/getSortedMovies'
 import { useListContext } from './list-context'
 import { useOptionalLists } from './lists-context'
 import getRewindIndex from '@/mergechoice/getRewindIndex'
+import { RewindHandlers, RewindMessage } from '@/shade/rewind-types'
+import onRewind from '@/rewind/onRewind'
 
 const privateListContext = contextCreator({
   name: 'privateList',
@@ -63,17 +63,34 @@ const privateListContext = contextCreator({
     const rewindWorkerRef = useRef<Worker>()
     useEffect(() => {
       rewindWorkerRef.current = new Worker(new URL('../rewind/rewind-worker.ts', import.meta.url))
-      rewindWorkerRef.current.onmessage = (event: MessageEvent<DeduceMessage>) => {
-        const handlers: DeduceHandlers = {
+      rewindWorkerRef.current.onmessage = (event: MessageEvent<RewindMessage>) => {
+        const handlers: RewindHandlers = {
           episode: (props) => {
             setRewindIndex(props.message.index)
           },
           state: (props) => {
             updateState({ newState: props.message.state })
             rewindAction.succeed()
+            const localeString = new Date().toLocaleString()
+            const label = `Rewind before ${localeString}`
+            const { history, ...snapshot } = props.message.state
+            const json = JSON.stringify(snapshot)
+            async function remote (): Promise<void> {
+              const request = {
+                episodeMergechoiceId: props.message.episodeId,
+                lastMergechoiceId: props.message.lastMergechoiceId,
+                listId: list.id,
+                snapshot: json
+              }
+              await postRewind({
+                label,
+                request
+              })
+            }
+            queueState({ label, remote })
           }
         }
-        handleDeduce({
+        onRewind({
           key: event.data.type,
           message: event.data,
           receivers: handlers
@@ -148,13 +165,16 @@ const privateListContext = contextCreator({
     function queueState (props: {
       remote?: () => Promise<unknown>
       label: string
-      local: (props: { state: State<ListMovie> }) => State<ListMovie>
+      local?: (props: { state: State<ListMovie> }) => State<ListMovie>
     }): void {
       const task = {
         perform: props.remote,
         label: props.label
       }
       void queue.add({ task })
+      if (props.local == null) {
+        return
+      }
       const newState = props.local({ state })
       updateState({ newState })
     }
@@ -328,36 +348,24 @@ const privateListContext = contextCreator({
       if (lastEpisode == null) {
         throw new Error('There is no lastEpisode')
       }
-      function local (updateProps: { state: State<ListMovie> }): State<ListMovie> {
-        console.log('rewind state', updateProps.state)
-        setRewindIndex(0)
-        const rewindIndex = getRewindIndex({
-          episodeId: rewindProps.episodeMergechoiceId,
-          history: updateProps.state.history
-        })
-        console.log('rewindIndex', rewindIndex)
-        console.log('updateProps.state.history.length', updateProps.state.history.length)
-        const length = updateProps.state.history.length - rewindIndex - 1
-        console.log('length', length)
-        setRewindLength(length)
-        rewindAction.start()
-        rewindWorkerRef.current?.postMessage({
-          episodeId: rewindProps.episodeMergechoiceId,
-          state: updateProps.state
-        })
-        return updateProps.state
-      }
-      const localeString = new Date().toLocaleString()
-      const label = `Rewind before ${localeString}`
-      async function remote (): Promise<void> {
-        await postRewind({
-          episodeMergechoiceId: rewindProps.episodeMergechoiceId,
-          label,
-          lastMergechoiceId: lastEpisode.mergeChoiceId,
-          listId: list.id
-        })
-      }
-      queueState({ label, local, remote })
+      console.log('rewind state', state)
+      setRewindIndex(0)
+      const rewindIndex = getRewindIndex({
+        episodeId: rewindProps.episodeMergechoiceId,
+        history: state.history
+      })
+      console.log('rewindIndex', rewindIndex)
+      console.log('state.history.length', state.history.length)
+      const length = state.history.length - rewindIndex - 1
+      console.log('length', length)
+      setRewindLength(length)
+      rewindAction.start()
+      rewindWorkerRef.current?.postMessage({
+        episodeId: rewindProps.episodeMergechoiceId,
+        lastMergechoiceId: lastEpisode.mergeChoiceId,
+        listId: list.id,
+        state
+      })
     }
     function unarchive (archiveProps: {
       movieId: number

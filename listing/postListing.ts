@@ -8,7 +8,7 @@ export default async function postListing (props: {
 }): Promise<ListingPayload> {
   const body = { listId: props.listId }
   const response = await post({
-    body,
+    request: body,
     guard: policeListingPayload,
     label: props.label,
     url: '/api/list/listing'

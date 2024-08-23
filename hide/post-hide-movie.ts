@@ -9,7 +9,7 @@ export default async function postHideMovie (props: {
     itemId: props.itemId
   }
   await post({
-    body,
+    request: body,
     guard: guardOkTrue,
     label: props.label,
     url: '/api/movie/hide'

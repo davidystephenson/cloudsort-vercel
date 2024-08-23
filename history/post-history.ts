@@ -8,7 +8,7 @@ export default async function postHistory (props: {
   label: string
 }): Promise<ListHistory> {
   const response = await post({
-    body: props.body,
+    request: props.body,
     guard: policeHistoryResponse,
     label: props.label,
     url: '/api/list/history'

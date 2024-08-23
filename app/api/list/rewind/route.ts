@@ -8,16 +8,7 @@ export async function POST (request: Request): HandledResponse<Ok> {
   const response = await handleAuth({
     guard: guardRewindRequest,
     label: '/list/rewind',
-    handle: async (authProps) => {
-      await handleRewind({
-        db: authProps.db,
-        episodeMergechoiceId: authProps.request.episodeMergechoiceId,
-        lastMergechoiceId: authProps.request.lastMergechoiceId,
-        listId: authProps.request.listId,
-        userId: authProps.authSession.user.id
-      })
-      return { ok: true }
-    },
+    handle: handleRewind,
     request
   })
   return response

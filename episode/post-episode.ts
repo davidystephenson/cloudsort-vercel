@@ -8,7 +8,7 @@ export default async function postEpisode (props: {
   url: string
 }): Promise<MovieEpisode> {
   const response = await post({
-    body: props.body,
+    request: props.body,
     guard: guardEpisodePayload,
     label: props.label,
     url: props.url

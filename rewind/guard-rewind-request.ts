@@ -1,6 +1,7 @@
 import guardNumber from '@/fashion-police/guard-number'
 import { RewindRequest } from '../shade/rewind-types'
 import fashionPolice from '@/fashion-police/fashion-police'
+import guardString from '@/fashion-police/guard-string'
 
 export default function guardRewindRequest (props: {
   label: string
@@ -9,7 +10,8 @@ export default function guardRewindRequest (props: {
   const required = {
     episodeMergechoiceId: guardNumber,
     lastMergechoiceId: guardNumber,
-    listId: guardNumber
+    listId: guardNumber,
+    snapshot: guardString
   }
   const policed = fashionPolice({
     label: props.label,

@@ -1,4 +1,4 @@
-import { ListMovie } from './movie-types'
+import { CalculatedMovie } from './movie-types'
 
 function lowerIncludes (props: {
   query: string
@@ -13,7 +13,7 @@ function lowerIncludes (props: {
 }
 
 export default function siftMovie (props: {
-  row: ListMovie
+  row: CalculatedMovie
   query: string
 }): boolean {
   const query = props.query.toLowerCase()
@@ -21,15 +21,24 @@ export default function siftMovie (props: {
   if (named) {
     return true
   }
-  const ided = lowerIncludes({ query, value: props.row.imdbId })
-  if (ided) {
+  if (query.startsWith('tt')) {
+    const ided = lowerIncludes({ query, value: props.row.imdbId })
+    if (ided) {
+      return true
+    }
+  }
+  const points = String(props.row.points)
+  const pointed = lowerIncludes({ query, value: points })
+  if (pointed) {
     return true
   }
-  const seeded = lowerIncludes({ query, value: String(props.row.seed) })
+  const seed = String(props.row.seed)
+  const seeded = lowerIncludes({ query, value: seed })
   if (seeded) {
     return true
   }
-  const yearly = lowerIncludes({ query, value: String(props.row.year) })
+  const year = String(props.row.year)
+  const yearly = lowerIncludes({ query, value: year })
   if (yearly) {
     return true
   }

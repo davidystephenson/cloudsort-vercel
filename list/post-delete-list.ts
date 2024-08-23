@@ -8,7 +8,7 @@ export default async function postDeleteList (props: {
   label: string
 }): Promise<OkTrue> {
   return await post({
-    body: props.body,
+    request: props.body,
     guard: guardOkTrue,
     label: props.label,
     url: '/api/list/delete'
