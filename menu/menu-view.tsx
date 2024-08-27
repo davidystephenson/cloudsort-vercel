@@ -6,10 +6,10 @@ export default function MenuView (props: {
   children: ReactNode
 } & MenuProps): JSX.Element {
   return (
-    <div style={{ zIndex: 2 }}>
+    <div>
       <Menu {...props}>
         <MenuIconButton />
-        <MenuList zIndex={1000}>
+        <MenuList zIndex={2}>
           {props.children}
         </MenuList>
       </Menu>

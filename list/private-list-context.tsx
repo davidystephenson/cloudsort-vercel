@@ -37,6 +37,7 @@ import { useOptionalLists } from './lists-context'
 import getRewindIndex from '@/mergechoice/getRewindIndex'
 import { RewindHandlers, RewindMessage } from '@/shade/rewind-types'
 import onRewind from '@/rewind/onRewind'
+import { RestorePoint } from '@/restore/restoreTypes'
 
 const privateListContext = contextCreator({
   name: 'privateList',
@@ -46,6 +47,28 @@ const privateListContext = contextCreator({
     const list = useListContext()
     const lists = useOptionalLists()
     const queue = useQueue()
+    const [restorePoints, setRestorePoints] = useState<RestorePoint[]>([])
+    const savePoint = useCallback((savePointProps: {
+      change: (props: { state: State<ListMovie> }) => State<ListMovie>
+      state: State<ListMovie>
+    }) => {
+      const { history, ...listState } = savePointProps.state
+      const cloneBefore = structuredClone(savePointProps.state)
+      const newState = savePointProps.change({ state: cloneBefore })
+      const newEpisode = newState.history[0]
+      console.log('newEpisode', newEpisode)
+      const restorePoint: RestorePoint = {
+        episodeId: newEpisode.mergeChoiceId,
+        listState
+      }
+      const [first, ...rest] = restorePoints
+      const newRestorePoints = [...rest, restorePoint]
+      if (first != null && newRestorePoints.length < 10) {
+        newRestorePoints.unshift(first)
+      }
+      setRestorePoints(newRestorePoints)
+      return newState
+    }, [])
     const router = useRouter()
     useEffect(() => {
       setState(props.state)
@@ -61,6 +84,29 @@ const privateListContext = contextCreator({
     const [rewindLength, setRewindLength] = useState<number>()
     const rewindAction = useAction()
     const rewindWorkerRef = useRef<Worker>()
+    const requestRewind = useCallback((requestRewindProps: {
+      episodeId: number
+      lastMergechoiceId: number
+      state: State<ListMovie>
+    }) => {
+      const localeString = new Date().toLocaleString()
+      const label = `Rewind before ${localeString}`
+      const { history, ...snapshot } = requestRewindProps.state
+      const json = JSON.stringify(snapshot)
+      async function remote (): Promise<void> {
+        const request = {
+          episodeMergechoiceId: requestRewindProps.episodeId,
+          lastMergechoiceId: requestRewindProps.lastMergechoiceId,
+          listId: list.id,
+          snapshot: json
+        }
+        await postRewind({
+          label,
+          request
+        })
+      }
+      queueState({ label, remote })
+    }, [updateState])
     useEffect(() => {
       rewindWorkerRef.current = new Worker(new URL('../rewind/rewind-worker.ts', import.meta.url))
       rewindWorkerRef.current.onmessage = (event: MessageEvent<RewindMessage>) => {
@@ -68,26 +114,14 @@ const privateListContext = contextCreator({
           episode: (props) => {
             setRewindIndex(props.message.index)
           },
-          state: (props) => {
-            updateState({ newState: props.message.state })
+          state: (stateProps) => {
+            updateState({ newState: stateProps.message.state })
             rewindAction.succeed()
-            const localeString = new Date().toLocaleString()
-            const label = `Rewind before ${localeString}`
-            const { history, ...snapshot } = props.message.state
-            const json = JSON.stringify(snapshot)
-            async function remote (): Promise<void> {
-              const request = {
-                episodeMergechoiceId: props.message.episodeId,
-                lastMergechoiceId: props.message.lastMergechoiceId,
-                listId: list.id,
-                snapshot: json
-              }
-              await postRewind({
-                label,
-                request
-              })
-            }
-            queueState({ label, remote })
+            requestRewind({
+              episodeId: stateProps.message.episodeId,
+              lastMergechoiceId: stateProps.message.lastMergechoiceId,
+              state: stateProps.message.state
+            })
           }
         }
         onRewind({
@@ -99,7 +133,7 @@ const privateListContext = contextCreator({
       return () => {
         rewindWorkerRef.current?.terminate()
       }
-    }, [updateState, rewindAction.succeed])
+    }, [requestRewind, rewindAction.succeed])
     const [state, setState] = useState(props.state)
     const [sortedMovies, setSortedMovies] = useState(() => {
       const sortedMovies = getSortedMovies({ state })
@@ -162,6 +196,17 @@ const privateListContext = contextCreator({
       await lists?.delete({ id: list.id })
       router.push('/lists')
     }
+    function _export (): void {
+      const fileData = JSON.stringify(state.history)
+      const blob = new Blob([fileData], { type: 'text/plain' })
+      const url = URL.createObjectURL(blob)
+      const link = document.createElement('a')
+      const now = new Date()
+      const timestamp = now.toLocaleString('sv-SE')
+      link.download = `cloudsort-${list.name}-${list.id}-${timestamp}.json`
+      link.href = url
+      link.click()
+    }
     function queueState (props: {
       remote?: () => Promise<unknown>
       label: string
@@ -183,11 +228,17 @@ const privateListContext = contextCreator({
     }): void {
       const item = getCalculatedItem({ itemId: archiveProps.movieId, state })
       const label = `Archive ${item.name}`
-      function local (updateProps: { state: State<ListMovie> }): State<ListMovie> {
-        const newState = archiveItem({
-          itemId: archiveProps.movieId,
-          state: updateProps.state
-        })
+      function local (localProps: {
+        state: State<ListMovie>
+      }): State<ListMovie> {
+        function change (changeProps: { state: State<ListMovie> }): State<ListMovie> {
+          const newState = archiveItem({
+            itemId: archiveProps.movieId,
+            state: changeProps.state
+          })
+          return newState
+        }
+        const newState = savePoint({ change, state: localProps.state })
         return newState
       }
       const body = {
@@ -348,12 +399,25 @@ const privateListContext = contextCreator({
       if (lastEpisode == null) {
         throw new Error('There is no lastEpisode')
       }
-      console.log('rewind state', state)
-      setRewindIndex(0)
       const rewindIndex = getRewindIndex({
         episodeId: rewindProps.episodeMergechoiceId,
         history: state.history
       })
+      const restorePoint = restorePoints.find(point => point.episodeId === rewindProps.episodeMergechoiceId)
+      console.log('restorePoint', restorePoint)
+      if (restorePoint != null) {
+        const history = state.history.slice(rewindIndex + 1)
+        const newState = { ...restorePoint.listState, history }
+        updateState({ newState })
+        requestRewind({
+          episodeId: rewindProps.episodeMergechoiceId,
+          lastMergechoiceId: lastEpisode.mergeChoiceId,
+          state: newState
+        })
+        return
+      }
+      console.log('rewind state', state)
+      setRewindIndex(0)
       console.log('rewindIndex', rewindIndex)
       console.log('state.history.length', state.history.length)
       const length = state.history.length - rewindIndex - 1
@@ -407,6 +471,7 @@ const privateListContext = contextCreator({
       defaultOptionIndex,
       defer,
       delete: _delete,
+      export: _export,
       historyFlag,
       historySifter,
       importAction,

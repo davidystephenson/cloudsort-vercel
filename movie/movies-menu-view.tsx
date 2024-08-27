@@ -8,6 +8,7 @@ import themeContext from '@/theme/theme-context'
 import { DeleteIcon } from '@chakra-ui/icons'
 import { Icon, MenuItem, Spinner } from '@chakra-ui/react'
 import { IoCreateSharp } from 'react-icons/io5'
+import { FaFileExport } from 'react-icons/fa6'
 
 export default function MoviesMenuView (): JSX.Element {
   const privateList = privateListContext.useContext()
@@ -23,6 +24,9 @@ export default function MoviesMenuView (): JSX.Element {
   function handleDelete (): void {
     void privateList.delete()
   }
+  function handleExport (): void {
+    privateList.export()
+  }
   return (
     <MenuView>
       <RandomMenuItemView />
@@ -37,6 +41,12 @@ export default function MoviesMenuView (): JSX.Element {
         icon={<HideIconView />}
       >
         Hide
+      </MenuItem>
+      <MenuItem
+        icon={<Icon as={FaFileExport} />}
+        onClick={handleExport}
+      >
+        Export
       </MenuItem>
       <MenuItem
         color={theme.red}
