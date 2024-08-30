@@ -19,11 +19,11 @@ export default function createActiveChoice<ListItem extends Item> (props: {
   const seed = `${props.state.seed}${props.state.choiceCount}`
   const aIndex = getRandomRange({ debug: props.debug, seed, maximum: 2 })
   if (props.debug === true) {
-    console.log('aIndex', aIndex)
+    console.debug('aIndex', aIndex)
   }
   const bIndex = 1 - aIndex
   if (props.debug === true) {
-    console.log('bIndex', bIndex)
+    console.debug('bIndex', bIndex)
   }
   const newChoiceData: ChoiceData = {
     options: [firstOption, secondOption],

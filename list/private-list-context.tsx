@@ -259,7 +259,6 @@ const privateListContext = contextCreator({
       function local (props: { state: State<ListMovie> }): State<ListMovie> {
         const newState = chooseOption({
           betterIndex: chooseProps.betterIndex,
-          debug: true,
           state: props.state
         })
         if (historyFlag.flag) {
@@ -421,9 +420,9 @@ const privateListContext = contextCreator({
       setRewindIndex(0)
       console.log('rewindIndex', rewindIndex)
       console.log('state.history.length', state.history.length)
-      const length = state.history.length - rewindIndex - 1
-      console.log('length', length)
-      setRewindLength(length)
+      const newRewindLength = state.history.length - rewindIndex - 1
+      console.log('newRewindLength', newRewindLength)
+      setRewindLength(newRewindLength)
       rewindAction.start()
       rewindWorkerRef.current?.postMessage({
         episodeId: rewindProps.episodeMergechoiceId,

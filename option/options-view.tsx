@@ -16,20 +16,21 @@ export default function OptionsView (): JSX.Element {
   ) {
     return <></>
   }
-  console.log('list.state.choice', list.state.choice)
+  const aId = list.state.choice.options[list.state.choice.aIndex]
+  const bId = list.state.choice.options[list.state.choice.bIndex]
   return (
     <>
       <HStack flexWrap='wrap' justifyContent='center' marginTop='10px'>
         <OptionView
           chooseLetter='a'
           index={0}
-          id={list.state.choice.options[list.state.choice.aIndex]}
+          id={aId}
           openLetter='c'
         />
         <OptionView
           chooseLetter='b'
           index={list.state.choice.bIndex}
-          id={list.state.choice.options[list.state.choice.bIndex]}
+          id={bId}
           openLetter='v'
         />
       </HStack>
