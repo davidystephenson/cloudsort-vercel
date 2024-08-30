@@ -7,6 +7,7 @@ import addEpisode from './addEpisode'
 
 export default function chooseOption<ListItem extends Item> (props: {
   betterIndex: number
+  debug?: boolean
   seeded?: boolean
   state: State<ListItem>
 }): State<ListItem> {
@@ -27,6 +28,7 @@ export default function chooseOption<ListItem extends Item> (props: {
     aItem,
     betterIndex: props.betterIndex,
     bItem,
+    debug: props.debug,
     state: props.state
   })
   if (props.seeded !== true) {

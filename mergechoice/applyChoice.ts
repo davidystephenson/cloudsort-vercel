@@ -9,6 +9,7 @@ export default function applyChoice <ListItem extends Item> (props: {
   aItem: ListItem
   betterIndex: number
   bItem: ListItem
+  debug?: boolean
   state: State<ListItem>
 }): State<ListItem> {
   if (props.state.choice == null) {
@@ -47,6 +48,7 @@ export default function applyChoice <ListItem extends Item> (props: {
     currentOperation.input[props.betterIndex] = []
   }
   return setupChoice({
+    debug: props.debug,
     state: props.state
   })
 }

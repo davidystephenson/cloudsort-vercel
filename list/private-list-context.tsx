@@ -259,6 +259,7 @@ const privateListContext = contextCreator({
       function local (props: { state: State<ListMovie> }): State<ListMovie> {
         const newState = chooseOption({
           betterIndex: chooseProps.betterIndex,
+          debug: true,
           state: props.state
         })
         if (historyFlag.flag) {

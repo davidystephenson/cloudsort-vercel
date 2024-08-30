@@ -8,11 +8,13 @@ import getItem from './getItem'
 import createOperation from './createOperation'
 
 export default function setupChoice <ListItem extends Item> (props: {
+  debug?: boolean
   state: State<ListItem>
 }): State<ListItem> {
   const maxSteps1 = getOperationsSteps({ operations: props.state.activeOperations })
   if (maxSteps1 > 0) {
     const choiceState = createActiveChoice({
+      debug: props.debug,
       state: props.state
     })
     choiceState.complete = false
@@ -27,6 +29,7 @@ export default function setupChoice <ListItem extends Item> (props: {
     if (maxSteps2 > 0) {
       newState.activeOperations = newOperations
       const choiceState = createActiveChoice({
+        debug: props.debug,
         state: newState
       })
       choiceState.complete = false
