@@ -4,6 +4,7 @@ import setupChoice from './setupChoice'
 import seedChoice from './seedChoice'
 import addEpisode from './addEpisode'
 
+// TODO: Avoid mutating item seeds
 export default function importItems <ListItem extends Item> (props: {
   items: ListItem[]
   silent?: boolean

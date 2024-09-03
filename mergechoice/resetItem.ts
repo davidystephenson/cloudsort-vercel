@@ -10,6 +10,7 @@ export default function resetItem<ListItem extends Item> (props: {
   state: State<ListItem>
 }): State<ListItem> {
   const item = getItem({ itemId: props.itemId, items: props.state.items })
+  item.seeding = false
   const removedState = removeItem({
     itemId: props.itemId,
     silent: true,

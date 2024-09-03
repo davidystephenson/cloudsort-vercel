@@ -7,7 +7,7 @@ export default async function postImportMovies (props: {
   label: string
 }): Promise<MovieEpisode> {
   const guarded = await postEpisode({
-    body: props.body,
+    request: props.body,
     label: props.label,
     url: '/api/movies/import'
   })

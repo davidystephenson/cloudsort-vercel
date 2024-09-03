@@ -7,7 +7,7 @@ export default async function postRemoveMovie (props: {
   label: string
 }): Promise<MovieEpisode> {
   const response = await postEpisode({
-    body: props.body,
+    request: props.body,
     label: props.label,
     url: '/api/movie/remove'
   })

@@ -3,15 +3,16 @@ import guardEpisodePayload from './guard-episode-payload'
 import { MovieEpisode } from './episode-types'
 
 export default async function postEpisode (props: {
-  body: unknown
+  request: unknown
   label: string
   url: string
 }): Promise<MovieEpisode> {
   const response = await post({
-    request: props.body,
+    request: props.request,
     guard: guardEpisodePayload,
     label: props.label,
     url: props.url
   })
+  console.log('response', response)
   return response.episode
 }

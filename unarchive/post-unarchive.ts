@@ -7,7 +7,7 @@ export default async function postUnarchive (props: {
   label: string
 }): Promise<MovieEpisode> {
   const episode = await postEpisode({
-    body: props.body,
+    request: props.body,
     label: props.label,
     url: '/api/movie/unarchive'
   })

@@ -22,8 +22,9 @@ export const {
       void movie.open()
     })
     useHotkeys(props.chooseLetter, choose)
-
+    const a = list.state.choice?.aIndex === props.index
     const value = {
+      a,
       choose,
       chooseLetter: props.chooseLetter,
       index: props.index,

@@ -21,19 +21,23 @@ export default async function ListConsumer (props: {
     const history = listToHistory({
       list
     })
+    console.log('history.length', history.length)
     if (list.snapshot == null) {
       throw new Error('list.snapshot is null')
     }
     if (typeof list.snapshot !== 'string') {
       throw new Error('list.snapshot is not a string')
     }
-    const listState = JSON.parse(list.snapshot)
-    const snapState = { ...listState, history }
+    // console.log('list.snapshot.length:', list.snapshot.length)
+    // const listState = JSON.parse(list.snapshot)
+    // console.log('listState.choice:', listState.choice)
+    // const snapState = { ...listState, history }
+    // console.log('snapState.choice:', snapState.choice)
+    // console.log('snapState.history.length:', snapState.history.length)
     return (
       <PrivateListView
         history={history}
         seed={list.seed}
-        state={snapState}
       />
     )
   }

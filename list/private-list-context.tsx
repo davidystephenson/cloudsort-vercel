@@ -70,15 +70,26 @@ const privateListContext = contextCreator({
       return newState
     }, [])
     const router = useRouter()
+    const [state, setState] = useState(props.state)
     useEffect(() => {
       setState(props.state)
     }, [props.state])
+    const [sortedMovies, setSortedMovies] = useState(() => {
+      const sortedMovies = getSortedMovies({ state })
+      return sortedMovies
+    })
+    const rankedMovies = getRankedMovies({ sortedMovies })
+    const moviesSifter = useSifter({
+      rows: rankedMovies,
+      sift: siftMovie
+    })
     const updateState = useCallback((props: {
       newState: State<ListMovie>
     }) => {
-      const sortedMovies = getSortedMovies({ state: props.newState })
+      const newState = structuredClone(props.newState)
+      const sortedMovies = getSortedMovies({ state: newState })
       setSortedMovies(sortedMovies)
-      setState(props.newState)
+      setState(newState)
     }, [])
     const [rewindIndex, setRewindIndex] = useState(0)
     const [rewindLength, setRewindLength] = useState<number>()
@@ -107,6 +118,38 @@ const privateListContext = contextCreator({
       }
       queueState({ label, remote })
     }, [updateState])
+    const archivedMovies = Object.values(state.archive)
+    const copiedArchivedMovies = [...archivedMovies]
+    const sortedArchivedMovies = copiedArchivedMovies.sort((a, b) => {
+      return a.name.localeCompare(b.name)
+    })
+    const calculatedArchivedMovies = sortedArchivedMovies.map(value => {
+      const row = { ...value, points: 0 }
+      return row
+    })
+    const archiveSifter = useSifter({
+      rows: calculatedArchivedMovies,
+      sift: siftMovie
+    })
+    console.log('state.history', state.history)
+    const historySifter = useSifter({
+      debug: true,
+      rows: state.history,
+      sift: siftEpisode
+    })
+    console.log('historySifter.query', historySifter.query)
+    const sift = useCallback((props: {
+      query: string | undefined
+    }) => {
+      moviesSifter.sift({ query: props.query })
+      archiveSifter.sift({ query: props.query })
+      historySifter.sift({ query: props.query })
+    }, [archiveSifter.sift, historySifter.sift, moviesSifter.sift])
+    const resetSifters = useCallback(() => {
+      moviesSifter.reset()
+      archiveSifter.reset()
+      historySifter.reset()
+    }, [archiveSifter.reset, historySifter.reset, moviesSifter.reset])
     useEffect(() => {
       rewindWorkerRef.current = new Worker(new URL('../rewind/rewind-worker.ts', import.meta.url))
       rewindWorkerRef.current.onmessage = (event: MessageEvent<RewindMessage>) => {
@@ -115,8 +158,9 @@ const privateListContext = contextCreator({
             setRewindIndex(props.message.index)
           },
           state: (stateProps) => {
-            updateState({ newState: stateProps.message.state })
             rewindAction.succeed()
+            resetSifters()
+            updateState({ newState: stateProps.message.state })
             requestRewind({
               episodeId: stateProps.message.episodeId,
               lastMergechoiceId: stateProps.message.lastMergechoiceId,
@@ -134,12 +178,6 @@ const privateListContext = contextCreator({
         rewindWorkerRef.current?.terminate()
       }
     }, [requestRewind, rewindAction.succeed])
-    const [state, setState] = useState(props.state)
-    const [sortedMovies, setSortedMovies] = useState(() => {
-      const sortedMovies = getSortedMovies({ state })
-      return sortedMovies
-    })
-    const rankedMovies = getRankedMovies({ sortedMovies })
     const archiveFlag = useFlagbearer()
     const historyFlag = useFlagbearer({
       onLower: () => {
@@ -155,24 +193,7 @@ const privateListContext = contextCreator({
     const importAction = useAction()
     const [openedEpisodes, setOpenedEpisodes] = useState<number[]>([])
     const randoming = state.choice?.random === true
-    const archivedMovies = Object.values(state.archive)
-    const copiedArchivedMovies = [...archivedMovies]
-    const sortedArchivedMovies = copiedArchivedMovies.sort((a, b) => {
-      return a.name.localeCompare(b.name)
-    })
-    const calculatedArchivedMovies = sortedArchivedMovies.map(value => {
-      const row = { ...value, points: 0 }
-      return row
-    })
     const range = getChoiceCountRange({ state })
-    const archiveSifter = useSifter({
-      rows: calculatedArchivedMovies,
-      sift: siftMovie
-    })
-    const historySifter = useSifter({
-      rows: state.history,
-      sift: siftEpisode
-    })
     function openEpisode (props: { episodeId: number }): void {
       setOpenedEpisodes([...openedEpisodes, props.episodeId])
     }
@@ -284,13 +305,14 @@ const privateListContext = contextCreator({
       }
       choose({ betterIndex: defaultOptionIndex })
     }
-    async function importMovies (createMoviesProps: {
+    async function importMovies (importMoviesProps: {
       movies: MovieData[]
       slice?: number
     } & AlwaysNever): Promise<void> {
+      console.log('importMovies movies', importMoviesProps)
       const sliced = shuffleSlice({
-        items: createMoviesProps.movies,
-        slice: createMoviesProps.slice
+        items: importMoviesProps.movies,
+        slice: importMoviesProps.slice
       })
       const body: CreateMoviesRequest = {
         lastMergechoiceId: state.history[0]?.mergeChoiceId ?? null,
@@ -310,10 +332,12 @@ const privateListContext = contextCreator({
         if (response.import == null) {
           throw new Error('There is no import')
         }
+        console.log('response.import.items', response.import.items)
         const newState = importItems({
           items: response.import.items,
           state: updateProps.state
         })
+        console.log('newState', newState)
         return newState
       }
       queueState({ label, local })
@@ -462,6 +486,8 @@ const privateListContext = contextCreator({
       queueState({ label, local, remote })
     }
     const synced = queue.taskQueue.currentTask == null
+    console.log('state', state)
+    console.log('historySifter.sifted', historySifter.sifted)
     const value = {
       archive,
       archiveFlag,
@@ -477,6 +503,7 @@ const privateListContext = contextCreator({
       importAction,
       removeMovie,
       movies: rankedMovies,
+      moviesSifter,
       openedEpisodes,
       queue,
       random,
@@ -487,6 +514,7 @@ const privateListContext = contextCreator({
       rewindAction,
       rewindIndex,
       rewindLength,
+      sift,
       state,
       synced,
       toggleEpisode,

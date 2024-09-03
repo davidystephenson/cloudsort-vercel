@@ -5,7 +5,7 @@ import moviesContext from '@/movie/movies-context'
 export default function PublicListConsumer (): JSX.Element {
   const publicList = publicListContext.useContext()
   const consumer = (
-    <moviesContext.Provider movies={publicList.listing}>
+    <moviesContext.Provider movies={publicList.listing} sifter={publicList.moviesSifter}>
       <PublicMoviesTableView />
     </moviesContext.Provider>
   )

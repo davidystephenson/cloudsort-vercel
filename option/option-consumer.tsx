@@ -4,8 +4,7 @@ import { useOption } from './option-context'
 
 export default function OptionConsumer (): JSX.Element {
   const option = useOption()
-
-  if (option.index === 0) {
+  if (option.a) {
     return (
       <>
         <PrivateListMovieMenuView />

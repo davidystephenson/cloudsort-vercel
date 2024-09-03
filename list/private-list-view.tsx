@@ -14,9 +14,10 @@ import onDeduce from '@/deduce/onDeduce'
 
 export default function PrivateListView (props: {
   history: Array<Episode<ListMovie>>
-  state: State<ListMovie>
   seed: string
 }): JSX.Element {
+  console.log('props.history.length', props.history.length)
+  // console.log('props.state.choice', props.state.choice)
   const theme = useTheme()
   const [index, setIndex] = useState(0)
   const [state, setState] = useState<State<ListMovie>>()
@@ -46,7 +47,7 @@ export default function PrivateListView (props: {
   }, [deduceAction.succeed])
   useEffect(() => {
     deduceWorkerRef.current?.postMessage({
-      history: props.state.history,
+      history: props.history,
       seed: props.seed
     })
   }, [])
@@ -57,13 +58,10 @@ export default function PrivateListView (props: {
     return (
       <DeducingView
         index={index}
-        length={props.state.history.length}
+        length={props.history.length}
       />
     )
   }
-  console.log('props.history', props.history)
-  console.log('props.state', props.state)
-  console.log('state', state)
   return (
     <privateListContext.Provider state={state}>
       <PrivateListConsumer />

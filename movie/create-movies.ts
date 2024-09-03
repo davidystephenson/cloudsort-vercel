@@ -86,7 +86,7 @@ export default async function createMovies (props: {
     }
     return episodeItem
   })
-  console.log('createdEpisodeItems.length', createdEpisodeItems.length)
+  console.log('createdEpisodeItems', createdEpisodeItems)
 
   const episode = await props.tx.episode.create({
     data: {
@@ -103,5 +103,6 @@ export default async function createMovies (props: {
     include: EPISODE_PARTS_RELATION
   })
   console.log('*****HANDLE POST END*****\n\n')
+  console.log('episodeIems', episode.import?.episodeItems)
   return episode
 }

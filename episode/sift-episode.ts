@@ -9,6 +9,15 @@ export default function siftEpisode (props: {
   if (props.query === '') {
     return true
   }
+  const keys = Object.keys(props.row)
+  const keyed = keys.some(key => {
+    const lower = key.toLowerCase()
+    const result = lower.includes(props.query)
+    return result
+  })
+  if (keyed) {
+    return true
+  }
   if (props.row.archive != null) {
     return siftMovie({ row: props.row.archive.item, query: props.query })
   }

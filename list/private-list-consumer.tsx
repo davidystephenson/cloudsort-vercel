@@ -17,7 +17,7 @@ export default function PrivateListConsumer (): JSX.Element {
     )
   }
   return (
-    <moviesContext.Provider movies={privateList.movies}>
+    <moviesContext.Provider movies={privateList.movies} sifter={privateList.moviesSifter}>
       <PrivateMoviesTableView />
     </moviesContext.Provider>
   )

@@ -7,7 +7,7 @@ export default async function postChoice (props: {
   label: string
 }): Promise<MovieEpisode> {
   const episode = await postEpisode({
-    body: props.request,
+    request: props.request,
     label: props.label,
     url: '/api/movie/choice'
   })

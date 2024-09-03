@@ -23,7 +23,7 @@ export default function OptionsView (): JSX.Element {
       <HStack flexWrap='wrap' justifyContent='center' marginTop='10px'>
         <OptionView
           chooseLetter='a'
-          index={0}
+          index={list.state.choice.aIndex}
           id={aId}
           openLetter='c'
         />

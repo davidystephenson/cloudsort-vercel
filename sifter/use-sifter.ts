@@ -1,26 +1,49 @@
-import { useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 import { Sifter } from './sifter-types'
 
 export default function useSifter <Row> (props: {
+  debug?: boolean
   sift: (props: { row: Row, query: string }) => boolean
   rows: Row[]
 }): Sifter<Row> {
   const [query, setQuery] = useState<string>()
-  const filtered = props.rows.filter((row) => {
-    if (query == null) {
-      return true
+  const { debug, rows, sift: siftProp } = props
+  console.log('rows', rows)
+  const sifted = useMemo(() => {
+    const sifted = rows.filter((row) => {
+      if (debug === true) {
+        console.debug('row', row)
+      }
+      if (query == null) {
+        if (debug === true) {
+          console.debug('queryless')
+        }
+        return true
+      }
+      const includes = siftProp({ row, query })
+      return includes
+    })
+    if (debug === true) {
+      console.log('sifted inside', sifted)
     }
-    const includes = props.sift({ row, query })
-    return includes
-  })
-  function filter (props: {
+    return sifted
+  }, [debug, query, rows, siftProp])
+  if (props.debug === true) {
+    console.log('sifted outside', sifted)
+  }
+  const reset = useCallback(() => {
+    setQuery(undefined)
+  }, [])
+  const sift = useCallback((props: {
     query: string | undefined
-  }): void {
+  }) => {
     setQuery(props.query)
+  }, [])
+  const sifter = {
+    query,
+    reset,
+    sift,
+    sifted
   }
-
-  return {
-    sift: filter,
-    sifted: filtered
-  }
+  return sifter
 }
