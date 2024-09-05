@@ -3,13 +3,13 @@ import { handleBody } from '@/handle/handle-body'
 import { HandledResponse } from '@/handle/handle-types'
 import guardAccessibleList from '@/list/guard-accessible-list'
 import guardListWhere from '@/list/guard-list-where'
-import guardListing from '@/listing/guard-listing'
-import { ListingPayload } from '@/listing/listing-types'
+import guardRanking from '@/ranking/guardRanking'
+import { RankingPayload } from '@/ranking/rankingTypes'
 
-export async function POST (request: Request): HandledResponse<ListingPayload> {
+export async function POST (request: Request): HandledResponse<RankingPayload> {
   const response = await handleBody({
     guard: guardListWhere,
-    label: '/list/delete',
+    label: '/list/ranking',
     handle: async (props) => {
       const authSession = await serverAuth()
       await guardAccessibleList({
@@ -17,11 +17,11 @@ export async function POST (request: Request): HandledResponse<ListingPayload> {
         db: props.db,
         listId: props.body.listId
       })
-      const listing = await guardListing({
+      const ranking = await guardRanking({
         db: props.db,
         listId: props.body.listId
       })
-      return { listing }
+      return { ranking }
     },
     request
   })

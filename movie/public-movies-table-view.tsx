@@ -6,9 +6,12 @@ import usePublicCellRows from '@/cell/use-public-cell-rows'
 import moviesContext from './movies-context'
 import { useListContext } from '@/list/list-context'
 import HeadingView from '@/heading/heading-view'
+import { Heading, HStack } from '@chakra-ui/react'
+import PublicListMenuView from '@/list/public-list-menu-view'
 
 export default function PublicMoviesTableView (): JSX.Element {
   const list = useListContext()
+  console.log('list', list)
   const movies = moviesContext.useContext()
   const columns = ['Movie', 'Seed', 'Points']
   const rows = usePublicCellRows()
@@ -20,7 +23,10 @@ export default function PublicMoviesTableView (): JSX.Element {
       filterRows={movies.sifter.sift}
     >
       <HeadingView>
-        {list.name}
+        <HStack justifyContent='space-between' w='100%'>
+          <Heading size='lg'>{list.name}</Heading>
+          <PublicListMenuView />
+        </HStack>
       </HeadingView>
     </TableView>
   )

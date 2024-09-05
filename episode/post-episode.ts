@@ -13,6 +13,5 @@ export default async function postEpisode (props: {
     label: props.label,
     url: props.url
   })
-  console.log('response', response)
   return response.episode
 }

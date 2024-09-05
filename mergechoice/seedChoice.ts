@@ -16,7 +16,7 @@ export default function seedChoice <ListItem extends Item> (props: {
       itemId: props.state.choice.options[1],
       items: props.state.items
     })
-    const seeding = firstItem.seeding || secondItem.seeding
+    const seeding = firstItem.seeding && secondItem.seeding
     if (
       seeding &&
       firstItem.seed != null &&
@@ -27,7 +27,8 @@ export default function seedChoice <ListItem extends Item> (props: {
       if (props.debug === true) {
         debugChoice({
           choice: props.state.choice,
-          items: props.state.items
+          items: props.state.items,
+          label: 'seedChoice'
         })
       }
       const chosenState = chooseOption({

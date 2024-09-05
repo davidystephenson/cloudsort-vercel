@@ -1,3 +1,4 @@
+import policeCritickerRowArray from '@/criticker/policeCritickerRowArray'
 import privateListContext from '@/list/private-list-context'
 import { CritickerRow } from '@/movie/movie-types'
 import parseCritickerMovies from '@/movies/parse-criticker-movies'
@@ -9,21 +10,29 @@ import { BsCloudUpload } from 'react-icons/bs'
 export default function ImportMenuItemView (): JSX.Element {
   const privateList = privateListContext.useContext()
   const inputRef = useRef<HTMLInputElement>(null)
+  function handleError (props: {
+    error: unknown
+  }): void {
+    if (!(props.error instanceof Error)) {
+      throw props.error
+    }
+    console.error(props.error)
+    privateList.importAction.fail({
+      error: props.error,
+      message: props.error.message
+    })
+  }
   async function parseCriticker (props: {
     data: CritickerRow[]
   }): Promise<void> {
     try {
       const movies = parseCritickerMovies({ rows: props.data })
       await privateList.importMovies({
-        movies,
-        slice: 5
+        movies
       })
       privateList.importAction.succeed()
     } catch (error) {
-      if (!(error instanceof Error)) {
-        throw error
-      }
-      privateList.importAction.fail({ error, message: error.message })
+      handleError({ error })
     }
   }
   function handleFileChange (e: ChangeEvent<HTMLInputElement>): void {
@@ -32,11 +41,20 @@ export default function ImportMenuItemView (): JSX.Element {
       throw new Error('There is no file.')
     }
     privateList.importAction.start()
-    Papa.parse<CritickerRow>(file, {
+    Papa.parse(file, {
       header: true,
       skipEmptyLines: true,
       complete: ({ data }) => {
-        void parseCriticker({ data })
+        console.log('data', data)
+        try {
+          const critickerRows = policeCritickerRowArray({
+            label: 'ImportMenuItemView',
+            value: data
+          })
+          void parseCriticker({ data: critickerRows })
+        } catch (error) {
+          handleError({ error })
+        }
       }
     })
     if (inputRef.current == null) {

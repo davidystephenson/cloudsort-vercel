@@ -1,15 +1,15 @@
 import getSortedMovies from '@/movies/getSortedMovies'
-import { Listing } from './listing-types'
+import { Ranking } from './rankingTypes'
 import { RelatedList } from '@/list/list-types'
 import listToHistory from '@/list/list-to-history'
 import deduceState from '@/mergechoice/deduceState'
-import getRankedMovies from '@/rank/get-ranked-movies'
 import { Db } from '@/prisma/prisma-types'
+import moviesToRanking from './moviesToRanking'
 
-export default async function getListing (props: {
+export default async function getPublicRanking (props: {
   db: Db
   relatedList: RelatedList
-}): Promise<Listing> {
+}): Promise<Ranking> {
   const itemHides = await props.db.itemHide.findMany({
     where: {
       userId: props.relatedList.userId
@@ -27,10 +27,6 @@ export default async function getListing (props: {
     })
     return !hidden
   })
-  const ranked = getRankedMovies({ sortedMovies: filtered })
-  const cleaned = ranked.map((movie) => {
-    const cleaned = { ...movie, seed: 0, points: 0 }
-    return cleaned
-  })
-  return cleaned
+  const ranking = moviesToRanking({ sortedMovies: filtered })
+  return ranking
 }

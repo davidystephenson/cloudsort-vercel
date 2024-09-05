@@ -1,13 +1,13 @@
 import fashionPolice from '@/fashion-police/fashion-police'
-import { ListingPayload } from './listing-types'
+import { RankingPayload } from './rankingTypes'
 import policeRankedMovieArray from '@/movie/police-ranked-movie-array'
 
-export default function policeListingPayload (props: {
+export default function policeRankingPayload (props: {
   label: string
   value: unknown
-}): ListingPayload {
+}): RankingPayload {
   const required = {
-    listing: policeRankedMovieArray
+    ranking: policeRankedMovieArray
   }
   const policed = fashionPolice({
     label: props.label,

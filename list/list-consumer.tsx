@@ -3,7 +3,6 @@
 import { List } from '@prisma/client'
 import PrivateListView from './private-list-view'
 import PublicListView from './public-list-view'
-import guardListing from '@/listing/guard-listing'
 import prisma from '@/prisma/prisma'
 import guardRelatedList from './guard-related-list'
 import listToHistory from './list-to-history'
@@ -41,14 +40,9 @@ export default async function ListConsumer (props: {
       />
     )
   }
-  const listing = await guardListing({
-    db: prisma,
-    listId: props.list.id
-  })
   return (
     <PublicListView
       list={props.list}
-      listing={listing}
     />
   )
 }

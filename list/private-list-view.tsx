@@ -16,8 +16,6 @@ export default function PrivateListView (props: {
   history: Array<Episode<ListMovie>>
   seed: string
 }): JSX.Element {
-  console.log('props.history.length', props.history.length)
-  // console.log('props.state.choice', props.state.choice)
   const theme = useTheme()
   const [index, setIndex] = useState(0)
   const [state, setState] = useState<State<ListMovie>>()

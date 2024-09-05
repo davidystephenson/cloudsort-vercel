@@ -41,9 +41,7 @@ export default async function handleEpisode<RequestBody extends LastWhere> (prop
         episodes,
         db: authProps.db
       })
-      console.log('handleEpisode episode.import.episodeItems', episode.import?.episodeItems)
       const historyEpisode = episodeToHistoryEpisode({ episode })
-      console.log('historyEpisode.import.items initial', historyEpisode.import?.items)
       const listState = await createListState({
         db: authProps.db,
         listId: authProps.request.listId
@@ -62,7 +60,6 @@ export default async function handleEpisode<RequestBody extends LastWhere> (prop
         data: { snapshot: json },
         where: { id: authProps.request.listId }
       })
-      console.log('historyEpisode.import.items response', historyEpisode.import?.items)
       return { ok: true, episode: historyEpisode }
     },
     request: props.request

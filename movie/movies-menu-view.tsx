@@ -1,3 +1,4 @@
+import ExportMenuItemView from '@/export/ExportMenuItemView'
 import { useHeading } from '@/heading/heading-context'
 import HideIconView from '@/hide/hide-icon-view'
 import ImportMenuItemView from '@/import/import-menu-item-view'
@@ -8,7 +9,6 @@ import themeContext from '@/theme/theme-context'
 import { DeleteIcon } from '@chakra-ui/icons'
 import { Icon, MenuItem, Spinner } from '@chakra-ui/react'
 import { IoCreateSharp } from 'react-icons/io5'
-import { FaFileExport } from 'react-icons/fa6'
 
 export default function MoviesMenuView (): JSX.Element {
   const privateList = privateListContext.useContext()
@@ -24,37 +24,31 @@ export default function MoviesMenuView (): JSX.Element {
   function handleDelete (): void {
     void privateList.delete()
   }
-  function handleExport (): void {
-    privateList.export()
-  }
   return (
-    <MenuView>
-      <RandomMenuItemView />
-      <ImportMenuItemView />
-      <MenuItem
-        icon={<Icon as={IoCreateSharp} />}
-        onClick={handleCreate}
-      >
-        Create Movie
-      </MenuItem>
-      <MenuItem
-        icon={<HideIconView />}
-      >
-        Hide
-      </MenuItem>
-      <MenuItem
-        icon={<Icon as={FaFileExport} />}
-        onClick={handleExport}
-      >
-        Export
-      </MenuItem>
-      <MenuItem
-        color={theme.red}
-        icon={<DeleteIcon />}
-        onClick={handleDelete}
-      >
-        Delete
-      </MenuItem>
-    </MenuView>
+    <>
+      <MenuView>
+        <RandomMenuItemView />
+        <ImportMenuItemView />
+        <MenuItem
+          icon={<Icon as={IoCreateSharp} />}
+          onClick={handleCreate}
+        >
+          Create Movie
+        </MenuItem>
+        <MenuItem
+          icon={<HideIconView />}
+        >
+          Hide
+        </MenuItem>
+        <ExportMenuItemView />
+        <MenuItem
+          color={theme.red}
+          icon={<DeleteIcon />}
+          onClick={handleDelete}
+        >
+          Delete
+        </MenuItem>
+      </MenuView>
+    </>
   )
 }

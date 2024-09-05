@@ -3,11 +3,15 @@ import getCalculatedItem from './getCalculatedItem'
 import getRandomElement from './getRandomElement'
 import { Item, State } from './mergeChoiceTypes'
 
-export default function setupRandomChoice <ListItem extends Item> (props: {
+export default function setupRandomChoice<ListItem extends Item> (props: {
   state: State<ListItem>
 }): State<ListItem> {
   if (!props.state.complete) {
     throw new Error('The state must be complete to create a random choice')
+  }
+  const lastEpisode = props.state.history[0]
+  if (lastEpisode == null) {
+    throw new Error('There is no last episode')
   }
   const items = Object.values(props.state.items)
   if (items.length < 2) {

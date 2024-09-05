@@ -38,6 +38,11 @@ import getRewindIndex from '@/mergechoice/getRewindIndex'
 import { RewindHandlers, RewindMessage } from '@/shade/rewind-types'
 import onRewind from '@/rewind/onRewind'
 import { RestorePoint } from '@/restore/restoreTypes'
+import downloadFile from '@/file/downloadFile'
+import moviesToRanking from '@/ranking/moviesToRanking'
+import downloadCritickerFile from '@/file/downloadCritickerFile'
+import { ListHistory } from '@/history/history-types'
+import debugChoice from '@/mergechoice/debugChoice'
 
 const privateListContext = contextCreator({
   name: 'privateList',
@@ -56,7 +61,6 @@ const privateListContext = contextCreator({
       const cloneBefore = structuredClone(savePointProps.state)
       const newState = savePointProps.change({ state: cloneBefore })
       const newEpisode = newState.history[0]
-      console.log('newEpisode', newEpisode)
       const restorePoint: RestorePoint = {
         episodeId: newEpisode.mergeChoiceId,
         listState
@@ -91,6 +95,26 @@ const privateListContext = contextCreator({
       setSortedMovies(sortedMovies)
       setState(newState)
     }, [])
+    const saveState = useCallback((saveStateProps: {
+      change: (props: { state: State<ListMovie> }) => State<ListMovie>
+    }) => {
+      const newState = savePoint({ change: saveStateProps.change, state })
+      updateState({ newState })
+    }, [state])
+    const rewindRestorePoints = useCallback((props: {
+      history: ListHistory
+    }) => {
+      setRestorePoints(current => {
+        const filtered = current.filter(point => {
+          const included = props.history.some(episode => {
+            const ided = episode.mergeChoiceId === point.episodeId
+            return ided
+          })
+          return included
+        })
+        return filtered
+      })
+    }, [])
     const [rewindIndex, setRewindIndex] = useState(0)
     const [rewindLength, setRewindLength] = useState<number>()
     const rewindAction = useAction()
@@ -116,7 +140,7 @@ const privateListContext = contextCreator({
           request
         })
       }
-      queueState({ label, remote })
+      queueTask({ label, perform: remote })
     }, [updateState])
     const archivedMovies = Object.values(state.archive)
     const copiedArchivedMovies = [...archivedMovies]
@@ -131,13 +155,10 @@ const privateListContext = contextCreator({
       rows: calculatedArchivedMovies,
       sift: siftMovie
     })
-    console.log('state.history', state.history)
     const historySifter = useSifter({
-      debug: true,
       rows: state.history,
       sift: siftEpisode
     })
-    console.log('historySifter.query', historySifter.query)
     const sift = useCallback((props: {
       query: string | undefined
     }) => {
@@ -217,51 +238,47 @@ const privateListContext = contextCreator({
       await lists?.delete({ id: list.id })
       router.push('/lists')
     }
-    function _export (): void {
-      const fileData = JSON.stringify(state.history)
-      const blob = new Blob([fileData], { type: 'text/plain' })
-      const url = URL.createObjectURL(blob)
-      const link = document.createElement('a')
-      const now = new Date()
-      const timestamp = now.toLocaleString('sv-SE')
-      link.download = `cloudsort-${list.name}-${list.id}-${timestamp}.json`
-      link.href = url
-      link.click()
+    function exportHistory (): void {
+      const text = JSON.stringify(state.history)
+      downloadFile({
+        extension: 'json',
+        label: 'history',
+        listId: list.id,
+        listName: list.name,
+        text
+      })
     }
-    function queueState (props: {
-      remote?: () => Promise<unknown>
+    function exportCriticker (): void {
+      const ranking = moviesToRanking({ sortedMovies })
+      downloadCritickerFile({
+        listId: list.id,
+        listName: list.name,
+        ranking
+      })
+    }
+    function queueTask (props: {
+      perform?: () => Promise<unknown>
       label: string
-      local?: (props: { state: State<ListMovie> }) => State<ListMovie>
     }): void {
       const task = {
-        perform: props.remote,
+        perform: props.perform,
         label: props.label
       }
       void queue.add({ task })
-      if (props.local == null) {
-        return
-      }
-      const newState = props.local({ state })
-      updateState({ newState })
     }
     function archive (archiveProps: {
       movieId: number
     }): void {
-      const item = getCalculatedItem({ itemId: archiveProps.movieId, state })
-      const label = `Archive ${item.name}`
-      function local (localProps: {
-        state: State<ListMovie>
-      }): State<ListMovie> {
-        function change (changeProps: { state: State<ListMovie> }): State<ListMovie> {
-          const newState = archiveItem({
-            itemId: archiveProps.movieId,
-            state: changeProps.state
-          })
-          return newState
-        }
-        const newState = savePoint({ change, state: localProps.state })
+      function change (changeProps: { state: State<ListMovie> }): State<ListMovie> {
+        const newState = archiveItem({
+          itemId: archiveProps.movieId,
+          state: changeProps.state
+        })
         return newState
       }
+      saveState({ change })
+      const item = getCalculatedItem({ itemId: archiveProps.movieId, state })
+      const label = `Archive ${item.name}`
       const body = {
         lastMergechoiceId: state.history[0].mergeChoiceId,
         listId: list.id,
@@ -269,35 +286,39 @@ const privateListContext = contextCreator({
           item
         }
       }
-      async function remote (): Promise<void> {
+      async function perform (): Promise<void> {
         await postArchive({ body, label: 'archive' })
       }
-      queueState({ label, local, remote })
+      queueTask({ label, perform })
     }
     function choose (chooseProps: {
       betterIndex: number
     }): void {
-      function local (props: { state: State<ListMovie> }): State<ListMovie> {
-        const newState = chooseOption({
+      console.log('chooseProps.betterIndex', chooseProps.betterIndex)
+      function change (changeProps: { state: State<ListMovie> }): State<ListMovie> {
+        const chosenState = chooseOption({
           betterIndex: chooseProps.betterIndex,
-          state: props.state
+          state: changeProps.state
         })
+        console.log('chosenState', chosenState)
+        debugChoice({ label: 'choose', choice: chosenState.choice, items: chosenState.items })
         if (historyFlag.flag) {
-          openEpisode({ episodeId: newState.history[0].mergeChoiceId })
+          openEpisode({ episodeId: chosenState.history[0].mergeChoiceId })
         } else {
-          setOpenedEpisodes([newState.history[0].mergeChoiceId])
+          setOpenedEpisodes([chosenState.history[0].mergeChoiceId])
         }
-        return newState
+        return chosenState
       }
+      saveState({ change })
       const request = createMovieChoiceRequest({
         betterIndex: chooseProps.betterIndex,
         listId: list.id,
         state
       })
-      async function remote (): Promise<void> {
+      async function perform (): Promise<void> {
         await postChoice({ request, label: request.label })
       }
-      queueState({ label: request.label, local, remote })
+      queueTask({ label: request.label, perform })
     }
     function defer (): void {
       if (defaultOptionIndex == null) {
@@ -309,7 +330,6 @@ const privateListContext = contextCreator({
       movies: MovieData[]
       slice?: number
     } & AlwaysNever): Promise<void> {
-      console.log('importMovies movies', importMoviesProps)
       const sliced = shuffleSlice({
         items: importMoviesProps.movies,
         slice: importMoviesProps.slice
@@ -328,27 +348,29 @@ const privateListContext = contextCreator({
         throw new Error('There is no import')
       }
       const label = `Import ${response.import.items.length} movies`
-      function local (updateProps: { state: State<ListMovie> }): State<ListMovie> {
+      queueTask({ label })
+      function change (updateProps: { state: State<ListMovie> }): State<ListMovie> {
         if (response.import == null) {
           throw new Error('There is no import')
         }
-        console.log('response.import.items', response.import.items)
         const newState = importItems({
           items: response.import.items,
           state: updateProps.state
         })
-        console.log('newState', newState)
         return newState
       }
-      queueState({ label, local })
+      saveState({ change })
     }
     function random (): void {
-      const lastEpisode = state.history[0]
-      if (lastEpisode == null) {
-        throw new Error('There is no lastEpisode')
+      function change (props: {
+        state: State<ListMovie>
+      }): State<ListMovie> {
+        const newState = setupRandomChoice({ state: props.state })
+        return newState
       }
-      const newState = setupRandomChoice({ state })
-      const newEpisode = newState.history[0]
+      saveState({ change })
+      const lastEpisode = state.history[0]
+      const newEpisode = state.history[0]
       async function perform (): Promise<void> {
         if (newEpisode.random == null) {
           throw new Error('There is no random')
@@ -361,22 +383,21 @@ const privateListContext = contextCreator({
         await postRandom({ body, label: 'random' })
       }
       const label = 'Create random choice'
-      const task = { perform, label }
-      void queue.add({ task })
-      updateState({ newState })
+      queueTask({ label, perform })
     }
     function removeMovie (deleteMovieProps: {
       movieId: number
     }): void {
-      const item = getCalculatedItem({ itemId: deleteMovieProps.movieId, state })
-      const label = `Remove ${item.name}`
-      function local (updateProps: { state: State<ListMovie> }): State<ListMovie> {
+      function change (changeProps: { state: State<ListMovie> }): State<ListMovie> {
         const newState = removeItem({
           itemId: deleteMovieProps.movieId,
-          state: updateProps.state
+          state: changeProps.state
         })
         return newState
       }
+      saveState({ change })
+      const item = getCalculatedItem({ itemId: deleteMovieProps.movieId, state })
+      const label = `Remove ${item.name}`
       const body = {
         lastMergechoiceId: state.history[0].mergeChoiceId,
         listId: list.id,
@@ -384,25 +405,26 @@ const privateListContext = contextCreator({
           item
         }
       }
-      async function remote (): Promise<void> {
+      async function perform (): Promise<void> {
         await postRemoveMovie({ body, label: 'removeMovie' })
       }
-      queueState({ label, local, remote })
+      queueTask({ label, perform })
     }
     function reset (resetProps: {
       movieId: number
     }): void {
-      const item = getCalculatedItem({
-        itemId: resetProps.movieId, state
-      })
-      const label = `Reset ${item.name}`
-      function local (updateProps: { state: State<ListMovie> }): State<ListMovie> {
+      function change (updateProps: { state: State<ListMovie> }): State<ListMovie> {
         const newState = resetItem({
           itemId: resetProps.movieId,
           state: updateProps.state
         })
         return newState
       }
+      saveState({ change })
+      const item = getCalculatedItem({
+        itemId: resetProps.movieId, state
+      })
+      const label = `Reset ${item.name}`
       const body = {
         lastMergechoiceId: state.history[0].mergeChoiceId,
         listId: list.id,
@@ -410,15 +432,14 @@ const privateListContext = contextCreator({
           item
         }
       }
-      async function remote (): Promise<void> {
+      async function perform (): Promise<void> {
         await postReset({ body, label: 'reset' })
       }
-      queueState({ label, local, remote })
+      queueTask({ label, perform })
     }
     function rewind (rewindProps: {
       episodeMergechoiceId: number
     }): void {
-      console.log('rewindProps', rewindProps)
       const lastEpisode = state.history[0]
       if (lastEpisode == null) {
         throw new Error('There is no lastEpisode')
@@ -427,10 +448,11 @@ const privateListContext = contextCreator({
         episodeId: rewindProps.episodeMergechoiceId,
         history: state.history
       })
+
+      const history = state.history.slice(rewindIndex + 1)
+      rewindRestorePoints({ history })
       const restorePoint = restorePoints.find(point => point.episodeId === rewindProps.episodeMergechoiceId)
-      console.log('restorePoint', restorePoint)
       if (restorePoint != null) {
-        const history = state.history.slice(rewindIndex + 1)
         const newState = { ...restorePoint.listState, history }
         updateState({ newState })
         requestRewind({
@@ -440,12 +462,8 @@ const privateListContext = contextCreator({
         })
         return
       }
-      console.log('rewind state', state)
       setRewindIndex(0)
-      console.log('rewindIndex', rewindIndex)
-      console.log('state.history.length', state.history.length)
       const newRewindLength = state.history.length - rewindIndex - 1
-      console.log('newRewindLength', newRewindLength)
       setRewindLength(newRewindLength)
       rewindAction.start()
       rewindWorkerRef.current?.postMessage({
@@ -458,18 +476,21 @@ const privateListContext = contextCreator({
     function unarchive (archiveProps: {
       movieId: number
     }): void {
+      function change (changeProps: {
+        state: State<ListMovie>
+      }): State<ListMovie> {
+        const newState = unarchiveItem({
+          itemId: archiveProps.movieId,
+          state: changeProps.state
+        })
+        return newState
+      }
+      saveState({ change })
       const item = state.archive[archiveProps.movieId]
       if (item == null) {
         throw new Error('There is no item')
       }
       const label = `Unarchive ${item.name}`
-      function local (updateProps: { state: State<ListMovie> }): State<ListMovie> {
-        const newState = unarchiveItem({
-          itemId: archiveProps.movieId,
-          state: updateProps.state
-        })
-        return newState
-      }
       const body = {
         lastMergechoiceId: state.history[0].mergeChoiceId,
         listId: list.id,
@@ -480,14 +501,12 @@ const privateListContext = contextCreator({
           }
         }
       }
-      async function remote (): Promise<void> {
+      async function perform (): Promise<void> {
         await postUnarchive({ body, label: 'archive' })
       }
-      queueState({ label, local, remote })
+      queueTask({ label, perform })
     }
     const synced = queue.taskQueue.currentTask == null
-    console.log('state', state)
-    console.log('historySifter.sifted', historySifter.sifted)
     const value = {
       archive,
       archiveFlag,
@@ -497,7 +516,8 @@ const privateListContext = contextCreator({
       defaultOptionIndex,
       defer,
       delete: _delete,
-      export: _export,
+      exportCriticker,
+      exportHistory,
       historyFlag,
       historySifter,
       importAction,

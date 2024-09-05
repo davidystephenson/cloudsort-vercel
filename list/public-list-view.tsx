@@ -1,7 +1,7 @@
 'use client'
 
-import { Listing } from '@/listing/listing-types'
-import postListing from '@/listing/postListing'
+import { Ranking } from '@/ranking/rankingTypes'
+import postRanking from '@/ranking/postRanking'
 import LoaderView from '@/loader/loader-view'
 import { useTheme } from '@/theme/theme-context'
 import { List } from '@prisma/client'
@@ -13,24 +13,23 @@ import publicListContext from './public-list-context'
 
 export default function PublicListView (props: {
   list: List
-  listing: Listing
 }): JSX.Element {
   const theme = useTheme()
-  const [listing, setListing] = useState<Listing>()
+  const [ranking, setRanking] = useState<Ranking>()
   useEffect(() => {
     async function download (): Promise<void> {
-      const payload = await postListing({
+      const payload = await postRanking({
         label: 'PublicListView',
         listId: props.list.id
       })
-      setListing(payload.listing)
+      setRanking(payload.ranking)
     }
     void download()
   }, [props.list.id])
   if (!theme.mounted) {
     return <ListMultiloaderView />
   }
-  if (listing == null) {
+  if (ranking == null) {
     return (
       <ListLoadingView>
         <LoaderView />
@@ -40,7 +39,7 @@ export default function PublicListView (props: {
   return (
     <publicListContext.Provider
       list={props.list}
-      listing={listing}
+      ranking={ranking}
     >
       <PublicListConsumer />
     </publicListContext.Provider>
