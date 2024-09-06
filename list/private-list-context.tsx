@@ -24,7 +24,7 @@ import postUnarchive from '@/unarchive/post-unarchive'
 import useQueue from '@/useQueue/useQueue'
 import contextCreator from 'context-creator'
 import { useRouter } from 'next/navigation'
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import chooseOption from '../mergechoice/chooseOption'
 import { State } from '../mergechoice/mergeChoiceTypes'
 import removeItem from '../mergechoice/removeItem'
@@ -42,7 +42,7 @@ import downloadFile from '@/file/downloadFile'
 import moviesToRanking from '@/ranking/moviesToRanking'
 import downloadCritickerFile from '@/file/downloadCritickerFile'
 import { ListHistory } from '@/history/history-types'
-import debugChoice from '@/mergechoice/debugChoice'
+import useWorkerRef from '@/worker/useWorkerRef'
 
 const privateListContext = contextCreator({
   name: 'privateList',
@@ -100,6 +100,7 @@ const privateListContext = contextCreator({
     }) => {
       const newState = savePoint({ change: saveStateProps.change, state })
       updateState({ newState })
+      return newState
     }, [state])
     const rewindRestorePoints = useCallback((props: {
       history: ListHistory
@@ -115,33 +116,6 @@ const privateListContext = contextCreator({
         return filtered
       })
     }, [])
-    const [rewindIndex, setRewindIndex] = useState(0)
-    const [rewindLength, setRewindLength] = useState<number>()
-    const rewindAction = useAction()
-    const rewindWorkerRef = useRef<Worker>()
-    const requestRewind = useCallback((requestRewindProps: {
-      episodeId: number
-      lastMergechoiceId: number
-      state: State<ListMovie>
-    }) => {
-      const localeString = new Date().toLocaleString()
-      const label = `Rewind before ${localeString}`
-      const { history, ...snapshot } = requestRewindProps.state
-      const json = JSON.stringify(snapshot)
-      async function remote (): Promise<void> {
-        const request = {
-          episodeMergechoiceId: requestRewindProps.episodeId,
-          lastMergechoiceId: requestRewindProps.lastMergechoiceId,
-          listId: list.id,
-          snapshot: json
-        }
-        await postRewind({
-          label,
-          request
-        })
-      }
-      queueTask({ label, perform: remote })
-    }, [updateState])
     const archivedMovies = Object.values(state.archive)
     const copiedArchivedMovies = [...archivedMovies]
     const sortedArchivedMovies = copiedArchivedMovies.sort((a, b) => {
@@ -166,39 +140,69 @@ const privateListContext = contextCreator({
       archiveSifter.sift({ query: props.query })
       historySifter.sift({ query: props.query })
     }, [archiveSifter.sift, historySifter.sift, moviesSifter.sift])
+    const requestRewind = useCallback((requestRewindProps: {
+      episodeId: number
+      lastMergechoiceId: number
+      state: State<ListMovie>
+    }) => {
+      const localeString = new Date().toLocaleString()
+      const label = `Rewind before ${localeString}`
+      const { history, ...snapshot } = requestRewindProps.state
+      const json = JSON.stringify(snapshot)
+      async function remote (): Promise<void> {
+        const request = {
+          episodeMergechoiceId: requestRewindProps.episodeId,
+          lastMergechoiceId: requestRewindProps.lastMergechoiceId,
+          listId: list.id,
+          snapshot: json
+        }
+        await postRewind({
+          label,
+          request
+        })
+      }
+      queueTask({ label, perform: remote })
+    }, [updateState])
+    const [rewindIndex, setRewindIndex] = useState(0)
+    const [rewindLength, setRewindLength] = useState<number>()
+    const rewindAction = useAction()
+    const rewindWorker = useMemo(() => {
+      const worker = new Worker(new URL('../rewind/rewind-worker.ts', import.meta.url))
+      return worker
+    }, [])
     const resetSifters = useCallback(() => {
       moviesSifter.reset()
       archiveSifter.reset()
       historySifter.reset()
     }, [archiveSifter.reset, historySifter.reset, moviesSifter.reset])
-    useEffect(() => {
-      rewindWorkerRef.current = new Worker(new URL('../rewind/rewind-worker.ts', import.meta.url))
-      rewindWorkerRef.current.onmessage = (event: MessageEvent<RewindMessage>) => {
-        const handlers: RewindHandlers = {
-          episode: (props) => {
-            setRewindIndex(props.message.index)
-          },
-          state: (stateProps) => {
-            rewindAction.succeed()
-            resetSifters()
-            updateState({ newState: stateProps.message.state })
-            requestRewind({
-              episodeId: stateProps.message.episodeId,
-              lastMergechoiceId: stateProps.message.lastMergechoiceId,
-              state: stateProps.message.state
-            })
-          }
+    const handleRewindMessage = useCallback((props: {
+      event: MessageEvent<RewindMessage>
+    }) => {
+      const handlers: RewindHandlers = {
+        episode: (props) => {
+          setRewindIndex(props.message.index)
+        },
+        state: (stateProps) => {
+          rewindAction.succeed()
+          resetSifters()
+          updateState({ newState: stateProps.message.state })
+          requestRewind({
+            episodeId: stateProps.message.episodeId,
+            lastMergechoiceId: stateProps.message.lastMergechoiceId,
+            state: stateProps.message.state
+          })
         }
-        onRewind({
-          key: event.data.type,
-          message: event.data,
-          receivers: handlers
-        })
       }
-      return () => {
-        rewindWorkerRef.current?.terminate()
-      }
-    }, [requestRewind, rewindAction.succeed])
+      onRewind({
+        key: props.event.data.type,
+        message: props.event.data,
+        receivers: handlers
+      })
+    }, [rewindAction.succeed, resetSifters, updateState, requestRewind])
+    const rewindWorkerRef = useWorkerRef({
+      onMessage: handleRewindMessage,
+      worker: rewindWorker
+    })
     const archiveFlag = useFlagbearer()
     const historyFlag = useFlagbearer({
       onLower: () => {
@@ -294,14 +298,11 @@ const privateListContext = contextCreator({
     function choose (chooseProps: {
       betterIndex: number
     }): void {
-      console.log('chooseProps.betterIndex', chooseProps.betterIndex)
       function change (changeProps: { state: State<ListMovie> }): State<ListMovie> {
         const chosenState = chooseOption({
           betterIndex: chooseProps.betterIndex,
           state: changeProps.state
         })
-        console.log('chosenState', chosenState)
-        debugChoice({ label: 'choose', choice: chosenState.choice, items: chosenState.items })
         if (historyFlag.flag) {
           openEpisode({ episodeId: chosenState.history[0].mergeChoiceId })
         } else {
@@ -368,18 +369,18 @@ const privateListContext = contextCreator({
         const newState = setupRandomChoice({ state: props.state })
         return newState
       }
-      saveState({ change })
+      const newState = saveState({ change })
       const lastEpisode = state.history[0]
-      const newEpisode = state.history[0]
+      const newEpisode = newState.history[0]
+      if (newEpisode.random == null) {
+        throw new Error('There is no random')
+      }
+      const body = {
+        lastMergechoiceId: lastEpisode.mergeChoiceId,
+        listId: list.id,
+        random: newEpisode.random
+      }
       async function perform (): Promise<void> {
-        if (newEpisode.random == null) {
-          throw new Error('There is no random')
-        }
-        const body = {
-          lastMergechoiceId: lastEpisode.mergeChoiceId,
-          listId: list.id,
-          random: newEpisode.random
-        }
         await postRandom({ body, label: 'random' })
       }
       const label = 'Create random choice'
@@ -451,7 +452,9 @@ const privateListContext = contextCreator({
 
       const history = state.history.slice(rewindIndex + 1)
       rewindRestorePoints({ history })
+      console.log('restorePoints', restorePoints)
       const restorePoint = restorePoints.find(point => point.episodeId === rewindProps.episodeMergechoiceId)
+      console.log('restorePoint', restorePoint)
       if (restorePoint != null) {
         const newState = { ...restorePoint.listState, history }
         updateState({ newState })

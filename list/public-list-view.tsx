@@ -3,18 +3,15 @@
 import { Ranking } from '@/ranking/rankingTypes'
 import postRanking from '@/ranking/postRanking'
 import LoaderView from '@/loader/loader-view'
-import { useTheme } from '@/theme/theme-context'
 import { List } from '@prisma/client'
 import { useEffect, useState } from 'react'
 import ListLoadingView from './list-loading-view'
-import ListMultiloaderView from './list-multiloader-view'
 import PublicListConsumer from './public-list-consumer'
 import publicListContext from './public-list-context'
 
 export default function PublicListView (props: {
   list: List
 }): JSX.Element {
-  const theme = useTheme()
   const [ranking, setRanking] = useState<Ranking>()
   useEffect(() => {
     async function download (): Promise<void> {
@@ -26,9 +23,6 @@ export default function PublicListView (props: {
     }
     void download()
   }, [props.list.id])
-  if (!theme.mounted) {
-    return <ListMultiloaderView />
-  }
   if (ranking == null) {
     return (
       <ListLoadingView>

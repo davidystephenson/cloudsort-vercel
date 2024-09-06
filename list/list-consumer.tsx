@@ -6,6 +6,7 @@ import PublicListView from './public-list-view'
 import prisma from '@/prisma/prisma'
 import guardRelatedList from './guard-related-list'
 import listToHistory from './list-to-history'
+import ListMounting from './list-mounting'
 
 export default async function ListConsumer (props: {
   currentUserId?: number
@@ -34,15 +35,19 @@ export default async function ListConsumer (props: {
     // console.log('snapState.choice:', snapState.choice)
     // console.log('snapState.history.length:', snapState.history.length)
     return (
-      <PrivateListView
-        history={history}
-        seed={list.seed}
-      />
+      <ListMounting>
+        <PrivateListView
+          history={history}
+          seed={list.seed}
+        />
+      </ListMounting>
     )
   }
   return (
-    <PublicListView
-      list={props.list}
-    />
+    <ListMounting>
+      <PublicListView
+        list={props.list}
+      />
+    </ListMounting>
   )
 }
