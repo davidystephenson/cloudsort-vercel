@@ -6,6 +6,7 @@ import HeadingView from '../heading/heading-view'
 import MoviesHeadingContentView from './movies-heading-content-view'
 import MoviesMenuView from './movies-menu-view'
 import MoviesQueueView from './movies-queue-view'
+import RandomButtonView from '@/random/random-button-view'
 
 export default function MoviesHeadingView (): JSX.Element {
   const list = useListContext()
@@ -19,6 +20,7 @@ export default function MoviesHeadingView (): JSX.Element {
         <Heading size='lg'>{list.name}</Heading>
         <MoviesQueueView />
         <ChoiceCounterView />
+        <RandomButtonView />
       </HStack>
       <MoviesMenuView />
     </HeadingView>
