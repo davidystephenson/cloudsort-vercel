@@ -1,20 +1,20 @@
 'use client'
 
-import { MutableRefObject, useEffect, useRef } from 'react'
+import { useEffect, useRef } from 'react'
+import { MarxRef } from './marxTypes'
 
-export default function useWorkerRef <
-  Message
+export default function useMarxRef <
+  Output
 > (props: {
   onMessage: (props: {
-    event: MessageEvent<Message>
+    event: MessageEvent<Output>
   }) => void
   worker: Worker
-}): MutableRefObject<Worker | undefined> {
+}): MarxRef {
   const ref = useRef<Worker>()
   useEffect(() => {
     ref.current = props.worker
-    ref.current.onmessage = function (event: MessageEvent<Message>) {
-      console.log('onmessage event', event)
+    ref.current.onmessage = function (event: MessageEvent<Output>) {
       props.onMessage({ event })
     }
     return () => {

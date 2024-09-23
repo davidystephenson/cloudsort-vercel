@@ -11,7 +11,6 @@ import PublicListMenuView from '@/list/public-list-menu-view'
 
 export default function PublicMoviesTableView (): JSX.Element {
   const list = useListContext()
-  console.log('list', list)
   const movies = moviesContext.useContext()
   const columns = ['Movie', 'Seed', 'Points']
   const rows = usePublicCellRows()

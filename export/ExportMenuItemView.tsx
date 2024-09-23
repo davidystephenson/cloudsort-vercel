@@ -15,6 +15,9 @@ export default function ExportMenuItemView (): JSX.Element {
   function handleExportHistory (): void {
     privateList.exportHistory()
   }
+  function handleExportRanking (): void {
+    privateList.exportRanking()
+  }
   return (
     <>
       <MenuItem
@@ -32,6 +35,17 @@ export default function ExportMenuItemView (): JSX.Element {
             <Table size='xs' variant='striped'>
               <Tbody>
                 <Tr>
+                  <Td w='0'>Criticker</Td>
+                  <Td>
+                    <ThemeButtonView
+                      onClick={handleExportCriticker}
+                      size='xs'
+                    >
+                      CSV
+                    </ThemeButtonView>
+                  </Td>
+                </Tr>
+                <Tr>
                   <Td w='0'>History</Td>
                   <Td>
                     <ThemeButtonView
@@ -43,10 +57,10 @@ export default function ExportMenuItemView (): JSX.Element {
                   </Td>
                 </Tr>
                 <Tr>
-                  <Td w='0' pr='4px'>Criticker</Td>
+                  <Td w='0' pr='4px'>Ranking</Td>
                   <Td>
                     <ThemeButtonView
-                      onClick={handleExportCriticker}
+                      onClick={handleExportRanking}
                       size='xs'
                     >
                       CSV

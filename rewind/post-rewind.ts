@@ -1,7 +1,7 @@
 import guardOkTrue from '@/ok/guard-ok-true'
 import { OkTrue } from '@/ok/ok-types'
 import post from '@/post/post'
-import { RewindRequest } from '@/shade/rewind-types'
+import { RewindRequest } from './rewindTypes'
 
 export default async function postRewind (props: {
   label: string

@@ -28,7 +28,6 @@ export default function OptionView (props: {
           <HStack>
             <OptionConsumer />
           </HStack>
-          {movie.seeding ? <p>Seeding</p> : <p>Not Seeding</p>}
           <OptionOpenView />
         </VStack>
       </OptionProvider>

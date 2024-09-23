@@ -6,7 +6,6 @@ export default function policeCritickerRow (props: {
   label: string
   value: unknown
 }): CritickerRow {
-  console.log('props.value', props.value)
   const policed = fashionPolice({
     required: {
       ' Date Rated': guardString,

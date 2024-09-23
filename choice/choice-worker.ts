@@ -1,14 +1,13 @@
 import { DeduceEpisode } from '@/deduce/deduce-types'
-import { State } from '@/mergechoice/mergeChoiceTypes'
+import { ListState } from '@/list/list-types'
 import rewindState from '@/mergechoice/rewindState'
-import { ListMovie } from '@/movie/movie-types'
-import { RewindState } from '@/shade/rewind-types'
+import { RewindState } from '@/rewind/rewindTypes'
 
 addEventListener('message', (event: MessageEvent<{
   episodeId: number
   lastMergechoiceId: string
   listId: string
-  state: State<ListMovie>
+  state: ListState
 }>) => {
   function handleEpisode (props: {
     index: number

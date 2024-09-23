@@ -1,62 +1,27 @@
 'use client'
 
+import DeducingView from '@/deduce/DeducingView'
 import { ListMovie } from '@/movie/movie-types'
-import { Episode, State } from '../mergechoice/mergeChoiceTypes'
+import { Episode } from '../mergechoice/mergeChoiceTypes'
 import PrivateListConsumer from './private-list-consumer'
 import privateListContext from './private-list-context'
-import { DeduceMessage, DeduceHandlers } from '@/deduce/deduce-types'
-import DeducingView from '@/deduce/DeducingView'
-import { useState, useEffect, useCallback, useMemo } from 'react'
-import onDeduce from '@/deduce/onDeduce'
-import useWorkerRef from '@/worker/useWorkerRef'
+import useDeduce from '@/deduce/useDeduce'
 
 export default function PrivateListView (props: {
   history: Array<Episode<ListMovie>>
   seed: string
 }): JSX.Element {
-  const [index, setIndex] = useState(0)
-  const [state, setState] = useState<State<ListMovie>>()
-  const deduceWorker = useMemo(() => {
-    return new Worker(new URL('../deduce/deduce-worker.ts', import.meta.url))
-  }, [])
-  const handleMessage = useCallback((handleMessageProps: {
-    event: MessageEvent<DeduceMessage>
-  }) => {
-    console.log('props.event.data', handleMessageProps.event.data)
-    const handlers: DeduceHandlers = {
-      episode: (episodeProps) => {
-        setIndex(episodeProps.message.index)
-      },
-      state: (stateProps) => {
-        setState(stateProps.message.state)
-      }
-    }
-    onDeduce({
-      key: handleMessageProps.event.data.type,
-      message: handleMessageProps.event.data,
-      receivers: handlers
-    })
-  }, [])
-  const deduceWorkerRef = useWorkerRef({
-    onMessage: handleMessage,
-    worker: deduceWorker
-  })
-  useEffect(() => {
-    deduceWorkerRef.current?.postMessage({
-      history: props.history,
-      seed: props.seed
-    })
-  }, [])
-  if (state == null) {
+  const deduction = useDeduce(props)
+  if (deduction.state == null) {
     return (
       <DeducingView
-        index={index}
+        index={deduction.index}
         length={props.history.length}
       />
     )
   }
   return (
-    <privateListContext.Provider state={state}>
+    <privateListContext.Provider state={deduction.state}>
       <PrivateListConsumer />
     </privateListContext.Provider>
   )

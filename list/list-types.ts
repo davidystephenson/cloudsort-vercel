@@ -3,18 +3,19 @@ import { State } from '../mergechoice/mergeChoiceTypes'
 import { ListMovie } from '@/movie/movie-types'
 import { EpisodesRelation } from '@/episode/episode-types'
 
-export type ListState = Omit<State<ListMovie>, 'history'>
+export interface CreateListRequest {
+  name: string
+}
+export type ListSnapshot = Omit<State<ListMovie>, 'history'>
+export type ListState = State<ListMovie>
 export interface ListWhere {
   listId: number
 }
 export interface LastWhere extends ListWhere {
   lastMergechoiceId: number | null
 }
-export interface CreateListRequest {
-  name: string
-}
-export type RelatedList = Prisma.ListGetPayload<EpisodesRelation>
 export interface MergechoiceList {
   list: RelatedList
-  state: State<ListMovie>
+  state: ListState
 }
+export type RelatedList = Prisma.ListGetPayload<EpisodesRelation>

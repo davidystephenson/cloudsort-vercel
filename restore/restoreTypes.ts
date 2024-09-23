@@ -1,6 +1,6 @@
-import { ListState } from '@/list/list-types'
+import { ListSnapshot } from '@/list/list-types'
 
 export interface RestorePoint {
   episodeId: number
-  listState: ListState
+  listSnapshot: ListSnapshot
 }

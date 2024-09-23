@@ -1,8 +1,8 @@
 import guardRelatedList from '@/list/guard-related-list'
 import { PrismaTransaction } from '@/prisma/prisma-types'
-import { RewindRequest } from '@/shade/rewind-types'
 import { PrismaClient } from '@prisma/client'
 import { ApiError } from 'next/dist/server/api-utils'
+import { RewindRequest } from './rewindTypes'
 
 export default async function handleRewind (props: {
   request: RewindRequest

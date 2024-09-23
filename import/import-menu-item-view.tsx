@@ -45,7 +45,6 @@ export default function ImportMenuItemView (): JSX.Element {
       header: true,
       skipEmptyLines: true,
       complete: ({ data }) => {
-        console.log('data', data)
         try {
           const critickerRows = policeCritickerRowArray({
             label: 'ImportMenuItemView',

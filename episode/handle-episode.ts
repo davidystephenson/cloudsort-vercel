@@ -41,24 +41,6 @@ export default async function handleEpisode<RequestBody extends LastWhere> (prop
         db: authProps.db
       })
       const historyEpisode = episodeToHistoryEpisode({ episode })
-      // const listState = await createListState({
-      //   db: authProps.db,
-      //   listId: authProps.request.listId
-      // })
-      // const state = { ...listState, history: [] }
-      // const historyEpisodeClone = structuredClone(historyEpisode)
-      // const newState = props.snap({
-      //   episode,
-      //   historyEpisode: historyEpisodeClone,
-      //   request: authProps.request,
-      //   state
-      // })
-      // const snapshot = { ...newState, history: [] }
-      // const json = JSON.stringify(snapshot)
-      // await authProps.db.list.update({
-      //   data: { snapshot: json },
-      //   where: { id: authProps.request.listId }
-      // })
       return { ok: true, episode: historyEpisode }
     },
     request: props.request

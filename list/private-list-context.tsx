@@ -2,6 +2,8 @@ import useAction from '@/action/use-action'
 import postArchive from '@/archive/post-archive'
 import postChoice from '@/choice/post-choice'
 import siftEpisode from '@/episode/sift-episode'
+import downloadRankingFile from '@/file/downloadRankingFile'
+import downloadFile from '@/file/downloadFile'
 import useFlagbearer from '@/flagbearer/use-flagbearer'
 import archiveItem from '@/mergechoice/archiveItem'
 import getCalculatedItem from '@/mergechoice/getCalculatedItem'
@@ -15,8 +17,8 @@ import createMovieChoiceRequest from '@/movie/create-movie-choice-request'
 import postRemoveMovie from '@/movie/post-remove-movie'
 import postRandom from '@/random/post-random'
 import getRankedMovies from '@/rank/get-ranked-movies'
+import moviesToRanking from '@/ranking/moviesToRanking'
 import postReset from '@/reset/post-reset'
-import postRewind from '@/rewind/post-rewind'
 import shuffleSlice from '@/shuffleSlice/shuffleSlice'
 import { AlwaysNever } from '@/shuffleSlice/shuffleSliceTypes'
 import useSifter from '@/sifter/use-sifter'
@@ -24,7 +26,7 @@ import postUnarchive from '@/unarchive/post-unarchive'
 import useQueue from '@/useQueue/useQueue'
 import contextCreator from 'context-creator'
 import { useRouter } from 'next/navigation'
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import chooseOption from '../mergechoice/chooseOption'
 import { State } from '../mergechoice/mergeChoiceTypes'
 import removeItem from '../mergechoice/removeItem'
@@ -34,15 +36,8 @@ import siftMovie from '../movie/sift-movie'
 import getSortedMovies from '../movies/getSortedMovies'
 import { useListContext } from './list-context'
 import { useOptionalLists } from './lists-context'
-import getRewindIndex from '@/mergechoice/getRewindIndex'
-import { RewindHandlers, RewindMessage } from '@/shade/rewind-types'
-import onRewind from '@/rewind/onRewind'
-import { RestorePoint } from '@/restore/restoreTypes'
-import downloadFile from '@/file/downloadFile'
-import moviesToRanking from '@/ranking/moviesToRanking'
 import downloadCritickerFile from '@/file/downloadCritickerFile'
-import { ListHistory } from '@/history/history-types'
-import useWorkerRef from '@/worker/useWorkerRef'
+import useRewind from '@/rewind/useRewind'
 
 const privateListContext = contextCreator({
   name: 'privateList',
@@ -52,27 +47,6 @@ const privateListContext = contextCreator({
     const list = useListContext()
     const lists = useOptionalLists()
     const queue = useQueue()
-    const [restorePoints, setRestorePoints] = useState<RestorePoint[]>([])
-    const savePoint = useCallback((savePointProps: {
-      change: (props: { state: State<ListMovie> }) => State<ListMovie>
-      state: State<ListMovie>
-    }) => {
-      const { history, ...listState } = savePointProps.state
-      const cloneBefore = structuredClone(savePointProps.state)
-      const newState = savePointProps.change({ state: cloneBefore })
-      const newEpisode = newState.history[0]
-      const restorePoint: RestorePoint = {
-        episodeId: newEpisode.mergeChoiceId,
-        listState
-      }
-      const [first, ...rest] = restorePoints
-      const newRestorePoints = [...rest, restorePoint]
-      if (first != null && newRestorePoints.length < 10) {
-        newRestorePoints.unshift(first)
-      }
-      setRestorePoints(newRestorePoints)
-      return newState
-    }, [])
     const router = useRouter()
     const [state, setState] = useState(props.state)
     useEffect(() => {
@@ -94,27 +68,6 @@ const privateListContext = contextCreator({
       const sortedMovies = getSortedMovies({ state: newState })
       setSortedMovies(sortedMovies)
       setState(newState)
-    }, [])
-    const saveState = useCallback((saveStateProps: {
-      change: (props: { state: State<ListMovie> }) => State<ListMovie>
-    }) => {
-      const newState = savePoint({ change: saveStateProps.change, state })
-      updateState({ newState })
-      return newState
-    }, [state])
-    const rewindRestorePoints = useCallback((props: {
-      history: ListHistory
-    }) => {
-      setRestorePoints(current => {
-        const filtered = current.filter(point => {
-          const included = props.history.some(episode => {
-            const ided = episode.mergeChoiceId === point.episodeId
-            return ided
-          })
-          return included
-        })
-        return filtered
-      })
     }, [])
     const archivedMovies = Object.values(state.archive)
     const copiedArchivedMovies = [...archivedMovies]
@@ -140,69 +93,37 @@ const privateListContext = contextCreator({
       archiveSifter.sift({ query: props.query })
       historySifter.sift({ query: props.query })
     }, [archiveSifter.sift, historySifter.sift, moviesSifter.sift])
-    const requestRewind = useCallback((requestRewindProps: {
-      episodeId: number
-      lastMergechoiceId: number
-      state: State<ListMovie>
-    }) => {
-      const localeString = new Date().toLocaleString()
-      const label = `Rewind before ${localeString}`
-      const { history, ...snapshot } = requestRewindProps.state
-      const json = JSON.stringify(snapshot)
-      async function remote (): Promise<void> {
-        const request = {
-          episodeMergechoiceId: requestRewindProps.episodeId,
-          lastMergechoiceId: requestRewindProps.lastMergechoiceId,
-          listId: list.id,
-          snapshot: json
-        }
-        await postRewind({
-          label,
-          request
-        })
-      }
-      queueTask({ label, perform: remote })
-    }, [updateState])
-    const [rewindIndex, setRewindIndex] = useState(0)
-    const [rewindLength, setRewindLength] = useState<number>()
-    const rewindAction = useAction()
-    const rewindWorker = useMemo(() => {
-      const worker = new Worker(new URL('../rewind/rewind-worker.ts', import.meta.url))
-      return worker
-    }, [])
+
     const resetSifters = useCallback(() => {
       moviesSifter.reset()
       archiveSifter.reset()
       historySifter.reset()
     }, [archiveSifter.reset, historySifter.reset, moviesSifter.reset])
-    const handleRewindMessage = useCallback((props: {
-      event: MessageEvent<RewindMessage>
+    const queueTask = useCallback((props: {
+      perform?: () => Promise<unknown>
+      label: string
     }) => {
-      const handlers: RewindHandlers = {
-        episode: (props) => {
-          setRewindIndex(props.message.index)
-        },
-        state: (stateProps) => {
-          rewindAction.succeed()
-          resetSifters()
-          updateState({ newState: stateProps.message.state })
-          requestRewind({
-            episodeId: stateProps.message.episodeId,
-            lastMergechoiceId: stateProps.message.lastMergechoiceId,
-            state: stateProps.message.state
-          })
-        }
+      const task = {
+        perform: props.perform,
+        label: props.label
       }
-      onRewind({
-        key: props.event.data.type,
-        message: props.event.data,
-        receivers: handlers
-      })
-    }, [rewindAction.succeed, resetSifters, updateState, requestRewind])
-    const rewindWorkerRef = useWorkerRef({
-      onMessage: handleRewindMessage,
-      worker: rewindWorker
+      void queue.add({ task })
+    }, [queue.add])
+    const rewind = useRewind({
+      listId: list.id,
+      onState: resetSifters,
+      queueTask,
+      state,
+      updateState
     })
+    const saveState = useCallback((saveStateProps: {
+      change: (props: { state: State<ListMovie> }) => State<ListMovie>
+    }) => {
+      const newState = rewind.savePoint({ change: saveStateProps.change, state })
+      updateState({ newState })
+      return newState
+    }, [state])
+
     const archiveFlag = useFlagbearer()
     const historyFlag = useFlagbearer({
       onLower: () => {
@@ -242,6 +163,14 @@ const privateListContext = contextCreator({
       await lists?.delete({ id: list.id })
       router.push('/lists')
     }
+    function exportCriticker (): void {
+      const ranking = moviesToRanking({ sortedMovies })
+      downloadCritickerFile({
+        listId: list.id,
+        listName: list.name,
+        ranking
+      })
+    }
     function exportHistory (): void {
       const text = JSON.stringify(state.history)
       downloadFile({
@@ -252,23 +181,13 @@ const privateListContext = contextCreator({
         text
       })
     }
-    function exportCriticker (): void {
+    function exportRanking (): void {
       const ranking = moviesToRanking({ sortedMovies })
-      downloadCritickerFile({
+      downloadRankingFile({
         listId: list.id,
         listName: list.name,
         ranking
       })
-    }
-    function queueTask (props: {
-      perform?: () => Promise<unknown>
-      label: string
-    }): void {
-      const task = {
-        perform: props.perform,
-        label: props.label
-      }
-      void queue.add({ task })
     }
     function archive (archiveProps: {
       movieId: number
@@ -438,44 +357,6 @@ const privateListContext = contextCreator({
       }
       queueTask({ label, perform })
     }
-    function rewind (rewindProps: {
-      episodeMergechoiceId: number
-    }): void {
-      const lastEpisode = state.history[0]
-      if (lastEpisode == null) {
-        throw new Error('There is no lastEpisode')
-      }
-      const rewindIndex = getRewindIndex({
-        episodeId: rewindProps.episodeMergechoiceId,
-        history: state.history
-      })
-
-      const history = state.history.slice(rewindIndex + 1)
-      rewindRestorePoints({ history })
-      console.log('restorePoints', restorePoints)
-      const restorePoint = restorePoints.find(point => point.episodeId === rewindProps.episodeMergechoiceId)
-      console.log('restorePoint', restorePoint)
-      if (restorePoint != null) {
-        const newState = { ...restorePoint.listState, history }
-        updateState({ newState })
-        requestRewind({
-          episodeId: rewindProps.episodeMergechoiceId,
-          lastMergechoiceId: lastEpisode.mergeChoiceId,
-          state: newState
-        })
-        return
-      }
-      setRewindIndex(0)
-      const newRewindLength = state.history.length - rewindIndex - 1
-      setRewindLength(newRewindLength)
-      rewindAction.start()
-      rewindWorkerRef.current?.postMessage({
-        episodeId: rewindProps.episodeMergechoiceId,
-        lastMergechoiceId: lastEpisode.mergeChoiceId,
-        listId: list.id,
-        state
-      })
-    }
     function unarchive (archiveProps: {
       movieId: number
     }): void {
@@ -521,6 +402,7 @@ const privateListContext = contextCreator({
       delete: _delete,
       exportCriticker,
       exportHistory,
+      exportRanking,
       historyFlag,
       historySifter,
       importAction,
@@ -534,9 +416,6 @@ const privateListContext = contextCreator({
       range,
       reset,
       rewind,
-      rewindAction,
-      rewindIndex,
-      rewindLength,
       sift,
       state,
       synced,

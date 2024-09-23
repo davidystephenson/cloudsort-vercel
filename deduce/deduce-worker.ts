@@ -5,7 +5,6 @@ addEventListener('message', (event: MessageEvent<{
   history: ListHistory
   seed: string
 }>) => {
-  console.log('deduce worker event', event)
   function handleEpisode (props: {
     index: number
   }): void {
