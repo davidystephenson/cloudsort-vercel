@@ -1,6 +1,5 @@
 import useAction from '@/action/use-action'
 import postArchive from '@/archive/post-archive'
-import postChoice from '@/choice/post-choice'
 import siftEpisode from '@/episode/sift-episode'
 import downloadRankingFile from '@/file/downloadRankingFile'
 import downloadFile from '@/file/downloadFile'
@@ -13,7 +12,6 @@ import importItems from '@/mergechoice/importItems'
 import resetItem from '@/mergechoice/resetItem'
 import setupRandomChoice from '@/mergechoice/setupRandomChoice'
 import unarchiveItem from '@/mergechoice/unarchiveItem'
-import createMovieChoiceRequest from '@/movie/create-movie-choice-request'
 import postRemoveMovie from '@/movie/post-remove-movie'
 import postRandom from '@/random/post-random'
 import getRankedMovies from '@/rank/get-ranked-movies'
@@ -27,7 +25,6 @@ import useQueue from '@/useQueue/useQueue'
 import contextCreator from 'context-creator'
 import { useRouter } from 'next/navigation'
 import { useCallback, useEffect, useState } from 'react'
-import chooseOption from '../mergechoice/chooseOption'
 import { State } from '../mergechoice/mergeChoiceTypes'
 import removeItem from '../mergechoice/removeItem'
 import { CreateMoviesRequest, ListMovie, MovieData } from '../movie/movie-types'
@@ -209,40 +206,16 @@ const privateListContext = contextCreator({
         } else {
           setOpenedEpisodes([props.state.history[0].mergeChoiceId])
         }
+        saveState({ newState: props.state })
       },
       queue,
       state
     })
-    void choice
-
-    function choose (chooseProps: {
-      betterIndex: number
-    }): void {
-      const request = createMovieChoiceRequest({
-        betterIndex: chooseProps.betterIndex,
-        listId: list.id,
-        state
-      })
-      async function perform (): Promise<void> {
-        await postChoice({ request, label: request.label })
-      }
-      void queue.add({ label: request.label, perform })
-      const newState = chooseOption({
-        betterIndex: chooseProps.betterIndex,
-        state
-      })
-      if (historyFlag.raised) {
-        openEpisode({ episodeId: newState.history[0].mergeChoiceId })
-      } else {
-        setOpenedEpisodes([newState.history[0].mergeChoiceId])
-      }
-      saveState({ newState })
-    }
     function defer (): void {
       if (defaultOptionIndex == null) {
         throw new Error('There is no defaultOptionIndex')
       }
-      choose({ betterIndex: defaultOptionIndex })
+      choice.choose({ betterIndex: defaultOptionIndex })
     }
     async function importMovies (importMoviesProps: {
       movies: MovieData[]
@@ -295,9 +268,10 @@ const privateListContext = contextCreator({
     function removeMovie (deleteMovieProps: {
       movieId: number
     }): void {
+      const oldState = structuredClone(state)
       const newState = removeItem({
         itemId: deleteMovieProps.movieId,
-        state
+        state: oldState
       })
       saveState({ newState })
       const item = getCalculatedItem({ itemId: deleteMovieProps.movieId, state })
@@ -371,7 +345,7 @@ const privateListContext = contextCreator({
       archive,
       archiveFlag,
       archiveSifter,
-      choose,
+      choice,
       importMovies,
       defaultOptionIndex,
       defer,

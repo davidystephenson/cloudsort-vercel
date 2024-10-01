@@ -64,10 +64,7 @@ export default function usePrivateCellRows (): Array<Row<CellsKey>> {
     }
     const episodeRows = marionEpisodeCellRows({
       actors: {
-        archive: props => {
-          const row = produceMovie({ movie: props.input.item })
-          return [row]
-        },
+        archive: () => [],
         choice: props => {
           const aRow = produceMovie({ movie: props.input.aItem })
           const bRow = produceMovie({ movie: props.input.bItem })
@@ -86,21 +83,9 @@ export default function usePrivateCellRows (): Array<Row<CellsKey>> {
           const rows = [first, second]
           return rows
         },
-        remove: props => {
-          const row = produceMovie({ movie: props.input.item })
-          const rows = [row]
-          return rows
-        },
-        reset: props => {
-          const row = produceMovie({ movie: props.input.item })
-          const rows = [row]
-          return rows
-        },
-        unarchive: props => {
-          const row = produceMovie({ movie: props.input.item })
-          const rows = [row]
-          return rows
-        }
+        remove: () => [],
+        reset: () => [],
+        unarchive: () => []
       },
       complement: {},
       part: episode

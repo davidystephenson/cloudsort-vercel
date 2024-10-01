@@ -16,7 +16,7 @@ export const {
     const movie = useMovie()
     const list = privateListContext.useContext()
     function choose (): void {
-      list.choose({ betterIndex: props.index })
+      list.choice.choose({ betterIndex: props.index })
     }
     useHotkeys(props.openLetter, () => {
       void movie.open()

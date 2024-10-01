@@ -1,7 +1,7 @@
 import { Row } from '@/cell/cell-types'
 import LabeledMovieCellsView from '@/movie/labeled-movie-cells-view'
 import ThemeTdView from '@/theme/theme-td-view'
-import { DeleteIcon } from '@chakra-ui/icons'
+import RemoveIconView from './remove-icon-view'
 
 export default function RemoveEpisodeMovieCellsView (props: {
   row: Row<'episodeMovie'>
@@ -9,7 +9,7 @@ export default function RemoveEpisodeMovieCellsView (props: {
   const view = (
     <LabeledMovieCellsView movie={props.row.cells.movie}>
       <ThemeTdView>
-        <DeleteIcon />
+        <RemoveIconView />
       </ThemeTdView>
     </LabeledMovieCellsView>
   )

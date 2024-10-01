@@ -28,11 +28,16 @@ export default function useChoice (props: {
     onMessage: handleMessage,
     worker: choiceWorker
   })
-  const choose = useCallback((optionChoice: OptionChoice<ListMovie>) => {
+  const choose = useCallback((chooseProps: {
+    betterIndex: number
+  }) => {
     action.start()
-    marx.post(optionChoice)
+    marx.post({
+      betterIndex: chooseProps.betterIndex,
+      state: props.state
+    })
     const request = createMovieChoiceRequest({
-      betterIndex: optionChoice.betterIndex,
+      betterIndex: chooseProps.betterIndex,
       listId: props.listId,
       state: props.state
     })

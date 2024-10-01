@@ -9,12 +9,10 @@ import UnarchiveEpisodeCellsView from '@/unarchive/unarchive-episode-cells-view'
 import episodeContext from './episode-context'
 import marionEpisodeElement from './marion-episode-element'
 import TableSpanView from '@/table/table-span-view'
-import privateListContext from '@/list/private-list-context'
 import { Heading, HStack, Text } from '@chakra-ui/react'
 import EpisodeTimeView from './episode-time-view'
-import { MouseEvent } from 'react'
-import ThemeLinkableView from '@/theme/theme-linkable-view'
 import EpisodeMenu from './episode-menu-view'
+import EpisodeCellsLinkView from './episode-cells-link-view'
 
 export default function EpisodeCellsConsumer (props: {
   row: Row<'episode'>
@@ -29,27 +27,22 @@ export default function EpisodeCellsConsumer (props: {
     reset: ResetEpisodeCellsView,
     unarchive: UnarchiveEpisodeCellsView
   }
-  const list = privateListContext.useContext()
   const cells = marionEpisodeElement({
     actors,
     complement: { row: props.row },
     part: episode.element
   })
-  function handleClick (event: MouseEvent): void {
-    event.preventDefault()
-    list.toggleEpisode({ episodeId: props.row.cells.episode.mergeChoiceId })
-  }
   const consumer = (
     <TableSpanView>
-      <HStack w='100%' justifyContent='space-between'>
-        <ThemeLinkableView href='#' onClick={handleClick} width='100%'>
+      <HStack w='100%' justifyContent='space-between' spacing='0'>
+        <EpisodeCellsLinkView row={props.row}>
           <HStack justifyContent='space-between' width='100%'>
             <Heading size='xs' width='100%'>
               {cells}
             </Heading>
             <Text whiteSpace='nowrap'>(<EpisodeTimeView />)</Text>
           </HStack>
-        </ThemeLinkableView>
+        </EpisodeCellsLinkView>
         <EpisodeMenu />
       </HStack>
     </TableSpanView>

@@ -8,5 +8,5 @@ export type ListOptionChoice = OptionChoice<ListMovie>
 export interface Choice {
   action: Action
   marx: Marx<ListOptionChoice>
-  choose: (optionChoice: ListOptionChoice) => void
+  choose: (props: { betterIndex: number }) => void
 }
