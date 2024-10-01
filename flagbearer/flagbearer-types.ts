@@ -1,5 +1,5 @@
 export interface Flagbearer {
-  flag: boolean
+  raised: boolean
   lower: () => void
   raise: () => void
   toggle: () => void

@@ -1,52 +1,38 @@
-export type Input<K, V> = { type: K } & V
-export type Actor<K, V> = (input: Input<K, V>) => void
-export type Actors<T extends object> = { [K in keyof T]: Actor<K, T[K]> }
+export type ActorInput<K, I> = { type: K } & I
+export type Actor<K extends keyof O & keyof I, I, O> = (input: ActorInput<K, I[K]>) => O[K]
+export type Actors<I extends object, O extends { [K in keyof I]: O[K] }, K extends keyof O & keyof I> = {
+  [T in K]: Actor<T, I, O>;
+}
+export type MarionInput<
+  I extends object,
+  O extends { [K in keyof I]: O[K] },
+  K extends keyof I & keyof O
+> = { type: K } & I[K]
 
-export default function marion<
-  T extends object,
-  K extends keyof T
-> (
-  actors: Actors<T>,
-  input: { type: K } & T[K]
-): void {
+export default function marion<I extends object, O extends { [K in keyof I]: O[K] }, K extends keyof I & keyof O> (
+  actors: Actors<I, O, K>,
+  input: MarionInput<I, O, K>
+): O[K] {
   const actor = actors[input.type]
-  actor(input)
+  return actor(input)
 }
 
-// interface Alpha { type: 'alpha', count: number }
-// interface Beta { type: 'beta', label: string }
-// const alphaBeta = {
-//   alpha: (input: Alpha) => console.log(input.count),
-//   beta: (input: Beta) => console.log(input.label)
-// }
-// const alpha: Alpha = { type: 'alpha', count: 42 }
-// marion(alphaBeta, alpha)
+interface Alpha { type: 'alpha', count: number }
+interface Beta { type: 'beta', label: string }
 
-// interface Gamma { type: 'gamma', flag: boolean }
-// interface Delta { type: 'delta', handler: () => void }
-// const gammaDelta = {
-//   gamma: (input: Gamma) => console.log(input.flag),
-//   delta: (input: Delta) => input.handler()
-// }
-// const gamma: Gamma = { type: 'gamma', flag: true }
-// marion(gammaDelta, gamma)
+const alphaBeta = {
+  alpha: (input: Alpha) => {
+    console.log(input.count)
+  },
+  beta: (input: Beta) => {
+    return input.label
+  }
+}
 
-// function audition<T extends object> (
-//   actors: Actors<T>
-// ): <K extends keyof T>(input: { type: K } & T[K]) => void {
-//   return input => {
-//     marion(actors, input)
-//   }
-// }
-// const lower = audition(alphaBeta)
-// lower(alpha)
+const alpha: Alpha = { type: 'alpha', count: 42 }
+const x = marion(alphaBeta, alpha)
+void x
 
-// interface AlphaBeta {
-//   alpha: Alpha
-//   beta: Beta
-// }
-// export function marionAlphaBeta (
-//   actors: Actors<AlphaBeta>
-// ): (input: Alpha | Beta) => void {
-//   return audition(actors)
-// }
+const beta: Beta = { type: 'beta', label: 'Hello' }
+const result = marion(alphaBeta, beta) // Output is string
+console.log(result) // "Hello"

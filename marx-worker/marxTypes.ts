@@ -8,3 +8,6 @@ export type MarxHandlers <Output, Key extends string> = {
   [key in Key]: (props: { message: Output }) => void
 }
 export type MarxRef = MutableRefObject<Worker | undefined>
+export type MarxHandler <Output> = (props: {
+  event: MessageEvent<Output>
+}) => void

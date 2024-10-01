@@ -18,13 +18,13 @@ export interface DeduceInput {
   history: ListHistory
   seed: string
 }
-export type DeduceKey = keyof DeduceMessages
-export type DeduceMessage = DeduceMessages[DeduceKey]
-export interface DeduceMessages {
+export type DeduceKey = keyof DeduceOutputs
+export type DeduceOutput = DeduceOutputs[DeduceKey]
+export interface DeduceOutputs {
   episode: DeduceEpisode
   state: DeduceState
 }
-export type DeduceProps<Key extends DeduceKey> = DeduceMessages[Key]
+export type DeduceProps<Key extends DeduceKey> = DeduceOutputs[Key]
 export interface DeduceState {
   type: 'state'
   state: State<ListMovie>

@@ -32,7 +32,7 @@ export default function usePrivateCellRows (): Array<Row<CellsKey>> {
   }
   const episodeRows = list.historySifter.sifted.flatMap((episode, index) => {
     const first = index === 0
-    if (!list.historyFlag.flag && !first) {
+    if (!list.historyFlag.raised && !first) {
       return []
     }
     const rows: Array<Row<keyof Cells>> = []
@@ -117,7 +117,7 @@ export default function usePrivateCellRows (): Array<Row<CellsKey>> {
     }
     sifted.push(archiveRow)
   }
-  if (list.archiveFlag.flag) {
+  if (list.archiveFlag.raised) {
     const archiveMovieRows = list.archiveSifter.sifted.map(movie => {
       const archiveMovieRow: Row<'archiveMovie'> = {
         cells: { movie, type: 'archiveMovie' },
@@ -134,7 +134,7 @@ export default function usePrivateCellRows (): Array<Row<CellsKey>> {
     type: 'listMovies'
   }
   sifted.push(listMoviesRow)
-  if (movies.flag.flag) {
+  if (movies.flag.raised) {
     const listMovieRows = movies.sifter.sifted.map(movie => {
       const listMovieRow: Row<'listMovie'> = {
         cells: { movie, type: 'listMovie' },

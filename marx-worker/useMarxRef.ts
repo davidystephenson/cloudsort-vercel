@@ -1,14 +1,12 @@
 'use client'
 
 import { useEffect, useRef } from 'react'
-import { MarxRef } from './marxTypes'
+import { MarxHandler, MarxRef } from './marxTypes'
 
 export default function useMarxRef <
   Output
 > (props: {
-  onMessage: (props: {
-    event: MessageEvent<Output>
-  }) => void
+  onMessage: MarxHandler<Output>
   worker: Worker
 }): MarxRef {
   const ref = useRef<Worker>()

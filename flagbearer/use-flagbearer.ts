@@ -23,7 +23,7 @@ export default function useFlagbearer (props?: {
     }
   }, [raised, lower, raise])
   const flagbearer = {
-    flag: raised,
+    raised,
     lower,
     raise,
     toggle

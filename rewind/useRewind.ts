@@ -9,6 +9,7 @@ import { ListMovie } from '@/movie/movie-types'
 import { RestorePoint } from '@/restore/restoreTypes'
 import { ListHistory } from '@/history/history-types'
 import postRewind from './post-rewind'
+import { AddTask } from '@/useQueue/useQueueTypes'
 
 export default function useRewind (props: {
   listId: number
@@ -17,10 +18,7 @@ export default function useRewind (props: {
     lastMergechoiceId: number
     state: ListState
   }) => void
-  queueTask: (props: {
-    perform?: () => Promise<unknown>
-    label: string
-  }) => void
+  queueTask: AddTask
   state: ListState
   updateState: (props: {
     newState: State<ListMovie>
@@ -28,13 +26,11 @@ export default function useRewind (props: {
 }): Rewind {
   const [restorePoints, setRestorePoints] = useState<RestorePoint[]>([])
   const savePoint = useCallback((savePointProps: {
-    change: (props: { state: State<ListMovie> }) => State<ListMovie>
+    newState: State<ListMovie>
     state: State<ListMovie>
   }) => {
     const { history, ...listSnapshot } = savePointProps.state
-    const cloneBefore = structuredClone(savePointProps.state)
-    const newState = savePointProps.change({ state: cloneBefore })
-    const newEpisode = newState.history[0]
+    const newEpisode = savePointProps.newState.history[0]
     const restorePoint: RestorePoint = {
       episodeId: newEpisode.mergeChoiceId,
       listSnapshot
@@ -45,7 +41,6 @@ export default function useRewind (props: {
       newRestorePoints.unshift(first)
     }
     setRestorePoints(newRestorePoints)
-    return newState
   }, [])
   const [index, setIndex] = useState(0)
   const [length, setLength] = useState<number>()
@@ -71,7 +66,7 @@ export default function useRewind (props: {
         request
       })
     }
-    props.queueTask({ label, perform: remote })
+    void props.queueTask({ label, perform: remote })
   }, [props.queueTask, props.listId])
   const handlers: RewindHandlers = useMemo(() => {
     return {

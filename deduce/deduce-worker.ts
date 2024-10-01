@@ -1,27 +1,22 @@
-import { ListHistory } from '@/history/history-types'
 import deduceState from '@/mergechoice/deduceState'
+import addMarx from '@/marx-worker/addMarx'
+import { DeduceInput, DeduceOutput } from './deduce-types'
 
-addEventListener('message', (event: MessageEvent<{
-  history: ListHistory
-  seed: string
-}>) => {
-  function handleEpisode (props: {
-    index: number
-  }): void {
-    const message = {
-      type: 'episode',
-      index: props.index
-    }
-    postMessage(message)
-  }
+addMarx<DeduceInput, DeduceOutput>((props) => {
   const deduced = deduceState({
-    history: event.data.history,
-    onEpisode: handleEpisode,
-    seed: event.data.seed
+    history: props.input.history,
+    onEpisode: (onEpisodeProps) => {
+      const message: DeduceOutput = {
+        type: 'episode',
+        index: onEpisodeProps.index
+      }
+      props.post(message)
+    },
+    seed: props.input.seed
   })
-  const message = {
+  const message: DeduceOutput = {
     type: 'state',
     state: deduced
   }
-  postMessage(message)
+  props.post(message)
 })

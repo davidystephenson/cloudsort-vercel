@@ -24,6 +24,12 @@ export interface ChoiceData {
   random: boolean
 }
 export type Choice = ChoiceData & Identity
+export interface OptionChoice <ListItem extends Item> {
+  betterIndex: number
+  debug?: boolean
+  seeded?: boolean
+  state: State<ListItem>
+}
 export type OperationDictionary = Record<number, Operation>
 export type ItemDictionary<ListItem> = Record<ItemId, ListItem>
 export interface State<ListItem extends Item> {

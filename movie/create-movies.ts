@@ -11,6 +11,7 @@ export default async function createMovies (props: {
   movies: MovieData[]
   tx: PrismaTransaction
 }): Promise<RelatedEpisode> {
+  console.log('props.movies.length', props.movies.length)
   const imdbIds = props.movies.map((movie) => movie.imdbId)
   const existingMovies = await props.tx.movie.findMany({
     where: {
@@ -19,13 +20,13 @@ export default async function createMovies (props: {
       }
     }
   })
-  const existingImdbIds = existingMovies.map((movie) => movie.imdbId)
-  const newImdbIds = imdbIds.filter((imdbId) => !existingImdbIds.includes(imdbId))
-  const newPayloads = props.movies.filter((movie) => {
-    const includes = newImdbIds.includes(movie.imdbId)
-    return includes
+  console.log('existingMovies.length', existingMovies.length)
+  const newMovies = props.movies.filter((payload) => {
+    const exisiting = existingMovies.some(movie => movie.imdbId === payload.imdbId)
+    return !exisiting
   })
-  const newItemData = newPayloads.map((movie) => {
+  console.log('newMovies.length', newMovies.length)
+  const newItemData = newMovies.map((movie) => {
     const data = {
       name: movie.name,
       movie: {

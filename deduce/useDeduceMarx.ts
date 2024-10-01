@@ -1,13 +1,13 @@
-import { Marx } from '@/use-marx/marxTypes'
-import useMarx from '@/use-marx/useMarx'
+import { Marx } from '@/marx-worker/marxTypes'
 import { DeduceHandlers, DeduceInput } from './deduce-types'
+import useMarxMarion from '@/marx-worker/useMarxMarion'
 
-const deduceWorker = new Worker(new URL('../deduce/deduce-worker.ts', import.meta.url))
+const deduceWorker = new Worker(new URL('./deduce-worker.ts', import.meta.url))
 
 export default function useDeduceMarx (props: {
   handlers: DeduceHandlers
 }): Marx<DeduceInput> {
-  const marx = useMarx({
+  const marx = useMarxMarion({
     actors: props.handlers,
     worker: deduceWorker
   })

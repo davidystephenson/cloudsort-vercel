@@ -25,7 +25,7 @@ export default function usePublicCellRows (): Array<Row<CellsKey>> {
     type: 'listMovies'
   }
   sifted.push(listMoviesRow)
-  if (movies.flag.flag) {
+  if (movies.flag.raised) {
     const listMovieRows = movies.sifter.sifted.map(movie => {
       const listMovieRow: Row<'listMovie'> = {
         cells: { movie, type: 'listMovie' },

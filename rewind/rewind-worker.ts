@@ -1,29 +1,30 @@
 import { DeduceEpisode } from '@/deduce/deduce-types'
 import rewindState from '@/mergechoice/rewindState'
-import { RewindInput, RewindState } from './rewindTypes'
+import { RewindInput, RewindOutput, RewindState } from './rewindTypes'
+import addMarx from '@/marx-worker/addMarx'
 
-addEventListener('message', (event: MessageEvent<RewindInput>) => {
-  function handleEpisode (props: {
+addMarx<RewindInput, RewindOutput>((props) => {
+  function handleEpisode (handleEpisodeProps: {
     index: number
   }): void {
     const message: DeduceEpisode = {
       type: 'episode',
-      index: props.index
+      index: handleEpisodeProps.index
     }
-    postMessage(message)
+    props.post(message)
   }
   const newState = rewindState({
-    episodeId: event.data.episodeId,
-    history: event.data.state.history,
+    episodeId: props.input.episodeId,
+    history: props.input.state.history,
     onEpisode: handleEpisode,
-    seed: event.data.state.seed
+    seed: props.input.state.seed
   })
   void newState
   const message: RewindState = {
-    episodeId: event.data.episodeId,
-    lastMergechoiceId: Number(event.data.lastMergechoiceId),
+    episodeId: props.input.episodeId,
+    lastMergechoiceId: Number(props.input.lastMergechoiceId),
     type: 'state',
     state: newState
   }
-  postMessage(message)
+  props.post(message)
 })

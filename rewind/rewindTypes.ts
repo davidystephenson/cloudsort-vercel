@@ -1,5 +1,5 @@
-import { Marx } from '@/use-marx/marxTypes'
-import { DeduceKey, DeduceMessages, DeduceState } from '@/deduce/deduce-types'
+import { Marx } from '@/marx-worker/marxTypes'
+import { DeduceKey, DeduceOutputs, DeduceState } from '@/deduce/deduce-types'
 import { LastWhere, ListState } from '@/list/list-types'
 import { State } from '@/mergechoice/mergeChoiceTypes'
 import { ListMovie } from '@/movie/movie-types'
@@ -11,9 +11,9 @@ export interface Rewind {
   length?: number
   marx: Marx<RewindInput>
   savePoint: (savePointProps: {
-    change: (props: { state: ListState }) => ListState
+    newState: ListState
     state: ListState
-  }) => ListState
+  }) => void
   start: (startProps: {
     episodeMergechoiceId: number
   }) => void
@@ -31,11 +31,11 @@ export interface RewindInput {
   listId: number
   state: State<ListMovie>
 }
-export type RewindMessage = RewindMessages[DeduceKey]
-export interface RewindMessages extends DeduceMessages {
+export type RewindOutput = RewindOutputs[DeduceKey]
+export interface RewindOutputs extends DeduceOutputs {
   state: RewindState
 }
-export type RewindProps<Key extends DeduceKey> = RewindMessages[Key]
+export type RewindProps<Key extends DeduceKey> = RewindOutputs[Key]
 export interface RewindRequest extends LastWhere {
   lastMergechoiceId: number
   episodeMergechoiceId: number
