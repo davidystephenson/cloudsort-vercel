@@ -1,18 +1,14 @@
 import { EpisodeRemove } from '@/mergechoice/mergeChoiceTypes'
 import { ListMovie } from '@/movie/movie-types'
-import { HStack, Text } from '@chakra-ui/react'
 import RemoveIconView from './remove-icon-view'
-import MovieLabelLinkContentView from '@/movie/movie-label-link-content-view'
+import SingleEpisodeCellsView from '@/episode/single-episode-cells-view'
 
 export default function RemoveEpisodeCellsView (props: {
   input: EpisodeRemove<ListMovie>
 }): JSX.Element {
   return (
-    <HStack width='100%' gap='4px' alignItems='baseline'>
+    <SingleEpisodeCellsView>
       <RemoveIconView />
-      <Text>
-        <MovieLabelLinkContentView />
-      </Text>
-    </HStack>
+    </SingleEpisodeCellsView>
   )
 }

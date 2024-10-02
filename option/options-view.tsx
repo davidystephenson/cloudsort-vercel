@@ -1,4 +1,4 @@
-import { Center, HStack } from '@chakra-ui/react'
+import { Center, HStack, VStack } from '@chakra-ui/react'
 import privateListContext from '../list/private-list-context'
 import OptionView from './option-view'
 import DeferView from '@/defer/defer-view'
@@ -19,7 +19,7 @@ export default function OptionsView (): JSX.Element {
   const aId = list.state.choice.options[list.state.choice.aIndex]
   const bId = list.state.choice.options[list.state.choice.bIndex]
   return (
-    <>
+    <VStack>
       <HStack flexWrap='wrap' justifyContent='center' marginTop='10px'>
         <OptionView
           chooseLetter='a'
@@ -37,6 +37,6 @@ export default function OptionsView (): JSX.Element {
       <Center>
         <DeferView />
       </Center>
-    </>
+    </VStack>
   )
 }

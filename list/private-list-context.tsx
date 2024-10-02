@@ -179,9 +179,10 @@ const privateListContext = contextCreator({
     function archive (archiveProps: {
       movieId: number
     }): void {
+      const oldState = structuredClone(state)
       const newState = archiveItem({
         itemId: archiveProps.movieId,
-        state
+        state: oldState
       })
       saveState({ newState })
       const item = getCalculatedItem({ itemId: archiveProps.movieId, state })
@@ -247,7 +248,8 @@ const privateListContext = contextCreator({
       saveState({ newState })
     }
     function random (): void {
-      const newState = setupRandomChoice({ state })
+      const oldState = structuredClone(state)
+      const newState = setupRandomChoice({ state: oldState })
       saveState({ newState })
       const lastEpisode = state.history[0]
       const newEpisode = newState.history[0]
@@ -291,9 +293,10 @@ const privateListContext = contextCreator({
     function reset (resetProps: {
       movieId: number
     }): void {
+      const oldState = structuredClone(state)
       const newState = resetItem({
         itemId: resetProps.movieId,
-        state
+        state: oldState
       })
       saveState({ newState })
       const item = getCalculatedItem({
@@ -315,9 +318,10 @@ const privateListContext = contextCreator({
     function unarchive (archiveProps: {
       movieId: number
     }): void {
+      const oldState = structuredClone(state)
       const newState = unarchiveItem({
         itemId: archiveProps.movieId,
-        state
+        state: oldState
       })
       saveState({ newState })
       const item = state.archive[archiveProps.movieId]

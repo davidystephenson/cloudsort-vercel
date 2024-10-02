@@ -1,15 +1,14 @@
 import { EpisodeArchive } from '@/mergechoice/mergeChoiceTypes'
 import { ListMovie } from '@/movie/movie-types'
-import { HStack, Text } from '@chakra-ui/react'
 import ArchiveIconView from './archive-icon-view'
+import SingleEpisodeCellsView from '@/episode/single-episode-cells-view'
 
 export default function ArchiveEpisodeCellsView (props: {
   input: EpisodeArchive<ListMovie>
 }): JSX.Element {
   return (
-    <HStack>
+    <SingleEpisodeCellsView>
       <ArchiveIconView />
-      <Text>{props.input.item.name}</Text>
-    </HStack>
+    </SingleEpisodeCellsView>
   )
 }
