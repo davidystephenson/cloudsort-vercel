@@ -36,6 +36,7 @@ import { useOptionalLists } from './lists-context'
 import downloadCritickerFile from '@/file/downloadCritickerFile'
 import useRewind from '@/rewind/useRewind'
 import useChoice from '@/choice/useChoice'
+import { ListState } from './list-types'
 
 const privateListContext = contextCreator({
   name: 'privateList',
@@ -109,7 +110,7 @@ const privateListContext = contextCreator({
     }) => {
       rewind.savePoint({ newState: saveStateProps.newState, state })
       updateState({ newState: saveStateProps.newState })
-    }, [state])
+    }, [state, rewind.savePoint])
 
     const archiveFlag = useFlagbearer()
     const historyFlag = useFlagbearer({
@@ -127,9 +128,9 @@ const privateListContext = contextCreator({
     const [openedEpisodes, setOpenedEpisodes] = useState<number[]>([])
     const randoming = state.choice?.random === true
     const range = getChoiceCountRange({ state })
-    function openEpisode (props: { episodeId: number }): void {
+    const openEpisode = useCallback((props: { episodeId: number }) => {
       setOpenedEpisodes([...openedEpisodes, props.episodeId])
-    }
+    }, [openedEpisodes])
     function closeEpisode (props: { episodeId: number }): void {
       const filtered = openedEpisodes.filter(id => id !== props.episodeId)
       setOpenedEpisodes(filtered)
@@ -199,16 +200,20 @@ const privateListContext = contextCreator({
       }
       void queue.add({ label, perform })
     }
+    const handleChoose = useCallback((props: {
+      state: ListState
+    }) => {
+      if (historyFlag.raised) {
+        openEpisode({ episodeId: props.state.history[0].mergeChoiceId })
+      } else {
+        setOpenedEpisodes([props.state.history[0].mergeChoiceId])
+      }
+      saveState({ newState: props.state })
+    }, [historyFlag.raised, openEpisode, saveState])
+
     const choice = useChoice({
       listId: list.id,
-      onChoose: (props) => {
-        if (historyFlag.raised) {
-          openEpisode({ episodeId: props.state.history[0].mergeChoiceId })
-        } else {
-          setOpenedEpisodes([props.state.history[0].mergeChoiceId])
-        }
-        saveState({ newState: props.state })
-      },
+      onChoose: handleChoose,
       queue,
       state
     })

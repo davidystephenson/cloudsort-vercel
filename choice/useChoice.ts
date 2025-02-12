@@ -1,7 +1,7 @@
 import useMarx from '@/marx-worker/useMarx'
 import { Choice } from './choiceTypes'
 import useAction from '@/action/use-action'
-import { useCallback } from 'react'
+import { useCallback, useMemo } from 'react'
 import { ListState } from '@/list/list-types'
 import { OptionChoice } from '@/mergechoice/mergeChoiceTypes'
 import { ListMovie } from '@/movie/movie-types'
@@ -47,10 +47,12 @@ export default function useChoice (props: {
     void props.queue.add({ label: request.label, perform })
   }, [action.start, marx.post, props.listId, props.queue.add, props.state])
 
-  const choice: Choice = {
-    action,
-    choose,
-    marx
-  }
+  const choice: Choice = useMemo(() => {
+    return {
+      action,
+      choose,
+      marx
+    }
+  }, [action, choose, marx])
   return choice
 }

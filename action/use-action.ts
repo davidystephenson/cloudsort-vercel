@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useMemo } from 'react'
 import { Action } from './action-types'
 
 export default function useAction (props?: {
@@ -11,7 +11,24 @@ export default function useAction (props?: {
   }, [props?.active])
   const [error, setError] = useState<Error>()
   const [errorMessage, setErrorMessage] = useState<string>()
-  async function act (): Promise<void> {
+  const start = useCallback(() => {
+    setActive(true)
+    setError(undefined)
+    setErrorMessage(undefined)
+  }, [])
+  const succeed = useCallback(() => {
+    setActive(false)
+  }, [])
+  const fail = useCallback((props: {
+    error: Error
+    message?: string
+  }) => {
+    setError(props.error)
+    const message = props.message ?? props.error.message
+    setErrorMessage(message)
+    setActive(false)
+  }, [])
+  const act = useCallback(async () => {
     start()
     try {
       await props?.action?.()
@@ -22,25 +39,18 @@ export default function useAction (props?: {
       }
       fail({ error })
     }
-  }
-  function start (): void {
-    setActive(true)
-    setError(undefined)
-    setErrorMessage(undefined)
-  }
-  const succeed = useCallback(() => {
-    setActive(false)
-  }, [])
-  function fail (props: {
-    error: Error
-    message?: string
-  }): void {
-    setError(props.error)
-    const message = props.message ?? props.error.message
-    setErrorMessage(message)
-    setActive(false)
-  }
-  const value = {
+  }, [props?.action, fail, start, succeed])
+  const value = useMemo(() => {
+    return {
+      act,
+      error,
+      errorMessage,
+      fail,
+      active,
+      start,
+      succeed
+    }
+  }, [
     act,
     error,
     errorMessage,
@@ -48,6 +58,6 @@ export default function useAction (props?: {
     active,
     start,
     succeed
-  }
+  ])
   return value
 }

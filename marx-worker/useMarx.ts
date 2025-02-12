@@ -1,6 +1,6 @@
 'use client'
 
-import { useCallback } from 'react'
+import { useCallback, useMemo } from 'react'
 import { Marx, MarxHandler } from './marxTypes'
 import useMarxRef from './useMarxRef'
 
@@ -18,9 +18,11 @@ export default function useMarx<
   const post = useCallback((input: Input) => {
     ref.current?.postMessage(input)
   }, [])
-  const marx: Marx<Input> = {
-    post,
-    ref
-  }
+  const marx: Marx<Input> = useMemo(() => {
+    return {
+      post,
+      ref
+    }
+  }, [post, ref])
   return marx
 }

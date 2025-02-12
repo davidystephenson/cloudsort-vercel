@@ -20,9 +20,9 @@ export default function useMarxMarion<
     const data = handleMessageProps.event.data
     marion(props.actors, data)
   }, [])
-  const ref = useMarx({
+  const marx = useMarx({
     onMessage: handleMessage,
     worker: props.worker
   })
-  return ref
+  return marx
 }

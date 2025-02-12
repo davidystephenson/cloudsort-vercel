@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { Rewind, RewindHandlers } from './rewindTypes'
 import useRewindMarx from './useRewindMarx'
 import useAction from '@/action/use-action'
@@ -10,6 +10,7 @@ import { RestorePoint } from '@/restore/restoreTypes'
 import { ListHistory } from '@/history/history-types'
 import postRewind from './post-rewind'
 import { AddTask } from '@/useQueue/useQueueTypes'
+import debugChoice from '@/mergechoice/debugChoice'
 
 export default function useRewind (props: {
   listId: number
@@ -25,10 +26,28 @@ export default function useRewind (props: {
   }) => void
 }): Rewind {
   const [restorePoints, setRestorePoints] = useState<RestorePoint[]>([])
+  useEffect(() => {
+    console.log('restorePoints', restorePoints)
+    const first = restorePoints[0]
+    if (first == null) {
+      return
+    }
+    debugChoice({
+      choice: first.listSnapshot.choice,
+      label: 'restorePoints choice',
+      items: first.listSnapshot.items
+    })
+  }, [restorePoints])
   const savePoint = useCallback((savePointProps: {
     newState: State<ListMovie>
     state: State<ListMovie>
   }) => {
+    console.log('savePoint state', savePointProps.state)
+    debugChoice({
+      choice: savePointProps.state.choice,
+      label: 'savePoint',
+      items: savePointProps.state.items
+    })
     const { history, ...listSnapshot } = savePointProps.state
     const newEpisode = savePointProps.newState.history[0]
     const restorePoint: RestorePoint = {
@@ -71,7 +90,6 @@ export default function useRewind (props: {
   const handlers: RewindHandlers = useMemo(() => {
     return {
       episode: (props) => {
-        console.log('useRewind episode', props)
         setIndex(props.index)
       },
       state: (stateProps) => {
@@ -121,8 +139,13 @@ export default function useRewind (props: {
     const history = props.state.history.slice(rewindIndex + 1)
     console.log('rewoundHistory', history)
     rewindRestorePoints({ history })
-    const restorePoint = restorePoints.find(point => point.episodeId === startProps.episodeMergechoiceId)
+    console.log('restorePoints', restorePoints)
+    const restorePoint = restorePoints.find(point => {
+      return point.episodeId === startProps.episodeMergechoiceId
+    })
+    console.log('restorePoint', restorePoint)
     if (restorePoint != null) {
+      console.log('if')
       const newState = { ...restorePoint.listSnapshot, history }
       props.updateState({ newState })
       request({
@@ -132,6 +155,7 @@ export default function useRewind (props: {
       })
       return
     }
+    console.log('else')
     setIndex(0)
     const newRewindLength = props.state.history.length - rewindIndex - 1
     setLength(newRewindLength)
@@ -143,13 +167,15 @@ export default function useRewind (props: {
       state: props.state
     })
   }, [props.listId, request, action.start, marx.post, restorePoints, props.state, props.updateState])
-  const rewind: Rewind = {
-    action,
-    index,
-    length,
-    marx,
-    savePoint,
-    start
-  }
+  const rewind: Rewind = useMemo(() => {
+    return {
+      action,
+      index,
+      length,
+      marx,
+      savePoint,
+      start
+    }
+  }, [action, index, length, marx, savePoint, start])
   return rewind
 }
