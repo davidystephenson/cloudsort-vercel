@@ -54,13 +54,13 @@ export default function useRewind (props: {
       episodeId: newEpisode.mergeChoiceId,
       listSnapshot
     }
-    const [first, ...rest] = restorePoints
-    const newRestorePoints = [...rest, restorePoint]
-    if (first != null && newRestorePoints.length < 10) {
-      newRestorePoints.unshift(first)
-    }
+    console.log('savePoint restorePoints', restorePoints)
+    const lastNine = restorePoints.slice(-9)
+    console.log('lastNine', lastNine)
+    const newRestorePoints = [...lastNine, restorePoint]
+    console.log('newRestorePoints', newRestorePoints)
     setRestorePoints(newRestorePoints)
-  }, [])
+  }, [restorePoints])
   const [index, setIndex] = useState(0)
   const [length, setLength] = useState<number>()
   const action = useAction()

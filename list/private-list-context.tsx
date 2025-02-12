@@ -24,7 +24,7 @@ import postUnarchive from '@/unarchive/post-unarchive'
 import useQueue from '@/useQueue/useQueue'
 import contextCreator from 'context-creator'
 import { useRouter } from 'next/navigation'
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { State } from '../mergechoice/mergeChoiceTypes'
 import removeItem from '../mergechoice/removeItem'
 import { CreateMoviesRequest, ListMovie, MovieData } from '../movie/movie-types'
@@ -55,7 +55,9 @@ const privateListContext = contextCreator({
       const sortedMovies = getSortedMovies({ state })
       return sortedMovies
     })
-    const rankedMovies = getRankedMovies({ sortedMovies })
+    const rankedMovies = useMemo(() =>
+      getRankedMovies({ sortedMovies })
+    , [sortedMovies])
     const moviesSifter = useSifter({
       rows: rankedMovies,
       sift: siftMovie
@@ -106,11 +108,14 @@ const privateListContext = contextCreator({
       updateState
     })
     const saveState = useCallback((saveStateProps: {
-      newState: State<ListMovie>
+      newState: ListState
     }) => {
-      rewind.savePoint({ newState: saveStateProps.newState, state })
+      setState((state) => {
+        rewind.savePoint({ newState: saveStateProps.newState, state })
+        return state
+      })
       updateState({ newState: saveStateProps.newState })
-    }, [state, rewind.savePoint])
+    }, [rewind.savePoint])
 
     const archiveFlag = useFlagbearer()
     const historyFlag = useFlagbearer({

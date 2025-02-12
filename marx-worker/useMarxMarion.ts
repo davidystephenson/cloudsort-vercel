@@ -17,9 +17,8 @@ export default function useMarxMarion<
   const handleMessage = useCallback((handleMessageProps: {
     event: MessageEvent<MarionInput<I, O, K>>
   }) => {
-    const data = handleMessageProps.event.data
-    marion(props.actors, data)
-  }, [])
+    marion(props.actors, handleMessageProps.event.data)
+  }, [props.actors])
   const marx = useMarx({
     onMessage: handleMessage,
     worker: props.worker

@@ -10,14 +10,19 @@ export default function useMarxRef <
   worker: Worker
 }): MarxRef {
   const ref = useRef<Worker>()
+  const handleRef = useRef<MarxHandler<Output>>(props.onMessage)
+  useEffect(() => {
+    handleRef.current = props.onMessage
+  }, [props.onMessage])
   useEffect(() => {
     ref.current = props.worker
     ref.current.onmessage = function (event: MessageEvent<Output>) {
-      props.onMessage({ event })
+      handleRef.current({ event })
     }
     return () => {
+      console.log('terminating')
       ref.current?.terminate()
     }
-  }, [props.worker, props.onMessage])
+  }, [props.worker])
   return ref
 }

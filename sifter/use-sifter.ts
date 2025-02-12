@@ -1,7 +1,7 @@
 import { useCallback, useMemo, useState } from 'react'
 import { Sifter } from './sifter-types'
 
-export default function useSifter <Row> (props: {
+export default function useSifter<Row> (props: {
   debug?: boolean
   sift: (props: { row: Row, query: string }) => boolean
   rows: Row[]
@@ -32,11 +32,13 @@ export default function useSifter <Row> (props: {
   }) => {
     setQuery(props.query)
   }, [])
-  const sifter = {
-    query,
-    reset,
-    sift,
-    sifted
-  }
+  const sifter = useMemo(() => {
+    return {
+      query,
+      reset,
+      sift,
+      sifted
+    }
+  }, [query, reset, sift, sifted])
   return sifter
 }

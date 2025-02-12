@@ -21,9 +21,10 @@ export default function useChoice (props: {
   const handleMessage = useCallback((handleMessageProps: {
     event: MessageEvent<ListState>
   }) => {
+    console.log('handleMessageProps.event', handleMessageProps.event)
     props.onChoose({ state: handleMessageProps.event.data })
     action.succeed()
-  }, [action.succeed])
+  }, [props.onChoose, action.succeed])
   const marx = useMarx<OptionChoice<ListMovie>, ListState>({
     onMessage: handleMessage,
     worker: choiceWorker
@@ -45,6 +46,7 @@ export default function useChoice (props: {
       await postChoice({ request, label: request.label })
     }
     void props.queue.add({ label: request.label, perform })
+    console.log('addeed to queue', request.label)
   }, [action.start, marx.post, props.listId, props.queue.add, props.state])
 
   const choice: Choice = useMemo(() => {
