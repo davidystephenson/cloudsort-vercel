@@ -24,7 +24,7 @@ function Consumer (
 ): JSX.Element {
   const button = useButtonContext()
   const { leftButton, ...restProps } = props
-  if (button.errorMessage == null) {
+  if (button.error == null) {
     const mainView = (
       <ThemeButtonView
         isLoading={button.loading}
@@ -71,7 +71,7 @@ function Consumer (
           <PopoverArrow />
           <PopoverCloseButton />
           <PopoverBody>
-            {button.errorMessage}
+            {button.error}
           </PopoverBody>
         </PopoverContent>
       </Popover>

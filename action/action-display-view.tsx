@@ -14,7 +14,7 @@ export default function ActionDisplayView (props: {
     <>
       <ButtonView
         isDisabled
-        errorMessage={props.action.errorMessage}
+        error={props.action.errorMessage}
         loading={props.action.active}
         loadingText='Importing...'
         fontSize='sm'

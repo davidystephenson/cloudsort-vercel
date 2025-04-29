@@ -11,7 +11,7 @@ function Consumer (
   ref: ForwardedRef<HTMLButtonElement>
 ): JSX.Element {
   const button = useButtonContext()
-  if (button.errorMessage == null) {
+  if (button.error == null) {
     return (
       <ThemeIconButtonView
         isLoading={button.loading}
@@ -46,7 +46,7 @@ function Consumer (
           <PopoverArrow />
           <PopoverCloseButton />
           <PopoverBody>
-            {button.errorMessage}
+            {button.error}
           </PopoverBody>
         </PopoverContent>
       </Popover>

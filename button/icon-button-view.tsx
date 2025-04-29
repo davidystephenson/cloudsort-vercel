@@ -10,13 +10,13 @@ function View (
   props: ButtonContextValue & IconButtonProps,
   ref: ForwardedRef<HTMLButtonElement>
 ): JSX.Element {
-  const { errorMessage: error, handleClick, loading, type, orientation, ...restProps } = props
+  const { error: error, handleClick, loading, type, orientation, ...restProps } = props
   function onClick (): void {
     handleClick?.()
   }
   return (
     <ButtonProvider
-      errorMessage={error}
+      error={error}
       loading={loading}
       handleClick={onClick}
       orientation={orientation}

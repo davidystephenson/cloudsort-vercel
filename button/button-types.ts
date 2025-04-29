@@ -1,5 +1,7 @@
+import { ReactNode } from 'react'
+
 export interface ButtonContextValue {
-  errorMessage?: string | undefined
+  error?: ReactNode | undefined
   handleClick?: () => void
   loading?: boolean
   type?: 'button' | 'submit' | 'reset'

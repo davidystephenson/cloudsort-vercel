@@ -19,7 +19,7 @@ function Consumer (
   }
   return (
     <ButtonView
-      errorMessage={request.errorMessage}
+      error={request.errorMessage}
       handleClick={handleClick}
       loading={request.acting}
       ref={ref}
